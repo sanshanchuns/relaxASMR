@@ -1,0 +1,19 @@
+# Audio files
+*.m4a
+*.pkf
+*.mp4
+*.mp3
+*.WAV
+*.wav
+
+# Reaper proxy files
+*.RPP-PROX
+*.rpp-PROX
+Reaper/ReaPeaks/
+output/
+
+# Reaper peaks
+*.reapeaks
+
+# macOS
+.DS_Store
