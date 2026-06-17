@@ -1,0 +1,61 @@
+project:
+  name: audio-intelligence-engine
+  version: 1.0
+
+domain:
+  categories:
+    - focus
+    - asmr
+    - sleep
+    - meditation
+    - ambience
+
+youtube:
+  videos_per_category: 500
+  min_duration_min: 30
+  metrics:
+    - views
+    - likes
+    - comments
+    - retention
+
+audio:
+  stem_separation:
+    enabled: true
+
+  sources:
+    detect_min_confidence: 0.75
+
+  features:
+    loudness: true
+    frequency: true
+    rhythm_density: true
+    event_frequency: true
+    source_ratio: true
+    dynamic_range: true
+
+video:
+  scene_analysis: true
+
+  features:
+    lighting
+    weather
+    motion
+    color_palette
+    camera_movement
+    environment_type
+
+scoring:
+  target:
+    views
+    retention
+
+  similarity_min: 0.85
+
+generation:
+  sound_library: true
+  ai_generation: true
+
+validation:
+  human_review: true
+  prediction_error_max: 15%
