@@ -2,7 +2,7 @@
 # Generate YouTube metadata (youtube.md) + thumbnail for an exported MP4.
 #
 # Usage:
-#   ./scripts/generate_youtube_material.sh output/stream_heal_3h_4k_gpu.mp4
+#   ./scripts/generate_youtube_material.sh "output/LakeHealMac_2026-06-17 16_49_07.mp4"
 #   ./scripts/generate_youtube_material.sh output/foo.mp4 --thumb-time 15
 
 set -euo pipefail
