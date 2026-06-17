@@ -12,6 +12,9 @@
 Reaper/ReaPeaks/
 output/
 
+# StudyCase 抓取片段（mp4 体积大）
+scripts/youtube_top3/output/
+
 # Reaper peaks
 *.reapeaks
 

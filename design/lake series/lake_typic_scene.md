@@ -1,0 +1,274 @@
+## 1. 晨雾湖泊（Morning Mist Lake）
+
+Lake Bled
+
+![Image](https://images.openai.com/static-rsc-4/GTfa3D5DdFGj-_HY-cIozOVooIzY1I0O0Fvk30qo5e1zZdS9aeSw4pgWaOCp1eJ6Wh8XffA8QL7kT-7ZNgFYBaoMWWLh6ldAR2iYSXS0qVuW5D9_3ghwukswp6Gzd80mJLCZ43m-0v6B1FRTc9VoIAbSoiYlv_JM0_HGa48sMPUD7CoosZ_i7VkF2gAUIjZW?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/iOrZMOxtX_8pL5ND6fw9t7gRnwCJwSb5tALkQckvRdAXc9-LuACiqVXJgNjgxiH_wXpQs5q74UnE5B8scDzr8sSTUpTCcESq2IqjH3UsUn1P4URQWbsI_rGs0ejfmSixmbpvOJiJMc0BHcVF774Ap4jTHLjguZotmTLu27RmiZs_7dqF0vGn9is6Ugm6ESvN?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/ve0QMYYZmhkJgpAuhGcnrmcDQ9w0FrICni_XbZWYHtiuvktx1Sm5-5c8uBFA2ZOWWVBXZfOkus8XZ5dft-6r420aIn5BySprFGro7xvVBdSvd0jrZS-6M7UkkVOkN8Q9ZAo-bhlrab2KG3Mvqr-bLcorIY_UJY3aGdVtn35MCxnAuUQnb2aWjcEwMVTd3eUx?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/mQ6gJmxRYRpVQ8wzmiM-ACC8JrGbkyKXQWljH90JHe8GaPVcCxW8OfvBmC7sE31yilpMy6mZ5JC_th9AXffB0cWZAdSYQqMdxOP1-YKXeO575JDPFcJdtuESE4PEUOGQlKsGOfPDs5L2EwIe2UDOuft1x6twcmlUKWUOeapZnvC-t-8SAHPB72QSlOAvJ2sV?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/u1tOPzu9RHaEKRQgzz8lN8Ux-IsWfetDETHSLLQPXxyK8Pe6FpMM61dePU-KDnF3MhvOVf_Wz-7RtXcVBBdQ0FF2oc1aihgLCKl8Z3bb_ehJuwSym1MUV8Y_2AXUpd3UpCv32z8Ver9MNMBzM36du7gzsUc7DhXEUr3HpzOHaZ8HR2jqCmRdSiPfvivXk_mb?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/josCuIBlZLeYPvAf6VT0SzvDiiJEzOVEKOMEJt-L_4oCuLKceu0W6TVja63RC4RdKMWR0wRr52gyRJOz44SrKKlhBtEmXs-HuCjBdDsbistzqyQoiLsFLgh1bCAI4bGNrCulMHn0B5-ej0yrW8oDAgCqqojGUri6JrByU49VUAxhnWXWFeKs5OkNop7Gj8lc?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/YgRqzjXrL3cd4bZDOTTqFQ6y6KHc4REOaQ0W-JtgHZgsPN67U0J1Ysfdjf2ASPuNJ5GsCQWybhpA8SOY97bE91LMpDAnbcg2pnij_UwI66KtCwvv1F6vzxpOGW6FDVUPKDSZt7QvAfGUZURLqlAvp9840QGaKaKOHGXa5ZnV3B_7ufwO-4AFsKkujWhl7LFT?purpose=fullsize)
+
+特色：
+
+* 晨雾非常经典
+* 湖心教堂若隐若现
+* 日出时画面极具治愈感
+
+---
+
+## 2. 湖边微风（Lakeside Breeze）
+
+Lake Windermere
+
+![Image](https://images.openai.com/static-rsc-4/WqtaOseeuzbAlE0Py2P8LonRohMt5H01yNWxbWV33kC4Ur3jJoRtCLrBYdf4mgLLdOdxfMxjCOZXJ4V8OkiIY5JJw8hxNSzumboGw6yRFZWrK7dL9ZFKVsJbjTZx2ES-Ulg7_P99VYHZYnHKYTSf5jbI_CBLEBjki5v6vkJjForkC7J-NVw7cN5_OSaaP_x3?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/xgm1g_z_HuAXL5gdDeL1ih3R6ycFT6LctclIhlx3s4g0HOoPIOnW-BDnuV5IWSllzDnyIZ3gXzSk3gMfeYhI3-soSMTyEUWmomHuafx5sAcHLstaeB3QrGep6Qt6zZLH5ucM_tRTdN9exJx4vM5OxgIv78JSGcjLDHxXoEJ5G5v4X_Oob3Cjv-IYU7KupOX-?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/CgX8UR_fgO4N5toLpXvm3C1f5El9xM8bXgVgQwP9VjWx8xQaraXHipiZkrIlb00KYQdIKKZbYeT-Olmf4D2IcM0nAFAEHdB2iuy_VKDxJXRHXSyJC3XekTXUWMNF18RF_If-hSkK9rf2SpV4el0ccCTr8fhFT0LCBA_u3Ldy6jyseO3H3OFlP5r-QUlhtL08?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/EW9NAIB-PqZPv59kjnbKH5iYjHrvZcE546ExDAJLlPRx_iHPqyZdYRfMJE5UcUI0_uy3Tinuqx1gmLj_q1Zt6BmB3Rst7nHGyhKRtzpnZSfU0P9XQgD3IE0VkXo5NHj7yM4_x0KneoO_6pnEBdP0dMgGmNn_vZJnj19WrDIf--vapiTpg9Q1bwekVCB_tCNp?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/zG6J5HgpJayh_8CEOeGF7rkyEVC-OneLJXJuz5N40aKymQdZkrMSrs9-SScyUt7cY3pmSnPZvlEOe4z3MRs3qzn3RZZcg1rsKmfA_Qn5FNvBbkqQTefHEt4bHGrNnl9DjqJaOu6eTh-ugI_TNYeh-kFz6kkudXEf3tfsQStOycC6NytWkl97xY-LeKg7iAJm?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/fcgZmPyudoRexpVhmr94RPX3zceV6n7IKe-27yQCQjJE_f4wtmu1jzBXVq1J8eBrwLlyoS1uLAygoDEtAmqjJodJfKoZfOQ-UOfsQpyFgnZQP0VvTdCK-D1-Xgcy9cXiFt92vFacicE6KpMFGEkusMneEtLZiD3zCn8m_PTvxd_317aKHzZHuw-5Pxq52o3D?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/L2fmRfzbPEN2_WUXVGzlY8yqPQBdV2mJvQbTpfx80rB3rCNiaLX-JLCtXLwVqMqcZ7nS7QwKPDHtBa06BI93AUNtuOBPtU8vGnUsKUzS5z_OKTd2hNgMikH1-PsM23L4Jn9cs_6wdXhf6YNxsNRK2q83ggD5mO9GukYLXfLttDoubflReZcLdz683QmbdRgE?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/7uCqGF5NQhGuc74bammHgzGKqSARGOeIkB33dehKtCxH8q15BSS5vsA5_Wj81LHysHRIv-1KVpka1wmq9H_HUaWxPEIDtCfnF_69dZJP7YVpYTnhGzPk7hbNcmhBzU7R11zJ0S_kEgkv0qc_VmSHEUcMJLySS00T3sRMff_GtEa3hVjbopYVOjx7-zeIpIcP?purpose=fullsize)
+
+特色：
+
+* 微风吹过草地和树林
+* 英伦乡村氛围浓厚
+* 非常适合轻专注场景
+
+---
+
+## 3. 湖畔木码头（Wooden Pier）
+
+Lake Bohinj
+
+![Image](https://images.openai.com/static-rsc-4/AbVxuSL32HKoUgc_t4VYbJhpBADyA_-c2lgCEC2TOLm_OqH7BvDVyjbKUFn9tQ3gRBsc4aQEGWysDxJDj-hTo4lyNluzRPAksvE6J2A4M55WR15CRgO6-5Sot997Tjm5CwLxnlM38E__OJJe1ShoDjGutYQaruF3jwa2WEu_SS6AyjB0ZXf_kyt9EO37V6cG?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/HtR77r7L5Fa_EnDNbqrIvYls0pbP2sRQHR7br8tJieOOE5H02fcjMRHJWX25h95wip-DMQxqVsxRyxxBtQKNgIB0ayHDwF9C1tUeE_BaBf7lvXrrHhGX4fUiTtmfQDAir-WXjtRJCqXIFWak-BT1D-c-pQoQBniTMZzeHVXbaeKka4ZVcpOSg1bP0QqHltAe?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/g3cabkx01VVfKepHZr4EpaeQJF-Hj2hzxj79GGBl4bQSyTpaW7xa1JDoGXYsRNApaCqekFDbDYBD2dPcRikfs2SK7jIY03q8MHAKkjwjzPb0-CJSMvJssRWlJu_TF91YyGMXs4F118wUzFvYBXl95vwj9NrDofxppXGhou8XMRHgVopvHkYi8QS4_PsaIqFE?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/kWGeR1mE1uBKhbudaIk21Cx8Y9DBBx95yEONiKZyOe2YpNdKnuqXdW-P42aqBMNP8u3zaik1BEoU5IT31bN1yqwAhQ2panaFxFCBu3-MtugvEeTnQ4IhU7FbY58fk3mrGyveF48D7w1-6WGDsv4yesYojseOqrWFRcXa4_EQcaqTMKM3BM2oFIDViBfMrvWI?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/msgTBcGEyC2jN_9sszoc-QKHY6aosHxGLnTASvbVp0BoUiP7t77Egm3BHkWQHir4j7Ksb2STd2EfCX-5ToZu4WLC3dgZHHBz4XcCVYd2-OmnSragsFnT9LRhNtdF6sSAbP6KMbOVJNwKlEFLG3EKEaMCnDWPtBKO0coyQOab7rThR5y_S8UvfcOvww6s_xZV?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/uQoFxS05tnaeTE_mFFZ5uaMFGwyv2EiGT-U3SLw2tVbrR5B-quW-VBlYDAEGAZFdKmMTiAv3u3XYSiah0DdOiHOWQASLjuG6kUTCMA-0WvdCP-blnWeFVxhYmFGVvV6QBjF1RjLlLzp3PnBaLBZ0yESPOd0W2BBzrZsLYQ74d9K2LLEJkjNgCspkbJSG8Hwl?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/PLVIuKoHCy3R6SCkBp_sjhK0s6CYt30laIQXJZTJMPAKbkiSgMv6Hmc14MxQJB_UHW5nu5coyRc9RRFPxpmNybKeOJtsswi2vkoJ4uQVTL5Dha1UZ-EnBNW_ei9VNdd-s4AwLwQmoqLWLw0j6STDHRog8KNmLniseV9KA_7Pb-4JsiWTZHuz-gVm18XAVW1-?purpose=fullsize)
+
+特色：
+
+* 大量经典木码头
+* 水面平静
+* 欧洲风格浓厚
+
+---
+
+## 4. 湖面雨声（Rain on Lake）
+
+Lake Kawaguchi
+
+![Image](https://images.openai.com/static-rsc-4/eLFjqBxEoiiL5yTExjrM1DVHbMpu96wTKKWkSz0i-Blwz61Af7JZXCaRxltHrAoByEpM4yWCjM4DRWize_qaZWl2mO77VgBg1LqSWTqOd6sdPsfdWsYC2sySB1X8NRBhpUFr4y55wOQJG-WhaHNNXZnmSMkbZdrnoQX07FFSioPQEtebaNwiaOk9z6RroHXo?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/gZ9MNWZtvFMJeyM3YcPu5nXGpI0DhGjGsSBYV3kOgj--5fMXXRSqKxJeZXkm-o3JRjTTTyw0Iwdqz8KW2_aI6LG9lNPj1C1XnHqV5HLDSRulKq-5e-02bas2eBSvbt60r-U9gpXU1f9L89af61oMaflHo47geGcmZQy5r5gId0RK9nSq5hTJEQFXWfWQA7iY?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/di3DkWx1sMzW4-bkm1hnWPvEooAsgWhJcyfH7bykfEnFwIHbCJGOgZLxNEbQK9SMYZkievtssQc3uNA1hA3dj1n4zhwOZuqPjtKIEfkjPHa2tykOSLp0gCHzTVQ3i7r-Zfy9RzHiuK2_N0pNbNyARVGLITfQsyHaswbsO_gmZr5F3blmaWBFqQWz70Z4TO4L?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/WYHC_gKLcq2oEOY1uXiWgyxYZm30k8BcXCd1NJLHCLa0nE8PNJ0maOZZn22Pv-hp6okHm-sI0dklCJSL_aJE0jxHz88l7Rg25q8772SdrNEdZd4b2fiHhJHjNYD18wLoiMgiYGu8u3vzHtm844BEtdgsx8zT8M7GvQL_9Mh-svNhw3EjSnCKCt1ktxPQip7o?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/f1Gtxh_yXDKGDMHh_P5Ph-iF-Mkrza_dV5DbxaTLvTTFeJ-8fr1jnZCu9gUXsBn7P2Z7Zkuqwrq7BkBkGXECo98HFTy-VLcwEZqJAh5HzcaNokYrDpMNHjrRIIIp5n5Z_IJMR6VaWVL9l1471rhb0KBJzPOK_pEte6xcCNIv2b9MciHk4yatgkbiq2EvjXvE?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/wYFfSMqgEojIJlOso3T2PxiEJ2QAvXXg4bnQi5TFyziW2hcaa7Vr3VWalb_1jaImoOCWuSiPTCAxNCVTJy_Ow_tMMzzeVJEQPuuyTLaOXEQbASMEHPTqbzAuqV1YMKIlNBY0R12nc35W-lm9s2yh_kNU3gKLuOANBb2nmYXbqO8ydsg175V8hgsUpyD0_qju?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/lwq5X6K2-NXDC2oHrFpBoCDGz1iLot3zP7gD_jqx6C3xvlrjnowfQnrsJx1s-6I2BwOy0XDRPNtHoN0EzRYvQ3EGduix5pg6-NZmo7_GTCrEw-1tSNse3zcRnuguOBZvtKymlAjmGOPSNhiwHMo3sZICyOvWPrx_wzgA5tjyTYm1bfItVX_ejsFI8aBgpA_L?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/yn09zTisbufU2nUEPFg0y0S9fp4teM98BDY7NHy0gtKKIoj5iGDU_qoiLGRVS8cSaFJVnS9_WMyt385HPg1InqRkSbI7ks5HHgXm-ifM3g_RPQOjEFIelAbQiI5YjDYssHvQmqAra489lUVSqMz67QHL7dHXhhFQuXAX4tOveUkodxWHBXGMn2CtLRvNFnr1?purpose=fullsize)
+
+特色：
+
+* 雨天富士山若隐若现
+* 湖面雨滴效果极佳
+* 日本风格很受欢迎
+
+---
+
+## 5. 黄昏湖泊（Evening Lake）
+
+Lake Annecy
+
+![Image](https://images.openai.com/static-rsc-4/IREQa-ZCIdgm7DL_ALvg8YeReS5w3zwWYhi9bizmgrOL2Tav9MuZdgcrlWMdzn5FUrYdOKmPLQ7gRL-KHKDVAAdLIen6GOlTk_hLIA6iaS9Nuiq2MgIA127fggqtngJQKfRJKg-Q8w9n7YUhwoJfAaBO6NpB9bI9xh3u_34K0GEtBBQBKrVJa1qvfdE-tz0T?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/IUYiqucrMNBz0jsl62JwgNxuYm3JB8kcATw5j0HRvmB6sQCBjxIvzxVQ2sVUrOkSHPKlsvTYIeRfrYJmUSDhfGwP1i22Nl9pANqIY1i4WLOREB5xI7NsK6aPKx9vP0r9xH8IzVFJT3XsHPt8zMOxWkX4K7nDmlLToYyscfWoF4MD4tEqtNwfZhxbOoTzdeag?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/wYJdHkC_YyeVT-m8qVmu--UJcjmURqkZ-rfeGqlH8mZf6Gop2gL4lumxVMtsdxTY2mC5pKWofpDk_JqrezwLeVYnmDAsa2vOClOoGn6M5J8FC9NfGgYJE1p_BnkiAm14PxMBVQRi6cAgQD6BlBGnoHGVALxyVWgeHkfwFOTdVkupBjm3tH1J2bLWZzUBndNH?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/IbNo9nYz0Rm6JC0fTmCch8Z5AvH9NDpEkn7RYH7wXC42jBaOM72yjJNsMxTtNL2DwSlSfWwfInYJgmbXbvBaAOmTe4j3GAX2_CmtUXDOLq9ZtyKD9prJ8ogtwsCor0QIkZMuuq6R3l8VFOBXhG3XdFXNUBYiytCcjKV4c20XhppUrV_zdqSKJ-Mjfn8Eb3UC?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/C_Ba9FwMmsm1_aD1AH6lmxmy3V_Rk6ldkcokyFnB9m8uWPsBQ-LiPTb9n6ZkBhVePJ6bGmtLD-MSnJlw_QTqOsjPwNaqWb21rd2wtt2s4Tfp21i7hEDBbjr2hgFMaX31mcqB71BHPEhSFNPjqtp90L6X15FDrYcj9z3JPzwfIsr_x02BSlmCkBhUFchxIOBw?purpose=fullsize)
+
+特色：
+
+* 欧洲最美湖泊之一
+* 黄昏色彩丰富
+* 适合晚间专注主题
+
+---
+
+## 6. 湖边篝火（Lake Campfire）
+
+Lake Tahoe
+
+![Image](https://images.openai.com/static-rsc-4/oGG0hUD4huAwx6b2hDXNrs_Jvjr4DFmVeBfbQN15wK7BCuocChvxhVCxrQxlaJAgIp78sVU7CGeZeaEgmKJz3UFmWFrhmpWrNGenw4SJheMIBWMAoYj95xzchuhpXaoJcyvxDmiQHD-vmkA-tr9TsIONq_03rulpDkco6MEsfXVomlOvqVM0zuQp3imtiIMH?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/kVu_LI2Wq0DEyhM6Ax2A2N0wOlO4Z2RzoqArL-OZFJbFNE4GQ8CnzoJU_uvz94qGtEuRNewHS6vLoCje9A5DN70McZJmYRwxBBNO6TMjLL-olRFYi2CzHh5cBuLp6iScsSP2-NmlVMpFC-JerjUPFLblFZLelMi5o3nRS6sklZ0A8K54WGnSDmdNXRvE0wgx?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/cDMSHQbUsBvm1etkCUPAjd_8D4ZCDAg_XMA7q3W6KDp7duGorksnJmIf9WdlsvJ7d2fC9tWA1qP9rljNgRKYxdiOZ3EvSDFGqdLNj_jqQAMS8CJK0TmaI3DF4-Hu-6fjwuRa6-PsPOcOrpC0UFVGHmdWlFt2CMxBBvs1L2A_oh0kXc-XCpoHsaJOAGX07diY?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/VwDhgVErY98BQVXDXnLDAggPOF1JEQQKIK_U49g7hX1C1R9l1LgvMH8PTkARZydsDw8TfWUJznDVtokPT14Tzie-cF8ANetm5hAQBlYIDfu-0wJQzMPtOwTx_2na9uPvTg-AMfS7clBNfGHpMytI5E1Xvzxb8gt92Ke-dnkRm4y3_4HEkmNuFMoxv4bOLrfe?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/GR3zCr_OM7IPaET8UKNPbx4AW56QhwnChdRt2E8iVoKsGbfnvtHJno-YBEYQAv1T6HCSazwtwfFVy-zshUzC_ZM0yXo_ANqnkKTw_9c8CHVdq1j67GpZL4-RTJLo1czufscGFvho72OEEhKiXkZxpRffIR5qT0PbvWjK-h-TPUqzGPR0EYlsosEZN4LsuRK7?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/pm5rcvtwmJs6RxTQjawEbkXqYDcRn5HzF-_vntPB8LhUZN7Fci08CAwVyEreH-s48ZxRRAAPicthe_YpEa6wHOcXTAum1jGgxPkDL3N4pl7FkcsdvWVtyXR20Mq_qgWTIoelVlPg1E39XqktUDFNXDfrD1jHn-T-UpNL3tckwjAujatOQv6kNPY3DYfChpHR?purpose=fullsize)
+
+特色：
+
+* 湖边露营文化成熟
+* 夜晚篝火场景丰富
+* 北美观众熟悉度高
+
+---
+
+## 7. 小船漂浮（Floating Boat）
+
+Lago di Braies
+
+![Image](https://images.openai.com/static-rsc-4/BFQa8NQg3d53DD5NraiWX52xKvH9aUw-XDicnAcepCb2xJd13EL1KXfThunAkNxQXuLIYrtpMI_3lsB5xvA2JPyVSVDnpxWaIMkuyhPolQGMOeEmjzbbiCwdI7L7xLaWFukEe1odfl5IJOXcitjsu9fW2XtprAN2NQOXO9P5pTNIvnoRJRh6oGzAkGiaerVx?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/QYUnkVPD-4OPPoV8o053A0QmUsO-gA-UZP_xbady-Q9o1JGR_7vcH8cA-XHx-FCFNAouI6X5HwmkkYBBWdGIM0ZQi54hMXSLjlh3f-HxT-EZ7f2mdasj254MOWZP2qPlJBaU6-DtlBVuvCKP0u839cBLubg448dHHLs0bmpLfdOT-DgxbAhhTv1u6TRZ6b7g?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/Fbvzy1pGUjG4tr0m60ur-G5W_yig0hPMvwCRwQSuDPr-s9majHH6dWA9hEltsd3U16BCZdGiVqnXEYFR4NnpDxancHVCDTAKO3nh1kkpgfXYoh20sOYZB1q_d4aJUhY0bm0HH2KfWCkGuVrkCir-3nEvezaMhubeeIgSVkGS8cQIzY-6jkamZ3BHLh2i4v93?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/o4DBE6TfBceyT0ku_I4Cx641lK_PnuWpHKDJKtzmjxWvu9hhrX3UcVqTTBNeoTpYT2p0Zo_WLyOVyxagL0ySJRYaanyScH_TRc0emzm_ke2rvVroFkcWe0gC7QNQK1SpY-xqpo5iWwvO89Y9hhyYpGjbgvRJpQmwNdzlTVUWbjAHCFB6i3Rwym7OZt4Dy1N2?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/f4llWBC3uDJUvaHk7_knFM9QdpoLYV-CRAbHVfbNStLcw1TWe8eNCyInZ7uCCfuIpqVF_KHx1DAn5nXjXwhQi4ihXDkQFVP6Xm5O_p9T8SuaOia2DyrE0ODt5NzKWaomedn04Iv-inRHqvPs1aACr2aD7Brv-P3btgLjeKG3WKWhNJ2pb-f0ta934OvM_qQ4?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/nm-ojHEBzKGKZPqu9ll6ME4lEgVuoj_PX8qQPDWUAVckZOnsv3cUZpG9mlvg1TTgi65RTe-ux57NBNz3D4F_Cj9KgTV4oqxUu93Yzr3331W_cfWMu-sko5QWiIw8kW4PJe34_TAI6CABvkYELlp0xv8UT9MyQbd0p0dKVmvEWXfEOYTlhPXl2-jNoOSUReUK?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/SSMfiD-by5Zlp-_tYsG9gCd75TK3eRc9_xY0EiKJs9lZ_6yspjUcTt_8zGdvMjfdYPhtmaRe-XP6SWdcr_Byt1NT5Gt5zc-Mi2ENA86cirThdf6G49u_y6pt60cBQYica6DTI5iR4f5Rlqj25vsJZGTaSnXhVfSrkwAn_mt9_VUXUgAADunw3VgDLmFHsEmU?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/4iD9WTcQcBs2xIXq5ISEgAh9cBOaMvcjnRLHNi99ILQkZbn8neivZRWf0q6cFs9_4_FMmsqbT1FED_IPtcujjubL8IrgVjFavg6CkHLdFk8AyX-Uek5KYqBK_AWufTiRm4Bs-vkQjYVby-tdK7vPwNSnM8eHY0zRE4qhDM84AxnrGnMwtJ-gw7YewrSN58kr?purpose=fullsize)
+
+特色：
+
+* 世界级木船场景
+* 湖面极静
+* YouTube 点击率非常高
+
+这是你目前最接近爆款的湖泊题材。
+
+---
+
+## 8. 高山冰川湖（Alpine Lake）
+
+Lake Louise
+
+![Image](https://images.openai.com/static-rsc-4/esbBfE8AaKd4TIdN4K_BG3evPjcNa0BMKQYPv4m3f7BBq4kfMgqUbsagC2OiFNCCqR44_76zl0mlZ4tN21ho6WGZl5ejqDrskDBg1LNmIyHSYeJi-kQwmOcSVl7GQiGeNXyCVDmiKMuiOMmXojqPAhIR4gRX_qKbJVmhVbM8nNV-BlRnSHVvLXhaOljSrBcr?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/Ok5CnWjG5Lz61VJbewumxENRVQCqzNnQJ2xOBUH-FpnkJ_kKOTGmGTMkkSFWCuHvIEjrB6aPccZ6NXgPT8DZopZ8wlCgh2O-X-fUIAG9ZkqTf5ofSErUBiqV5MYjudZGw-9UxFIKshPH_FSjPa8-VTuwzVGqtimZjoPq1L-HMOPvFRdm4xuWpEDdcPvh6_XI?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/e0oEpXTm-eE28Ydi9blETWO4tQr9HXmpQKSzAIOmA1bXO4r1gJelKW7usJEPBXBnaMuZRdCSkgCFXtS6lY81h0jq4ogpIPJfyRQH63Kx3bDs2YM3TqMFXQtoH_ZvUHst31IRQzLUIzjqk7A8o_j9L3hNus-ZQqyFsg1bhtkMGXP8m52HK3hQj0pEMH1ZRE35?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/St_1KzUbr3Ia0X-OZb1GxZl1jfSJr63YwhVn5rRnavLGkLRG2RoZb-4uxZ-egryabu8zu2mKViNKfVajySqxZK4vKE9ePDfaVXGPxJO1QuwXqHYjK0HNyMnU4L2-baHNhCBQ5QJpa84MVWGaCnpB0RXe70qhntnD4M3kGAxmS2ko-aczieyLIgS2j6-fK6fP?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/xy3YQyH26Br8YjtPMXaK0Sd2W5Zevt18DrmaqIRghcUlaL0YxMnNn43_fu3VEcDsFpaNFt5sEhvfHqgfDSS1wSnv-gjbjeR4AXVqIf9fqQa7D0Vq-zskH1HlE5yejGSxcOQugXNVdy74uZ8ZGfAyLow28s3qrBlHZ75jKU22JizMCCnpDs4pJUp23W0djvRO?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/kbvb7rELBfyTxOAxxoUlGczhL697A31BN84GhyMf8xlBsNF7VU36cFYCgMIxSoaIS982cVgBPtVUGBcyrnvbf4ud2yQggtVr9fcCgqo9Qk7aQ6t0ZutmZ6vxrFKh_XcYZnxoRF-6LWLL8eMFKBy3DleC6Ax4vlRTNOGfh9JdNk3KeXa1u-PJ6HmrMCAjKsDk?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/0w8QbC90xxz0O0-Hiv8znSCVgclrtBiQ_Ve9r2vjuV4ZqddYQSTcPmMrYeS3EFulRRglQXa-BJNc0crkg7rpND4K2DJGbRiw2lF1_r6QxLNvD2Lo-8eDuBdZ1S5qNfln9z5YSfR-34evfiSTRC7TqM4iUARrHTlfuPedulKy-tD6ZlhVghm7kG7x5EXll-qP?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/QWGFzBqg5HqX3C0zFNByRJjrfGdNKkgBcCYhbAkAxNMu9MJXDb4qX46gJrJ_hnMD8xkLBZV37B_JN6b2QARPMOhs6b6AGQZQ0iPPJrB5CoLREL9SRIkl8qi4l5HB9k6B4pr9kSimuhxCInUSktF4GklycfEEAhKt6OyxLfWj8w059FLdgza-nSZ_QOhL18Xj?purpose=fullsize)
+
+特色：
+
+* 冰川蓝湖水
+* 雪山背景
+* 世界级风景
+
+---
+
+## 9. 芦苇湖（Reed Lake）
+
+Neusiedler See
+
+![Image](https://images.openai.com/static-rsc-4/6DZT1cWaveuEs-g3CdUBwKrq5XElSRtKd1RjST_uytWpPEGQKti6FWCYalwcZxVNiBy5ITS3x7oizGuA_mMXiO78CZPFqkqpeXgd2BB6ZaqG26odecrzYuurqPshXgjOs4rExA-oszFArUjKr6Fzv99h2t8eQaeJ2l4UkJOuJrGQ6CWyAluaMmIVTr97Cw5s?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/qhUFLxHXq5D4KevLumTk7KJQfWnkSkPZxK2TnpfUMvLVXOqjIj0VzWNQ7En_sct4ywMfsOmqPIOfjZ-RYw-3XVVyNwCMZHf18Qh4hZkYexZz6Kjt6nRYTg50BiG1LjyBaURehB2-YYlqN8hVGjFyH00wOB9vm54Fn4NB_pr9-3b7s3HKnbMgAeSiIh3wjKpG?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/6SJduuVU_BMrL_DZgJ5eJWqXIFQRsJp_U9i-_l22ummd4FAs0xZedmlUbGR0imejtn6_vE-gJKvXcz2VAcRQppc5pzOMdKaFVQU1qpRiCqhEkrZ6ezZZRxifJsai9UM2IwI9OaC9oqU07TP8aS4Bxy5abDq-7IApoT9vA2cr0n7rZCuCM6pl_j55m5Vp3vDX?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/fLkVKsAUKQYvWpRPPuC2TsTPRhIIcF62ARM02j4XYm2PAF1JzFzM6ZNcQtK9F3Zj0GTdW7hcrli44JnklFTBg4B2S_nbvMor_9Xum76eY16F33iy95bbcQt4n6gy6M6UjznzSYlxdVKwPkCYy7rc0H9PFm25eiXGZC-uwTAJb-70MNu3xdQxCZ95ObqoGbnt?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/Ux3bddsMaLMTM_RoacIZsNJG_dV3VVpw8d1_--WuXwoDNmtf9h-osB1dsMhTaB-mQHlWW76ds3pT5_fiI-n4ssnnJ4_Q_a_OmRAq1dwo-NI4hU104OtdhKOPLBgqwQiiY8zt_nwE_ksgabCC0Paq1_RkTvKi2XeMtuCIui0FsBuDlP88DhWSUEZroye4MWDN?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/JoMpEeJHInPwvJZuTnIm-628TTz7r61-HbUzXs88_HtTAcsObbDNdP4WN9Z7j96vYoTR-e01Fo6U4axe9SZuAV8pv_z0Mdwfg4Aj20kBFaMZsRmCO3mmi2ri2MLFG2zwyQFSFT5KQf7qBJandqXthYCnfyHdxGLzcuMG1w5o5YUh5Rzg_KPNk9mpNJ5WT0uE?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/0YkOsjnMuBG-0_fvPAbu580Hm993lfy4SM3uvXykFab_VseoNnpz2Ydxtw3scIrTN60G_Rg9JJ09EhqQGxHQJ5jEC_nB1gJwrW--7hruvZ3ULzbrIn7X6_s-Db6-nRGrV-ok9RgYQV3swEcXWlYRMWMUf95CTYPbl8Ce1AYK5GB7MyIt_0chBYzg8BrHPkjk?purpose=fullsize)
+
+特色：
+
+* 欧洲最大的芦苇湖之一
+* 水鸟丰富
+* 风吹芦苇声音非常舒服
+
+---
+
+## 10. 天鹅湖（Waterbird Lake）
+
+Lake Hallstatt
+
+![Image](https://images.openai.com/static-rsc-4/GBr7DptwI8sr2-54pRVNKGzQyGDNJXXtTBuAfQ8Who4NVcPjU_n4ZUSSdoFsruxLHfcwvCBAnnRmXtNURt_CPIuu-Qk9MBuXwDs2MUVGtZ-19B99dE0nHhu7JmvOrxIvqhoIK8gUwjkZZIImIYHcAeiWjyRodJ5adONqNAygMDALm07jwo8vFgB_iseYqkw3?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/8xbC814whCe-WAqL75r0ciPjU4q1MQ-Nfo2N6RqRClVseHumhwf5L3hJb5qbxKNvjSRxLsbqm0RHVzBBMOWnN_YQ2Mh3d93qzfWJ3J9J2phwvSgO_VdWAEU_UKY8SsooVgU_o9qEnBx8HVMkSZjEgqTyGuNdLWg-WrkvvRoeMQpiXn4vuTO64jJG4IzGHcmq?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/yVuF1h9Lo3s3UCTRz1X884vHGqGV0hhbbYA_EOxdUig8DxN6TeERxeVTrEAbplsEn9vJ7w8ntyf8AQX_R7hYtVW_ibKPCeJLG_vJElNXIC5gLQro53F0eOBJ7SVyPuYR7YnsRqbgK8YOwW5mdFHMkLfvgKbfbF1lif3F81HtW6u42SZ1fr_2OL9lkQe8RX7T?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/KEo3_StO5jNqMObd-AQ0sS3urvXn7xS8k8vnPKqEr4MKOcDaL4xUHErnaQMyo5--bqthVvJBa_wTyTPc8Qz3rNqsAfMZY8J3kHQmudFExfCHfMOFlCNC5wSh3tgxZa2Qd7T1AKdZWUUMnKKtBsUNFD30oqgLOKkA_o6g3mskwiNw_xecIx7Db77SEETw1lU9?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/yfwlzY8mO-k8uwWUnvBxSZRfBAlW9V2qV4w5zeYl_GrGToTBh1XSO5Cm6RehFPpMrS2Eru-qPOu4SInY1i8FzIkDM7PAI3QSRW9JCnLdifx4s2ySp7_XHuHh6Dl1Sgc0FWIl3vijakMJzpgZg350wM4GPOBscFn1_RpbikEwHUrEqFtzicD2N0aoQkayDmwo?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/e88SI6ndiGHFpFktV6Ux46ysAzgg0A0ykVRvu23gCTWbgbp3vWMwKDVOHxckwmC3BRewFf8SpE0aAXBX-Mkr5MUkXUaFF9fJUTkOWnPn4RqpGoq68dD3rf29Hqdyp9E86k6cQbi3IRyH6x5twZyaq9YdgDaQ7548QtW5PpUby2qbyOO7F3SRjym2Jt54MuBl?purpose=fullsize)
+
+![Image](https://images.openai.com/static-rsc-4/6mbHLAfgo67Ni3qoGLRoiS2vAQyBTXqkDRGawtamELDYWnPukaVFjUz1jOp21gaeVr9jxgH6h_GqCs6ZoyJbyXzpFHxdMEJH8Ib5sZO1dQLgHzDdBDCQs1XiDc7YaxakrSbuThAEh8pA7ZlDbymElM0ET0zHEg1yEwI92gO_8Qj6u7i7yEhfWG25AieZQAD7?purpose=fullsize)
+
+特色：
+
+* 天鹅和野鸭经常出现
+* 湖面极其平静
+* 欧洲童话风格
+
+---
+
+如果从 **YouTube「4K自然声 + 钢琴 + 长时专注」赛道** 的视觉吸引力排序，我会排：
+
+1. Lago di Braies
+2. Lake Louise
+3. Lake Bled
+4. Lake Kawaguchi
+5. Lake Annecy
+6. Lake Hallstatt
+
+这几个在视觉上都具备“看一眼就想点进来”的潜力，而且素材资源（照片、视频、无人机镜头）相对丰富，适合做系列化的「Healing Lake Sounds」频道。

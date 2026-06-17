@@ -1,0 +1,82 @@
+{
+  "defaults": {
+    "days": 30,
+    "min_views": 30000,
+    "top_n": 3,
+    "clip_seconds": 300,
+    "search_limit": 40,
+    "max_height": 720
+  },
+  "series": {
+    "morning_mist_lake": {
+      "name": "晨雾湖泊 · Morning Mist Lake（Lake Bled）",
+      "queries": [
+        "morning mist lake",
+        "lake bled"
+      ]
+    },
+    "lakeside_breeze": {
+      "name": "湖边微风 · Lakeside Breeze（Lake Windermere）",
+      "queries": [
+        "lakeside breeze lake",
+        "lake windermere"
+      ]
+    },
+    "wooden_pier": {
+      "name": "湖畔木码头 · Wooden Pier（Lake Bohinj）",
+      "queries": [
+        "wooden pier lake",
+        "lake bohinj"
+      ]
+    },
+    "rain_on_lake": {
+      "name": "湖面雨声 · Rain on Lake（Lake Kawaguchi）",
+      "queries": [
+        "rain on lake",
+        "lake kawaguchi"
+      ]
+    },
+    "evening_lake": {
+      "name": "黄昏湖泊 · Evening Lake（Lake Annecy）",
+      "queries": [
+        "evening lake",
+        "lake annecy"
+      ]
+    },
+    "lake_campfire": {
+      "name": "湖边篝火 · Lake Campfire（Lake Tahoe）",
+      "queries": [
+        "lake campfire",
+        "lake tahoe"
+      ]
+    },
+    "floating_boat": {
+      "name": "小船漂浮 · Floating Boat（Lago di Braies）",
+      "queries": [
+        "floating boat lake",
+        "lago di braies"
+      ]
+    },
+    "alpine_lake": {
+      "name": "高山冰川湖 · Alpine Lake（Lake Louise）",
+      "queries": [
+        "alpine lake",
+        "lake louise"
+      ]
+    },
+    "reed_lake": {
+      "name": "芦苇湖 · Reed Lake（Neusiedler See）",
+      "queries": [
+        "reed lake",
+        "neusiedler see"
+      ]
+    },
+    "waterbird_lake": {
+      "name": "天鹅湖 · Waterbird Lake（Lake Hallstatt）",
+      "queries": [
+        "waterbird lake",
+        "lake hallstatt"
+      ]
+    }
+  }
+}
