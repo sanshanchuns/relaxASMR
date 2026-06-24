@@ -15,8 +15,15 @@ output/
 # StudyCase 抓取片段（mp4 体积大）
 scripts/youtube_top3/output/
 
+# 剪映音效库（音频体积大）
+scripts/capcut_audio/output/
+
 # Reaper peaks
 *.reapeaks
 
 # macOS
 .DS_Store
+
+# python cache
+scripts/capcut_audio/__pycache__/
+scripts/youtube_top3/__pycache__/
