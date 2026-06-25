@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
-"""从剪映（ulikecam）音效 API 按分层关键词批量下载雨声音效库。"""
+"""从剪映（ulikecam）音效/音乐 API 按分层关键词批量下载素材库。
+
+支持两类层级（layer.type）：
+- effect：调用 effect/search 关键词搜索音效
+- music ：调用 lv/v1/get_collection_songs 拉取音乐歌单
+
+可按配置仅下载可商用素材（commercial_only）。
+"""
 
 from __future__ import annotations
 
@@ -13,23 +20,47 @@ import urllib.request
 from pathlib import Path
 
 SCRIPT_DIR = Path(__file__).resolve().parent
-LAYERS_PATH = SCRIPT_DIR / "layers.json"
-OUTPUT_ROOT = SCRIPT_DIR / "output"
+REPO_ROOT = SCRIPT_DIR.parent.parent
+DEFAULT_CONFIG = SCRIPT_DIR / "rain_layers.json"
 
-SEARCH_URL = (
+def resolve_output_root(defaults: dict) -> Path:
+    raw = defaults.get("output_dir", "output")
+    p = Path(raw)
+    if p.is_absolute():
+        return p
+    if raw.startswith("assets/"):
+        return REPO_ROOT / raw
+    return SCRIPT_DIR / raw
+
+
+EFFECT_SEARCH_URL = (
     "https://lv-api-sinfonlinec.ulikecam.com/artist/v1/effect/search"
     "?aid=3704&device_platform=mac&region=CN&app_name=JianyingPro&language=zh-Hans"
 )
+MUSIC_COLLECTION_URL = (
+    "https://lv-pc-api-sinfonlinec.ulikecam.com/lv/v1/get_collection_songs"
+    "?aid=3704&device_platform=mac&region=CN&app_name=JianyingPro&language=zh-Hans"
+    "&version_code=10.7.8&channel=jianyingpro_beta"
+)
 
-REQUEST_HEADERS = {
+EFFECT_HEADERS = {
     "Host": "lv-api-sinfonlinec.ulikecam.com",
     "content-type": "application/json",
     "user-agent": "Cronet/TTNetVersion:906739f5 2024-12-18",
 }
+MUSIC_HEADERS = {
+    "Host": "lv-pc-api-sinfonlinec.ulikecam.com",
+    "content-type": "application/json",
+    "appvr": "10.7.8-beta1",
+    "lan": "zh-Hans",
+    "loc": "CN",
+    "pf": "3",
+    "user-agent": "Cronet/TTNetVersion:906739f5 2024-12-18",
+}
 
 
-def load_config() -> dict:
-    data = json.loads(LAYERS_PATH.read_text(encoding="utf-8"))
+def load_config(config_path: Path) -> dict:
+    data = json.loads(config_path.read_text(encoding="utf-8"))
     return {
         "defaults": data.get("defaults", {}),
         "layers": data.get("layers", {}),
@@ -43,24 +74,43 @@ def safe_filename(text: str, max_len: int = 60) -> str:
     return cleaned[:max_len]
 
 
-def parse_paid_type(business_info: dict | None) -> str:
+def parse_business_info(business_info: dict | None) -> dict:
+    """返回 {paid_type, paid_modes}。"""
+    result = {"paid_type": "unknown", "paid_modes": []}
     if not business_info:
-        return "unknown"
+        return result
     raw = business_info.get("json_str", "")
     if not raw:
-        return "unknown"
+        return result
     try:
         info = json.loads(raw)
-        return info.get("paid_type", "unknown")
     except json.JSONDecodeError:
-        return "unknown"
+        return result
+    result["paid_type"] = info.get("paid_type", "unknown")
+    strategies = (
+        info.get("commercial_strategy", {})
+        .get("resource_export", {})
+        .get("paid_strategy_list", [])
+    )
+    result["paid_modes"] = [s.get("paid_mode") for s in strategies if s.get("paid_mode")]
+    return result
 
 
-def search_effects(
-    query: str,
-    offset: int,
-    count: int,
-) -> dict:
+def http_post_json(url: str, headers: dict, body: dict) -> dict:
+    payload = json.dumps(body).encode("utf-8")
+    req = urllib.request.Request(url, data=payload, headers=headers, method="POST")
+    with urllib.request.urlopen(req, timeout=30) as resp:
+        data = json.loads(resp.read().decode("utf-8"))
+    if data.get("ret") != "0":
+        raise RuntimeError(f"API error: {data.get('errmsg', data)}")
+    return data.get("data", {})
+
+
+# ---------------------------------------------------------------------------
+# Effect（音效）
+# ---------------------------------------------------------------------------
+
+def search_effects(query: str, offset: int, count: int) -> dict:
     body = {
         "app_id": 3704,
         "count": count,
@@ -75,18 +125,10 @@ def search_effects(
         "need_recommend": False,
         "offset": offset,
         "pack_optional": {
-            "fav_scene": None,
-            "image_pack_param": None,
-            "large_image_formats": [],
             "need_collection_id": False,
             "need_contract": True,
             "need_favorite_info": False,
-            "need_operation_tag": False,
-            "need_parent_tag": False,
-            "need_tag": False,
-            "need_thumb": False,
             "only_commercial": False,
-            "tag_one_level": None,
         },
         "query": query,
         "replicate_sdk_version": "",
@@ -106,20 +148,7 @@ def search_effects(
         },
         "strategy_extra": "",
     }
-    payload = json.dumps(body).encode("utf-8")
-    req = urllib.request.Request(
-        SEARCH_URL,
-        data=payload,
-        headers=REQUEST_HEADERS,
-        method="POST",
-    )
-    with urllib.request.urlopen(req, timeout=30) as resp:
-        data = json.loads(resp.read().decode("utf-8"))
-
-    if data.get("ret") != "0":
-        raise RuntimeError(f"API error: {data.get('errmsg', data)}")
-
-    return data.get("data", {})
+    return http_post_json(EFFECT_SEARCH_URL, EFFECT_HEADERS, body)
 
 
 def parse_effect_item(item: dict) -> dict | None:
@@ -129,10 +158,9 @@ def parse_effect_item(item: dict) -> dict | None:
     title = common.get("title") or ""
     download_info = common.get("download_info") or {}
     url = download_info.get("url") or (common.get("item_urls") or [None])[0]
-
     if not effect_id or not url:
         return None
-
+    biz = parse_business_info(common.get("business_info"))
     return {
         "id": str(effect_id),
         "title": title,
@@ -140,103 +168,197 @@ def parse_effect_item(item: dict) -> dict | None:
         "md5": common.get("md5", ""),
         "duration": audio.get("duration"),
         "duration_ms": audio.get("duration_ms"),
-        "paid_type": parse_paid_type(common.get("business_info")),
+        "paid_type": biz["paid_type"],
+        "paid_modes": biz["paid_modes"],
+        "ext": "mp3",
     }
+
+
+def effect_is_commercial(effect: dict) -> bool:
+    """音效可免费商用：paid_type 为 free，或导出策略含 free。"""
+    if effect["paid_type"] == "free":
+        return True
+    return "free" in (effect.get("paid_modes") or [])
 
 
 def collect_for_keyword(
     query: str,
-    per_keyword: int,
-    include_paid: bool,
+    target: int,
+    commercial_only: bool,
     page_size: int,
     global_seen: set[str],
 ) -> list[dict]:
     results: list[dict] = []
     offset = 0
-
-    while len(results) < per_keyword:
+    while len(results) < target:
         data = search_effects(query, offset, page_size)
         items = data.get("effect_item_list") or []
         if not items:
             break
-
         for item in items:
             parsed = parse_effect_item(item)
             if not parsed:
                 continue
-
             dedupe_key = parsed["md5"] or parsed["id"]
             if dedupe_key in global_seen:
                 continue
-
-            if not include_paid and parsed["paid_type"] not in ("free", "unknown"):
+            if commercial_only and not effect_is_commercial(parsed):
                 continue
-
             global_seen.add(dedupe_key)
-            parsed["keyword"] = query
+            parsed["source"] = query
             results.append(parsed)
-            if len(results) >= per_keyword:
+            if len(results) >= target:
                 break
-
         if not data.get("has_more"):
             break
         offset = data.get("next_offset", offset + len(items))
         time.sleep(0.3)
-
     return results
 
 
+# ---------------------------------------------------------------------------
+# Music（音乐）
+# ---------------------------------------------------------------------------
+
+def fetch_collection_songs(collection_id: str, offset: int, count: int) -> dict:
+    body = {
+        "count": count,
+        "filter_commercial": False,
+        "filter_paid_type": [],
+        "id": int(collection_id),
+        "offset": offset,
+        "only_enterprise_commercial": False,
+        "scene": 0,
+        "strategy_extra": "",
+    }
+    return http_post_json(MUSIC_COLLECTION_URL, MUSIC_HEADERS, body)
+
+
+def parse_song_item(song: dict) -> dict | None:
+    song_id = song.get("id")
+    url = song.get("preview_url")
+    if not song_id or not url:
+        return None
+    return {
+        "id": str(song_id),
+        "title": song.get("title") or "",
+        "author": song.get("author") or "",
+        "url": url,
+        "md5": "",
+        "duration": song.get("duration"),
+        "duration_ms": (song.get("duration") or 0) * 1000,
+        "paid_type": song.get("paid_type", "unknown"),
+        "is_commerce": bool(song.get("is_commerce")),
+        "ext": "m4a",
+    }
+
+
+def collect_for_collection(
+    collection_id: str,
+    target: int,
+    commercial_only: bool,
+    page_size: int,
+    global_seen: set[str],
+) -> list[dict]:
+    results: list[dict] = []
+    offset = 0
+    while len(results) < target:
+        data = fetch_collection_songs(collection_id, offset, page_size)
+        songs = data.get("songs") or []
+        if not songs:
+            break
+        for song in songs:
+            parsed = parse_song_item(song)
+            if not parsed:
+                continue
+            if parsed["id"] in global_seen:
+                continue
+            if commercial_only and not parsed["is_commerce"]:
+                continue
+            global_seen.add(parsed["id"])
+            results.append(parsed)
+            if len(results) >= target:
+                break
+        if not data.get("has_more"):
+            break
+        offset += len(songs)
+        time.sleep(0.3)
+    return results
+
+
+# ---------------------------------------------------------------------------
+# 下载 / 落地
+# ---------------------------------------------------------------------------
+
 def download_file(url: str, dest: Path) -> None:
     dest.parent.mkdir(parents=True, exist_ok=True)
-    req = urllib.request.Request(url, headers={"User-Agent": REQUEST_HEADERS["user-agent"]})
+    req = urllib.request.Request(url, headers={"User-Agent": EFFECT_HEADERS["user-agent"]})
     with urllib.request.urlopen(req, timeout=120) as resp:
         dest.write_bytes(resp.read())
 
 
-def local_path_for(layer_id: str, keyword: str, effect: dict) -> Path:
-    kw_dir = safe_filename(keyword.replace(" ", "_"))
-    fname = f"{effect['id']}_{safe_filename(effect['title'])}.mp3"
-    return OUTPUT_ROOT / layer_id / kw_dir / fname
+def local_path_for(output_root: Path, layer_id: str, group: str, item: dict) -> Path:
+    group_dir = safe_filename(group.replace(" ", "_"))
+    fname = f"{item['id']}_{safe_filename(item['title'])}.{item['ext']}"
+    return output_root / layer_id / group_dir / fname
 
 
 def process_layer(
     layer_id: str,
     spec: dict,
     defaults: dict,
+    output_root: Path,
     *,
     dry_run: bool,
-    per_keyword: int | None,
-    include_paid: bool | None,
+    target_override: int | None,
+    commercial_only: bool,
     page_size: int,
     global_seen: set[str],
 ) -> list[dict]:
     name = spec.get("name", layer_id)
-    keywords = spec.get("keywords", [])
-    pk = per_keyword if per_keyword is not None else int(defaults.get("per_keyword", 15))
-    paid = include_paid if include_paid is not None else bool(defaults.get("include_paid", True))
+    layer_type = spec.get("type", "effect")
 
-    print(f"\n==> 层级: {name} ({layer_id})")
+    print(f"\n==> 层级: {name} ({layer_id}) [{layer_type}]")
     layer_manifest: list[dict] = []
 
-    for keyword in keywords:
-        print(f"  搜索: {keyword} (目标 {pk} 条)")
-        effects = collect_for_keyword(keyword, pk, paid, page_size, global_seen)
-        print(f"    命中: {len(effects)} 条")
+    if layer_type == "music":
+        target = target_override if target_override is not None else int(
+            defaults.get("per_collection", 30)
+        )
+        groups = [
+            (c.get("name", str(c.get("id"))), str(c.get("id")), "collection")
+            for c in spec.get("collections", [])
+        ]
+        collector = collect_for_collection
+    else:
+        target = target_override if target_override is not None else int(
+            defaults.get("per_keyword", 15)
+        )
+        groups = [(kw, kw, "keyword") for kw in spec.get("keywords", [])]
+        collector = collect_for_keyword
 
-        for effect in effects:
-            local_path = local_path_for(layer_id, keyword, effect)
+    for group_label, group_key, group_kind in groups:
+        print(f"  {group_kind}: {group_label} (目标 {target} 条)")
+        items = collector(group_key, target, commercial_only, page_size, global_seen)
+        print(f"    命中: {len(items)} 条")
+
+        for item in items:
+            local_path = local_path_for(output_root, layer_id, group_label, item)
             entry = {
                 "layer_id": layer_id,
                 "layer_name": name,
-                "keyword": keyword,
-                "id": effect["id"],
-                "title": effect["title"],
-                "duration": effect["duration"],
-                "duration_ms": effect["duration_ms"],
-                "paid_type": effect["paid_type"],
-                "url": effect["url"],
-                "local_path": str(local_path.relative_to(SCRIPT_DIR)),
+                "layer_type": layer_type,
+                "group": group_label,
+                "id": item["id"],
+                "title": item["title"],
+                "duration": item.get("duration"),
+                "paid_type": item.get("paid_type"),
+                "url": item["url"],
+                "local_path": str(local_path.relative_to(REPO_ROOT)),
             }
+            if layer_type == "music":
+                entry["author"] = item.get("author")
+                entry["is_commerce"] = item.get("is_commerce")
 
             if dry_run:
                 entry["status"] = "dry_run"
@@ -248,18 +370,18 @@ def process_layer(
                 entry["status"] = "skipped"
             else:
                 try:
-                    print(f"    下载: {effect['title'][:40]}...")
-                    download_file(effect["url"], local_path)
+                    print(f"    下载: {item['title'][:40]}...")
+                    download_file(item["url"], local_path)
                     entry["status"] = "downloaded"
                     time.sleep(0.2)
                 except (urllib.error.URLError, TimeoutError, OSError) as exc:
-                    print(f"    ✗ 失败: {effect['title'][:40]} — {exc}", file=sys.stderr)
+                    print(f"    ✗ 失败: {item['title'][:40]} — {exc}", file=sys.stderr)
                     entry["status"] = "failed"
                     entry["error"] = str(exc)
 
             layer_manifest.append(entry)
 
-    layer_dir = OUTPUT_ROOT / layer_id
+    layer_dir = output_root / layer_id
     layer_dir.mkdir(parents=True, exist_ok=True)
     manifest_path = layer_dir / "manifest.json"
     manifest_path.write_text(
@@ -267,43 +389,43 @@ def process_layer(
         encoding="utf-8",
     )
     print(f"  manifest: {manifest_path}")
-
     return layer_manifest
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="剪映音效分层批量下载（雨声库）")
+    parser = argparse.ArgumentParser(description="剪映音效/音乐分层批量下载")
+    parser.add_argument("--config", default=str(DEFAULT_CONFIG), help="配置文件路径")
     parser.add_argument("--layer", action="append", help="指定层级 ID（可多次）")
     parser.add_argument("--all", action="store_true", help="下载全部层级")
     parser.add_argument("--list", action="store_true", help="列出可用层级")
     parser.add_argument("--dry-run", action="store_true", help="只搜索，不下载")
-    parser.add_argument("--per-keyword", type=int, help="每个关键词下载条数")
-    parser.add_argument(
-        "--include-paid",
-        action="store_true",
-        default=None,
-        help="包含付费素材",
-    )
-    parser.add_argument(
-        "--free-only",
-        action="store_true",
-        help="仅下载免费素材",
-    )
+    parser.add_argument("--target", type=int, help="每关键词/歌单下载条数（覆盖配置）")
+    parser.add_argument("--all-licenses", action="store_true", help="不限商用，下载全部")
     args = parser.parse_args()
 
-    if not LAYERS_PATH.is_file():
-        print(f"Error: 找不到配置 {LAYERS_PATH}", file=sys.stderr)
+    config_path = Path(args.config)
+    if not config_path.is_absolute():
+        config_path = (Path.cwd() / config_path).resolve()
+    if not config_path.is_file():
+        config_path = SCRIPT_DIR / Path(args.config).name
+    if not config_path.is_file():
+        print(f"Error: 找不到配置 {args.config}", file=sys.stderr)
         sys.exit(1)
 
-    cfg = load_config()
+    cfg = load_config(config_path)
     all_layers = cfg["layers"]
     defaults = cfg["defaults"]
     page_size = int(defaults.get("page_size", 50))
+    output_root = resolve_output_root(defaults)
+    commercial_only = not args.all_licenses and bool(defaults.get("commercial_only", False))
 
     if args.list:
         for lid, spec in all_layers.items():
-            kw = ", ".join(spec.get("keywords", []))
-            print(f"  {lid}: {spec.get('name', lid)} — {kw}")
+            if spec.get("type") == "music":
+                detail = ", ".join(c.get("name", "") for c in spec.get("collections", []))
+            else:
+                detail = ", ".join(spec.get("keywords", []))
+            print(f"  {lid}: {spec.get('name', lid)} [{spec.get('type', 'effect')}] — {detail}")
         return
 
     if args.all or not args.layer:
@@ -316,28 +438,24 @@ def main() -> None:
             print("可用:", ", ".join(all_layers.keys()), file=sys.stderr)
             sys.exit(1)
 
-    include_paid: bool | None = None
-    if args.free_only:
-        include_paid = False
-    elif args.include_paid:
-        include_paid = True
-
-    print("剪映音效分层下载")
-    print(f"配置: {LAYERS_PATH}")
+    print("剪映音效/音乐分层下载")
+    print(f"配置: {config_path}")
+    print(f"输出: {output_root}")
+    print(f"商用过滤: {'是（仅可商用）' if commercial_only else '否'}")
     if args.dry_run:
         print("模式: dry-run（仅搜索）")
 
     global_seen: set[str] = set()
     total = 0
-
     for lid in targets:
         manifest = process_layer(
             lid,
             all_layers[lid],
             defaults,
+            output_root,
             dry_run=args.dry_run,
-            per_keyword=args.per_keyword,
-            include_paid=include_paid,
+            target_override=args.target,
+            commercial_only=commercial_only,
             page_size=page_size,
             global_seen=global_seen,
         )

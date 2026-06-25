@@ -1,0 +1,71 @@
+{
+  "defaults": {
+    "duration_seconds": 30,
+    "loop": true,
+    "prompt_influence": 0.35,
+    "model_id": "eleven_text_to_sound_v2",
+    "output_format": "pcm_44100"
+  },
+  "prompts": [
+    {
+      "id": "lake_gentle_lap",
+      "layer": "water",
+      "series": "lake",
+      "text": "Gentle lake waves lapping against a sandy shore, calm and continuous, soft water ambience for focus"
+    },
+    {
+      "id": "lake_dock_splash",
+      "layer": "dock",
+      "series": "lake",
+      "text": "Water gently splashing against wooden dock posts, rhythmic and subtle, lakeside ambience"
+    },
+    {
+      "id": "lake_morning_mist",
+      "layer": "water",
+      "series": "lake",
+      "text": "Very soft lake surface ripples in morning mist, minimal movement, serene and spacious"
+    },
+    {
+      "id": "wind_light_breeze",
+      "layer": "wind",
+      "series": "lake",
+      "text": "Light breeze through lakeside trees, soft rustling leaves, gentle and steady"
+    },
+    {
+      "id": "reed_wind",
+      "layer": "wind",
+      "series": "lake",
+      "text": "Wind blowing through reeds at a lakeside, soft friction sound, pink noise texture"
+    },
+    {
+      "id": "birds_distant",
+      "layer": "life",
+      "series": "lake",
+      "text": "Distant birds chirping near a calm lake, sparse and natural, not loud"
+    },
+    {
+      "id": "rain_light_lake",
+      "layer": "rain",
+      "series": "rain",
+      "text": "Light rain falling on a calm lake surface, soft continuous drizzle, ASMR sleep ambience"
+    },
+    {
+      "id": "rain_on_leaves",
+      "layer": "impact",
+      "series": "rain",
+      "text": "Raindrops hitting forest leaves, delicate high-frequency impacts, natural and immersive"
+    },
+    {
+      "id": "rain_roof_drip",
+      "layer": "water",
+      "series": "rain",
+      "text": "Roof drip after rain, occasional water drops falling, hypnotic and sparse"
+    },
+    {
+      "id": "thunder_distant",
+      "layer": "accent",
+      "series": "rain",
+      "text": "Distant rolling thunder, far away storm, low rumble, occasional and soft"
+    }
+  ]
+}

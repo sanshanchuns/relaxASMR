@@ -1,0 +1,49 @@
+{
+  "defaults": {
+    "per_keyword": 100,
+    "per_collection": 30,
+    "commercial_only": true,
+    "page_size": 50,
+    "output_dir": "assets/lake_sound"
+  },
+  "layers": {
+    "1_water": {
+      "type": "effect",
+      "name": "水体层",
+      "keywords": ["湖水", "湖浪", "湖面", "流水"]
+    },
+    "2_wind": {
+      "type": "effect",
+      "name": "风声层",
+      "keywords": ["微风", "风声", "风吹树叶", "芦苇"]
+    },
+    "3_dock_boat": {
+      "type": "effect",
+      "name": "码头船只层",
+      "keywords": ["划船", "船桨", "水声"]
+    },
+    "4_rain": {
+      "type": "effect",
+      "name": "雨层",
+      "keywords": ["雨声", "雨打湖面"]
+    },
+    "5_life": {
+      "type": "effect",
+      "name": "生物层",
+      "keywords": ["鸟鸣", "水鸟", "蛙鸣", "蟋蟀", "鸭子"]
+    },
+    "6_accent": {
+      "type": "effect",
+      "name": "点缀层",
+      "keywords": ["雷声", "瀑布", "篝火", "草地"]
+    },
+    "7_music": {
+      "type": "music",
+      "name": "音乐层",
+      "collections": [
+        { "name": "舒缓", "id": "6927573368820615950" },
+        { "name": "纯音乐", "id": "6894170693479549704" }
+      ]
+    }
+  }
+}
