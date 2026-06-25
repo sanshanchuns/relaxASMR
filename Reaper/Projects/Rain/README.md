@@ -29,7 +29,7 @@ python3 Reaper/scripts/generate_subproject.py --scene MVI_6918
 - 轨 **Group**（Folder 父轨）· `JS ASMR Sleep HF EQ` + `ReaComp`
 - 轨 1–7 在 Folder 内 · 轨 8 视频在 Folder 末（静音，仅渲染）
 
-首次打开若 JS 未识别，运行一次 `asmr_apply_group_eq.lua`（会安装到 `Effects/relaxASMR/`）。
+首次打开若 JS 未识别：在 Group 上手动加 ReaEQ（模板默认 ReaComp；高频用 ReaEQ shelf，见设计文档）。
 
 ## 打开工程后
 

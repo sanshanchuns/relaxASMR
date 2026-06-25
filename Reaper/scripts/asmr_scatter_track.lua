@@ -1,16 +1,11 @@
--- @description ASMR · 单轨随机散布 one-shot（通用）
--- @version 2.0
+-- @description ASMR · 单轨随机散布（配方优先，无配方则手动）
+-- @version 3.0
 -- @author relaxASMR
 -- @about
---   参数（GetUserInputs）：
---     track        轨道号（1-based），0=当前选中轨
---     duration_h   工程时长（小时），0=读工程长度
---     count        总出现次数；0=按间隔自动铺满
---     min_gap_min  最小间隔（分钟）
---     max_gap_min  最大间隔（分钟）
---     randomness   随机程度 0~1（越大间隔/位置抖动越大）
---     fade_ms      淡入淡出（毫秒）
---   优先复制轨道上已有 item（template）；否则用 paths 配置或选文件。
+--   输入：0=当前选中轨 · 或层 id（3_impact）· 或配方 track 号（3）
+--   有 scripts/asmr_config.lua 且匹配 scatter_layers → 用配方间隔/随机度
+--   否则弹出手动参数（时长、间隔、随机度等）
+--   整片铺稀疏仍用 asmr_apply_recipe.lua
 
 local r = reaper
 
@@ -18,24 +13,57 @@ local function log(msg)
   r.ShowConsoleMsg("[scatter] " .. msg .. "\n")
 end
 
-local function parse_num(s, default)
-  local n = tonumber(s)
-  if n == nil then return default end
-  return n
+local function script_dir()
+  local _, p = r.get_action_context()
+  return p:match("^(.+)[\\/][^\\/]+$")
 end
 
 local function load_paths()
-  local _, script_path = r.get_action_context()
-  if not script_path then return nil end
-  local dir = script_path:match("^(.+)[\\/][^\\/]+$")
-  local f = loadfile(dir .. package.config:sub(1, 1) .. "asmr_paths.lua")
+  local f = loadfile(script_dir() .. package.config:sub(1, 1) .. "asmr_paths.lua")
   if not f then return nil end
   return f()
 end
 
-local function track_by_number(n)
-  if n < 1 then return nil end
-  return r.GetTrack(0, n - 1)
+local function track_name(tr)
+  local _, name = r.GetTrackName(tr)
+  return name or ""
+end
+
+local function resolve_track(key)
+  key = (key or ""):match("^%s*(.-)%s*$") or ""
+  if key == "" or key == "0" then
+    return r.GetSelectedTrack(0, 0), key
+  end
+  local n = tonumber(key)
+  if n and n > 0 then
+    for i = 0, r.CountTracks(0) - 1 do
+      local tr = r.GetTrack(0, i)
+      local _, name = r.GetTrackName(tr)
+      if name == key then return tr, name end
+    end
+    return r.GetTrack(0, n - 1), "track " .. n
+  end
+  for i = 0, r.CountTracks(0) - 1 do
+    local tr = r.GetTrack(0, i)
+    local _, name = r.GetTrackName(tr)
+    if name == key then return tr, name end
+  end
+  return nil, key
+end
+
+local function find_scatter_spec(cfg, track, key)
+  if not cfg or not track then return nil end
+  local name = track_name(track)
+  local paths_mod = load_paths()
+  for _, spec in ipairs(cfg.scatter_layers or {}) do
+    if spec.id and name == spec.id then return spec end
+    if paths_mod and paths_mod.track_for_layer then
+      if paths_mod.track_for_layer(spec) == track then return spec end
+    end
+    local n = tonumber(key)
+    if n and spec.track == n then return spec end
+  end
+  return nil
 end
 
 local function get_item_chunk(item)
@@ -45,38 +73,67 @@ local function get_item_chunk(item)
   return nil
 end
 
-local function get_source_filename(src)
+local function get_source_path(take)
+  local src = r.GetMediaItemTake_Source(take)
+  if not src then return nil end
   local a, b = r.GetMediaSourceFileName(src, "")
   if type(b) == "string" and b ~= "" then return b end
   if type(a) == "string" and a ~= "" then return a end
   return nil
 end
 
-local function get_template(track)
+local function get_template_from_track(track)
   local n = r.CountTrackMediaItems(track)
+  local fallback = nil
   for i = 0, n - 1 do
     local item = r.GetTrackMediaItem(track, i)
+    if r.GetMediaItemInfo_Value(item, "B_LOOPSRC") == 1 then goto continue end
     local take = r.GetActiveTake(item)
-    if take then
-      local src = r.GetMediaItemTake_Source(take)
-      if src then
-        local len = r.GetMediaItemInfo_Value(item, "D_LENGTH")
-        local src_len = r.GetMediaSourceLength(src, false)
-        if len > src_len * 1.5 then len = src_len end
-        if len and len > 0 then
-          return {
-            chunk = get_item_chunk(item),
-            length = len,
-            path = get_source_filename(src),
-          }
-        end
-      end
-    end
+    if not take then goto continue end
+    local src = r.GetMediaItemTake_Source(take)
+    if not src then goto continue end
+    local len = r.GetMediaItemInfo_Value(item, "D_LENGTH")
+    local src_len = r.GetMediaSourceLength(src, false)
+    if len > src_len * 1.5 then len = src_len end
+    local tmpl = {
+      chunk = get_item_chunk(item),
+      length = len,
+      path = get_source_path(take),
+    }
+    if r.GetMediaItemInfo_Value(item, "D_POSITION") < 0.001 then return tmpl end
+    if not fallback then fallback = tmpl end
+    ::continue::
   end
-  return nil
+  return fallback
 end
 
-local function delete_items(track)
+local function template_from_spec(spec, paths_mod)
+  local rel = spec.paths and spec.paths[1]
+  if not rel then return nil end
+  local path = paths_mod.resolve_asset(rel, paths_mod.repo_root())
+  if not path then return nil end
+  local src = r.PCM_Source_CreateFromFile(path)
+  if not src then return nil end
+  local len = r.GetMediaSourceLength(src, false)
+  if not len or len <= 0 then return nil end
+  return { path = path, length = len }
+end
+
+local function delete_scatter_items(track, keep_template)
+  local n = r.CountTrackMediaItems(track)
+  for i = n - 1, 0, -1 do
+    local item = r.GetTrackMediaItem(track, i)
+    if keep_template and r.GetMediaItemInfo_Value(item, "D_POSITION") < 0.001 then
+      goto continue
+    end
+    if r.GetMediaItemInfo_Value(item, "B_LOOPSRC") ~= 1 then
+      r.DeleteTrackMediaItem(track, item)
+    end
+    ::continue::
+  end
+end
+
+local function delete_all_items(track)
   local n = r.CountTrackMediaItems(track)
   for i = n - 1, 0, -1 do
     r.DeleteTrackMediaItem(track, r.GetTrackMediaItem(track, i))
@@ -112,22 +169,16 @@ local function insert_oneshot(track, path, pos, item_len, fade_sec)
 end
 
 local function insert_from_template(track, template, pos, fade_sec)
-  local item = r.AddMediaItemToTrack(track)
-  if not item then return false end
-  if template.chunk then
-    local ok = r.SetItemStateChunk(item, template.chunk, false)
-    if not ok then
-      r.DeleteTrackMediaItem(track, item)
-      if template.path then
-        return insert_oneshot(track, template.path, pos, template.length, fade_sec)
-      end
-      return false
-    end
-  elseif template.path then
-    r.DeleteTrackMediaItem(track, item)
+  if template.path and not template.chunk then
     return insert_oneshot(track, template.path, pos, template.length, fade_sec)
-  else
+  end
+  local item = r.AddMediaItemToTrack(track)
+  if not item or not template.chunk then return false end
+  if not r.SetItemStateChunk(item, template.chunk, false) then
     r.DeleteTrackMediaItem(track, item)
+    if template.path then
+      return insert_oneshot(track, template.path, pos, template.length, fade_sec)
+    end
     return false
   end
   r.SetMediaItemInfo_Value(item, "D_POSITION", pos)
@@ -144,118 +195,144 @@ end
 local function jitter_gap(min_gap, max_gap, randomness)
   local spread = max_gap - min_gap
   local rfac = math.max(0, math.min(1, randomness or 0.5))
-  local base = min_gap + math.random() * spread
-  local jitter = (math.random() - 0.5) * spread * rfac
-  return math.max(min_gap, base + jitter)
+  return math.max(min_gap, min_gap + math.random() * spread + (math.random() - 0.5) * spread * rfac)
 end
 
-local function positions_by_count(count, range_start, range_end, item_len, randomness)
+local function build_positions(total_sec, template_len, count, min_gap, max_gap, randomness)
   local positions = {}
-  local span = range_end - range_start - item_len
-  if count < 1 or span <= 0 then return positions end
-  local step = span / (count + 1)
-  local rfac = math.max(0, math.min(1, randomness or 0.5))
-  for i = 1, count do
-    local jitter = (math.random() - 0.5) * step * rfac
-    local pos = range_start + step * i + jitter
-    if pos >= range_start and pos + item_len <= range_end then
-      positions[#positions + 1] = pos
+  if count and count > 0 then
+    local span = total_sec - template_len
+    local step = span / (count + 1)
+    for i = 1, count do
+      local jitter = (math.random() - 0.5) * step * randomness
+      positions[#positions + 1] = step * i + jitter
+    end
+  else
+    local t = min_gap * (0.3 + math.random() * 0.4)
+    while t + template_len < total_sec do
+      positions[#positions + 1] = t
+      t = t + jitter_gap(min_gap, max_gap, randomness)
     end
   end
-  table.sort(positions)
   return positions
 end
 
-local function positions_by_gap(range_start, range_end, item_len, min_gap, max_gap, randomness)
-  local positions = {}
-  local t = range_start + min_gap * (0.3 + math.random() * 0.4)
-  while t + item_len < range_end do
-    positions[#positions + 1] = t
-    t = t + jitter_gap(min_gap, max_gap, randomness)
-  end
-  return positions
-end
+local function run_scatter(track, label, total_sec, fade_sec, template, spec)
+  local count = spec.count
+  local min_g = (spec.min_gap_min or 3) * 60
+  local max_g = (spec.max_gap_min or 8) * 60
+  if max_g < min_g then max_g = min_g end
+  local randomness = spec.randomness or 0.5
+  local clear = spec.clear_existing
 
-local function main()
-  local sel = r.GetSelectedTrack(0, 0)
-  local _, sel_name = sel and r.GetTrackName(sel) or ""
-
-  local ret, user = r.GetUserInputs(
-    "随机散布 · " .. (sel_name or "未选中"),
-    7,
-    "轨道 track (0=选中),时长h duration_h,次数 count (0=按间隔),min间隔min,max间隔min,随机度0-1,fade_ms",
-    "0,3,0,3,8,0.6,80"
-  )
-  if not ret then return end
-
-  local track_n, dur_h, count, min_gap_min, max_gap_min, randomness, fade_ms =
-    user:match("([^,]+),([^,]+),([^,]+),([^,]+),([^,]+),([^,]+),([^,]+)")
-
-  track_n = parse_num(track_n, 0)
-  dur_h = parse_num(dur_h, 3)
-  count = parse_num(count, 0)
-  min_gap_min = parse_num(min_gap_min, 3)
-  max_gap_min = parse_num(max_gap_min, 8)
-  randomness = parse_num(randomness, 0.5)
-  fade_ms = parse_num(fade_ms, 80)
-
-  local track
-  if track_n > 0 then
-    track = track_by_number(track_n)
-  else
-    track = sel
-  end
-  if not track then
-    r.ShowMessageBox("请指定有效轨道或先选中一条轨道", "asmr_scatter_track", 0)
-    return
-  end
-
-  local _, track_name = r.GetTrackName(track)
-  local template = get_template(track)
-  if not template then
-    r.ShowMessageBox("轨道上无 template item，请先插入一条 sample", "asmr_scatter_track", 0)
-    return
-  end
-
-  local total_sec = dur_h * 3600
-  if dur_h <= 0 then
-    total_sec = r.GetProjectLength(0)
-    if total_sec <= 0 then total_sec = 3 * 3600 end
-  end
-
-  local min_gap = min_gap_min * 60
-  local max_gap = max_gap_min * 60
-  if max_gap < min_gap then max_gap = min_gap end
-  local fade_sec = fade_ms / 1000
-
-  math.randomseed(os.time() + math.floor(randomness * 1000))
-
-  local positions
-  if count > 0 then
-    positions = positions_by_count(count, 0, total_sec, template.length, randomness)
-  else
-    positions = positions_by_gap(0, total_sec, template.length, min_gap, max_gap, randomness)
-  end
+  math.randomseed(os.time() + math.floor(min_g) + math.floor(template.length * 100))
 
   r.Undo_BeginBlock()
   r.PreventUIRefresh(1)
-  delete_items(track)
+  if clear then
+    delete_scatter_items(track, true)
+  end
 
+  local positions = build_positions(total_sec, template.length, count, min_g, max_g, randomness)
   local placed = 0
   for _, pos in ipairs(positions) do
-    if insert_from_template(track, template, pos, fade_sec) then
-      placed = placed + 1
-    end
+    if insert_from_template(track, template, pos, fade_sec) then placed = placed + 1 end
   end
 
   r.PreventUIRefresh(-1)
   r.UpdateArrange()
-  r.Undo_EndBlock("Scatter track " .. track_name, -1)
+  r.Undo_EndBlock("Scatter " .. label, -1)
 
-  log(string.format(
-    "轨 %s · 放置 %d · 计划 %d · %.1fh · random=%.2f",
-    track_name, placed, #positions, total_sec / 3600, randomness
-  ))
+  log(string.format("%s · 放置 %d / %d · %.1fh", label, placed, #positions, total_sec / 3600))
+  r.ShowMessageBox(
+    string.format("%s\n放置 %d 个事件", label, placed),
+    "asmr_scatter_track",
+    0
+  )
+end
+
+local function run_manual(track, label)
+  local ret, user = r.GetUserInputs(
+    "手动散布 · " .. label,
+    6,
+    "时长h (0=工程),次数(0=间隔),min间隔min,max间隔min,随机度0-1,fade_ms",
+    "0,0,3,8,0.6,80"
+  )
+  if not ret then return end
+
+  local dur_h, count, min_gap_min, max_gap_min, randomness, fade_ms =
+    user:match("([^,]+),([^,]+),([^,]+),([^,]+),([^,]+),([^,]+)")
+  dur_h = tonumber(dur_h) or 0
+  count = tonumber(count) or 0
+  min_gap_min = tonumber(min_gap_min) or 3
+  max_gap_min = tonumber(max_gap_min) or 8
+  randomness = tonumber(randomness) or 0.5
+  fade_ms = tonumber(fade_ms) or 80
+
+  local template = get_template_from_track(track)
+  if not template then
+    r.ShowMessageBox("轨道上需有一条 sample（position 0 的 template）", "asmr_scatter_track", 0)
+    return
+  end
+
+  local total_sec = dur_h > 0 and dur_h * 3600 or r.GetProjectLength(0)
+  if total_sec <= 0 then total_sec = 3 * 3600 end
+
+  local spec = {
+    count = count > 0 and count or nil,
+    min_gap_min = min_gap_min,
+    max_gap_min = max_gap_min,
+    randomness = randomness,
+    clear_existing = false,
+  }
+  delete_all_items(track)
+  run_scatter(track, label .. " (手动)", total_sec, fade_ms / 1000, template, spec)
+end
+
+local function main()
+  local sel = r.GetSelectedTrack(0, 0)
+  local sel_hint = sel and track_name(sel) or "未选中"
+  local ret, key = r.GetUserInputs(
+    "散布单轨",
+    1,
+    "0=选中 · 或层 id(3_impact) · 或轨号",
+    sel_hint == "未选中" and "0" or sel_hint
+  )
+  if not ret then return end
+
+  local track, label = resolve_track(key)
+  if not track then
+    r.ShowMessageBox("找不到轨道: " .. key, "asmr_scatter_track", 0)
+    return
+  end
+  label = track_name(track) or label
+
+  local paths_mod = load_paths()
+  local cfg, cfg_err = nil, nil
+  if paths_mod then
+    cfg, cfg_err = paths_mod.load_asmr_config()
+  end
+
+  local spec = cfg and find_scatter_spec(cfg, track, key)
+  if spec and paths_mod then
+    local total_sec = (cfg.duration_hours or 3) * 3600
+    if r.GetProjectLength(0) > 0 then total_sec = r.GetProjectLength(0) end
+    local fade_sec = cfg.fade_sec or 0.08
+    local template = get_template_from_track(track)
+    if not template then template = template_from_spec(spec, paths_mod) end
+    if not template then
+      r.ShowMessageBox("无 template 且 config.paths 不可用", "asmr_scatter_track", 0)
+      return
+    end
+    log("配方模式 · " .. (spec.name or spec.id or label))
+    run_scatter(track, spec.name or spec.id or label, total_sec, fade_sec, template, spec)
+    return
+  end
+
+  if cfg_err and key ~= "0" and not tonumber(key) then
+    log("无配方或层未在 scatter_layers，改用手动模式")
+  end
+  run_manual(track, label)
 end
 
 main()

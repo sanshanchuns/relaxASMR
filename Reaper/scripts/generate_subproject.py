@@ -250,7 +250,7 @@ def make_group_track(js_ref: str, params: list[float]) -> str:
 
 
 def stage_rain_fx_assets(out_dir: Path) -> None:
-    """复制 JS EQ 到子工程 scripts/fx/（与 asmr_apply_group_eq 一致）。"""
+    """复制 JS EQ 到子工程 scripts/fx/（模板可选）。"""
     if not RAIN_FX_SRC.is_file():
         return
     dest_dir = out_dir / "scripts" / "fx"

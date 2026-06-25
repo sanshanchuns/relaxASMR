@@ -163,7 +163,7 @@
 | `depth` | **0.08** | 两端约 −8%，中段回到基准 |
 | `peak_at` | `center` | 中段雨势略强，模拟风/雨一阵 |
 
-由 `asmr_apply_recipe` 写入轨 2 Volume 包络；单独重刷：`asmr_apply_vol_envelope.lua`。
+由 `asmr_apply_recipe` 写入轨 2 Volume 包络。
 
 ---
 
@@ -244,9 +244,9 @@
 打开工程后：
 
 1. 运行 `asmr_apply_recipe.lua` — 铺轨 1–7 循环 + 稀疏 + **轨 2 音量包络**（**不改动轨 8 视频**）
-2. 仅重刷包络：`asmr_apply_vol_envelope.lua`
-3. **Group 总线**：轨 1–7 进 Folder，父轨 `Group` 上 **ReaEQ 统一削 3–8kHz**（见 `rain_sound_design.md` §Group Bus）
-4. 稀疏轨：`asmr_scatter_config_track.lua` 输入 **3**（雨打树叶）或 **6**（远处鸟鸣）
+2. 仅重刷包络：再次运行 `asmr_apply_recipe`（选「仅循环」）或配方里改 `vol_envelope` 后全量应用
+3. **Group 总线**：轨 1–7 进 Folder，父轨 `Group` 上 **ReaEQ 削高频**（见 `rain_sound_design.md` §Group Bus）
+4. 单轨稀疏：`asmr_scatter_track.lua` 输入 `3_impact` 或 `6_life`
 
 **修订记录**：初版误套窗景；移除鸟鸣；伞下声迁至 7_comfort；**v3** 空气底噪入 1_base、4_water 留白、comfort 换 `小雨击打雨伞.wav`；**v4** 轨 2 长时单周期音量包络；**v5** Group 总线 EQ 规范。
 

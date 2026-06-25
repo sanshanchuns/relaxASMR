@@ -1,5 +1,5 @@
 -- 长时音量包络 · 模拟自然界雨势/风的缓慢起伏（无限循环视频的时间感）
--- 由 asmr_apply_recipe.lua 或 asmr_apply_vol_envelope.lua 调用
+-- 由 asmr_apply_recipe.lua 调用
 
 local M = {}
 

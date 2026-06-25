@@ -77,7 +77,7 @@ vol_envelope = {
 ### 工程操作
 
 1. `asmr_apply_recipe.lua` 铺循环后会 **自动写入** 带 `vol_envelope` 的 loop 层包络  
-2. 单独重刷包络：`asmr_apply_vol_envelope.lua`（不改 item 长度）
+2. 仅重刷包络：再跑 `asmr_apply_recipe`（选「仅循环」）
 
 ---
 
