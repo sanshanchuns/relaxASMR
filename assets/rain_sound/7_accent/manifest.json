@@ -9,7 +9,7 @@
     "duration": 15,
     "paid_type": "free",
     "url": "https://v3-artist.vlabvod.com/94d71a8f16e0c3a92ad1e70d0170988a/6a4535d8/video/tos/cn/tos-cn-v-436d67/00272c89f90342ff9d5250400f6ce309/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGzg6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=Njs4Nzk1ODhnaTg3NGk2NEBpamo0NHBxODNlNjMzNDZlM0BgNDAvYy9eXmIxMzRjL2EwYSNnXjZjcG5zby9gLS1kYC9zcw%3D%3D&btag=c0000e00010000&dy_q=1782315849&l=20260624234408620770CF7255E549A4FF",
-    "local_path": "output_rain/7_accent/雷声/6972902433286671624_轰隆的闷雷声.mp3",
+    "local_path": "assets/rain_sound/7_accent/雷声/6972902433286671624_轰隆的闷雷声.mp3",
     "status": "downloaded",
     "curation_score": 9
   },
@@ -23,7 +23,7 @@
     "duration": 10,
     "paid_type": "free",
     "url": "https://v6-artist.vlabvod.com/c3b7bdd71fd08a40e368cec3480cd86a/6a4535d3/video/tos/cn/tos-cn-v-436d67/b8cd9f34eb774b45babd60b73ae8f7d6/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGzg6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=Z2g5OGU2PDllOTc0NThkPEBpMzpkeTVndDNlNjMzNDZlM0AuXy5hL2AzNjAxLV4uLjI0YSNgZmcubW5yby9gLS1kYC9zcw%3D%3D&btag=c0000e00008000&dy_q=1782315849&l=20260624234409C6552AE18551C740C1A8",
-    "local_path": "output_rain/7_accent/雷声/6972902480061533470_轰隆轰隆的闷雷声.mp3",
+    "local_path": "assets/rain_sound/7_accent/雷声/6972902480061533470_轰隆轰隆的闷雷声.mp3",
     "status": "downloaded",
     "curation_score": 9
   },
@@ -37,8 +37,8 @@
     "duration": 16,
     "paid_type": "free",
     "url": "https://v6-artist.vlabvod.com/fd73e6815cbf90d8f18db45a84210981/6a4535d9/video/tos/cn/tos-cn-v-436d67/e2492f7f77804e6fb92659ac5e23f957/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGzg6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=O2c6NjY3OzM7ZjlkMzs8O0BpM25yanE8bnhlNjMzNDZlM0AxNTZiYzMxXl4xNDEwMzJiYSM2ZDYtLWIwbS9gLS1kYC9zcw%3D%3D&btag=c0000e00010000&dy_q=1782315849&l=20260624234408620770CF7255E549A4FF",
-    "local_path": "output_rain/7_accent/雷声/6972902497476283684_低沉的闷雷声.mp3",
-    "status": "skipped",
+    "local_path": "assets/rain_sound/7_accent/雷声/6972902497476283684_低沉的闷雷声.mp3",
+    "status": "downloaded",
     "curation_score": 7
   },
   {
@@ -51,8 +51,8 @@
     "duration": 32,
     "paid_type": "free",
     "url": "https://v6-artist.vlabvod.com/212c21822c1374e3758aa62239daa123/6a4535e9/video/tos/cn/tos-cn-v-436d67/392460ca45c640679d79baeabcacc81a/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGzg6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=OGY2Mzs6PGlkOGU5aGc7O0BpM2dkeTVndGhlNjMzNDZlM0AtLTFhNl8vNjAxLV4xYS0zYSNxZ2cubW5icC9gLS1kYC9zcw%3D%3D&btag=c0000e00018000&dy_q=1782315849&l=20260624234408620770CF7255E549A4FF",
-    "local_path": "output_rain/7_accent/雷声/6972902747720928519_雷声轰隆狂风暴雨天气突变.mp3",
-    "status": "skipped",
+    "local_path": "assets/rain_sound/7_accent/雷声/6972902747720928519_雷声轰隆狂风暴雨天气突变.mp3",
+    "status": "downloaded",
     "curation_score": 7
   },
   {
@@ -65,7 +65,7 @@
     "duration": 36,
     "paid_type": "free",
     "url": "https://v6-artist.vlabvod.com/96bb3eb65d244039acb72061e08937d6/6a4535ed/video/tos/cn/tos-cn-v-436d67/fdd79505afd44f49958dabdb124e2d09/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGzg6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=NWc6aGg3OTU6ZzZnODVlZEBpM3A4eGlnNzllNjMzNDZlM0AyXmMxXmMzNi8xNjNfMTNhYSNoZS9tYGZvbC9gLS1kYC9zcw%3D%3D&btag=c0000e00018000&dy_q=1782315849&l=20260624234408620770CF7255E549A4FF",
-    "local_path": "output_rain/7_accent/雷声/6972902273366117645_远处传来闷雷声炸雷声.mp3",
+    "local_path": "assets/rain_sound/7_accent/雷声/6972902273366117645_远处传来闷雷声炸雷声.mp3",
     "status": "downloaded",
     "curation_score": 7
   },
@@ -79,7 +79,7 @@
     "duration": 28,
     "paid_type": "free",
     "url": "https://lf26-faceu-file-sign.bytecdn.com/tos-cn-v-436d67/46c71fc0b341489fac209b2f52397d2e?x-expires=1813851849&x-signature=d7eejj2e4QvN22JDLunNEO6wfdM%3D",
-    "local_path": "output_rain/7_accent/雷声/6937945508753231140_闪电雷声.mp3",
+    "local_path": "assets/rain_sound/7_accent/雷声/6937945508753231140_闪电雷声.mp3",
     "status": "downloaded",
     "curation_score": 7
   },
@@ -93,8 +93,8 @@
     "duration": 21,
     "paid_type": "free",
     "url": "https://v3-artist.vlabvod.com/c9ef6b5d729eec2d0a913985ec952dc5/6a4535de/video/tos/cn/tos-cn-v-436d67/72bed1650073498194ae2d369599c97d/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGzg6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=MzQ1O2Y0aDs3OTU8Z2hkO0BpanF0dWo6cjllNjMzNDZlM0AzXjFjYjUyXzExYDNeMS1eYSNnZF5hLzRsbC9gLS1kYC9zcw%3D%3D&btag=c0000e00010000&dy_q=1782315849&l=20260624234408620770CF7255E549A4FF",
-    "local_path": "output_rain/7_accent/雷声/6972902276910370079_远处传来的闷雷声.mp3",
-    "status": "failed",
+    "local_path": "assets/rain_sound/7_accent/雷声/6972902276910370079_远处传来的闷雷声.mp3",
+    "status": "downloaded",
     "error": "HTTP Error 424: Failed Dependency",
     "curation_score": 7
   },
@@ -108,7 +108,7 @@
     "duration": 13,
     "paid_type": "free",
     "url": "https://v26-artist.vlabvod.com/8232457cb90fb2b1729b70615f53d683/6a4535d6/video/tos/cn/tos-cn-v-436d67/62fbdf05000c471484984f5bb72b4f55/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGzg6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=NzdoMzVoNmg0NDk2OzQzNkBpM2h5d2Z0PDNlNjMzNDZlM0BeNS9gXi81NTMxMDQyNS5jYSNjY2EyZzVzby9gLS1kYC9zcw%3D%3D&btag=c0000e00008000&dy_q=1782315849&l=20260624234409C6552AE18551C740C1A8",
-    "local_path": "output_rain/7_accent/雷声/6972902479889468708_轰隆的雷声_(1).mp3",
+    "local_path": "assets/rain_sound/7_accent/雷声/6972902479889468708_轰隆的雷声_(1).mp3",
     "status": "downloaded",
     "curation_score": 7
   },
@@ -122,7 +122,7 @@
     "duration": 7,
     "paid_type": "free",
     "url": "https://v3-artist.vlabvod.com/2e86edb8e039f616f5b36ad66d0227ab/6a45360f/video/tos/cn/tos-cn-v-436d67/6a5fefc6bc084fe796526b38668229e0/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGag6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=aWk4OmU5PDs8OWkzZGg5O0BpM2Y8eHFqanR2NjMzNDZlM0A0YGNjNjRjNTQxNGJeLmJiYSNrbTRtMmczXjVgLS1kYC9zcw%3D%3D&btag=c0000e00018000&dy_q=1782315885&l=20260624234445DAEAE328E44567D46125",
-    "local_path": "output_rain/7_accent/篝火/6976574261863451935_火堆的火焰很小持续燃烧噼啪声.mp3",
+    "local_path": "assets/rain_sound/7_accent/篝火/6976574261863451935_火堆的火焰很小持续燃烧噼啪声.mp3",
     "status": "downloaded",
     "curation_score": 12
   },
@@ -136,8 +136,8 @@
     "duration": 87,
     "paid_type": "free",
     "url": "https://v26-artist.vlabvod.com/caace16adb2965a93cfebd5eff7675e5/6a453644/video/tos/cn/tos-cn-v-436d67/3a2565686c404c9291cc8d4a655df54b/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGag6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=aThlOzs1aGk0NTc7ZjM1aEBpM294OWk5NG5rNjMzNDZlM0AxNTJeLzZiXmMxXmNhNTA0YSNvLi5yaHFlMi9gLS1kYC9zcw%3D%3D&btag=c0000e00028000&dy_q=1782315885&l=20260624234445DAEAE328E44567D46125",
-    "local_path": "output_rain/7_accent/篝火/6972987376557772040_火堆持续燃烧的噼啪声和风声.mp3",
-    "status": "skipped",
+    "local_path": "assets/rain_sound/7_accent/篝火/6972987376557772040_火堆持续燃烧的噼啪声和风声.mp3",
+    "status": "downloaded",
     "curation_score": 10
   },
   {
@@ -150,7 +150,7 @@
     "duration": 46,
     "paid_type": "free",
     "url": "https://v3-artist.vlabvod.com/f88539cffec5bd20a373b5730b8393a6/6a45361b/video/tos/cn/tos-cn-v-436d67/ce0e4f164eaa4414a5fc143aebdba51e/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGag6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=NzhnODU5MzhpNTRoaTM7aUBpM3Y7aDR3ZG85eTMzNTZlM0BjYC4uMTI1X2AxMy8tMWNiYSNiYTBeZGY2LWBfLS1jYC9zcw%3D%3D&btag=c0000e00020000&dy_q=1782315885&l=20260624234445DAEAE328E44567D46125",
-    "local_path": "output_rain/7_accent/篝火/6906372658359799053_篝火燃烧的噼啪声.mp3",
+    "local_path": "assets/rain_sound/7_accent/篝火/6906372658359799053_篝火燃烧的噼啪声.mp3",
     "status": "downloaded",
     "curation_score": 9
   },
@@ -164,8 +164,8 @@
     "duration": 34,
     "paid_type": "free",
     "url": "https://v26-artist.vlabvod.com/fd6891128244ea6bf9bfc52a01bde68f/6a45360f/video/tos/cn/tos-cn-v-436d67/a0aeea6a60764b8b9982ee6fe86d2772/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGag6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=NzVkZzk6aGVnaThoaDc6OkBpanh4NWl4b2RqNTMzNDZlM0A2MTNhNi8uXy8xXjUyMjZgYSNpNm9xbWJpYm9gLS1kYC9zcw%3D%3D&btag=c0000e00018000&dy_q=1782315885&l=20260624234445DAEAE328E44567D46125",
-    "local_path": "output_rain/7_accent/篝火/6969042802512497928_很小的火焰持续燃烧声.mp3",
-    "status": "skipped",
+    "local_path": "assets/rain_sound/7_accent/篝火/6969042802512497928_很小的火焰持续燃烧声.mp3",
+    "status": "downloaded",
     "curation_score": 8
   },
   {
@@ -177,10 +177,11 @@
     "title": "燃烧篝火的噼啪声",
     "duration": 3,
     "paid_type": "free",
-    "url": "https://v3-artist.vlabvod.com/ba4a2b692beab9baacda675c77ce8763/6a4535f0/video/tos/cn/tos-cn-v-436d67/76b2709757c1403ebf4dfd3ea912d9b7/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=251&bt=251&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGag6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=ZDQ3ZGZpOzk4ZDk5ZGY6ZEBpMzNzajhseWY6eTMzZzZlM0BgYi8wY2MyNjUxMDNgLjQuYSNxaWVeMDVjX2BfLS0uYC9zcw%3D%3D&btag=c0000e00008000&dy_q=1782315885&l=20260624234445DAEAE328E44567D46125",
-    "local_path": "output_rain/7_accent/篝火/6906395576871488782_燃烧篝火的噼啪声.mp3",
+    "url": "https://v9-artist.vlabvod.com/b8a05d4def2b7a8c5be329bc51e27799/6a462b27/video/tos/cn/tos-cn-v-436d67/76b2709757c1403ebf4dfd3ea912d9b7/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=251&bt=251&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tG6busU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=ZDQ3ZGZpOzk4ZDk5ZGY6ZEBpMzNzajhseWY6eTMzZzZlM0BgYi8wY2MyNjUxMDNgLjQuYSNxaWVeMDVjX2BfLS0uYC9zcw%3D%3D&btag=c0000e00008000&dy_q=1782378660&l=20260625171058B50BF74F63BD61CD3AA9",
+    "local_path": "assets/rain_sound/7_accent/篝火/6906395576871488782_燃烧篝火的噼啪声.mp3",
     "status": "downloaded",
-    "curation_score": 8
+    "curation_score": 8,
+    "error": "HTTP Error 424: Failed Dependency"
   },
   {
     "layer_id": "7_accent",
@@ -192,7 +193,7 @@
     "duration": 13,
     "paid_type": "free",
     "url": "https://v3-artist.vlabvod.com/6b018b7e466d0e066d1560fdd7943f37/6a4535fa/video/tos/cn/tos-cn-v-436d67/57e5b946ee584343858668094352f112/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGag6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=aWc7aTxmZ2lkN2doNmc5NkBpMzgzaGU6ZmR5OzMzNDZlM0AxMDY1LzYzXy0xMGNeNDExYSNfNHNncjRnYWBgLS1kYDBzcw%3D%3D&btag=c0000e00008000&dy_q=1782315885&l=20260624234445DAEAE328E44567D46125",
-    "local_path": "output_rain/7_accent/篝火/7068647289119624479_烤火声_火焰声音_火堆燃烧声音.mp3",
+    "local_path": "assets/rain_sound/7_accent/篝火/7068647289119624479_烤火声_火焰声音_火堆燃烧声音.mp3",
     "status": "downloaded",
     "curation_score": 8
   },
@@ -206,7 +207,7 @@
     "duration": 21,
     "paid_type": "free",
     "url": "https://v3-artist.vlabvod.com/4741e4881b21f020fde4871102794b9f/6a453602/video/tos/cn/tos-cn-v-436d67/1ba64df499a7461f81f726eb64da833d/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGag6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=PDY7NDQ4aTdlZGZmZ2k8aEBpajN5ZWYzamtpNjMzNDZlM0A0Ly40YDZhNS0xNS81YDAxYSM1NmkuMl9vYjZgLS1kYC9zcw%3D%3D&btag=c0000e00010000&dy_q=1782315885&l=20260624234445DAEAE328E44567D46125",
-    "local_path": "output_rain/7_accent/篝火/6976910480023653663_燃烧音效野火山火火堆柴火环境音效.mp3",
+    "local_path": "assets/rain_sound/7_accent/篝火/6976910480023653663_燃烧音效野火山火火堆柴火环境音效.mp3",
     "status": "downloaded",
     "curation_score": 8
   },
@@ -220,7 +221,7 @@
     "duration": 5,
     "paid_type": "free",
     "url": "https://lf26-faceu-file-sign.bytecdn.com/tos-cn-v-436d67/b4f5d0b72bfc4cc182362040f3ea11fa?x-expires=1813851886&x-signature=3avz4L0ez3aCpObFvyzh02Bz2Xg%3D",
-    "local_path": "output_rain/7_accent/篝火/6937940791419538719_篝火燃烧，噼噼啪啪声.mp3",
+    "local_path": "assets/rain_sound/7_accent/篝火/6937940791419538719_篝火燃烧，噼噼啪啪声.mp3",
     "status": "downloaded",
     "curation_score": 8
   },
@@ -234,8 +235,8 @@
     "duration": 22,
     "paid_type": "free",
     "url": "https://v3-artist.vlabvod.com/81d55874d59cf2ea048802d9e7b9a074/6a453627/video/tos/cn/tos-cn-v-436d67/7ac855471e1f406a8fbe99e5b6f34d12/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGci6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=OTY4NmhkaWhpOzQ4O2Q1ZkBpamp3b2Q2NTVpNjMzNDZlM0AvMy80Yl5fXmExNTNeL19jYSNqNm8ycjJqLTZgLS1kYC9zcw%3D%3D&btag=c0000e00010000&dy_q=1782315921&l=20260624234521CCEE8375CFCB2AF04014",
-    "local_path": "output_rain/7_accent/风铃/6976902187880385828_清脆悦耳的风铃声.mp3",
-    "status": "skipped",
+    "local_path": "assets/rain_sound/7_accent/风铃/6976902187880385828_清脆悦耳的风铃声.mp3",
+    "status": "downloaded",
     "curation_score": 7
   },
   {
@@ -248,7 +249,7 @@
     "duration": 59,
     "paid_type": "free",
     "url": "https://v3-artist.vlabvod.com/23e01b1d9053b56dc79d4969b92a86a0/6a45364c/video/tos/cn/tos-cn-v-436d67/b6a3d5a3b99c4a18a93f38ed5817ae0e/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGci6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=OzdmZGU0aTZpOWlpaGc2O0BpM3FnNWU6ZmdrNzMzNDZlM0A0MmI2XmM1XmAxXjI2MjJjYSNval9zcjQwNmBgLS1kYC9zcw%3D%3D&btag=c0000e00020000&dy_q=1782315921&l=20260624234521CCEE8375CFCB2AF04014",
-    "local_path": "output_rain/7_accent/风铃/6996625802498444575_日本小风铃清脆悦耳声音效.mp3",
+    "local_path": "assets/rain_sound/7_accent/风铃/6996625802498444575_日本小风铃清脆悦耳声音效.mp3",
     "status": "downloaded",
     "curation_score": 7
   },
@@ -262,7 +263,7 @@
     "duration": 15,
     "paid_type": "free",
     "url": "https://v26-artist.vlabvod.com/2fbf22d7db890f11e030366b19837c40/6a453620/video/tos/cn/tos-cn-v-436d67/493e5ccb27244e73af207500de998dbf/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGci6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=ZjY5PGQ5NDU0ZDtpOjs7aEBpM2s8MzllODdxMzMzZDZlM0BfLi9eLjEtXmMxLzQ0LWFjYSNeYl8tNmRvZDVgLS1hYC9zcw%3D%3D&btag=c0000e00010000&dy_q=1782315921&l=20260624234521CCEE8375CFCB2AF04014",
-    "local_path": "output_rain/7_accent/风铃/6922384876092083470_风中清脆悦耳的风铃声音效.mp3",
+    "local_path": "assets/rain_sound/7_accent/风铃/6922384876092083470_风中清脆悦耳的风铃声音效.mp3",
     "status": "downloaded",
     "curation_score": 7
   },
@@ -276,7 +277,7 @@
     "duration": 20,
     "paid_type": "free",
     "url": "https://v26-artist.vlabvod.com/5b14a226b634c7558c18daf7f2bc3a18/6a453626/video/tos/cn/tos-cn-v-436d67/0c51a5340fd34864bc008d4b372847a5/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGKi6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=OGk1NWllOzM5ZDxpZmc5NUBpajVwPGg6ZjltZTMzNDZlM0BgX19jXzFjNTUxMV4uYzYuYSMxaS5vcjQwbGJgLS1kYC9zcw%3D%3D&btag=c0000e00010000&dy_q=1782315922&l=20260624234522C3267434C55770F084E6",
-    "local_path": "output_rain/7_accent/风铃/7123424463022001422_风铃清脆的声音.mp3",
+    "local_path": "assets/rain_sound/7_accent/风铃/7123424463022001422_风铃清脆的声音.mp3",
     "status": "downloaded",
     "curation_score": 7
   },
@@ -290,7 +291,7 @@
     "duration": 104,
     "paid_type": "free",
     "url": "https://v3-artist.vlabvod.com/4b7e41667776da36ad21c23ceee3003e/6a45367a/video/tos/cn/tos-cn-v-436d67/58d7d7e3c81a4ca5a068eaa466cf1774/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGKi6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=ZWZlZmdmNGRkMzllZzpmOUBpajhzd2g7OTpsNTMzNDZlM0A0YC5jXy8wNi8xMS0wYmMzYSMyNmQuaWItX29gLS1kYC9zcw%3D%3D&btag=c0000e00028000&dy_q=1782315922&l=20260624234522C3267434C55770F084E6",
-    "local_path": "output_rain/7_accent/风铃/6969077966999522573_清脆铜风铃的声音.mp3",
+    "local_path": "assets/rain_sound/7_accent/风铃/6969077966999522573_清脆铜风铃的声音.mp3",
     "status": "downloaded",
     "curation_score": 7
   },
@@ -304,7 +305,7 @@
     "duration": 14,
     "paid_type": "free",
     "url": "https://v3-artist.vlabvod.com/490725bc49c383e4b5f90deb7b63ee37/6a453621/video/tos/cn/tos-cn-v-436d67/f099f09638b046d38fed69e65498a934/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tG0i6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=NThkZWgzaTM2PDdlOzs0PEBpM3B2eGQ6ZjdmNjMzNDZlM0AwMi5jY19jNjIxLzIuLi1gYSNoZ2FpcjQwa2NgLS1kYC9zcw%3D%3D&btag=c0000e00010000&dy_q=1782315923&l=202606242345238AA079BB0A915DCA7D5D",
-    "local_path": "output_rain/7_accent/风铃/6980259227801537822_清脆悦耳的风铃声.mp3",
+    "local_path": "assets/rain_sound/7_accent/风铃/6980259227801537822_清脆悦耳的风铃声.mp3",
     "status": "downloaded",
     "curation_score": 7
   },
@@ -318,7 +319,7 @@
     "duration": 29,
     "paid_type": "free",
     "url": "https://v3-artist.vlabvod.com/1e8acf5fb020a51edd1bc1721e037154/6a453630/video/tos/cn/tos-cn-v-436d67/5e4e4b42d2664292bc401b54e8b475bd/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tG0i6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=NmVlN2RkOmg6NTwzNjVpZEBpanI8d2Y6Zm83PDMzNDZlM0A2MS8tNjBeX14xMmExYzBiYSNhM2hlcjRvc2lgLS1kYC9zcw%3D%3D&btag=c0000e00018000&dy_q=1782315923&l=202606242345238AA079BB0A915DCA7D5D",
-    "local_path": "output_rain/7_accent/风铃/7091229118456515871_铃声_风铃_清脆悦耳.mp3",
+    "local_path": "assets/rain_sound/7_accent/风铃/7091229118456515871_铃声_风铃_清脆悦耳.mp3",
     "status": "downloaded",
     "curation_score": 7
   },
@@ -332,8 +333,8 @@
     "duration": 3,
     "paid_type": "free",
     "url": "https://v3-artist.vlabvod.com/5a0573215a1f83aeb72e391780d01d42/6a453614/video/tos/cn/tos-cn-v-436d67/549a0b5bd174430694d448adff50c94d/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=251&bt=251&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGci6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=OzxmNzRkZmVpZ2RlOTRnNUBpanI2ZHFnN285NjMzNDZlM0AtNWM0MGM1NS8xMjYyYzQwYSNuMWFzb2VnMjNgLS1kYC9zcw%3D%3D&btag=c0000e00008000&dy_q=1782315921&l=20260624234521CCEE8375CFCB2AF04014",
-    "local_path": "output_rain/7_accent/风铃/6975054683123502343_清脆响亮唯美风铃声音效素材.mp3",
-    "status": "skipped",
+    "local_path": "assets/rain_sound/7_accent/风铃/6975054683123502343_清脆响亮唯美风铃声音效素材.mp3",
+    "status": "downloaded",
     "curation_score": 6
   },
   {
@@ -346,8 +347,8 @@
     "duration": 30,
     "paid_type": "free",
     "url": "https://lf26-faceu-file-sign.bytecdn.com/tos-cn-v-436d67/0249179fb5d64180b187af377818c39e?x-expires=1813851955&x-signature=lBe6N3IGJpZJ30%2BtTcbk%2Fpq2WkY%3D",
-    "local_path": "output_rain/7_accent/划船/6937949886541204743_划船声船桨划水声.mp3",
-    "status": "skipped",
+    "local_path": "assets/rain_sound/7_accent/划船/6937949886541204743_划船声船桨划水声.mp3",
+    "status": "downloaded",
     "curation_score": 11
   },
   {
@@ -360,8 +361,8 @@
     "duration": 126,
     "paid_type": "free",
     "url": "https://v6-artist.vlabvod.com/75a21414a8a8858360a699c15037e662/6a4536b1/video/tos/cn/tos-cn-v-436d67/1258818342e6408086cfa4cd7bf99733/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGmi6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=Nmg3OGRnNmdkZDRpaDc6OEBpM2xkdXk8M3c1NTMzNDZlM0A0MWE2LjQ1NjIxXzEzMS0yYSMwMmBqZXExL29gLS1kYC9zcw%3D%3D&btag=c0000e00028000&dy_q=1782315955&l=20260624234555F74A22F75BCC24F8A367",
-    "local_path": "output_rain/7_accent/划船/6968791121203891492_划桨船：快速,摇橹和划桨.mp3",
-    "status": "skipped",
+    "local_path": "assets/rain_sound/7_accent/划船/6968791121203891492_划桨船：快速,摇橹和划桨.mp3",
+    "status": "downloaded",
     "curation_score": 8
   },
   {
@@ -374,8 +375,8 @@
     "duration": 15,
     "paid_type": "free",
     "url": "https://v6-artist.vlabvod.com/12f1b863ed71918c5fbb49385bcedc36/6a453642/video/tos/cn/tos-cn-v-436d67/dec8dd45366741948cfc741912a8d89b/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGmi6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=PDVkZmRnaTo4ODQzaTNnZUBpanc1bHE4OnlzNTMzNDZlM0AuYi4yNC4yNjExLV9jY2IvYSNvbzVnZGFvZm5gLS1kYC9zcw%3D%3D&btag=c0000e00010000&dy_q=1782315955&l=20260624234555F74A22F75BCC24F8A367",
-    "local_path": "output_rain/7_accent/划船/6968638285132467470_船桨划水-划动船桨拍打水-短视频.mp3",
-    "status": "skipped",
+    "local_path": "assets/rain_sound/7_accent/划船/6968638285132467470_船桨划水-划动船桨拍打水-短视频.mp3",
+    "status": "downloaded",
     "curation_score": 8
   },
   {
@@ -388,7 +389,7 @@
     "duration": 4,
     "paid_type": "free",
     "url": "https://v3-artist.vlabvod.com/f0e8d79b3d986ab3aebe7302d10db098/6a453637/video/tos/cn/tos-cn-v-436d67/d0d73a633eb54fb7abb7eee2923829f7/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGmi6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=PGk6PDdpN2ZpMzRkZzo6aEBpamRyZmU6Zm9tPDMzNDZlM0A1LzUxYGA1XjQxMV41NV8xYSNlNXBpcjRvYXNgLS1kYC9zcw%3D%3D&btag=c0000e00008000&dy_q=1782315955&l=20260624234555F74A22F75BCC24F8A367",
-    "local_path": "output_rain/7_accent/划船/7097409925692886309_将桨放回划艇内（划船后）声音.mp3",
+    "local_path": "assets/rain_sound/7_accent/划船/7097409925692886309_将桨放回划艇内（划船后）声音.mp3",
     "status": "downloaded",
     "curation_score": 8
   },
@@ -402,8 +403,8 @@
     "duration": 46,
     "paid_type": "free",
     "url": "https://v6-artist.vlabvod.com/73f84d0a46cf11a0edc5e98f4b297a0e/6a453661/video/tos/cn/tos-cn-v-436d67/24f99bd9f588454fa4b58f60e7332d48/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGmi6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=ZWk1ZjxkOzxpMzo3Z2U3OkBpanU2M3VldTQ8NDMzNDZlM0AvNGAzMC8wXi0xXy00YDJjYSNtazZlZjRhZzVgLS00YC9zcw%3D%3D&btag=c0000e00020000&dy_q=1782315955&l=20260624234555F74A22F75BCC24F8A367",
-    "local_path": "output_rain/7_accent/划船/6940214624587418887_划船式音效素材.mp3",
-    "status": "skipped",
+    "local_path": "assets/rain_sound/7_accent/划船/6940214624587418887_划船式音效素材.mp3",
+    "status": "downloaded",
     "curation_score": 7
   },
   {
@@ -416,8 +417,8 @@
     "duration": 35,
     "paid_type": "free",
     "url": "https://v6-artist.vlabvod.com/0454c27c0fa98317355ba2b4eb20a64f/6a453656/video/tos/cn/tos-cn-v-436d67/f6b5d5cc0ed24c55a4f2e6ff1bcc237e/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGmi6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=ZDtnO2c7aDs3NmQ5M2Q3M0BpajZ2NWQzdjhqNTMzNDZlM0AyXy0uLmEwXmAxYWIvLzYwYSNtX2dlMHBpY29gLS1kYC9zcw%3D%3D&btag=c0000e00018000&dy_q=1782315955&l=20260624234555F74A22F75BCC24F8A367",
-    "local_path": "output_rain/7_accent/划船/6969043742930013447_划船从远到近.mp3",
-    "status": "skipped",
+    "local_path": "assets/rain_sound/7_accent/划船/6969043742930013447_划船从远到近.mp3",
+    "status": "downloaded",
     "curation_score": 7
   },
   {
@@ -430,7 +431,7 @@
     "duration": 87,
     "paid_type": "free",
     "url": "https://v6-artist.vlabvod.com/4322959e390de7bad95ea29ca8ae59c5/6a45368a/video/tos/cn/tos-cn-v-436d67/effdffb5c2624fc7b23499ac9490f07f/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGmi6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=PDM1aTQzOWloPDw3OGU7M0BpajRrbmc2dHVsNTMzNDZlM0AtYzY2Mi80X2ExNWAtYmIxYSNya2UxcWRjZ29gLS1kYC9zcw%3D%3D&btag=c0000e00028000&dy_q=1782315955&l=20260624234555F74A22F75BCC24F8A367",
-    "local_path": "output_rain/7_accent/划船/6969083302665866532_水上划船音效.mp3",
+    "local_path": "assets/rain_sound/7_accent/划船/6969083302665866532_水上划船音效.mp3",
     "status": "downloaded",
     "curation_score": 7
   },
@@ -444,7 +445,7 @@
     "duration": 48,
     "paid_type": "free",
     "url": "https://v6-artist.vlabvod.com/6d8f2a815379e0bdca6a18f5e447aa2a/6a453663/video/tos/cn/tos-cn-v-436d67/6a8b46cec9ba463f9e31f34f19bdae1a/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGmi6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=NzZpaTk0aThoNWczZWlkM0BpMzQzOTQ6ZmZpNzMzNDZlM0A0MWIxYWAvNmMxYjA0YzUyYSNkYWFzcjQwbGBgLS1kYC9zcw%3D%3D&btag=c0000e00020000&dy_q=1782315955&l=20260624234555F74A22F75BCC24F8A367",
-    "local_path": "output_rain/7_accent/划船/6996602909421014309_划船远来走.mp3",
+    "local_path": "assets/rain_sound/7_accent/划船/6996602909421014309_划船远来走.mp3",
     "status": "downloaded",
     "curation_score": 7
   }

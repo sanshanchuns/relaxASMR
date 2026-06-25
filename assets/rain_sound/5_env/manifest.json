@@ -9,7 +9,7 @@
     "duration": 94,
     "paid_type": "free",
     "url": "https://v6-artist.vlabvod.com/f3f02b1093be42639e3a92bdf39183f0/6a4534bf/video/tos/cn/tos-cn-v-436d67/9da40852c6214c5e9dbf60d0dc27a676/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGPm6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=ZzdoOjo1O2c5ZGk5aDhpPEBpamxtaTRseWo8eTMzNDZlM0AwYS9eYzItXl8xMDVhYTM2YSM1cTJjMDVzLmBfLS1eYC9zcw%3D%3D&btag=c0000e00028000&dy_q=1782315489&l=20260624233809F5C52D447F876AF78112",
-    "local_path": "output_rain/5_env/竹林_雨/6906428006319852814_电闪雷鸣_瓢泼大雨的环境音.mp3",
+    "local_path": "assets/rain_sound/5_env/竹林_雨/6906428006319852814_电闪雷鸣_瓢泼大雨的环境音.mp3",
     "status": "downloaded",
     "curation_score": 8
   },
@@ -23,8 +23,8 @@
     "duration": 49,
     "paid_type": "free",
     "url": "https://v6-artist.vlabvod.com/71848383d4377847b88e9f165002985a/6a453491/video/tos/cn/tos-cn-v-436d67/oUMJfBm4bMCFOGi2ZXIQfePLhlD4HBCFCAWnLm/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGMm6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=aDU1Zjc0O2U8aGg6N2VkZUBpanl2ODY6ZnI1cTMzNDZlM0BgMTM2YmE2XmAxYDNfNjFfYSMuNnMxcjRfbTNgLS1kYDBzcw%3D%3D&btag=c0000e00020000&dy_q=1782315488&l=2026062423380876AA12C3C2B838C2CE1F",
-    "local_path": "output_rain/5_env/竹林_雨/7335270175865883913_电影级森林雨天气素材.mp3",
-    "status": "skipped",
+    "local_path": "assets/rain_sound/5_env/竹林_雨/7335270175865883913_电影级森林雨天气素材.mp3",
+    "status": "downloaded",
     "curation_score": 6
   },
   {
@@ -37,7 +37,7 @@
     "duration": 60,
     "paid_type": "free",
     "url": "https://v6-artist.vlabvod.com/9892e6dcbee0d9becd68b9802f90b0b0/6a45349c/video/tos/cn/tos-cn-v-436d67/oUPYyRwDqQN8gYMQfBelCWmngWDcDA2HbCz8JX/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGMm6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=Omc0ZGY8PGk6Njo8ZTk2aUBpajpyZGU6ZmY1cTMzNDZlM0AvXjZgLzZjNjExNjAuMTRgYSNpNjBocjRnbDNgLS1kYDBzcw%3D%3D&btag=c0000e00028000&dy_q=1782315488&l=2026062423380876AA12C3C2B838C2CE1F",
-    "local_path": "output_rain/5_env/竹林_雨/7335268175694646554_电影级森林雨天气素材.mp3",
+    "local_path": "assets/rain_sound/5_env/竹林_雨/7335268175694646554_电影级森林雨天气素材.mp3",
     "status": "downloaded",
     "curation_score": 6
   },
@@ -51,8 +51,8 @@
     "duration": 59,
     "paid_type": "free",
     "url": "https://v6-artist.vlabvod.com/617b6b493f8aecd5b90771a18303fbd2/6a45349b/video/tos/cn/tos-cn-v-436d67/ocB0jdhMIAgyW25t7LfDMKTQCDYU3eC7zBhGQM/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGMm6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=OGQzOTpmOjU4ZTVpOTQ0NkBpMzZreGY6ZmU1cTMzNDZlM0BgLTQxMjRjXmIxMl5eLmBhYSMuLm5xcjRfbDNgLS1kYDBzcw%3D%3D&btag=c0000e00020000&dy_q=1782315488&l=2026062423380876AA12C3C2B838C2CE1F",
-    "local_path": "output_rain/5_env/竹林_雨/7335270960368536858_电影级森林雨天气素材.mp3",
-    "status": "skipped",
+    "local_path": "assets/rain_sound/5_env/竹林_雨/7335270960368536858_电影级森林雨天气素材.mp3",
+    "status": "downloaded",
     "curation_score": 6
   },
   {
@@ -65,7 +65,7 @@
     "duration": 224,
     "paid_type": "free",
     "url": "https://v6-artist.vlabvod.com/6d4a50fbbb1ea9900a35bf9354b05a01/6a453540/video/tos/cn/tos-cn-ve-3011c800/bd57bad81c5f4816a764422877b0dc0d/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGMm6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=OWg7ODk1NmU7ZWY2NjlpN0BpM3AzbXFmOTt1MzMzZTZlM0AwX2A1XzVgNjUxLTQtLTFgYSNtNWg2MGswYWlgLS01YC9zcw%3D%3D&btag=c0000e00028000&dy_q=1782315488&l=2026062423380876AA12C3C2B838C2CE1F",
-    "local_path": "output_rain/5_env/竹林_雨/6929304428453448973_下雨淅淅沥沥的声音音效.mp3",
+    "local_path": "assets/rain_sound/5_env/竹林_雨/6929304428453448973_下雨淅淅沥沥的声音音效.mp3",
     "status": "downloaded",
     "curation_score": 6
   },
@@ -79,7 +79,7 @@
     "duration": 59,
     "paid_type": "free",
     "url": "https://v3-artist.vlabvod.com/73d4cfb078271f3ec673ef23cb504604/6a45349b/video/tos/cn/tos-cn-v-436d67/oAB0wkhMIAgyZr5tbLfDMVTSKDYbMeCBzBhGQN/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGMm6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=Zzs7ZztmZzU5aDdlOmk7OEBpM2pncGc6ZmY1cTMzNDZlM0BhYi41M15jXzMxLjQxYjRgYSMyMm8tcjRvbDNgLS1kYDBzcw%3D%3D&btag=c0000e00020000&dy_q=1782315488&l=2026062423380876AA12C3C2B838C2CE1F",
-    "local_path": "output_rain/5_env/竹林_雨/7335269051477871923_电影级森林雨天气素材.mp3",
+    "local_path": "assets/rain_sound/5_env/竹林_雨/7335269051477871923_电影级森林雨天气素材.mp3",
     "status": "downloaded",
     "curation_score": 6
   },
@@ -93,8 +93,8 @@
     "duration": 60,
     "paid_type": "free",
     "url": "https://v3-artist.vlabvod.com/320b99aacec8a51a01fb75bf6c0e2348/6a45349c/video/tos/cn/tos-cn-v-436d67/oc1QhMBuMEyCvQVLhuhOBf5eGAOz1gZDGINTYZ/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGMm6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=ZTpmZDs6NjUzNjg2OTw4N0BpanNzcjc6ZnE1cTMzNDZlM0BiX2BjNDZiNWMxY2A0Nl5jYSNrZDVucjQwbTNgLS1kYDBzcw%3D%3D&btag=c0000e00028000&dy_q=1782315488&l=2026062423380876AA12C3C2B838C2CE1F",
-    "local_path": "output_rain/5_env/竹林_雨/7335272109058362661_电影级森林雨天气素材.mp3",
-    "status": "failed",
+    "local_path": "assets/rain_sound/5_env/竹林_雨/7335272109058362661_电影级森林雨天气素材.mp3",
+    "status": "downloaded",
     "error": "HTTP Error 424: Failed Dependency",
     "curation_score": 6
   },
@@ -108,7 +108,7 @@
     "duration": 60,
     "paid_type": "free",
     "url": "https://v6-artist.vlabvod.com/3eb846dbb3a5d04b5bbd57230e726ed0/6a45349d/video/tos/cn/tos-cn-v-436d67/ooTDmLoCINQ8DBzBpMZnbAeNwcCeQ1CgBjslMT/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGPm6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=Ozw0OGU8NDxpNDw0OzxnOkBpM25nZDs6Zjo1cTMzNDZlM0BhNGBfNmEwXjIxNl5gMTJgYSNzNWIwcjQwbDNgLS1kYDBzcw%3D%3D&btag=c0000e00028000&dy_q=1782315489&l=20260624233809F5C52D447F876AF78112",
-    "local_path": "output_rain/5_env/竹林_雨/7335270608772533555_电影级森林雨天气素材.mp3",
+    "local_path": "assets/rain_sound/5_env/竹林_雨/7335270608772533555_电影级森林雨天气素材.mp3",
     "status": "downloaded",
     "curation_score": 6
   },
@@ -122,7 +122,7 @@
     "duration": 44,
     "paid_type": "free",
     "url": "https://v9-artist.vlabvod.com/3aae9ed98ec5217544dd4f94e4c26862/6a4534bf/video/tos/cn/tos-cn-v-436d67/b6a6efccffad4fd9aa15fe8aa97b9b30/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tG0x6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=aWVlOThlODg8N2c3ZDNlO0BpamhpNzU6b282NTMzNDZlM0AvYjUvYTYxNi0xLS4zYTQvYSNqcGYwYGBebW1gLS1kYC9zcw%3D%3D&btag=c0000e00020000&dy_q=1782315539&l=202606242338587409BF6C42600BEBC734",
-    "local_path": "output_rain/5_env/森林_雨/6967699325690400031_清晨薄雾山林鸟叫声_森林自然环境混合_背景音片头片尾.mp3",
+    "local_path": "assets/rain_sound/5_env/森林_雨/6967699325690400031_清晨薄雾山林鸟叫声_森林自然环境混合_背景音片头片尾.mp3",
     "status": "downloaded",
     "curation_score": 12
   },
@@ -136,7 +136,7 @@
     "duration": 216,
     "paid_type": "free",
     "url": "https://v9-artist.vlabvod.com/15f1bfbc25387781d464ff74a9605226/6a45356c/video/tos/cn/tos-cn-v-436d67/b358c18f6807492a9fb054b0897ad67b/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGYx6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=ZDg2NTs5PDs3Nzw3PDQ5aUBpanc6b2ZuaHVsNTMzNDZlM0A2NF4yNTRhX2IxMTNgYy9fYSM2aF5xMS9ra21gLS1kYC9zcw%3D%3D&btag=c0000e00028000&dy_q=1782315540&l=202606242339006E7AE03ED578D0FCF226",
-    "local_path": "output_rain/5_env/森林_雨/6967951258619628813_树林蟋蟀知了城市夜晚_夏天蝉鸣鸟叫环境背景音_大自然森林野外.mp3",
+    "local_path": "assets/rain_sound/5_env/森林_雨/6967951258619628813_树林蟋蟀知了城市夜晚_夏天蝉鸣鸟叫环境背景音_大自然森林野外.mp3",
     "status": "downloaded",
     "curation_score": 12
   },
@@ -150,7 +150,7 @@
     "duration": 58,
     "paid_type": "free",
     "url": "https://v3-artist.vlabvod.com/e123527b7f01331f11d5b761020963d9/6a4534cd/video/tos/cn/tos-cn-v-436d67/d0a437d1bde14118b1cfa3a95e8d532a/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tG0x6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=NWk5aTg8OjNpN2Q1ZTY7aEBpMzNvaWY6Zjo3OzMzNDZlM0BjNDQtNDExXzIxYF80MTU2YSM1bnMxcjQwcjRgLS1kYC9zcw%3D%3D&btag=c0000e00020000&dy_q=1782315539&l=202606242338587409BF6C42600BEBC734",
-    "local_path": "output_rain/5_env/森林_雨/7065647570638490917_自然环境音_森林鸟叫声.mp3",
+    "local_path": "assets/rain_sound/5_env/森林_雨/7065647570638490917_自然环境音_森林鸟叫声.mp3",
     "status": "downloaded",
     "curation_score": 10
   },
@@ -164,8 +164,8 @@
     "duration": 60,
     "paid_type": "free",
     "url": "https://v9-artist.vlabvod.com/1fc6827ed2cd583c9c2dbb49d57ddc36/6a4534cf/video/tos/cn/tos-cn-v-436d67/970ab83474ea46cca61e5d451e5eb609/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tG0x6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=ZmgzZ2U6MzxoPDU7ZTdkO0BpMzxnZ3Uzc3NsNTMzNDZlM0BgYWEzYjFjXzMxMDI0NDMwYSNlNHA2b25hYW9gLS1kYC9zcw%3D%3D&btag=c0000e00028000&dy_q=1782315539&l=202606242338587409BF6C42600BEBC734",
-    "local_path": "output_rain/5_env/森林_雨/6969079855610678558_森林环境音-鸟叫昆虫叫-自然环境.mp3",
-    "status": "skipped",
+    "local_path": "assets/rain_sound/5_env/森林_雨/6969079855610678558_森林环境音-鸟叫昆虫叫-自然环境.mp3",
+    "status": "downloaded",
     "curation_score": 10
   },
   {
@@ -178,7 +178,7 @@
     "duration": 56,
     "paid_type": "free",
     "url": "https://v9-artist.vlabvod.com/42056ce69ffae91e657f643e85a72928/6a4534cc/video/tos/cn/tos-cn-v-436d67/ba7724e8607f4007b1a6413509fcf274/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGYx6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=OGVlOjdmNzRoaTg3Nzg0aUBpanE2cTV0OXVsNTMzNDZlM0AzYzFgXy9eXi0xY2A1M18yYSNscC1hcGZoa21gLS1kYC9zcw%3D%3D&btag=c0000e00020000&dy_q=1782315540&l=202606242339007CBB9EFA5CE61FC10BD5",
-    "local_path": "output_rain/5_env/森林_雨/6967950297092181256_夏天蝉鸣声鸟叫_安静知了叫背景音_大自然树林森林野外短片头.mp3",
+    "local_path": "assets/rain_sound/5_env/森林_雨/6967950297092181256_夏天蝉鸣声鸟叫_安静知了叫背景音_大自然树林森林野外短片头.mp3",
     "status": "downloaded",
     "curation_score": 10
   },
@@ -192,7 +192,7 @@
     "duration": 27,
     "paid_type": "free",
     "url": "https://v9-artist.vlabvod.com/f54ba6d81ac8746aab45d75d880f81a9/6a4534ae/video/tos/cn/tos-cn-v-436d67/439263f75d2745159dbba4b49188a78e/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tG0x6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=NTYzZWc8Omk7ZTVoOzkzZ0BpamRmNW51ZHhsNjMzNDZlM0A2MS42NjQtNl4xXjIuMF5gYSNpZmM0c2FwNjJgLS1kYC9zcw%3D%3D&btag=c0000e00010000&dy_q=1782315539&l=202606242338587409BF6C42600BEBC734",
-    "local_path": "output_rain/5_env/森林_雨/6974708674241498376_森林成群鸟叫自然环境鸟类各种多鸟语鸟语花香森林动物大自然麻雀.mp3",
+    "local_path": "assets/rain_sound/5_env/森林_雨/6974708674241498376_森林成群鸟叫自然环境鸟类各种多鸟语鸟语花香森林动物大自然麻雀.mp3",
     "status": "downloaded",
     "curation_score": 9
   },
@@ -206,7 +206,7 @@
     "duration": 126,
     "paid_type": "free",
     "url": "https://v3-artist.vlabvod.com/c80dea86803bd261ce2e45e9ca8c7f16/6a453511/video/tos/cn/tos-cn-v-436d67/c64ee6b2760642148451b3cc800c5ae2/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tG0x6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=NDU7Mzg5NzczPGU1NTg2aEBpM3IzOjl4PDhoNTMzNDZlM0AzNmNjY2FiNWIxXzVeMWFiYSNlcGEvbWxiamxgLS1kYC9zcw%3D%3D&btag=c0000e00028000&dy_q=1782315539&l=202606242338587409BF6C42600BEBC734",
-    "local_path": "output_rain/5_env/森林_雨/6967328547589360933_大自然背景声混合（山谷田野森林微风鸟叫）.mp3",
+    "local_path": "assets/rain_sound/5_env/森林_雨/6967328547589360933_大自然背景声混合（山谷田野森林微风鸟叫）.mp3",
     "status": "downloaded",
     "curation_score": 8
   },
@@ -220,7 +220,7 @@
     "duration": 60,
     "paid_type": "free",
     "url": "https://v9-artist.vlabvod.com/60692fe73ecd80dfc1cacc0ba8a3ee51/6a4534d0/video/tos/cn/tos-cn-v-436d67/o4BbVehTCHmN9nMoMeWA181kTyD81lTDgQBVIa/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGYx6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=M2gzZGVoZzgzZjo4OmllZUBpM248Njk6ZndvcTMzNDZlM0A0MTEzX2MtXzYxYS1gMzI2YSNjM15jcjRfZF5gLS1kYDBzcw%3D%3D&btag=c0000e00028000&dy_q=1782315540&l=202606242339007CBB9EFA5CE61FC10BD5",
-    "local_path": "output_rain/5_env/森林_雨/7337852739646491931_环境音森林树林鸟叫虫鸣.mp3",
+    "local_path": "assets/rain_sound/5_env/森林_雨/7337852739646491931_环境音森林树林鸟叫虫鸣.mp3",
     "status": "downloaded",
     "curation_score": 8
   },
@@ -234,7 +234,7 @@
     "duration": 47,
     "paid_type": "free",
     "url": "https://v26-artist.vlabvod.com/cf10edb2fb118e851b461d8c48bcd2dd/6a4534eb/video/tos/cn/tos-cn-v-436d67/0adf01e8911a448aa278b3adc1adad9a/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGQx6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=Zzs7MztoaTlpZjlkZTU2N0BpM3E2czo6Zm45PDMzNDZlM0BjXzZiXjUzXy0xYC42MS42YSNqbGY1cjRvXl5gLS1kYC9zcw%3D%3D&btag=c0000e00020000&dy_q=1782315580&l=2026062423394054381E43BCC8BB545EDD",
-    "local_path": "output_rain/5_env/城市_雨/7085268274795007246_城市雨夜淅淅沥沥.mp3",
+    "local_path": "assets/rain_sound/5_env/城市_雨/7085268274795007246_城市雨夜淅淅沥沥.mp3",
     "status": "downloaded",
     "curation_score": 9
   },
@@ -248,8 +248,8 @@
     "duration": 183,
     "paid_type": "free",
     "url": "https://v9-artist.vlabvod.com/e4e9be731e075b6e80255b0f75b067ca/6a453572/video/tos/cn/tos-cn-v-436d67/1df92a193d214b67a9b900798cd17179/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGox6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=OmY5ZGg0aWZkaDo6M2VoZ0BpMzhzaDo6ZmlrNzMzNDZlM0AzY142LzUyNTYxLS40MGJjYSMxbHNkcjQwa2BgLS1kYC9zcw%3D%3D&btag=c0000e00028000&dy_q=1782315579&l=2026062423393828D15F5D4E4B0ECC624C",
-    "local_path": "output_rain/5_env/城市_雨/6996641615179681061_城市街道人杂环境音.mp3",
-    "status": "skipped",
+    "local_path": "assets/rain_sound/5_env/城市_雨/6996641615179681061_城市街道人杂环境音.mp3",
+    "status": "downloaded",
     "curation_score": 8
   },
   {
@@ -262,7 +262,7 @@
     "duration": 128,
     "paid_type": "free",
     "url": "https://v9-artist.vlabvod.com/0fefd4369db9399704e15bebfc4f795d/6a45353b/video/tos/cn/tos-cn-v-436d67/1cf17f24e2894cae9379b24a9b1854d0/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGox6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=NDc2M2VoZmhkOzg4aTVoaEBpamprdG9odHBqNDMzNjZlM0BgMGNeNDA2NWAxLmItLS01YSMzNGwtajNlbTRgLS0vYC9zcw%3D%3D&btag=c0000e00028000&dy_q=1782315579&l=2026062423393828D15F5D4E4B0ECC624C",
-    "local_path": "output_rain/5_env/城市_雨/6939770827269295397_城市街道环境音.mp3",
+    "local_path": "assets/rain_sound/5_env/城市_雨/6939770827269295397_城市街道环境音.mp3",
     "status": "downloaded",
     "curation_score": 8
   },
@@ -276,7 +276,7 @@
     "duration": 47,
     "paid_type": "free",
     "url": "https://v6-artist.vlabvod.com/12ebe74b76d1940b3601419fca12c9a5/6a4534ea/video/tos/cn/tos-cn-v-436d67/oQs8i4eJjInzZZQCExbgbmDflkMkNUMACBSP8B/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGox6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=M2Y4OmlkPGU4NDZmODRkOUBpajZsc2Y6ZjlpbjMzNDZlM0A0YTU2LjQwNmMxMC8wMGEyYSNsMmVzcjRfL2ZgLS1kYC9zcw%3D%3D&btag=c0000e00020000&dy_q=1782315579&l=2026062423393828D15F5D4E4B0ECC624C",
-    "local_path": "output_rain/5_env/城市_雨/7288191254892973312_城市街道底噪环境音效.mp3",
+    "local_path": "assets/rain_sound/5_env/城市_雨/7288191254892973312_城市街道底噪环境音效.mp3",
     "status": "downloaded",
     "curation_score": 8
   },
@@ -290,7 +290,7 @@
     "duration": 41,
     "paid_type": "free",
     "url": "https://v6-artist.vlabvod.com/c5b6b9d83153eea92693a53f6a6bc43c/6a4534e4/video/tos/cn/tos-cn-v-436d67/7c1683c890864910a2d6143f010c25af/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGox6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=ZTU6MzM6NWg8ZGRkNmlmZEBpM3NmPG5rO21wNDMzNDZlM0BiNDQtLy4uXi4xMzI1NjNfYSMyNG82X29pbmZgLS1kYC9zcw%3D%3D&btag=c0000e00018000&dy_q=1782315579&l=2026062423393828D15F5D4E4B0ECC624C",
-    "local_path": "output_rain/5_env/城市_雨/6946051090336992526_城市公园环境音.mp3",
+    "local_path": "assets/rain_sound/5_env/城市_雨/6946051090336992526_城市公园环境音.mp3",
     "status": "downloaded",
     "curation_score": 8
   },
@@ -304,7 +304,7 @@
     "duration": 141,
     "paid_type": "free",
     "url": "https://v6-artist.vlabvod.com/d5111bda1a88ccbc18f9891e5f8d546e/6a453548/video/tos/cn/tos-cn-v-436d67/cc07707cb60b4483a009dce5cd555998/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGox6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=OGgzZThpZWg8ZjhmPDNpOkBpampqaTY6ZmRnODMzNDZlM0BfLTY0NTEyNl8xNl5fM2A0YSNvLmAtcjRncDBgLS1kYC9zcw%3D%3D&btag=c0000e00028000&dy_q=1782315579&l=2026062423393828D15F5D4E4B0ECC624C",
-    "local_path": "output_rain/5_env/城市_雨/7009517711415987464_城市街道马路交通环境音.mp3",
+    "local_path": "assets/rain_sound/5_env/城市_雨/7009517711415987464_城市街道马路交通环境音.mp3",
     "status": "downloaded",
     "curation_score": 8
   },
@@ -318,7 +318,7 @@
     "duration": 45,
     "paid_type": "free",
     "url": "https://v26-artist.vlabvod.com/a63238899402c80244daaa74a092fb3a/6a4534e9/video/tos/cn/tos-cn-v-436d67/2768a528d87842c683bbdc4f03675d65/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGQx6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=ZDZmPDpoZWloNDg4ODU7OEBpMzs6O2c6ZnJ3OzMzNDZlM0BfYjJgNDMvNS8xLWBfM2FfYSNxcS5vcjRvMDFgLS1kYC9zcw%3D%3D&btag=c0000e00020000&dy_q=1782315580&l=2026062423394054381E43BCC8BB545EDD",
-    "local_path": "output_rain/5_env/城市_雨/7064380006440455454_城市街头车来车往的环境音.mp3",
+    "local_path": "assets/rain_sound/5_env/城市_雨/7064380006440455454_城市街头车来车往的环境音.mp3",
     "status": "downloaded",
     "curation_score": 8
   },
@@ -332,7 +332,7 @@
     "duration": 135,
     "paid_type": "free",
     "url": "https://v3-artist.vlabvod.com/87a99903160eef3306cd02a855513d52/6a453543/video/tos/cn/tos-cn-v-436d67/8742bbbfefb646ac9b05b1f68f9f2671/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGQx6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=NWdkOzZmNzo7Z2g8MzQzOkBpMzt0ZTttdXJqNDMzOjZlM0AwYS8wMDJhXmIxX18tY2NgYSNoXjBtcWZnbTRgLS1eYC9zcw%3D%3D&btag=c0000e00028000&dy_q=1782315580&l=2026062423394054381E43BCC8BB545EDD",
-    "local_path": "output_rain/5_env/城市_雨/6939770826912763149_城市环境音.mp3",
+    "local_path": "assets/rain_sound/5_env/城市_雨/6939770826912763149_城市环境音.mp3",
     "status": "downloaded",
     "curation_score": 8
   }

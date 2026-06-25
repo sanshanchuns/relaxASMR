@@ -303,6 +303,83 @@ def local_path_for(output_root: Path, layer_id: str, group: str, item: dict) -> 
     return output_root / layer_id / group_dir / fname
 
 
+def resolve_manifest_dest(entry: dict, asset_root: Path) -> Path:
+    """将 manifest 中的 local_path 解析为 assets 目录下的实际路径。"""
+    rel = entry.get("local_path") or ""
+    if rel.startswith("assets/"):
+        return REPO_ROOT / rel
+    legacy_prefixes = ("output_rain/", "output_lake/", "output/")
+    for prefix in legacy_prefixes:
+        if rel.startswith(prefix):
+            sub = rel[len(prefix):]
+            if prefix == "output_rain/":
+                return REPO_ROOT / "assets" / "rain_sound" / sub
+            if prefix == "output_lake/":
+                return REPO_ROOT / "assets" / "lake_sound" / sub
+            return asset_root / sub
+    if rel:
+        return REPO_ROOT / rel
+    ext = "m4a" if entry.get("layer_type") == "music" else "mp3"
+    group = entry.get("group") or "misc"
+    return local_path_for(
+        asset_root,
+        entry.get("layer_id", "unknown"),
+        group,
+        {"id": entry["id"], "title": entry.get("title", ""), "ext": ext},
+    )
+
+
+def restore_from_manifest(
+    asset_root: Path,
+    *,
+    layer_ids: list[str] | None = None,
+    force: bool = False,
+    fix_paths: bool = True,
+) -> dict:
+    """按已有 manifest.json 重新下载缺失的音频文件。"""
+    stats = {"downloaded": 0, "skipped": 0, "failed": 0, "fixed_paths": 0}
+    manifests = sorted(asset_root.glob("*/manifest.json"))
+    for manifest_path in manifests:
+        layer_id = manifest_path.parent.name
+        if layer_ids and layer_id not in layer_ids:
+            continue
+        items = json.loads(manifest_path.read_text(encoding="utf-8"))
+        print(f"\n==> 恢复: {layer_id} ({len(items)} 条)")
+        for entry in items:
+            url = entry.get("url")
+            if not url:
+                print(f"    跳过(无 URL): {entry.get('id')}")
+                stats["skipped"] += 1
+                continue
+            dest = resolve_manifest_dest(entry, asset_root)
+            if dest.is_file() and not force:
+                stats["skipped"] += 1
+                continue
+            title = (entry.get("title") or entry.get("id") or "")[:40]
+            try:
+                print(f"    下载: {title}...")
+                download_file(url, dest)
+                entry["status"] = "downloaded"
+                stats["downloaded"] += 1
+                time.sleep(0.15)
+            except (urllib.error.URLError, TimeoutError, OSError) as exc:
+                print(f"    ✗ 失败: {title} — {exc}", file=sys.stderr)
+                entry["status"] = "failed"
+                entry["error"] = str(exc)
+                stats["failed"] += 1
+            if fix_paths:
+                new_rel = str(dest.relative_to(REPO_ROOT))
+                if entry.get("local_path") != new_rel:
+                    entry["local_path"] = new_rel
+                    stats["fixed_paths"] += 1
+        if fix_paths:
+            manifest_path.write_text(
+                json.dumps(items, ensure_ascii=False, indent=2),
+                encoding="utf-8",
+            )
+    return stats
+
+
 def process_layer(
     layer_id: str,
     spec: dict,
@@ -401,6 +478,16 @@ def main() -> None:
     parser.add_argument("--dry-run", action="store_true", help="只搜索，不下载")
     parser.add_argument("--target", type=int, help="每关键词/歌单下载条数（覆盖配置）")
     parser.add_argument("--all-licenses", action="store_true", help="不限商用，下载全部")
+    parser.add_argument(
+        "--restore",
+        action="store_true",
+        help="按已有 manifest 重新下载缺失文件（不调用搜索 API）",
+    )
+    parser.add_argument(
+        "--force",
+        action="store_true",
+        help="与 --restore 合用：覆盖已存在的文件",
+    )
     args = parser.parse_args()
 
     config_path = Path(args.config)
@@ -418,6 +505,21 @@ def main() -> None:
     page_size = int(defaults.get("page_size", 50))
     output_root = resolve_output_root(defaults)
     commercial_only = not args.all_licenses and bool(defaults.get("commercial_only", False))
+
+    if args.restore:
+        print("按 manifest 恢复下载")
+        print(f"配置: {config_path}")
+        print(f"输出: {output_root}")
+        stats = restore_from_manifest(
+            output_root,
+            layer_ids=args.layer if args.layer else None,
+            force=args.force,
+        )
+        print(
+            f"\n完成。下载 {stats['downloaded']}，跳过 {stats['skipped']}，"
+            f"失败 {stats['failed']}，修正路径 {stats['fixed_paths']}"
+        )
+        return
 
     if args.list:
         for lid, spec in all_layers.items():

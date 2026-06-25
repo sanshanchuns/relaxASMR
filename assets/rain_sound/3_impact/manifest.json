@@ -9,7 +9,7 @@
     "duration": 102,
     "paid_type": "free",
     "url": "https://v9-artist.vlabvod.com/27ab151a462df2be7f1676398b475624/6a452f3e/video/tos/cn/tos-cn-v-436d67/75210b97e59c4d1699b6333bc795f407/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGJA6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=aTQ3ZTU5PDVnZ2hnaTg7OUBpM2Y3cDx1aG1qNTMzNDZlM0BeMTUtNjAtNTMxM14wMS9iYSNvMS4xYjI0Mm9gLS1kYC9zcw%3D%3D&btag=c0000e00028000&dy_q=1782314072&l=20260624231432361679FC7EC430D61015",
-    "local_path": "output_rain/3_impact/雨打树叶/6969039291464961293_风吹落叶-树叶沙沙-自然环境天气.mp3",
+    "local_path": "assets/rain_sound/3_impact/雨打树叶/6969039291464961293_风吹落叶-树叶沙沙-自然环境天气.mp3",
     "status": "downloaded",
     "curation_score": 10
   },
@@ -23,8 +23,8 @@
     "duration": 5,
     "paid_type": "free",
     "url": "https://v9-artist.vlabvod.com/9dff1cf0cd368e08512bc5f9451c27ad/6a452edc/video/tos/cn/tos-cn-v-436d67/69aaaa7b5c724d33a2a95c846fa32fa8/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=251&bt=251&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGkA6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=ZDg7ZzQ2aWhmaDs1Zjk4aEBpam9waGxxb2U6eTMzMzZlM0AvNDZiYC5eNmMxXzRhXl5jYSNvZGQuNGMvcmBfLS1jYC9zcw%3D%3D&btag=c0000e00008000&dy_q=1782314071&l=202606242314316B88B87FDB30BD15A5D2",
-    "local_path": "output_rain/3_impact/雨打树叶/6906409559296871687_雨打芭蕉、雨打树叶的声音.mp3",
-    "status": "skipped",
+    "local_path": "assets/rain_sound/3_impact/雨打树叶/6906409559296871687_雨打芭蕉、雨打树叶的声音.mp3",
+    "status": "downloaded",
     "curation_score": 8
   },
   {
@@ -37,8 +37,8 @@
     "duration": 160,
     "paid_type": "free",
     "url": "https://v9-artist.vlabvod.com/bf1e0f31045435012e42790a2dcc0637/6a452f77/video/tos/cn/tos-cn-v-436d67/5426a9b4fd454ae08cb608aa166b1d9a/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGkA6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=Nzg2OWc2Ozk2OmUzZjs4OEBpamw8dGZwZnBrNjMzNDZlM0AzMTQtNTRgNV4xNWM0XzMuYSNvYmNvX15yMTJgLS1kYC9zcw%3D%3D&btag=c0000e00028000&dy_q=1782314071&l=202606242314316B88B87FDB30BD15A5D2",
-    "local_path": "output_rain/3_impact/雨打树叶/6974687724502600974_小雨落在树叶上的声音.mp3",
-    "status": "skipped",
+    "local_path": "assets/rain_sound/3_impact/雨打树叶/6974687724502600974_小雨落在树叶上的声音.mp3",
+    "status": "downloaded",
     "curation_score": 6
   },
   {
@@ -51,8 +51,8 @@
     "duration": 14,
     "paid_type": "free",
     "url": "https://v9-artist.vlabvod.com/0ed5ddee5ed3462610e6feae87e16361/6a452ee5/video/tos/cn/tos-cn-v-436d67/7cd1a1813a194072abfbcd5fc2670e69/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGkA6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=aDs8NDpoaDY0NTo7NjtpOkBpMzs7cmg6Zmo7ZTMzNDZlM0BhMjIwLTQtXy4xNF9gMDQ1YSNpMGFwcjRfa3BgLS1kYDBzcw%3D%3D&btag=c0000e00008000&dy_q=1782314071&l=202606242314316B88B87FDB30BD15A5D2",
-    "local_path": "output_rain/3_impact/雨打树叶/7130853007532494112_雨打屋檐与树叶.mp3",
-    "status": "skipped",
+    "local_path": "assets/rain_sound/3_impact/雨打树叶/7130853007532494112_雨打屋檐与树叶.mp3",
+    "status": "downloaded",
     "curation_score": 6
   },
   {
@@ -65,7 +65,7 @@
     "duration": 21,
     "paid_type": "free",
     "url": "https://v3-artist.vlabvod.com/66b8c6b0869d1e76334e2f518f92438f/6a452eec/video/tos/cn/tos-cn-v-436d67/e1f37bb562b3405ab0f85130ac155d68/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGkA6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=Mzk3aTs3PDtlODszNjc1OEBpMzN0OTg6ZjdzODMzNDZlM0A1L2FjMV8yNi8xXjIvMjBfYSNuM3BqcjRfcWdgLS1kYC9zcw%3D%3D&btag=c0000e00010000&dy_q=1782314071&l=202606242314316B88B87FDB30BD15A5D2",
-    "local_path": "output_rain/3_impact/雨打树叶/7018713149293595934_扫落叶_落叶_树叶.mp3",
+    "local_path": "assets/rain_sound/3_impact/雨打树叶/7018713149293595934_扫落叶_落叶_树叶.mp3",
     "status": "downloaded",
     "curation_score": 6
   },
@@ -79,7 +79,7 @@
     "duration": 14,
     "paid_type": "free",
     "url": "https://v6-artist.vlabvod.com/5fecbdd25997bb831c7439421703041a/6a452ee5/video/tos/cn/tos-cn-v-436d67/1610869e985d42f7a07f12e4f2fd0b1e/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGkA6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=aWg6NjppaDRmPDY5PGg8aUBpamlvOjs6Znh0ODMzNDZlM0AuXzNeNWIvNmIxNWJhMy4yYSNpYTVrcjQwZGVgLS1kYC9zcw%3D%3D&btag=c0000e00008000&dy_q=1782314071&l=202606242314316B88B87FDB30BD15A5D2",
-    "local_path": "output_rain/3_impact/雨打树叶/7017615798831254821_雨声_雨打芭蕉.mp3",
+    "local_path": "assets/rain_sound/3_impact/雨打树叶/7017615798831254821_雨声_雨打芭蕉.mp3",
     "status": "downloaded",
     "curation_score": 6
   },
@@ -93,7 +93,7 @@
     "duration": 15,
     "paid_type": "free",
     "url": "https://v6-artist.vlabvod.com/36729935e8173114344d10cab3aeafc4/6a452ee6/video/tos/cn/tos-cn-v-436d67/6acf4ad9e15e455f8f66625177bfd297/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGkA6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=OWg1PDg1NDlpZmVoZDhlZ0Bpanl0dzo6Zjc2ODMzNDZlM0A2NjYwYS8tNV4xNjQuXzI2YSNwbzVfcjQwcG5gLS1kYC9zcw%3D%3D&btag=c0000e00010000&dy_q=1782314071&l=202606242314316B88B87FDB30BD15A5D2",
-    "local_path": "output_rain/3_impact/雨打树叶/7022091456651316512_风吹树叶沙沙响.mp3",
+    "local_path": "assets/rain_sound/3_impact/雨打树叶/7022091456651316512_风吹树叶沙沙响.mp3",
     "status": "downloaded",
     "curation_score": 6
   },
@@ -107,7 +107,7 @@
     "duration": 28,
     "paid_type": "free",
     "url": "https://v3-artist.vlabvod.com/81b045d7915222bc25d40562036af3f1/6a452ef4/video/tos/cn/tos-cn-v-436d67/63ca6f872ed6494990f674920ea08bc1/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGJA6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=ZWZpOGRpOTszOTplNjtpOEBpanl5eDY6ZjU5NjMzNDZlM0A2YGIvLy5jXzQxXjIzMTA2YSNqXm9rcjRva29gLS1kYC9zcw%3D%3D&btag=c0000e00010000&dy_q=1782314072&l=20260624231432361679FC7EC430D61015",
-    "local_path": "output_rain/3_impact/雨打树叶/6986869511106366756_树林风吹树叶沙沙响.mp3",
+    "local_path": "assets/rain_sound/3_impact/雨打树叶/6986869511106366756_树林风吹树叶沙沙响.mp3",
     "status": "downloaded",
     "curation_score": 6
   },
@@ -121,7 +121,7 @@
     "duration": 160,
     "paid_type": "free",
     "url": "https://v9-artist.vlabvod.com/3a432afc754624c9cc37d05a45c2b563/6a452f78/video/tos/cn/tos-cn-v-436d67/79b5d1c68f7848b382877853ff76ed2b/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGJA6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=OjxnNDk3NjNmOzo3OjM4NEBpM3M1ODxpdG9rNjMzNDZlM0A1Yy0zYzAtXmExLy0vYDBjYSMuX3FqZGs1YDJgLS1kYC9zcw%3D%3D&btag=c0000e00028000&dy_q=1782314072&l=20260624231432361679FC7EC430D61015",
-    "local_path": "output_rain/3_impact/雨打树叶/6974691567823097118_雨滴在树叶上的声音.mp3",
+    "local_path": "assets/rain_sound/3_impact/雨打树叶/6974691567823097118_雨滴在树叶上的声音.mp3",
     "status": "downloaded",
     "curation_score": 6
   },
@@ -135,7 +135,7 @@
     "duration": 90,
     "paid_type": "free",
     "url": "https://v9-artist.vlabvod.com/13067e8ce566a967f87aeba0a7d109c9/6a452f32/video/tos/cn/tos-cn-v-436d67/d40727b424554f969ae589a537c4cb69/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGJA6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=ZWg3ODszZTc1aDw3OzQ6OkBpajttOmt0eG15MzMzMzZlM0AvYF9gLTNfX14xYmMyMjNgYSNhbGVrbjMtY19gLS1eYC9zcw%3D%3D&btag=c0000e00028000&dy_q=1782314072&l=20260624231432361679FC7EC430D61015",
-    "local_path": "output_rain/3_impact/雨打树叶/6924230826410495245_雨水滴落树叶发出的声音音效素材.mp3",
+    "local_path": "assets/rain_sound/3_impact/雨打树叶/6924230826410495245_雨水滴落树叶发出的声音音效素材.mp3",
     "status": "downloaded",
     "curation_score": 6
   },
@@ -149,8 +149,8 @@
     "duration": 27,
     "paid_type": "free",
     "url": "https://v6-artist.vlabvod.com/99aec3eb875c5456530a2ce4b1a19c84/6a452f23/video/tos/cn/tos-cn-v-436d67/d06041289f6746739f9ae50394f5cec3/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tG8J6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=OTw5NTVnNzY3Ozg8NTc2ZkBpM2t4aTVodWs8eTMzZjZlM0BhLTJgLmEvNl4xXjUvXi00YSMyNWRjNS8vLmBfLS01YC9zcw%3D%3D&btag=c0000e00010000&dy_q=1782314120&l=20260624231519AF8F3747C63BDCD2DFD4",
-    "local_path": "output_rain/3_impact/雨打屋顶/6906428006701518094_雨滴在屋顶的声音.mp3",
-    "status": "skipped",
+    "local_path": "assets/rain_sound/3_impact/雨打屋顶/6906428006701518094_雨滴在屋顶的声音.mp3",
+    "status": "downloaded",
     "curation_score": 8
   },
   {
@@ -163,8 +163,8 @@
     "duration": 24,
     "paid_type": "free",
     "url": "https://v3-artist.vlabvod.com/7982268652872762faa5eae77ac6fae8/6a452f20/video/tos/cn/tos-cn-v-436d67/b58b1abc2a0a4a00978884f0f0a0c4f8/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tG8J6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=ODVoOjRlNmg4NWQ2PDhnNUBpajdtaTU6ZmZtPDMzNDZlM0AyMDNiXzUvNl8xMTYuYjMxYSNqMWZwcjRvZmtgLS1kYC9zcw%3D%3D&btag=c0000e00010000&dy_q=1782314120&l=20260624231519AF8F3747C63BDCD2DFD4",
-    "local_path": "output_rain/3_impact/雨打屋顶/7092285195184786719_一阵强风的声音铁皮屋顶嘎嘎作响风吹渐渐下雨的声音音效.mp3",
-    "status": "skipped",
+    "local_path": "assets/rain_sound/3_impact/雨打屋顶/7092285195184786719_一阵强风的声音铁皮屋顶嘎嘎作响风吹渐渐下雨的声音音效.mp3",
+    "status": "downloaded",
     "curation_score": 8
   },
   {
@@ -177,8 +177,8 @@
     "duration": 50,
     "paid_type": "free",
     "url": "https://v6-artist.vlabvod.com/cc1c80ce4df1f83accc70254ff59d73a/6a452f3a/video/tos/cn/tos-cn-v-436d67/7b2cc080f9494d99a59c8d1a55b19ad6/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tG8J6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=OmRoPDdnZDtnNzM6Omc7OkBpam41ZjtwPGk8eDMzaTZlM0BhXl81XzA2XzMxMzFhYDAxYSNsZG9eaHI2NjZfLS0uYC9zcw%3D%3D&btag=c0000e00020000&dy_q=1782314120&l=20260624231519AF8F3747C63BDCD2DFD4",
-    "local_path": "output_rain/3_impact/雨打屋顶/6896406229539720461_水滴水龙头屋顶漏水冰雪消融.mp3",
-    "status": "skipped",
+    "local_path": "assets/rain_sound/3_impact/雨打屋顶/6896406229539720461_水滴水龙头屋顶漏水冰雪消融.mp3",
+    "status": "downloaded",
     "curation_score": 6
   },
   {
@@ -191,7 +191,7 @@
     "duration": 26,
     "paid_type": "free",
     "url": "https://v3-artist.vlabvod.com/fbc60cdce624f7484ff1a04c7fb3706a/6a452f22/video/tos/cn/tos-cn-v-436d67/f27fd3c3a1ee446caa514ecc9861cbf2/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tG8J6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=ZjxmNTc4aTM8aTlkaWU7OkBpam12czg6Zm5lODMzNDZlM0BfX15fLy4wX2ExYi1iMl5fYSMxMi8tcjRfZS5gLS1kYC9zcw%3D%3D&btag=c0000e00010000&dy_q=1782314120&l=20260624231519AF8F3747C63BDCD2DFD4",
-    "local_path": "output_rain/3_impact/雨打屋顶/7008363947791306020_屋檐下的雨声.mp3",
+    "local_path": "assets/rain_sound/3_impact/雨打屋顶/7008363947791306020_屋檐下的雨声.mp3",
     "status": "downloaded",
     "curation_score": 6
   },
@@ -205,7 +205,7 @@
     "duration": 16,
     "paid_type": "free",
     "url": "https://v3-artist.vlabvod.com/ed8605d57aa68c129d9a31148c2b0402/6a452f18/video/tos/cn/tos-cn-v-436d67/92cd71a02dae488e9d922a9240921283/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tG8J6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=MzM7MzdmZzM5Z2dnZmQ6O0BpamtlOWQ6ZnM5ODMzNDZlM0AtYTAtXy1eNWIxMzEuX2ExYSM1Y2o2cjQwbW9gLS1kYDBzcw%3D%3D&btag=c0000e00010000&dy_q=1782314120&l=20260624231519AF8F3747C63BDCD2DFD4",
-    "local_path": "output_rain/3_impact/雨打屋顶/7022905245315517710_雨滴落地声.mp3",
+    "local_path": "assets/rain_sound/3_impact/雨打屋顶/7022905245315517710_雨滴落地声.mp3",
     "status": "downloaded",
     "curation_score": 6
   },
@@ -219,7 +219,7 @@
     "duration": 35,
     "paid_type": "free",
     "url": "https://v3-artist.vlabvod.com/6899f1cb7076afa116de3fd358e8520f/6a452f2b/video/tos/cn/tos-cn-ve-3011c800/a1d0b77ceead4b368e8d21805089a343/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tG8J6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=aGg1OTw5NTk0aTlkZmhoOUBpM2VuM3Q5NjZrNTMzNDZlM0AtYzI1Xi0vXl4xLjNiMTU0YSNsaTAwbWpmcG9gLS1kYC9zcw%3D%3D&btag=c0000e00018000&dy_q=1782314120&l=20260624231519AF8F3747C63BDCD2DFD4",
-    "local_path": "output_rain/3_impact/雨打屋顶/6969070502102961438_屋檐滴水声.mp3",
+    "local_path": "assets/rain_sound/3_impact/雨打屋顶/6969070502102961438_屋檐滴水声.mp3",
     "status": "downloaded",
     "curation_score": 6
   },
@@ -233,7 +233,7 @@
     "duration": 69,
     "paid_type": "free",
     "url": "https://v3-artist.vlabvod.com/58f64a7f71fdc58541aeae383a619bbd/6a452f4d/video/tos/cn/tos-cn-v-436d67/cee2ab6f699844a4bb7084e5e879e964/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tG8J6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=NTo8aTs5NzVpaTRmMzo8aEBpMzo3cTc7aTN0NjMzNDZlM0AwMl4xMTJeNTYxMDEvMjEvYSM2NTNuZTFoMjVgLS1kYC9zcw%3D%3D&btag=c0000e00028000&dy_q=1782314120&l=20260624231519AF8F3747C63BDCD2DFD4",
-    "local_path": "output_rain/3_impact/雨打屋顶/6976534828250385672_下雨拍打铁皮声.mp3",
+    "local_path": "assets/rain_sound/3_impact/雨打屋顶/6976534828250385672_下雨拍打铁皮声.mp3",
     "status": "downloaded",
     "curation_score": 6
   },
@@ -247,7 +247,7 @@
     "duration": 60,
     "paid_type": "free",
     "url": "https://v3-artist.vlabvod.com/64aab4ef8ac6dc403874d60e767e1efa/6a452f44/video/tos/cn/tos-cn-v-436d67/84d4906f7b2048dea7e1941007a84048/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tG8J6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=NGVkZThlaGQ8NjU3PDRpOkBpM3N5PG08PG0zNTMzNDZlM0BjNF4wMjQzNWAxYzFjMDFhYSNpc2g1ZGlpM2VgLS1kYC9zcw%3D%3D&btag=c0000e00028000&dy_q=1782314120&l=20260624231519AF8F3747C63BDCD2DFD4",
-    "local_path": "output_rain/3_impact/雨打屋顶/6963088898859879716_大雨拍打屋檐的声音.mp3",
+    "local_path": "assets/rain_sound/3_impact/雨打屋顶/6963088898859879716_大雨拍打屋檐的声音.mp3",
     "status": "downloaded",
     "curation_score": 6
   },
@@ -261,7 +261,7 @@
     "duration": 180,
     "paid_type": "free",
     "url": "https://v6-artist.vlabvod.com/ff1fbc7d590c9ddfec7eb3adf7dd3c57/6a452fbc/video/tos/cn/tos-cn-v-436d67/bbdd753b40ba4cf6a35d4057ef922e1b/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tG8J6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=Njo7aTw7ZjM3Z2c1aTU7Z0Bpam9xZGdtZXk5NTMzNDZlM0A0XjNhMTIvXjYxXl4yYzBjYSMyMG9paWNqbm9gLS1kYC9zcw%3D%3D&btag=c0000e00028000&dy_q=1782314120&l=202606242315204273ACB0DAC9311067DB",
-    "local_path": "output_rain/3_impact/雨打屋顶/6968872972199251230_屋檐下的雨声.mp3",
+    "local_path": "assets/rain_sound/3_impact/雨打屋顶/6968872972199251230_屋檐下的雨声.mp3",
     "status": "downloaded",
     "curation_score": 6
   },
@@ -275,7 +275,7 @@
     "duration": 13,
     "paid_type": "free",
     "url": "https://v6-artist.vlabvod.com/5c6ac7dbf7fb1369b46631f976344af2/6a452f15/video/tos/cn/tos-cn-v-436d67/43e4df16193b466ea47eb4fec93028b8/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tG8J6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=NWY1aTZkZWc1OzxpZTo0OEBpM2t3ZDg6ZjRzODMzNDZlM0AyNTAyLS4vXjIxNGIuXmEtYSNyYi4vcjRfaGVgLS1kYC9zcw%3D%3D&btag=c0000e00008000&dy_q=1782314120&l=202606242315204273ACB0DAC9311067DB",
-    "local_path": "output_rain/3_impact/雨打屋顶/7017510462367567140_雨声_雨落屋檐.mp3",
+    "local_path": "assets/rain_sound/3_impact/雨打屋顶/7017510462367567140_雨声_雨落屋檐.mp3",
     "status": "downloaded",
     "curation_score": 6
   },
@@ -289,8 +289,8 @@
     "duration": 44,
     "paid_type": "free",
     "url": "https://lf26-faceu-file-sign.bytecdn.com/tos-cn-v-436d67/ebc9dd6494d34b27bd35c94a91ba58bf?x-expires=1813850182&x-signature=O5uMxxUcKG9ujkaXO8BqvsfnLD8%3D",
-    "local_path": "output_rain/3_impact/雨打窗户/6896681876925222152_窗户上的雨.mp3",
-    "status": "skipped",
+    "local_path": "assets/rain_sound/3_impact/雨打窗户/6896681876925222152_窗户上的雨.mp3",
+    "status": "downloaded",
     "curation_score": 6
   },
   {
@@ -303,7 +303,7 @@
     "duration": 11,
     "paid_type": "free",
     "url": "https://v3-artist.vlabvod.com/0c68bcca0e5a86abdf7dbd7c973680e6/6a452f51/video/tos/cn/tos-cn-v-436d67/696a99c8fab040f1b8b036c8965ab7e7/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGgP6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=ZjY3Ojw3OWRmaTUzNGc8OUBpajo8eTR0dnQ2NjMzNDZlM0AtNmBiYy1gX2MxXy4zMDNjYSNeMGwzcWBrNl5gLS1kYC9zcw%3D%3D&btag=c0000e00008000&dy_q=1782314182&l=20260624231621377A9A0826ACF1BFEBB1",
-    "local_path": "output_rain/3_impact/雨打窗户/6977272614326701325_用力拍打窗户.mp3",
+    "local_path": "assets/rain_sound/3_impact/雨打窗户/6977272614326701325_用力拍打窗户.mp3",
     "status": "downloaded",
     "curation_score": 6
   },
@@ -317,7 +317,7 @@
     "duration": 65,
     "paid_type": "free",
     "url": "https://v3-artist.vlabvod.com/daa8b88f6de78b6a1256e5af317cf3eb/6a452f87/video/tos/cn/tos-cn-v-436d67/2ba68b4c3dd64f6ba50774b15ceae811/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGgP6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=O2g6PDtmNjtoZDtoPDk5PEBpM3ZzN3J5NThzNDMzPDZlM0AyM2MzMjQ1NjExNS1eLV5gYSNqNXNfbDFiamJgLS1jYC9zcw%3D%3D&btag=c0000e00028000&dy_q=1782314182&l=20260624231621377A9A0826ACF1BFEBB1",
-    "local_path": "output_rain/3_impact/雨打窗户/6943874109952576805_雨滴打到窗户上.mp3",
+    "local_path": "assets/rain_sound/3_impact/雨打窗户/6943874109952576805_雨滴打到窗户上.mp3",
     "status": "downloaded",
     "curation_score": 6
   },
@@ -331,7 +331,7 @@
     "duration": 19,
     "paid_type": "free",
     "url": "https://v26-artist.vlabvod.com/dd79c871dce3d017812cf66aab2a150b/6a452f59/video/tos/cn/tos-cn-v-436d67/6b50db2e9195419f87955f8580f402c7/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGgP6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=ZGQ2ZmZmPGg3ZTdkOjM7PEBpamtrcjk6ZmtxODMzNDZlM0BfMl80MWMtNTIxLzNhYzQyYSMvZm4vcjRvYzVgLS1kYC9zcw%3D%3D&btag=c0000e00010000&dy_q=1782314182&l=20260624231622BE1B3216595F9468E123",
-    "local_path": "output_rain/3_impact/雨打窗户/7012513134015532296_玻璃破碎_石头砸穿玻璃窗户.mp3",
+    "local_path": "assets/rain_sound/3_impact/雨打窗户/7012513134015532296_玻璃破碎_石头砸穿玻璃窗户.mp3",
     "status": "downloaded",
     "curation_score": 6
   },
@@ -345,7 +345,7 @@
     "duration": 87,
     "paid_type": "free",
     "url": "https://v9-artist.vlabvod.com/1bb463eb307649796c221ef9cdb135da/6a452f9d/video/tos/cn/tos-cn-v-436d67/528bd00ad914470b8b1551295286c276/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGgP6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=Omk5OzQ2ODM7ODw5MzZkNkBpM2xlbDQ6ZjgzODMzNDZlM0AwLTQuNWAwNjQxLjRjMS4tYSNmbi02cjQwby9gLS1kYC9zcw%3D%3D&btag=c0000e00028000&dy_q=1782314182&l=20260624231622BE1B3216595F9468E123",
-    "local_path": "output_rain/3_impact/雨打窗户/7008727331225324814_窗外有点嘈杂的雨声音效.mp3",
+    "local_path": "assets/rain_sound/3_impact/雨打窗户/7008727331225324814_窗外有点嘈杂的雨声音效.mp3",
     "status": "downloaded",
     "curation_score": 6
   },
@@ -359,7 +359,7 @@
     "duration": 20,
     "paid_type": "free",
     "url": "https://v6-artist.vlabvod.com/ba2764b1fe58c5cbaa9660cf70d8c6e7/6a452f5b/video/tos/cn/tos-cn-v-436d67/d9d3f42364b04c108c191bb9dea9c81c/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tG1P6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=O2VoO2c2Z2czNTNnOGk8N0BpMzZnZXhxanc4NjMzNDZlM0BeLzZgYTM2Xl4xNl4vLV5fYSNwal4zNC1xcl5gLS1kYC9zcw%3D%3D&btag=c0000e00010000&dy_q=1782314183&l=20260624231623D266F00ABCD7DADDD4CE",
-    "local_path": "output_rain/3_impact/雨打窗户/6977306586343558430_下雨天聆听窗外的雨声.mp3",
+    "local_path": "assets/rain_sound/3_impact/雨打窗户/6977306586343558430_下雨天聆听窗外的雨声.mp3",
     "status": "downloaded",
     "curation_score": 6
   },
@@ -373,7 +373,7 @@
     "duration": 21,
     "paid_type": "free",
     "url": "https://v6-artist.vlabvod.com/750d0295230b0d5b0aad53edcfc4ffda/6a452f5c/video/tos/cn/tos-cn-v-436d67/a55c6a91c2474851a6586a6cc9cce03e/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tG1P6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=OGU8aTg2ZzRkZDw2ZTZlO0BpajZneGc6Zjx3NjMzNDZlM0AuYmEwMC1eNS8xYi0vL2M1YSMwM2E2cjRnLXNgLS1kYC9zcw%3D%3D&btag=c0000e00010000&dy_q=1782314183&l=20260624231623D266F00ABCD7DADDD4CE",
-    "local_path": "output_rain/3_impact/雨打窗户/6989527603149360421_雨水打在玻璃上的声音.mp3",
+    "local_path": "assets/rain_sound/3_impact/雨打窗户/6989527603149360421_雨水打在玻璃上的声音.mp3",
     "status": "downloaded",
     "curation_score": 6
   },
@@ -387,7 +387,7 @@
     "duration": 55,
     "paid_type": "free",
     "url": "https://v3-artist.vlabvod.com/a3960f07d9d993b19113c195b0b84da4/6a452f7e/video/tos/cn/tos-cn-v-436d67/ecab5ab7d56a46088843a0e3ae415248/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tG1P6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=NDs1ODdpO2RoMzo1OjRpM0BpM3FrOzo6ZmVoNjMzNDZlM0AuX2BhM2JjNTYxMDRhYjQuYSMyLS1ycjRvX3FgLS1kYC9zcw%3D%3D&btag=c0000e00020000&dy_q=1782314183&l=20260624231623D266F00ABCD7DADDD4CE",
-    "local_path": "output_rain/3_impact/雨打窗户/6988144883840175396_大雨打在窗台声音.mp3",
+    "local_path": "assets/rain_sound/3_impact/雨打窗户/6988144883840175396_大雨打在窗台声音.mp3",
     "status": "downloaded",
     "curation_score": 6
   },
@@ -401,7 +401,7 @@
     "duration": 7,
     "paid_type": "free",
     "url": "https://v9-artist.vlabvod.com/6f58c475ba22259ae105a39c2becf25c/6a452f4d/video/tos/cn/tos-cn-v-436d67/2a8e54c258d64826a2ba9d78ced0006b/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGgP6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=Omg5NjpnPGk4OjdmOmU6aEBpanl1azNudG5qNjMzNDZlM0AuLi82M2ItNS0xNGM1YzM1YSNmbGkzYF8yazJgLS1kYC9zcw%3D%3D&btag=c0000e00008000&dy_q=1782314182&l=20260624231622BE1B3216595F9468E123",
-    "local_path": "output_rain/3_impact/雨打窗户/6974680038616648990_霰弹枪射击窗户玻璃破碎声.mp3",
+    "local_path": "assets/rain_sound/3_impact/雨打窗户/6974680038616648990_霰弹枪射击窗户玻璃破碎声.mp3",
     "status": "downloaded",
     "curation_score": 5
   },
@@ -415,7 +415,7 @@
     "duration": 9,
     "paid_type": "free",
     "url": "https://v26-artist.vlabvod.com/773d29d2c914f83cdaa930f75f773988/6a452f4f/video/tos/cn/tos-cn-v-436d67/8879120c03b6454dacd58e6e02434f9a/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGgP6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=PGk7Omg4NTloaDs1OmhkZkBpM29pcDU6Zmg2OjMzNDZlM0AvMy1iLzQyNTAxYDMtYDQ2YSNgNDRucjRfcV5gLS1kYDBzcw%3D%3D&btag=c0000e00008000&dy_q=1782314182&l=20260624231622BE1B3216595F9468E123",
-    "local_path": "output_rain/3_impact/雨打窗户/7048639859950488863_车窗外的雨.mp3",
+    "local_path": "assets/rain_sound/3_impact/雨打窗户/7048639859950488863_车窗外的雨.mp3",
     "status": "downloaded",
     "curation_score": 5
   },
@@ -429,8 +429,8 @@
     "duration": 6,
     "paid_type": "free",
     "url": "https://v3-artist.vlabvod.com/8d207b7855532b5d6524f0a3f44925f9/6a452f7b/video/tos/cn/tos-cn-v-436d67/6b0861e432cc400fa7b9b3a77d2a29b6/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGuP6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=OWg4NmhnZTRmPDM1OTlkOEBpandpdmg6ZmV5ZDMzNDZlM0BjMGEyLTMxNi0xMzUyNS5fYSMxZ2gvcjRnbGVgLS1kYDBzcw%3D%3D&btag=c0000e00008000&dy_q=1782314229&l=20260624231709C15B1D35E1399455E1B4",
-    "local_path": "output_rain/3_impact/雨伞/7107624698506153246_雨水滴落在雨伞上的声音.mp3",
-    "status": "skipped",
+    "local_path": "assets/rain_sound/3_impact/雨伞/7107624698506153246_雨水滴落在雨伞上的声音.mp3",
+    "status": "downloaded",
     "curation_score": 10
   },
   {
@@ -443,8 +443,8 @@
     "duration": 50,
     "paid_type": "free",
     "url": "https://v3-artist.vlabvod.com/b8d8d5c3dc8a15e89c20b3ea6ee3a1f2/6a452fa7/video/tos/cn/tos-cn-v-436d67/0fde1d159eeb482fa2c828bae0e51727/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGuP6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=NDk2OzY7NWhkaWk8PDk0OEBpM2s2ZTo6ZmlsZjMzNDZlM0AtM2EwL2I2NV8xYzQ1YDFeYSNeYl42cjRfaXJgLS1kYC9zcw%3D%3D&btag=c0000e00020000&dy_q=1782314229&l=20260624231709C15B1D35E1399455E1B4",
-    "local_path": "output_rain/3_impact/雨伞/7150664136844692749_雨落在雨伞上的声音.mp3",
-    "status": "skipped",
+    "local_path": "assets/rain_sound/3_impact/雨伞/7150664136844692749_雨落在雨伞上的声音.mp3",
+    "status": "downloaded",
     "curation_score": 9
   },
   {
@@ -457,7 +457,7 @@
     "duration": 23,
     "paid_type": "free",
     "url": "https://v3-artist.vlabvod.com/db4b5311b3b83ff25b645a59e6f122cb/6a452f8c/video/tos/cn/tos-cn-v-436d67/b0993ae22f0b4bd0a4c063dea24376da/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGuP6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=Zzc5ZzU6Zjc1aDU6NjtmNUBpM3d3dmk6ZnA6ZTMzNDZlM0BiMV40NjA2XjQxYjVgMmIyYSNuMDI0cjRvZjZgLS1kYDBzcw%3D%3D&btag=c0000e00010000&dy_q=1782314229&l=20260624231709C15B1D35E1399455E1B4",
-    "local_path": "output_rain/3_impact/雨伞/7120506005326187784_大雨伞下声音.mp3",
+    "local_path": "assets/rain_sound/3_impact/雨伞/7120506005326187784_大雨伞下声音.mp3",
     "status": "downloaded",
     "curation_score": 7
   },
@@ -471,7 +471,7 @@
     "duration": 37,
     "paid_type": "free",
     "url": "https://v6-artist.vlabvod.com/14ab6dbea98251cf351531743d51832b/6a452f9a/video/tos/cn/tos-cn-v-436d67/37593958100b47609198824ae9a8e728/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGuP6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=Ojw5NTxoOTczMzRoaWdoaEBpanh5PDw6ZjhmODMzNDZlM0AtMC5iYDEvXzAxXmItY2MxYSNga2VncjRfLjFgLS1kYC9zcw%3D%3D&btag=c0000e00018000&dy_q=1782314229&l=20260624231709C15B1D35E1399455E1B4",
-    "local_path": "output_rain/3_impact/雨伞/7010034846441426206_大雨伞下声音.mp3",
+    "local_path": "assets/rain_sound/3_impact/雨伞/7010034846441426206_大雨伞下声音.mp3",
     "status": "downloaded",
     "curation_score": 7
   },
@@ -485,7 +485,7 @@
     "duration": 34,
     "paid_type": "free",
     "url": "https://v6-artist.vlabvod.com/407b782f1a264c4d6ca67685530d6fe4/6a452fa6/video/tos/cn/tos-cn-v-436d67/ogDQhMB18PyCCnDJMWhBBfHeGAnzbgMD9ItgaL/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGuP6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=ZWVlaDc6N2g1Zjc8NWg4NUBpM2VvbWk6ZnQ1ajMzNDZlM0BfXmMyXmMuX14xNjM0XjA2YSMuaDRhcjRvYHJgLS1kYDBzcw%3D%3D&btag=c0000e00020000&dy_q=1782314229&l=20260624231709C15B1D35E1399455E1B4",
-    "local_path": "output_rain/3_impact/雨伞/7222661592083696934_雨伞下春雨.mp3",
+    "local_path": "assets/rain_sound/3_impact/雨伞/7222661592083696934_雨伞下春雨.mp3",
     "status": "downloaded",
     "curation_score": 7
   },
@@ -499,8 +499,8 @@
     "duration": 3,
     "paid_type": "free",
     "url": "https://v3-artist.vlabvod.com/9d8cdb64f355cd88ae065634efca0f6c/6a452f78/video/tos/cn/tos-cn-v-436d67/9d7970d65d704dc680190ba0172c5bfa/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGuP6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=M2dlZWZlOTxpOTZnZzUzNkBpM2xnbGk6ZjZkZDMzNDZlM0A2LjIuNS8tNTAxLmFhMTMuYSMuM3JqcjRvNmBgLS1kYDBzcw%3D%3D&btag=c0000e00008000&dy_q=1782314229&l=20260624231709C15B1D35E1399455E1B4",
-    "local_path": "output_rain/3_impact/雨伞/7104599090805099813_雨滴落在雨伞上的声音.mp3",
-    "status": "skipped",
+    "local_path": "assets/rain_sound/3_impact/雨伞/7104599090805099813_雨滴落在雨伞上的声音.mp3",
+    "status": "downloaded",
     "curation_score": 4
   },
   {
@@ -513,8 +513,8 @@
     "duration": 15,
     "paid_type": "free",
     "url": "https://v3-artist.vlabvod.com/1b71332f56b14032f17db9a23fd6670d/6a452f84/video/tos/cn/tos-cn-v-436d67/295206b570a348d2b83f9848db977527/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGuP6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=ZWQ6NjRkOTY6Z2g5O2k2ZkBpam5rcjk6ZjVuZTMzNDZlM0AvNC5iXzBiNjYxXzZfMi42YSM2bm1wcjRvbGFgLS1kYDBzcw%3D%3D&btag=c0000e00010000&dy_q=1782314229&l=20260624231709C15B1D35E1399455E1B4",
-    "local_path": "output_rain/3_impact/雨伞/7123068214065614093_下雨声.mp3",
-    "status": "skipped",
+    "local_path": "assets/rain_sound/3_impact/雨伞/7123068214065614093_下雨声.mp3",
+    "status": "downloaded",
     "curation_score": 4
   },
   {
@@ -527,7 +527,7 @@
     "duration": 1,
     "paid_type": "free",
     "url": "https://v6-artist.vlabvod.com/8ed7b66e9f96221a336573fa78738410/6a452f76/video/tos/cn/tos-cn-v-436d67/1582b1336f8d43ceb96aea927d723a38/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=256&bt=256&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGuP6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=OWY1NzxnOGc7Ozo1ODQ5ZUBpajlzaGk6ZjN5NjMzNDZlM0BiNi4zL2JfXjExXzI0Ni4wYSNvZmpvcjRnYmVgLS1kYC9zcw%3D%3D&btag=c0000e00008000&dy_q=1782314229&l=20260624231709C15B1D35E1399455E1B4",
-    "local_path": "output_rain/3_impact/雨伞/6981729356972297509_下雨天雨水滴落雨伞音效.mp3",
+    "local_path": "assets/rain_sound/3_impact/雨伞/6981729356972297509_下雨天雨水滴落雨伞音效.mp3",
     "status": "downloaded",
     "curation_score": 2
   },
@@ -541,7 +541,7 @@
     "duration": 3,
     "paid_type": "free",
     "url": "https://v6-artist.vlabvod.com/a18c9ef2b59b5a7707c4c2b994d20ebf/6a452f78/video/tos/cn/tos-cn-v-436d67/bdcf59df1e51433a9f62ddc98cdd4d6b/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGuP6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=M2lkODhlZmc8ODplaGlnOUBpM3E1cTY6ZjtsZDMzNDZlM0AxLTE2MF41XmAxLzM2MmIvYSNgXnIucjRvLWVgLS1kYDBzcw%3D%3D&btag=c0000e00008000&dy_q=1782314229&l=20260624231709C15B1D35E1399455E1B4",
-    "local_path": "output_rain/3_impact/雨伞/7107531588690283807_收好雨伞的声音.mp3",
+    "local_path": "assets/rain_sound/3_impact/雨伞/7107531588690283807_收好雨伞的声音.mp3",
     "status": "downloaded",
     "curation_score": 0
   },
@@ -555,7 +555,7 @@
     "duration": 1,
     "paid_type": "free",
     "url": "https://v6-artist.vlabvod.com/8d2a22036d601641ceaccc5a645649b3/6a452f76/video/tos/cn/tos-cn-v-436d67/ooDkYaKbpf4QnV4bwnDKfB8fkl0n0oABF9DPOC/?a=4066&ch=0&cr=0&dr=0&er=2&cd=0%7C0%7C0%7C0&br=250&bt=250&ft=gt-9LrwwZR6Gskao1PDS6kFgAX1tGuP6JU9eF-yUmLr12nzXT&mime_type=audio_mpeg&qs=7&rc=PDs3OTRnZjs4NmYzOjc5ZEBpM3ZpeDM6ZnZubjMzNDZlM0BhNDYyLTQ2NmIxL2AxXi4vYSM2cWZzcjQwczBgLS1kYGFzcw%3D%3D&btag=c0000e00008000&dy_q=1782314229&l=20260624231709C15B1D35E1399455E1B4",
-    "local_path": "output_rain/3_impact/雨伞/7279840353862110483_实拍_手拿雨伞撑开伞制作_降落伞声.mp3",
+    "local_path": "assets/rain_sound/3_impact/雨伞/7279840353862110483_实拍_手拿雨伞撑开伞制作_降落伞声.mp3",
     "status": "downloaded",
     "curation_score": 0
   }
