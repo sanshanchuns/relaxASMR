@@ -18,9 +18,6 @@ scripts/youtube_top3/output/
 # assets/rain_sound/
 # assets/lake_sound/
 
-# AI 生成音效 WAV（json 描述文件可提交）
-# assets/api_sound/*.wav 已由全局 *.wav 忽略
-
 # Reaper peaks
 *.reapeaks
 

@@ -87,18 +87,23 @@ local function get_template_from_track(track)
   local fallback = nil
   for i = 0, n - 1 do
     local item = r.GetTrackMediaItem(track, i)
-    if r.GetMediaItemInfo_Value(item, "B_LOOPSRC") == 1 then goto continue end
     local take = r.GetActiveTake(item)
     if not take then goto continue end
     local src = r.GetMediaItemTake_Source(take)
     if not src then goto continue end
+    local path = get_source_path(take)
+    if not path then goto continue end
     local len = r.GetMediaItemInfo_Value(item, "D_LENGTH")
     local src_len = r.GetMediaSourceLength(src, false)
-    if len > src_len * 1.5 then len = src_len end
+    local is_loop = r.GetMediaItemInfo_Value(item, "B_LOOPSRC") == 1
+    -- 循环片段也作 template：散布用源文件长度做单次事件，不用 chunk（含循环状态）
+    if is_loop or len > src_len * 1.5 then
+      len = src_len
+    end
     local tmpl = {
-      chunk = get_item_chunk(item),
+      chunk = is_loop and nil or get_item_chunk(item),
       length = len,
-      path = get_source_path(take),
+      path = path,
     }
     if r.GetMediaItemInfo_Value(item, "D_POSITION") < 0.001 then return tmpl end
     if not fallback then fallback = tmpl end
@@ -252,6 +257,17 @@ local function run_scatter(track, label, total_sec, fade_sec, template, spec)
 end
 
 local function run_manual(track, label)
+  local template = get_template_from_track(track)
+  if not template then
+    r.ShowMessageBox(
+      "轨道上需有一条可读的音频 sample（建议在 position 0）。\n"
+        .. "若片段已拖入仍报错，检查是否为有效音频、路径是否可访问。",
+      "asmr_scatter_track",
+      0
+    )
+    return
+  end
+
   local ret, user = r.GetUserInputs(
     "手动散布 · " .. label,
     6,
@@ -268,12 +284,6 @@ local function run_manual(track, label)
   max_gap_min = tonumber(max_gap_min) or 8
   randomness = tonumber(randomness) or 0.5
   fade_ms = tonumber(fade_ms) or 80
-
-  local template = get_template_from_track(track)
-  if not template then
-    r.ShowMessageBox("轨道上需有一条 sample（position 0 的 template）", "asmr_scatter_track", 0)
-    return
-  end
 
   local total_sec = dur_h > 0 and dur_h * 3600 or r.GetProjectLength(0)
   if total_sec <= 0 then total_sec = 3 * 3600 end

@@ -1,82 +1,74 @@
 # ElevenLabs AI 音效生成
 
-使用 [ElevenLabs Sound Effects API](https://elevenlabs.io/docs/eleven-api/guides/cookbooks/sound-effects) 生成音效，输出到仓库 `assets/api_sound/`。
+使用 [ElevenLabs Sound Effects API](https://elevenlabs.io/docs/eleven-api/guides/cookbooks/sound-effects) 生成音效，输出到 `assets/api_sound/<category>/`。
+
+**原则**：保存 API PCM 原声；落地 MP3 仅做 ffmpeg 转码（无混响/EQ）。**生成后必须试听**。
+
+## 响度问题说明
+
+ElevenLabs 直接返回的 `mp3_44100_128` 有时峰值仅 **-50～-60 dB**（近乎无声）。  
+当前流程：**API 固定 `pcm_44100` → ffmpeg 转 MP3**，并自动检测响度。
+
+| max_volume | 判定 |
+|------------|------|
+| ≥ -36 dB | OK |
+| -48 ～ -36 dB | WARN 偏低，建议试听 |
+| < -48 dB | FAIL 近乎无声，需 `--force` 重生成 |
 
 ## 输出格式
 
-每个条目一对文件：
-
 | 文件 | 说明 |
 |------|------|
-| `api_<id>.wav` | AI 生成音频（PCM 44100Hz 转 WAV） |
-| `api_<id>.json` | 描述词 `text` 与生成参数 |
+| `<category>/api_<id>.mp3` | API PCM 原声 → ffmpeg MP3 128kbps |
+| `<category>/api_<id>.json` | 提示词、响度、`post_process: format_only` |
 
-批量生成后另有 `assets/api_sound/index.json` 索引。
+分类目录：`bird/`、`rain/`、`water/`、`wind/`、`accent/` …
 
 ## 前置
 
 ```bash
 pip install -r requirements.txt
 source ~/.zshrc   # ELEVENLABS_API_KEY
+# 需要 ffmpeg、ffplay（试听）
 ```
 
 ## 用法
 
-### 单条生成
+### 生成
 
 ```bash
-python3 generate.py "Light rain on calm lake, soft ASMR ambience" \
-  --duration 30 --loop
-
-# 指定文件名后缀
-python3 generate.py "Gentle wind through reeds" --slug reed_test --duration 20
-
-# 预览
-python3 generate.py "test prompt" --dry-run
-```
-
-无 `--slug` 时自动编号：`api_001.wav`、`api_002.wav` …
-
-### 批量（prompts.json）
-
-```bash
-python3 generate.py --list
+python3 generate.py --id mvi6918_bird_distant --force --play
 python3 generate.py --all
 ./generate.sh
-python3 generate.py --id lake_gentle_lap --id rain_light_lake
 ```
 
-预设 id 对应文件名，如 `api_lake_gentle_lap.wav`。
+`--play`：生成后自动播放。`--force`：覆盖已存在文件。
+
+### 试听 / 校验（生成后必做）
+
+```bash
+python3 audition.py                    # 检查全部 api_sound
+python3 audition.py mvi6918_bird_distant --play   # 指定 slug 播放
+python3 audition.py --play-only bird/api_mvi6918_bird_distant.mp3
+python3 audition.py --update-json      # 响度写回 json
+```
 
 ## api_xx.json 示例
 
 ```json
 {
-  "text": "Gentle lake waves lapping against a sandy shore...",
-  "slug": "lake_gentle_lap",
-  "layer": "water",
-  "series": "lake",
-  "duration_seconds": 30,
-  "loop": true,
-  "prompt_influence": 0.35,
-  "model_id": "eleven_text_to_sound_v2",
-  "generated_at": "2026-06-25T08:00:00",
-  "source": "elevenlabs"
+  "api_format": "pcm_44100",
+  "file_format": "mp3",
+  "post_process": "format_only",
+  "loudness": {
+    "max_volume_db": -28.5,
+    "mean_volume_db": -42.1,
+    "verdict": "pass"
+  }
 }
 ```
 
-## 素材目录总览
-
-见 [assets/README.md](../../assets/README.md)。
-
-| 目录 | 来源 |
-|------|------|
-| `assets/rain_sound/` | 剪映下载（雨声） |
-| `assets/lake_sound/` | 剪映下载（湖泊） |
-| `assets/api_sound/` | ElevenLabs 生成 |
-
 ## 注意
 
-- 生成按 ElevenLabs 配额计费，批量前建议 `--dry-run`
-- 已存在 `api_xx.wav` 会跳过
-- `*.wav` 已在 `.gitignore`，`api_xx.json` 可提交仓库
+- 生成按 ElevenLabs 配额计费
+- `assets/api_sound/**/*.mp3` 已在 `.gitignore`，`*.json` 可提交

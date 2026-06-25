@@ -78,7 +78,7 @@ return {
       name = "远处鸟鸣",
       vol = 0.3,
       paths = {
-        "assets/rain_sound/6_life/鸟鸣/6974679661968182536_清晨大自然的鸟叫声.mp3",
+        "assets/api_sound/bird/api_mvi6918_bird_distant.mp3",
       },
       min_gap_min = 12,
       max_gap_min = 28,

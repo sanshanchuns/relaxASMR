@@ -127,7 +127,7 @@
 | 3 | 3_impact | 雨打树叶 | scatter | 0.5 | `assets/rain_sound/3_impact/雨打树叶/6974691567823097118_雨滴在树叶上的声音.mp3` | 树冠物理击打 · gap 3–8 min |
 | 4 | 4_water | — | — | — | — | **留白** · 湖面在远景，听感上无近场水声 |
 | 5 | 5_env | 林间雨环境 | loop | 0.22 | `assets/rain_sound/5_env/竹林_雨/7335268175694646554_电影级森林雨天气素材.mp3` | 宽频林间湿感；纯雨环境，无鸟叫 |
-| 6 | 6_life | 远处鸟鸣 | scatter | 0.3 | `assets/rain_sound/6_life/鸟鸣/6974679661968182536_清晨大自然的鸟叫声.mp3` | 打破单调 · 极稀疏远处单声 · gap 12–28 min |
+| 6 | 6_life | 远处鸟鸣 | scatter | 0.3 | `assets/api_sound/bird/api_mvi6918_bird_distant.mp3` | AI 原声远处单声 · gap 12–28 min |
 | 7 | **7_comfort** | **伞面水滴** | **loop** | **0.45** | `assets/rain_sound/3_impact/雨伞/小雨击打雨伞.wav` | **仅伞面水滴** · 无尖锐雨声；区别于 `大雨伞下声音` |
 | 8 | video | Video · MVI_6918 loop | looper | 0（渲染） | `assets/rain_video/MVI_6919_loop_0.98_dur_3_fade_0.5.mp4` | 轨末 · 仅渲染 |
 
@@ -229,7 +229,7 @@
 
 **混音**：低音量、长间隔；雨天可偶发远处鸟叫，但须 **稀疏、远、短**。
 
-**选用**：`清晨大自然的鸟叫声`（约 5 s 片段）· vol **0.3** · scatter · gap **12–28 min** · random **0.55**
+**选用**：`api_mvi6918_bird_distant`（ElevenLabs AI 原声）· vol **0.3** · scatter · gap **12–28 min** · random **0.55** · 混响可在 Reaper 片段级按需加
 
 ---
 

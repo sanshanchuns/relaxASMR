@@ -469,6 +469,79 @@ def process_layer(
     return layer_manifest
 
 
+def download_keyword(
+    keyword: str,
+    layer_id: str,
+    output_root: Path,
+    defaults: dict,
+    *,
+    group_label: str | None,
+    dry_run: bool,
+    target: int,
+    commercial_only: bool,
+    page_size: int,
+) -> list[dict]:
+    """按单个关键词搜索并下载到 output_root/<layer_id>/<group>/。"""
+    group = group_label or keyword
+    layer_name = defaults.get("layer_names", {}).get(layer_id, layer_id)
+    print(f"\n==> 关键词: {keyword} → {layer_id}/{group} (目标 {target} 条)")
+    items = collect_for_keyword(keyword, target, commercial_only, page_size, set())
+    print(f"    命中: {len(items)} 条")
+
+    manifest_path = output_root / layer_id / "manifest.json"
+    existing: list[dict] = []
+    if manifest_path.is_file():
+        existing = json.loads(manifest_path.read_text(encoding="utf-8"))
+    seen_ids = {e.get("id") for e in existing}
+
+    new_entries: list[dict] = []
+    for item in items:
+        if item["id"] in seen_ids:
+            print(f"    跳过(manifest 已有): {item['title'][:40]}")
+            continue
+        local_path = local_path_for(output_root, layer_id, group, item)
+        entry = {
+            "layer_id": layer_id,
+            "layer_name": layer_name,
+            "layer_type": "effect",
+            "group": group,
+            "id": item["id"],
+            "title": item["title"],
+            "duration": item.get("duration"),
+            "paid_type": item.get("paid_type"),
+            "url": item["url"],
+            "local_path": str(local_path.relative_to(REPO_ROOT)),
+        }
+        if dry_run:
+            entry["status"] = "dry_run"
+            new_entries.append(entry)
+            continue
+        if local_path.is_file():
+            print(f"    跳过(已存在): {local_path.name}")
+            entry["status"] = "skipped"
+        else:
+            try:
+                print(f"    下载: {item['title'][:40]}...")
+                download_file(item["url"], local_path)
+                entry["status"] = "downloaded"
+                time.sleep(0.2)
+            except (urllib.error.URLError, TimeoutError, OSError) as exc:
+                print(f"    ✗ 失败: {item['title'][:40]} — {exc}", file=sys.stderr)
+                entry["status"] = "failed"
+                entry["error"] = str(exc)
+        new_entries.append(entry)
+
+    if not dry_run and new_entries:
+        merged = existing + new_entries
+        manifest_path.parent.mkdir(parents=True, exist_ok=True)
+        manifest_path.write_text(
+            json.dumps(merged, ensure_ascii=False, indent=2),
+            encoding="utf-8",
+        )
+        print(f"  manifest: {manifest_path} (+{len(new_entries)} 条)")
+    return new_entries
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="剪映音效/音乐分层批量下载")
     parser.add_argument("--config", default=str(DEFAULT_CONFIG), help="配置文件路径")
@@ -477,6 +550,8 @@ def main() -> None:
     parser.add_argument("--list", action="store_true", help="列出可用层级")
     parser.add_argument("--dry-run", action="store_true", help="只搜索，不下载")
     parser.add_argument("--target", type=int, help="每关键词/歌单下载条数（覆盖配置）")
+    parser.add_argument("--keyword", help="单关键词搜索下载（需配合 --layer）")
+    parser.add_argument("--group", help="关键词下载时的子目录名（默认与 keyword 相同）")
     parser.add_argument("--all-licenses", action="store_true", help="不限商用，下载全部")
     parser.add_argument(
         "--restore",
@@ -519,6 +594,27 @@ def main() -> None:
             f"\n完成。下载 {stats['downloaded']}，跳过 {stats['skipped']}，"
             f"失败 {stats['failed']}，修正路径 {stats['fixed_paths']}"
         )
+        return
+
+    if args.keyword:
+        layer_id = (args.layer and args.layer[0]) or "6_life"
+        target = args.target if args.target is not None else 20
+        print("剪映音效 · 单关键词下载")
+        print(f"关键词: {args.keyword}")
+        print(f"输出: {output_root}/{layer_id}/{args.group or args.keyword}")
+        print(f"商用过滤: {'是' if commercial_only else '否'}")
+        entries = download_keyword(
+            args.keyword,
+            layer_id,
+            output_root,
+            defaults,
+            group_label=args.group,
+            dry_run=args.dry_run,
+            target=target,
+            commercial_only=commercial_only,
+            page_size=page_size,
+        )
+        print(f"\n完成。处理 {len(entries)} 条。")
         return
 
     if args.list:

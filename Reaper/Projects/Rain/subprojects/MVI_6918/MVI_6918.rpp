@@ -1,4 +1,4 @@
-<REAPER_PROJECT 0.1 "7.73/win64" 1782379350 0
+<REAPER_PROJECT 0.1 "7.73/win64" 1782397753 0
   <NOTES 0 2
   >
   RIPPLE 0 0
@@ -19,8 +19,8 @@
   VIDEO_CONFIG 0 0 65792
   PANMODE 3
   PANLAWFLAGS 3
-  CURSOR 10280
-  ZOOM 11.57918162456091 118718 0
+  CURSOR 38
+  ZOOM 6.53609209971909 0 0
   VZOOMEX 6 0
   USE_REC_CFG 0
   RECMODE 1
@@ -68,8 +68,8 @@
   GLOBAL_AUTO -1
   TEMPO 60 4 4 1
   PLAYRATE 1 0 0.25 4
-  SELECTION 113 108
-  SELECTION2 113 108
+  SELECTION 60 0
+  SELECTION2 60 0
   MASTERAUTOMODE 0
   MASTERTRACKHEIGHT 0 0
   MASTERPEAKCOL 16576
@@ -77,7 +77,7 @@
   MASTERTRACKVIEW 1 0.6667 0.5 0.5 0 0 0 0 0 0 0 0 0 0 1
   MASTERHWOUT 0 0 1 0 0 0 0 -1
   MASTER_NCH 2 2
-  MASTER_VOLUME 1.37177745379402 0 -1 -1 1
+  MASTER_VOLUME 2.12211305105301 0 -1 -1 1
   MASTER_PANMODE 3
   MASTER_PANLAWFLAGS 3
   MASTER_FX 0
@@ -131,14 +131,14 @@
     MAINSEND 1 0
     <FXCHAIN
       WNDRECT 1044 88 736 461
-      SHOW 0
+      SHOW 1
       LASTSEL 0
       DOCKED 0
       BYPASS 0 0 0
       <VST "VST: ReaEQ (Cockos)" reaeq.dll 0 "" 1919247729<56535472656571726561657100000000> ""
         cWVlcu5e7f4CAAAAAQAAAAAAAAACAAAAAAAAAAIAAAABAAAAAAAAAAIAAAAAAAAAzQAAAAEAAAAAABAA
         IQAAAAUAAAAAAAAAAQAAAAAAAAAAAFlAAAAAAAAA8D+amZmZmZnpPwEIAAAAAQAAAAAAAAAAwHJAAAAAAAAA8D8AAAAAAAAAQAEIAAAAAQAAAAAAAAAAQI9AAAAAAAAA
-        8D8AAAAAAAAAQAEBAAAAAQAAAH3btrxzR7NA3iy9koaU4z+amZmZmZnpPwEEAAAAAQAAAAAAAAAAAFlAAAAAAAAA8D8AAAAAAAAAQAEBAAAAAQAAAAAAAAAAAPA/AAAA
+        8D8AAAAAAAAAQAEBAAAAAQAAAJ/vruhzybNAMIH/8g6n2z+amZmZmZnpPwEEAAAAAQAAAAAAAAAAAFlAAAAAAAAA8D8AAAAAAAAAQAEBAAAAAQAAAAAAAAAAAPA/AAAA
         AP0BAABcAQAAAgABAA==
         AAAQAAAA
       >
@@ -169,7 +169,7 @@
     BEAT -1
     AUTOMODE 0
     PANLAWFLAGS 3
-    VOLPAN 0.28 0 -1 -1 1
+    VOLPAN 0.04816847551365 0 -1 -1 1
     MUTESOLO 0 0 0
     IPHASE 0
     PLAYOFFS 0 1
@@ -184,11 +184,17 @@
     TRACKHEIGHT 0 0 0 0 0 0 0
     INQ 0 0 0 0.5 100 0 0 100
     NCHAN 2
-    FX 0
+    FX 1
     TRACKID {D1096D67-550F-47AC-844C-54E9D230DC39}
     PERF 0
     MIDIOUT -1
     MAINSEND 1 0
+    <FXCHAIN
+      WNDRECT 2009 224 1084 641
+      SHOW 0
+      LASTSEL 0
+      DOCKED 0
+    >
     <ITEM
       POSITION 0
       SNAPOFFS 0
@@ -199,16 +205,16 @@
       FADEOUT 1 0 0 1 0 0 0
       MUTE 0 0
       SEL 0
-      IGUID {2AEDA0BF-8FE1-4BDE-B5CF-3916B12CE5A1}
-      IID 2029
-      NAME 6979801635392343310_河边，湖边，午后环境-glued.wav
+      IGUID {7FDE38D6-0EFF-40BD-9C69-DF4F423EAEC6}
+      IID 2224
+      NAME 6979801635392343310_空气底噪.mp3
       VOLPAN 1 0 1 -1
       SOFFS 0
       PLAYRATE 1 1 0 -1 0 0.0025
       CHANMODE 0
-      GUID {66BCA81F-0634-4978-BB5D-7210E61AFCAB}
-      <SOURCE WAVE
-        FILE "Audio Files\6979801635392343310_河边，湖边，午后环境-glued.wav"
+      GUID {27D11874-13B0-4E54-947C-AE441A3B9C33}
+      <SOURCE MP3
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\1_base\白噪音\6979801635392343310_空气底噪.mp3" 1
       >
     >
   >
@@ -218,7 +224,7 @@
     BEAT -1
     AUTOMODE 0
     PANLAWFLAGS 3
-    VOLPAN 0.70858445955218 0 -1 -1 1
+    VOLPAN 0.33398278328423 0 -1 -1 1
     MUTESOLO 0 0 0
     IPHASE 0
     PLAYOFFS 0 1
@@ -227,7 +233,7 @@
     SHOWINMIX 1 0.6667 0.5 1 0.5 0 0 0 0
     FIXEDLANES 9 0 0 0 0
     LANEREC -1 -1 -1 0
-    SEL 1
+    SEL 0
     REC 0 0 1 0 0 0 0 0
     VU 64
     TRACKHEIGHT 0 0 0 0 0 0 0
@@ -246,11 +252,18 @@
       ARM 1
       DEFSHAPE 0 -1 -1
       VOLTYPE 1
-      PT 0 0.92075629 5 2
-      PT 20 0.92151619 5 2
-      PT 20.0005 0.92023629 5 2
-      PT 63.9995 0.92075628 5 2
-      PT 84.0005 0.92151621 5 2 0 0 -0.125
+      PT 0 0.92094623 5 2
+      PT 15.0005 0.92151621 5 2
+      PT 30 0.92204917 5 2
+      PT 30.0005 0.92179071 5 2
+      PT 34 0.92193839 5 2
+      PT 34.0005 0.92182163 5 2
+      PT 38.0005 0.92193841 5 2
+      PT 41.0005 0.92204919 5 2
+      PT 54 0.9225113 5 2
+      PT 54.0005 0.9206854 5 2
+      PT 108.0005 0.92281748 0
+      PT 126.0005 0.92319973 5 2 0 0 -0.25
       PT 327.27272727 0.92760448 2
       PT 654.54545455 0.9351401 2
       PT 981.81818182 0.9425386 2
@@ -312,16 +325,16 @@
       FADEOUT 1 0 0 1 0 0 0
       MUTE 0 0
       SEL 0
-      IGUID {821E9854-C01D-4B41-9173-A083C29D26A8}
-      IID 1789
-      NAME 6969457686995881230_舒缓轻柔小雨声淅淅沥沥_雨后滴水小雨大自然夏至夏天下雨声清凉.mp3
+      IGUID {598CC5A3-4FCF-44E7-BE63-B316447D5ECB}
+      IID 2226
+      NAME 6969457686995881230_中小雨_雨滴打击地面.mp3
       VOLPAN 1 0 1 -1
       SOFFS 0
       PLAYRATE 1 1 0 -1 0 0.0025
       CHANMODE 0
-      GUID {A012479A-D04A-4509-B29D-FE80BA6742B6}
+      GUID {31715EA9-D9E5-481A-AB3A-D2992BD45E49}
       <SOURCE MP3
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\2_rain\小雨\6969457686995881230_舒缓轻柔小雨声淅淅沥沥_雨后滴水小雨大自然夏至夏天下雨声清凉.mp3" 1
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\2_rain\小雨\6969457686995881230_中小雨_雨滴打击地面.mp3" 1
       >
     >
   >
@@ -340,7 +353,7 @@
     SHOWINMIX 1 0.6667 0.5 1 0.5 0 0 0 0
     FIXEDLANES 9 0 0 0 0
     LANEREC -1 -1 -1 0
-    SEL 0
+    SEL 1
     REC 0 0 1 0 0 0 0 0
     VU 64
     TRACKHEIGHT 0 0 0 0 0 0 0
@@ -351,28 +364,6 @@
     PERF 0
     MIDIOUT -1
     MAINSEND 1 0
-    <ITEM
-      POSITION 102
-      SNAPOFFS 0
-      LENGTH 198.11266666666666
-      LOOP 1
-      ALLTAKES 0
-      FADEIN 1 0 0 1 0 0 0
-      FADEOUT 1 0 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {4D4A5B25-EBB5-4FAB-9506-42669587F713}
-      IID 2025
-      NAME 6979801635392343310_河边，湖边，午后环境.mp3
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {968673BF-E9BB-4359-949D-5F6CBB4EC09F}
-      <SOURCE MP3
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\4_water\湖水\6979801635392343310_河边，湖边，午后环境.mp3" 1
-      >
-    >
   >
   <TRACK {DE29A257-F073-421F-A9D6-3648E9AB50A1}
     NAME 4_water
@@ -380,7 +371,7 @@
     BEAT -1
     AUTOMODE 0
     PANLAWFLAGS 3
-    VOLPAN 1 0 -1 -1 1
+    VOLPAN 0.01109919329767 0 -1 -1 1
     MUTESOLO 0 0 0
     IPHASE 0
     PLAYOFFS 0 1
@@ -400,6 +391,3328 @@
     PERF 0
     MIDIOUT -1
     MAINSEND 1 0
+    <ITEM
+      POSITION 12
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {54E0599D-87E4-4F7B-B879-F83A210C2BA5}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E4662E26-6D18-4428-8248-D0EC887853A6}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 81.88109052663025
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 122.30123262414362
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 228.92044779010149
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 272.30521535176445
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 373.49677924730253
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 431.2039238606236
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 496.66422854501457
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 572.0700517310953
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 629.39607464945493
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 698.35374348294499
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 793.78812030544361
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 873.85172620089941
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 942.03651659827938
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 991.80396794882893
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 1055.815760578763
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 1134.3956592047355
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 1209.1922963917705
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 1266.7913169941407
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 1345.4416001703705
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 1443.0657500897257
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 1515.9652789428051
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 1557.7293470243683
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 1654.5387403199099
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 1711.0536371836229
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 1808.6794178501884
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 1847.6989185812772
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 1944.0605470865107
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 2013.2710376068815
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 2056.7633288814609
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 2142.2585479253498
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 2203.2630178450563
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 2301.5026571656449
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 2364.9464544505181
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 2421.0767611968968
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 2488.5842046255398
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 2575.5029376605207
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 2664.6631420506287
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 2731.1009323064141
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 2789.0718684502795
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 2856.1602710426569
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 2917.4641000419429
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 2989.1163580725765
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 3062.153312204232
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 3160.5582388678863
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 3223.8011171497228
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 3305.4166429680499
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 3378.9918476973194
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 3433.8356009785939
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 3512.8384712284756
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 3575.8226868590546
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 3637.2732031736064
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 3731.4416115576669
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 3770.4575107047299
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 3858.9182518201737
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 3936.9271464177973
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 3987.8819662420869
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 4085.9575607795637
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 4127.2082360890299
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 4216.2650418261928
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 4301.5889410615382
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 4346.6418224959316
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 4428.8580457078897
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 4508.319139112692
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 4584.8144840278119
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 4638.7792724423871
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 4717.1361141140869
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 4786.7047032693145
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 4844.7259472521791
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 4924.8839747551283
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 4989.9173926085277
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 5092.0864299555205
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 5168.9945553674415
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 5222.6128768869894
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 5281.4342456543181
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 5356.9480470259705
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 5439.2184729325172
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 5522.4254145761397
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 5572.7531371548157
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 5640.357160559699
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 5725.2454850202803
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 5783.9402149716125
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 5847.2457702791498
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 5952.5962098816617
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 5997.374887360781
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 6078.2478891398496
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 6151.1808146980611
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 6203.8909456516221
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 6301.0202724164355
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 6346.7894004213931
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 6440.2182216381434
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 6528.730307271132
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 6580.1310452848429
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 6650.7657110932796
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 6730.1448147743886
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 6774.5053845070197
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 6851.1072336585976
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 6940.8040067837155
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 7003.3566210581866
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 7086.8433765528043
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 7142.4545908765504
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 7203.5676948223236
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 7304.1330538695465
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 7363.4593736917805
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 7449.2581415960594
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 7493.2559791873909
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 7601.3304399540302
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 7673.0555598810952
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 7717.5175313987447
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 7784.8327782956121
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 7846.7852036969043
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 7957.5968719919856
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 8002.1162957937631
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 8067.2947275832066
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 8171.1596715585256
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 8243.6030165329375
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 8282.3796487488253
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 8351.2895792386698
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 8439.9759834836022
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 8516.4240400516392
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 8582.824313314979
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 8655.7525059627096
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 8745.6750042486892
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 8802.9508554732674
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 8880.2567127519524
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 8929.1175393953345
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 8995.2908104574799
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 9065.6442396217153
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 9162.8553532689002
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 9229.6692701082084
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 9314.6301943498729
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 9368.1757378725815
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 9425.1937352198656
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 9507.632462261261
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 9599.472306043328
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 9653.7325258998517
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 9741.5038429826709
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 9778.4560972329618
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 9868.857976636762
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 9928.1282849253021
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 10003.395467297754
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 10101.207743535246
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 10173.966754802095
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 10232.172265845644
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 10280.10206335992
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 10366.825826537211
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 10437.424149854791
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 10494.714973224085
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 10604.068108763409
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 10660.479413560373
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
+    <ITEM
+      POSITION 10723.658248781316
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
+      IID 2050
+      NAME Single_quiet_frog_cr_#4-1780663380763.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
+      >
+    >
   >
   <TRACK {1055DC63-0742-4C2B-BB6C-CFB52CE83901}
     NAME 5_env
@@ -437,14 +3750,14 @@
       FADEOUT 1 0 0 1 0 0 0
       MUTE 0 0
       SEL 0
-      IGUID {DFC5483C-414E-4542-8C86-DF727A1C4975}
-      IID 6
+      IGUID {C1BC8D8D-9FB8-47BA-BFC7-36DD7BFEB1D2}
+      IID 2228
       NAME 7335268175694646554_电影级森林雨天气素材.mp3
-      VOLPAN 0.22 0 1 -1
+      VOLPAN 1 0 1 -1
       SOFFS 0
       PLAYRATE 1 1 0 -1 0 0.0025
       CHANMODE 0
-      GUID {4809587E-F685-4B78-811F-4F375152DF3F}
+      GUID {09B7ECA9-0DE7-4B70-9105-A89601C60246}
       <SOURCE MP3
         FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\5_env\竹林_雨\7335268175694646554_电影级森林雨天气素材.mp3" 1
       >
@@ -456,8 +3769,8 @@
     BEAT -1
     AUTOMODE 0
     PANLAWFLAGS 3
-    VOLPAN 0.3 0 -1 -1 1
-    MUTESOLO 0 2 0
+    VOLPAN 0.09060204030027 0 -1 -1 1
+    MUTESOLO 0 0 0
     IPHASE 0
     PLAYOFFS 0 1
     ISBUS 0 0
@@ -477,41 +3790,19 @@
     MIDIOUT -1
     MAINSEND 1 0
     <FXCHAIN
-      WNDRECT 2057 410 643 345
+      WNDRECT 674 108 758 404
       SHOW 0
       LASTSEL 0
       DOCKED 0
       BYPASS 0 0 0
       <VST "VST: ReaVerbate (Cockos)" reaverbate.dll 0 "" 1920361016<56535472766238726561766572626174> ""
         OGJ2cu9e7f4CAAAAAQAAAAAAAAACAAAAAAAAAAIAAAABAAAAAAAAAAIAAAAAAAAAKAAAAAAAAAAAABAA
-        776t3g3wrd5DAgA/AACAPzxolj4AAAA/AACAPwAAAAAAAIA/AAAAAA==
+        776t3g3wrd5DAgA/AACAP9oEPD817P8+AACAPwAAAAAAAIA/AAAAAA==
         AAAQAAAA
       >
       FLOATPOS 0 0 0 0
       FXID {08D6AF3E-E0B7-4073-82DC-C5727F15F7BE}
       WAK 0 0
-    >
-    <ITEM
-      POSITION 10276
-      SNAPOFFS 0
-      LENGTH 30.81845833333333
-      LOOP 1
-      ALLTAKES 0
-      FADEIN 1 0 0 1 0 0 0
-      FADEOUT 1 0 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {5F8DCCC1-0830-4770-A3F1-111B44429353}
-      IID 2030
-      NAME 6974708982388624670_鸟雁大自然森林鸟叫大雁鸟鸣树林奇怪的鸟叫动物鸟类.mp3
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {F8BD1463-1065-4B0E-B7FA-B983AB9E8DCB}
-      <SOURCE MP3
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\鸟鸣\6974708982388624670_鸟雁大自然森林鸟叫大雁鸟鸣树林奇怪的鸟叫动物鸟类.mp3" 1
-      >
     >
   >
   <TRACK {F2A5A41C-CC2A-4170-B3AE-68607EA21EE3}
@@ -520,7 +3811,7 @@
     BEAT -1
     AUTOMODE 0
     PANLAWFLAGS 3
-    VOLPAN 0.56085967561807 0 -1 -1 1
+    VOLPAN 0.23456058929776 0 -1 -1 1
     MUTESOLO 0 0 0
     IPHASE 0
     PLAYOFFS 0 1
@@ -592,7 +3883,7 @@
     <ITEM
       POSITION 0
       SNAPOFFS 0
-      LENGTH 1.5015
+      LENGTH 10800
       LOOP 1
       ALLTAKES 0
       FADEIN 1 0 0 1 0 0 0

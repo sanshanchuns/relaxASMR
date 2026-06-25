@@ -4,68 +4,90 @@
     "loop": true,
     "prompt_influence": 0.35,
     "model_id": "eleven_text_to_sound_v2",
-    "output_format": "pcm_44100"
+    "file_format": "mp3",
+    "mp3_bitrate": 128
   },
   "prompts": [
     {
       "id": "lake_gentle_lap",
+      "category": "water",
       "layer": "water",
       "series": "lake",
       "text": "Gentle lake waves lapping against a sandy shore, calm and continuous, soft water ambience for focus"
     },
     {
       "id": "lake_dock_splash",
+      "category": "water",
       "layer": "dock",
       "series": "lake",
       "text": "Water gently splashing against wooden dock posts, rhythmic and subtle, lakeside ambience"
     },
     {
       "id": "lake_morning_mist",
+      "category": "water",
       "layer": "water",
       "series": "lake",
       "text": "Very soft lake surface ripples in morning mist, minimal movement, serene and spacious"
     },
     {
       "id": "wind_light_breeze",
+      "category": "wind",
       "layer": "wind",
       "series": "lake",
       "text": "Light breeze through lakeside trees, soft rustling leaves, gentle and steady"
     },
     {
       "id": "reed_wind",
+      "category": "wind",
       "layer": "wind",
       "series": "lake",
       "text": "Wind blowing through reeds at a lakeside, soft friction sound, pink noise texture"
     },
     {
       "id": "birds_distant",
+      "category": "bird",
       "layer": "life",
       "series": "lake",
       "text": "Distant birds chirping near a calm lake, sparse and natural, not loud"
     },
     {
       "id": "rain_light_lake",
+      "category": "rain",
       "layer": "rain",
       "series": "rain",
       "text": "Light rain falling on a calm lake surface, soft continuous drizzle, ASMR sleep ambience"
     },
     {
       "id": "rain_on_leaves",
+      "category": "rain",
       "layer": "impact",
       "series": "rain",
       "text": "Raindrops hitting forest leaves, delicate high-frequency impacts, natural and immersive"
     },
     {
       "id": "rain_roof_drip",
+      "category": "water",
       "layer": "water",
       "series": "rain",
       "text": "Roof drip after rain, occasional water drops falling, hypnotic and sparse"
     },
     {
       "id": "thunder_distant",
+      "category": "accent",
       "layer": "accent",
       "series": "rain",
       "text": "Distant rolling thunder, far away storm, low rumble, occasional and soft"
+    },
+    {
+      "id": "mvi6918_bird_distant",
+      "category": "bird",
+      "layer": "life",
+      "series": "rain",
+      "scene": "MVI_6918",
+      "text": "Exactly one single distant bird chirp, two soft notes only, then complete silence for the rest, overcast rainy lakeside woodland, far away muffled, sleep ASMR, no flock, no chorus, no continuous birds, no insects",
+      "duration_seconds": 8,
+      "loop": false,
+      "prompt_influence": 0.42
     }
   ]
 }
