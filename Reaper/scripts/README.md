@@ -30,6 +30,7 @@ Group 父轨存在时，脚本按 **轨名（如 `3_impact`）** 匹配，不依
 | `analyze_video_audio.py --scene <id> --update-doc` | 视频原声 → `video_analysis.md` §二 |
 | `score_mix.py --scene <id>` | 成品 wav 打分 |
 | `repair_rpp_paths.py` | 修复 rpp 内媒体路径 |
+| [`scripts/video_render/export_mp4.sh`](../../scripts/video_render/export_mp4.sh) | 循环视频 + 音频 → MP4（CPU / NVENC） |
 
 ## 库文件（勿单独加载）
 
@@ -46,7 +47,7 @@ Group 父轨存在时，脚本按 **轨名（如 `3_impact`）** 匹配，不依
 python3 Reaper/scripts/generate_subproject.py --scene MVI_6918
 ```
 
-打开 `.rpp` → **`asmr_apply_recipe.lua`** → 手调 Group ReaEQ / Master 限幅 → 渲染 → `score_mix.py`。
+打开 `.rpp` → **`asmr_apply_recipe.lua`** → 手调 Group ReaEQ / Master 限幅 → 渲染 wav → [`scripts/video_render/export_mp4.sh`](../../../scripts/video_render/export_mp4.sh) 合成 mp4 → `score_mix.py`。
 
 `asmr_config.lua` 在子工程 `scripts/` 下（非 `Audio Files/`）。
 

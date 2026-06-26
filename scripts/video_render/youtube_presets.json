@@ -1,4 +1,31 @@
 {
+  "stream_heal": {
+    "title_zh": "【4K】3小时山涧溪流 · 自然疗愈白噪音",
+    "title_en": "3 Hours Mountain Stream in 4K | Healing Water Sounds",
+    "thumb_title_en": "Relaxing mountain stream sounds | Healing & Meditation",
+    "subtitle_zh": "睡眠 · 专注 · 冥想 · 减压",
+    "subtitle_en": "Sleep · Focus · Meditation · Stress Relief",
+    "tags": [
+      "溪流声",
+      "白噪音",
+      "4K",
+      "ASMR",
+      "自然声音",
+      "助眠",
+      "冥想",
+      "专注",
+      "疗愈",
+      "山涧",
+      "stream sounds",
+      "white noise",
+      "sleep sounds",
+      "nature sounds",
+      "relaxation",
+      "4K nature"
+    ],
+    "description_zh": "3小时不间断山涧溪流声，4K 超清画面配合自然水声，适合入睡、专注工作、冥想与减压放松。\n\n🌊 纯净溪流循环，无音乐无人声\n🎧 建议佩戴耳机获得最佳沉浸体验\n⏱ 时长：{duration}\n📺 分辨率：{resolution} · {fps}\n\n#溪流 #白噪音 #4K #ASMR #助眠 #自然音",
+    "description_en": "3 hours of continuous mountain stream sounds with 4K visuals — ideal for sleep, deep focus, meditation, and stress relief.\n\n🌊 Pure stream ambience, no music, no voice\n🎧 Headphones recommended for full immersion\n⏱ Duration: {duration}\n📺 Resolution: {resolution} · {fps}\n\n#stream #whitenoise #4K #ASMR #sleep #nature"
+  },
   "lake_heal_mac": {
     "title_zh": "【4K】3小时深度专注音乐 | 意大利布拉耶斯湖",
     "title_en": "3 Hours Deep Focus Music | Lago di Braies, Italy",
