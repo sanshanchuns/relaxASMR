@@ -2,7 +2,7 @@
 
 | 目录 | 内容 | 来源 |
 |------|------|------|
-| `rain_sound/` | 雨声系列分层音效 | 剪映 API 下载 + curate |
+| `rain_sound/` | 雨声系列分层音效 | 剪映 / Envato Elements 下载 + curate |
 | `lake_sound/` | 湖泊系列分层音效与音乐 | 剪映 API 下载 + curate |
 | `rain_video/` | 雨景循环视频 | 实拍 / 后期 |
 | `lake_video/` | 湖景循环视频 | 实拍 / 后期 |

@@ -1,0 +1,37 @@
+{
+  "defaults": {
+    "per_keyword": 15,
+    "output_dir": "assets/rain_sound",
+    "search_path_prefix": "/sound-effects/nature-sounds"
+  },
+  "layers": {
+    "1_base": {
+      "name": "底噪层",
+      "keywords": ["wind", "light breeze", "forest ambience", "white noise"]
+    },
+    "2_rain": {
+      "name": "雨层",
+      "keywords": ["drizzle", "light rain", "rain", "heavy rain", "storm rain"]
+    },
+    "3_impact": {
+      "name": "击打层",
+      "keywords": ["rain on leaves", "rain on roof", "rain on window", "rain on umbrella"]
+    },
+    "4_water": {
+      "name": "水体层",
+      "keywords": ["water drop", "roof drip", "creek", "flowing water", "lake water"]
+    },
+    "5_env": {
+      "name": "环境层",
+      "keywords": ["bamboo rain", "forest rain", "city rain"]
+    },
+    "6_life": {
+      "name": "生物层",
+      "keywords": ["birds", "frog", "cricket", "cicada", "duck"]
+    },
+    "7_accent": {
+      "name": "点缀层",
+      "keywords": ["thunder", "campfire", "wind chime", "rowing boat"]
+    }
+  }
+}
