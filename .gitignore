@@ -28,3 +28,4 @@ scripts/youtube_top3/output/
 __pycache__/
 *.py[cod]
 *$py.class
+scripts/envato_audio/.envato_browser_profile/

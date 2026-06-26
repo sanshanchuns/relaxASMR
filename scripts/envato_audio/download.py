@@ -88,7 +88,8 @@ def load_credentials(path: Path) -> dict:
     if path.is_file():
         text = path.read_text(encoding="utf-8")
         if not cookie:
-            m = re.search(r'-H "Cookie: ([^"]+)"', text)
+            # Cookie 内含 g_state={\"...\"}，不能用 [^"]+ 截断
+            m = re.search(r'-H "Cookie: (.+?)" -H "sec-ch', text)
             if m:
                 cookie = m.group(1)
         m = re.search(r'-H "user-agent: ([^"]+)"', text, re.I)
@@ -147,6 +148,10 @@ def is_cloudflare_challenge(html: str) -> bool:
     return "Just a moment..." in html or "cf-chl" in html
 
 
+class CloudflareChallenge(RuntimeError):
+    """curl 命中 Cloudflare 验证页。"""
+
+
 def curl_fetch(url: str, creds: dict, *, accept: str, timeout: int = 60) -> str:
     cmd = [
         "curl",
@@ -171,18 +176,34 @@ def curl_fetch(url: str, creds: dict, *, accept: str, timeout: int = 60) -> str:
     return proc.stdout
 
 
-def fetch_page_html(url: str, creds: dict) -> str:
-    return curl_fetch(
+def fetch_page_html(
+    url: str,
+    creds: dict,
+    browser: "BrowserFetcher | None" = None,
+) -> str:
+    if browser is not None:
+        return browser.fetch_html(url)
+    body = curl_fetch(
         url,
         creds,
         accept="text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
     )
-
-
-def fetch_api_payload(url: str, creds: dict) -> dict | str:
-    body = curl_fetch(url, creds, accept="application/json")
     if is_cloudflare_challenge(body):
-        raise RuntimeError("Cloudflare 验证页（data-api）")
+        raise CloudflareChallenge("Cloudflare 验证页（HTML）")
+    return body
+
+
+def fetch_api_payload(
+    url: str,
+    creds: dict,
+    browser: "BrowserFetcher | None" = None,
+) -> dict | str:
+    if browser is not None:
+        body = browser.fetch_body(url)
+    else:
+        body = curl_fetch(url, creds, accept="application/json")
+    if is_cloudflare_challenge(body):
+        raise CloudflareChallenge("Cloudflare 验证页（data-api）")
     try:
         return json.loads(body)
     except json.JSONDecodeError:
@@ -215,9 +236,9 @@ def extract_html_from_payload(payload: dict | str) -> str:
     return walk(payload) or ""
 
 
-def parse_search_html(html: str) -> list[dict]:
+def parse_search_html(page_html: str) -> list[dict]:
     """从搜索结果页 HTML 解析当前页全部 preview.m4a / preview.mp3。"""
-    parts = html.split('data-testid="audio-element"')
+    parts = page_html.split('data-testid="audio-element"')
     if len(parts) <= 1:
         return []
 
@@ -264,7 +285,7 @@ def parse_search_html(html: str) -> list[dict]:
         items.append(
             {
                 "id": item_id,
-                "title": html.unescape(title or item_id),
+                "title": html.unescape(title or item_id),  # noqa: html module
                 "url": preview_m4a,
                 "preview_m4a": preview_m4a,
                 "preview_mp3": preview_mp3,
@@ -294,6 +315,8 @@ def fetch_search_html(
     defaults: dict,
     *,
     mode: str,
+    browser: "BrowserFetcher | None" = None,
+    browser_fallback: bool = True,
 ) -> tuple[str, str]:
     prefix = defaults.get("search_path_prefix", "/sound-effects/nature-sounds")
     path = keyword_to_path(prefix, keyword)
@@ -301,25 +324,47 @@ def fetch_search_html(
     api = api_url(path, creds)
     modes = ["html", "api"] if mode == "auto" else [mode]
     errors: list[str] = []
+    cf_hit = False
 
     for current in modes:
         try:
             if current == "html":
-                html = fetch_page_html(page, creds)
+                html = fetch_page_html(page, creds, browser=browser)
                 if is_cloudflare_challenge(html):
-                    raise RuntimeError("Cloudflare 验证页（HTML）")
+                    raise CloudflareChallenge("Cloudflare 验证页（HTML）")
                 if "preview.m4a" in html or "preview.mp3" in html:
-                    return html, "html"
+                    via = "browser-html" if browser else "html"
+                    return html, via
                 raise RuntimeError("HTML 中未找到 preview 音频")
-            payload = fetch_api_payload(api, creds)
+            payload = fetch_api_payload(api, creds, browser=browser)
             html = extract_html_from_payload(payload)
             if not html:
                 raise RuntimeError("data-api 响应中未找到 HTML 片段")
             if is_cloudflare_challenge(html):
-                raise RuntimeError("Cloudflare 验证页（data-api HTML）")
-            return html, "api"
+                raise CloudflareChallenge("Cloudflare 验证页（data-api HTML）")
+            via = "browser-api" if browser else "api"
+            return html, via
+        except CloudflareChallenge as exc:
+            cf_hit = True
+            errors.append(f"{current}: {exc}")
         except RuntimeError as exc:
             errors.append(f"{current}: {exc}")
+
+    if cf_hit and browser_fallback and browser is None:
+        from browser_fetch import BrowserFetcher
+
+        fb = BrowserFetcher(creds)
+        try:
+            return fetch_search_html(
+                keyword,
+                creds,
+                defaults,
+                mode=mode,
+                browser=fb,
+                browser_fallback=False,
+            )
+        finally:
+            fb.close()
 
     raise RuntimeError("；".join(errors))
 
@@ -331,8 +376,17 @@ def search_items(
     *,
     limit: int,
     mode: str,
+    browser: "BrowserFetcher | None" = None,
+    browser_fallback: bool = True,
 ) -> list[dict]:
-    html, via = fetch_search_html(keyword, creds, defaults, mode=mode)
+    html, via = fetch_search_html(
+        keyword,
+        creds,
+        defaults,
+        mode=mode,
+        browser=browser,
+        browser_fallback=browser_fallback,
+    )
     items = parse_search_html(html)
     if not items:
         raise RuntimeError(f"解析失败（via={via}），页面中无 preview.m4a/mp3")
@@ -405,6 +459,8 @@ def process_layer(
     global_seen: set[str],
     fetch_mode: str,
     audio_format: str,
+    browser: "BrowserFetcher | None" = None,
+    browser_fallback: bool = True,
 ) -> list[dict]:
     name = spec.get("name", layer_id)
     target = target_override if target_override is not None else int(
@@ -422,6 +478,8 @@ def process_layer(
                 defaults,
                 limit=target,
                 mode=fetch_mode,
+                browser=browser,
+                browser_fallback=browser_fallback,
             )
         except RuntimeError as exc:
             print(f"    ✗ 搜索失败: {exc}", file=sys.stderr)
@@ -532,6 +590,26 @@ def main() -> None:
         metavar="FILE",
         help="离线解析本地搜索结果 HTML（如 rain.html），不下载",
     )
+    parser.add_argument(
+        "--browser",
+        action="store_true",
+        help="始终用 CloakBrowser 抓取（绕过 Cloudflare）",
+    )
+    parser.add_argument(
+        "--no-browser-fallback",
+        action="store_true",
+        help="curl 遇 Cloudflare 时不自动切换浏览器",
+    )
+    parser.add_argument(
+        "--headed",
+        action="store_true",
+        help="浏览器有界面模式（部分站点比 headless 更稳）",
+    )
+    parser.add_argument(
+        "--browser-profile",
+        metavar="DIR",
+        help="CloakBrowser 持久化 profile 目录（默认 .envato_browser_profile）",
+    )
     args = parser.parse_args()
 
     if args.parse_html:
@@ -592,20 +670,42 @@ def main() -> None:
 
     global_seen: set[str] = set()
     total = 0
-    for layer_id in selected:
-        entries = process_layer(
-            layer_id,
-            layers[layer_id],
-            defaults,
-            output_root,
+    browser: "BrowserFetcher | None" = None
+    browser_fallback = not args.no_browser_fallback
+
+    if args.browser:
+        from browser_fetch import BrowserFetcher
+
+        profile = Path(args.browser_profile or ".envato_browser_profile")
+        if not profile.is_absolute():
+            profile = SCRIPT_DIR / profile
+        browser = BrowserFetcher(
             creds,
-            dry_run=args.dry_run,
-            target_override=args.target,
-            global_seen=global_seen,
-            fetch_mode=args.fetch_mode,
-            audio_format=args.format,
+            profile_dir=profile,
+            headless=not args.headed,
         )
-        total += len(entries)
+        print("==> 使用 CloakBrowser 抓取（profile: {})".format(profile))
+
+    try:
+        for layer_id in selected:
+            entries = process_layer(
+                layer_id,
+                layers[layer_id],
+                defaults,
+                output_root,
+                creds,
+                dry_run=args.dry_run,
+                target_override=args.target,
+                global_seen=global_seen,
+                fetch_mode=args.fetch_mode,
+                audio_format=args.format,
+                browser=browser,
+                browser_fallback=browser_fallback,
+            )
+            total += len(entries)
+    finally:
+        if browser is not None:
+            browser.close()
 
     print(f"\n完成。本 run 处理 {total} 条。")
 

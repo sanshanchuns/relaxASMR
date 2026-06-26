@@ -28,6 +28,7 @@
 - Python 3.8+
 - `curl`
 - 有效的 Envato Elements 订阅账号 Cookie（见 [envato_API.yaml](envato_API.yaml)）
+- **Cloudflare 拦截时**：`pip install -r requirements.txt`（[CloakBrowser](https://github.com/CloakHQ/cloakbrowser)）
 
 ---
 
@@ -65,6 +66,15 @@ python3 download.py --layer 2_rain --format mp3
 
 # 只搜索、不下载
 python3 download.py --layer 2_rain --dry-run
+
+# Cloudflare 拦截：自动 fallback 到 CloakBrowser（curl 失败时）
+python3 download.py --layer 2_rain --dry-run
+
+# 始终用 CloakBrowser 抓取（WSL 需代理时自动读 HTTPS_PROXY）
+python3 download.py --layer 2_rain --browser --dry-run
+
+# 有界面模式（更稳，需 DISPLAY 或 Xvfb）
+python3 download.py --layer 2_rain --browser --headed --dry-run
 ```
 
 ---
@@ -109,3 +119,4 @@ manifest 额外字段：`preview_m4a`, `preview_mp3`, `fetch_via`（html / api�
 - 下载的是 Elements **预览音频**（m4a 或 mp3），与浏览器试听一致。
 - 同一层 manifest 会与已有剪映条目 **合并**，不会覆盖 `source=capcut` 记录。
 - Cookie 过期时两种 fetch 都会失败，需更新 `envato_API.yaml`。
+- **Cloudflare**：默认 curl 遇验证页会自动切换 CloakBrowser；或加 `--browser`。首次会下载 ~200MB Chromium 二进制；profile 缓存在 `.envato_browser_profile/`（可 `--browser-profile` 自定义）。WSL 用户若开了系统代理，脚本会自动把 `HTTPS_PROXY` 传给浏览器。
