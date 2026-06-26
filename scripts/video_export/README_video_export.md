@@ -16,11 +16,10 @@
 在仓库根目录：
 
 ```bash
-scripts/video_render/export_mp4.sh \
-  -v assets/rain_video/MVI_6918/MVI_6918_loop_3_fade_0.5.mp4 \
-  -a Reaper/Projects/Rain/subprojects/MVI_6918/MVI_6918.wav \
-  -o Reaper/Projects/Rain/subprojects/MVI_6918/MVI_6918_final.mp4 \
-  --encoder nvenc
+scripts/video_export/export_mp4.sh \
+  -v assets/loop_video/rain_video/MVI_6918/MVI_6918_loop_3_fade_0.5.mp4 \
+  -a Reaper/Projects/Rain/subprojects/MVI_6918/output/MVI_6918_3h.wav
+# 默认输出：与音频同目录 · <stem>_4k.mp4
 ```
 
 编码过程中同一行刷新 **Elapsed / Remaining / 进度%**。

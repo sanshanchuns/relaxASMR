@@ -44,6 +44,19 @@ probe_duration_sec() {
   awk "BEGIN {printf \"%.3f\", $d}"
 }
 
+default_output_from_audio() {
+  local audio="$1"
+  local dir base stem
+  dir=$(dirname "$audio")
+  base=$(basename "$audio")
+  stem="${base%.*}"
+  if [[ "$stem" =~ _4k$ ]]; then
+    printf '%s/%s.mp4' "$dir" "$stem"
+  else
+    printf '%s/%s_4k.mp4' "$dir" "$stem"
+  fi
+}
+
 run_ffmpeg_with_progress() {
   local target_sec="$1"
   shift
@@ -96,11 +109,11 @@ run_ffmpeg_with_progress() {
 
 usage() {
   cat <<'EOF'
-Usage: export_mp4.sh -v VIDEO -a AUDIO -o OUTPUT [options]
+Usage: export_mp4.sh -v VIDEO -a AUDIO [-o OUTPUT] [options]
 
   -v, --video PATH       Video source (looped to match audio)
   -a, --audio PATH       Audio source (WAV etc.; sets duration)
-  -o, --output PATH      Output .mp4
+  -o, --output PATH      Output .mp4 (default: same dir as audio, <stem>_4k.mp4)
   -d, --duration SEC     Cap output length (default: full audio)
       --encoder MODE     cpu (libx264, default) | nvenc (GPU h264_nvenc)
       --threads N        libx264 thread count, 0=auto (default: 0)
@@ -113,13 +126,12 @@ Usage: export_mp4.sh -v VIDEO -a AUDIO -o OUTPUT [options]
   -h, --help
 
 Example:
-  scripts/video_render/export_mp4.sh \
-    -v assets/rain_video/MVI_6918/MVI_6918_loop_3_fade_0.5.mp4 \
-    -a Reaper/Projects/Rain/subprojects/MVI_6918/MVI_6918.wav \
-    -o Reaper/Projects/Rain/subprojects/MVI_6918/MVI_6918_final.mp4
+  scripts/video_export/export_mp4.sh \
+    -v assets/loop_video/rain_video/MVI_6918/MVI_6918_loop_3_fade_0.5.mp4 \
+    -a Reaper/Projects/Rain/subprojects/MVI_6918/output/MVI_6918_3h.wav
+  # => Reaper/Projects/Rain/subprojects/MVI_6918/output/MVI_6918_3h_4k.mp4
 
-  # GPU encode (RTX, much faster):
-  scripts/video_render/export_mp4.sh ... --encoder nvenc
+  scripts/video_export/export_mp4.sh ... -o custom/path/out.mp4 --encoder nvenc
 EOF
 }
 
@@ -141,10 +153,14 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-if [[ -z "$VIDEO" || -z "$AUDIO" || -z "$OUTPUT" ]]; then
-  echo "Error: -v, -a, -o are required." >&2
+if [[ -z "$VIDEO" || -z "$AUDIO" ]]; then
+  echo "Error: -v and -a are required." >&2
   usage >&2
   exit 1
+fi
+
+if [[ -z "$OUTPUT" ]]; then
+  OUTPUT=$(default_output_from_audio "$AUDIO")
 fi
 
 if [[ ! -f "$VIDEO" ]]; then
