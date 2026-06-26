@@ -1,7 +1,7 @@
-# 视频分析 · MVI_6918
+# 视频分析 · MVI_6888
 
-> 子工程：`subprojects/MVI_6918`
-> 视频：`assets/loop_video/rain_video/MVI_6918/MVI_6918_loop_3_fade_0.5.mp4`
+> 子工程：`subprojects/MVI_6888`
+> 视频：`assets/loop_video/rain_video/MVI_6888/MVI_6888_loop_8_fade_0.5.mp4`
 > 分析日期：2026-06-26
 > 状态：**Looper 首帧代表全片**（`create_rain_subproject.py` 自动生成，§一 请人工核对）
 > 系列：**Rain 睡眠**
@@ -16,9 +16,9 @@
 | 项 | 值 |
 |----|-----|
 | 分辨率 | 3840×2160（h264） |
-| 时长 | 2.57 s |
+| 时长 | 7.22 s |
 | 内嵌音轨 | **无** |
-| 文件名线索 | loop=3 fade=0.5 |
+| 文件名线索 | loop=8 fade=0.5 |
 
 ## 1.2 画面描述
 

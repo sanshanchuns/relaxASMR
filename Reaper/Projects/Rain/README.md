@@ -17,19 +17,27 @@
 
 ## 生成流程
 
+**一键（只给 loop 视频）：**
+
 ```bash
-# 1. 写 video_analysis.md（§一画面 → §二原声 → §三配方）+ asmr_config.lua
+python3 Reaper/scripts/create_rain_subproject.py \
+  --video assets/loop_video/rain_video/<MVI_xxxx>/<...>_loop_*_fade_*.mp4
+```
+
+产出 `video_analysis.md`、`scripts/asmr_config.lua`、`<scene>.rpp`；打开工程后运行 **`asmr_apply_recipe.lua`**（轨 2 长时包络在配方 `vol_envelope` 里，由脚本写入，不预画在 rpp）。
+
+**仅生成 `.rpp`（配方已存在）：**
+
+```bash
 python3 Reaper/scripts/generate_subproject.py --scene MVI_6918
 ```
 
-生成器会将素材 **直接引用** `assets/`（WSL UNC 全路径，不复制到 `Audio Files`）。
+生成器将素材 **直接引用** `assets/`（WSL UNC 全路径，不复制到 `Audio Files`）。
 
 **模板自带：**
 
-- 轨 **Group**（Folder 父轨）· `JS ASMR Sleep HF EQ` + `ReaComp`
-- 轨 1–7 在 Folder 内 · 轨 8 视频在 Folder 末（静音，仅渲染）
-
-首次打开若 JS 未识别：在 Group 上手动加 ReaEQ（模板默认 ReaComp；高频用 ReaEQ shelf，见设计文档）。
+- 轨 **Group**（Folder 父轨）· **ReaEQ + ReaComp**
+- 轨 1–7 在 Folder 内 · 轨 `6_life` 带 **ReaVerbate** · 轨 8 视频在 Folder 末（静音，仅渲染）
 
 ## 打开工程后
 
@@ -42,17 +50,22 @@ python3 Reaper/scripts/generate_subproject.py --scene MVI_6918
 
 | 轨 | 层 | 模式 | 说明 |
 |----|-----|------|------|
-| **Group** | 总线 | Folder | **JS 削高频 + ReaComp**（模板自动） |
+| **Group** | 总线 | Folder | **ReaEQ + ReaComp**（模板自动） |
 | 1 | 1_base | loop | 混音 |
 | 2 | 2_rain | loop | 混音 |
 | 3 | 3_impact | scatter | 混音 |
 | 4 | 4_water | loop | 混音 |
 | 5 | 5_env | loop | 混音 |
-| 6 | 6_life | scatter | 混音 |
+| 6 | 6_life | scatter | 混音 · **ReaVerbate** |
 | 7 | 7_comfort | loop | 心理舒适 · 安全感锚点（可叠多条） |
 | **8** | **视频 looper** | — | **Folder 末轨 · 仅渲染，混音时不改** |
 
 模板定义：[`scripts/layer_template.lua`](scripts/layer_template.lua) · JS 源：[`scripts/fx/asmr_sleep_hf_eq.jsfx`](scripts/fx/asmr_sleep_hf_eq.jsfx)
+
+## MVI_6888
+
+- 分析与配方（初版）：[`subprojects/MVI_6888/video_analysis.md`](subprojects/MVI_6888/video_analysis.md)
+- 视频：`assets/loop_video/rain_video/MVI_6888/MVI_6888_loop_8_fade_0.5.mp4`（无内嵌音轨）
 
 ## MVI_6918
 

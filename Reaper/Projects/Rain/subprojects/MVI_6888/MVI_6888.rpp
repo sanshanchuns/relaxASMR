@@ -1,6 +1,6 @@
 <REAPER_PROJECT 0.1 "7.73/win64" 0 0
   <NOTES 0 2
-    Rain · MVI_6918 · 3.0h · sleep series
+    Rain · MVI_6888 · 3.0h · sleep series
   >
   RIPPLE 0 0
   GROUPOVERRIDE 0 0 0 0
@@ -104,7 +104,7 @@
   RULERLANE 2 8 "" 0 -1 0
   <PROJBAY
   >
-  <TRACK {430A927C-09F6-4C51-9CC1-0CBDC28901B7}
+  <TRACK {8DF0E222-3ED6-4C4F-B429-A27EF6CA2116}
     NAME Group
     PEAKCOL 16576
     BEAT -1
@@ -126,7 +126,7 @@
     INQ 0 0 0 0.5 100 0 0 100
     NCHAN 2
     FX 1
-    TRACKID {430A927C-09F6-4C51-9CC1-0CBDC28901B7}
+    TRACKID {8DF0E222-3ED6-4C4F-B429-A27EF6CA2116}
     PERF 0
     MIDIOUT -1
     MAINSEND 1 0
@@ -143,7 +143,7 @@
         AAAQAAAA
       >
       FLOATPOS 0 0 0 0
-      FXID {3682446F-B541-4346-8ACF-42DB218CD98C}
+      FXID {B1F1046C-2680-4627-9EEA-FEDCF86242C9}
       WAK 0 0
       BYPASS 0 0 0
       <VST "VST: ReaComp (Cockos)" reacomp.dll 0 "" 1919247213<5653547265636D726561636F6D700000> ""
@@ -152,11 +152,11 @@
         AAAQAAAA
       >
       FLOATPOS 0 0 0 0
-      FXID {1A7551FD-5691-451E-9DE3-6E5CDE4B766E}
+      FXID {84735E1C-9720-4ED1-BB72-ABF07EE39144}
       WAK 0 0
     >
   >
-  <TRACK {007A4E10-34FE-4F0E-8485-5E7C0EB25329}
+  <TRACK {5EEF4FB1-62E6-4E5D-B18E-830D0B77D26B}
     NAME 1_base
     PEAKCOL 16576
     BEAT -1
@@ -178,7 +178,7 @@
     INQ 0 0 0 0.5 100 0 0 100
     NCHAN 2
     FX 0
-    TRACKID {007A4E10-34FE-4F0E-8485-5E7C0EB25329}
+    TRACKID {5EEF4FB1-62E6-4E5D-B18E-830D0B77D26B}
     PERF 0
     MIDIOUT -1
     MAINSEND 1 0
@@ -192,20 +192,20 @@
       FADEOUT 1 0 0 1 0 0 0
       MUTE 0 0
       SEL 0
-      IGUID {1F6DB1F0-9DCC-4C8B-8582-1EF8C7E5B022}
+      IGUID {23002AEB-A1AC-4949-ABDE-8E738972DA06}
       IID 4
       NAME 165877_Ambience,_Room_Tone,_Interior,_Air_Condition,_Unit_A.mp3
       VOLPAN 0.28 0 1 -1
       SOFFS 0
       PLAYRATE 1 1 0 -1 0 0.0025
       CHANMODE 0
-      GUID {986CF82E-DCFF-459B-9D6B-80E05151A509}
+      GUID {CFDE59D1-6815-4609-8226-F17DD087C1ED}
       <SOURCE MP3
         FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\rain_sound\1_base\air_tone\165877_Ambience,_Room_Tone,_Interior,_Air_Condition,_Unit_A.mp3" 1
       >
     >
   >
-  <TRACK {104B2515-91AA-4A62-A3A4-29AC22FC424F}
+  <TRACK {10A346DA-C3AB-4204-8482-13FD5C53A2F2}
     NAME 2_rain
     PEAKCOL 16576
     BEAT -1
@@ -227,7 +227,7 @@
     INQ 0 0 0 0.5 100 0 0 100
     NCHAN 2
     FX 0
-    TRACKID {104B2515-91AA-4A62-A3A4-29AC22FC424F}
+    TRACKID {10A346DA-C3AB-4204-8482-13FD5C53A2F2}
     PERF 0
     MIDIOUT -1
     MAINSEND 1 0
@@ -241,20 +241,20 @@
       FADEOUT 1 0 0 1 0 0 0
       MUTE 0 0
       SEL 0
-      IGUID {C3D21307-302D-4A5F-B874-4D184F8FD764}
+      IGUID {90C49B9D-6B66-4683-88D5-BE751CCC0D63}
       IID 5
       NAME 197192_Rain,_Vegetation,_Light_Rain_In_A_Field_Of_Bananas_Trees_03.mp3
       VOLPAN 1.0 0 1 -1
       SOFFS 0
       PLAYRATE 1 1 0 -1 0 0.0025
       CHANMODE 0
-      GUID {6C8CE997-2B40-4A64-B26E-52C7474BE2E8}
+      GUID {429628B3-DDF8-4BDC-8B04-2FFC624FFC7F}
       <SOURCE MP3
         FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\rain_sound\2_rain\light_rain\197192_Rain,_Vegetation,_Light_Rain_In_A_Field_Of_Bananas_Trees_03.mp3" 1
       >
     >
   >
-  <TRACK {7CBC9B53-2CAA-4759-8721-BF90A2FE334D}
+  <TRACK {AAFABBD6-6027-4E03-8CCB-2C464E620DB1}
     NAME 3_impact
     PEAKCOL 16576
     BEAT -1
@@ -276,7 +276,7 @@
     INQ 0 0 0 0.5 100 0 0 100
     NCHAN 2
     FX 0
-    TRACKID {7CBC9B53-2CAA-4759-8721-BF90A2FE334D}
+    TRACKID {AAFABBD6-6027-4E03-8CCB-2C464E620DB1}
     PERF 0
     MIDIOUT -1
     MAINSEND 1 0
@@ -290,20 +290,20 @@
       FADEOUT 1 0 0 1 0 0 0
       MUTE 0 0
       SEL 0
-      IGUID {4CCC0413-A2B9-425E-845D-B8A269888A40}
+      IGUID {AAC74139-76D8-4088-AE75-709105B1B95C}
       IID 2
       NAME 152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3
       VOLPAN 0.5 0 1 -1
       SOFFS 0
       PLAYRATE 1 1 0 -1 0 0.0025
       CHANMODE 0
-      GUID {FDB42EC6-5C24-4BE7-A374-A21D8CACD2FA}
+      GUID {96A1825F-3D31-44AB-9DBE-6C7F815BEE04}
       <SOURCE MP3
         FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\rain_sound\3_impact\rain_on_leaves\152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3" 1
       >
     >
   >
-  <TRACK {4837BC13-30AE-4865-B043-D2F41EFDD6FB}
+  <TRACK {AF6F336E-36F3-43E6-A03C-B1AF5319CF2D}
     NAME 4_water
     PEAKCOL 16576
     BEAT -1
@@ -325,12 +325,12 @@
     INQ 0 0 0 0.5 100 0 0 100
     NCHAN 2
     FX 0
-    TRACKID {4837BC13-30AE-4865-B043-D2F41EFDD6FB}
+    TRACKID {AF6F336E-36F3-43E6-A03C-B1AF5319CF2D}
     PERF 0
     MIDIOUT -1
     MAINSEND 1 0
   >
-  <TRACK {68AFCBC7-921F-4B49-863C-B4F75B797BE1}
+  <TRACK {08C19894-52A6-44B2-89F9-32CE3AD44E8D}
     NAME 5_env
     PEAKCOL 16576
     BEAT -1
@@ -352,7 +352,7 @@
     INQ 0 0 0 0.5 100 0 0 100
     NCHAN 2
     FX 0
-    TRACKID {68AFCBC7-921F-4B49-863C-B4F75B797BE1}
+    TRACKID {08C19894-52A6-44B2-89F9-32CE3AD44E8D}
     PERF 0
     MIDIOUT -1
     MAINSEND 1 0
@@ -366,20 +366,20 @@
       FADEOUT 1 0 0 1 0 0 0
       MUTE 0 0
       SEL 0
-      IGUID {B5AC4FFB-C9FF-4A99-9FE0-C72ACF61571D}
+      IGUID {08539FBE-10A2-4487-A63A-8B374FB48571}
       IID 6
       NAME 171831_Rain,_Vegetation,_Forest,_Evening,_Medium_Rain,_Distant_Bird.mp3
       VOLPAN 0.22 0 1 -1
       SOFFS 0
       PLAYRATE 1 1 0 -1 0 0.0025
       CHANMODE 0
-      GUID {21E87500-0A14-4AA6-B8EF-CD8010F84730}
+      GUID {D9E6E4FD-3911-4FA9-A26F-CAF9F0CDF56E}
       <SOURCE MP3
         FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\rain_sound\5_env\forest_rain\171831_Rain,_Vegetation,_Forest,_Evening,_Medium_Rain,_Distant_Bird.mp3" 1
       >
     >
   >
-  <TRACK {09AD018A-221F-4282-A97F-D61B46F782DE}
+  <TRACK {D79887FA-82BA-4614-82BF-C2F5A0011249}
     NAME 6_life
     PEAKCOL 16576
     BEAT -1
@@ -401,7 +401,7 @@
     INQ 0 0 0 0.5 100 0 0 100
     NCHAN 2
     FX 1
-    TRACKID {09AD018A-221F-4282-A97F-D61B46F782DE}
+    TRACKID {D79887FA-82BA-4614-82BF-C2F5A0011249}
     PERF 0
     MIDIOUT -1
     MAINSEND 1 0
@@ -416,7 +416,7 @@
         AAAQAAAA
       >
       FLOATPOS 0 0 0 0
-      FXID {9CA61F25-2B93-49E6-92F1-268735514F88}
+      FXID {6F282DA1-E509-409C-943E-0845CC47A917}
       WAK 0 0
     >
     <ITEM
@@ -429,20 +429,20 @@
       FADEOUT 1 0 0 1 0 0 0
       MUTE 0 0
       SEL 0
-      IGUID {AC1B1452-1A4C-4783-8A3A-12F0FDD83159}
+      IGUID {7E175114-6323-4816-9442-A7E6BAD2F3A6}
       IID 3
       NAME api_mvi6918_bird_distant.mp3
       VOLPAN 0.3 0 1 -1
       SOFFS 0
       PLAYRATE 1 1 0 -1 0 0.0025
       CHANMODE 0
-      GUID {634A4EB5-A7F1-4C4D-949E-AA1FFFF7D7D2}
+      GUID {C0A467CB-782E-4CE5-A4A1-48B1DDF71CFD}
       <SOURCE MP3
         FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\elevenlabs_sound\bird\api_mvi6918_bird_distant.mp3" 1
       >
     >
   >
-  <TRACK {8179FC21-A9B0-442E-8E3D-8EBA7B78EFDA}
+  <TRACK {D495D977-E75E-4E73-92A2-490AB48617E5}
     NAME 7_comfort
     PEAKCOL 16576
     BEAT -1
@@ -464,7 +464,7 @@
     INQ 0 0 0 0.5 100 0 0 100
     NCHAN 2
     FX 0
-    TRACKID {8179FC21-A9B0-442E-8E3D-8EBA7B78EFDA}
+    TRACKID {D495D977-E75E-4E73-92A2-490AB48617E5}
     PERF 0
     MIDIOUT -1
     MAINSEND 1 0
@@ -478,20 +478,20 @@
       FADEOUT 1 0 0 1 0 0 0
       MUTE 0 0
       SEL 0
-      IGUID {3394002E-58C5-4E40-9BBE-8E74D57BEE65}
+      IGUID {9681D1CF-F921-4AC1-BDA4-E9021CA13861}
       IID 7
       NAME 171322_Rain,_Cloth,_Light,_Under_Umbrella,_Close.mp3
       VOLPAN 0.45 0 1 -1
       SOFFS 0
       PLAYRATE 1 1 0 -1 0 0.0025
       CHANMODE 0
-      GUID {205E65CF-6DC0-4155-9186-1340B77AD185}
+      GUID {1B82CF88-E66D-4DB9-90DE-022C19C81060}
       <SOURCE MP3
         FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\rain_sound\3_impact\rain_on_umbrella\171322_Rain,_Cloth,_Light,_Under_Umbrella,_Close.mp3" 1
       >
     >
   >
-  <TRACK {74693C61-1596-42F7-87FF-C9B43EFEB9F6}
+  <TRACK {02046EB9-93D3-474F-9C35-F95CEF4EF58E}
     NAME video
     PEAKCOL 16576
     BEAT -1
@@ -513,30 +513,30 @@
     INQ 0 0 0 0.5 100 0 0 100
     NCHAN 2
     FX 0
-    TRACKID {74693C61-1596-42F7-87FF-C9B43EFEB9F6}
+    TRACKID {02046EB9-93D3-474F-9C35-F95CEF4EF58E}
     PERF 0
     MIDIOUT -1
     MAINSEND 1 0
     <ITEM
       POSITION 0
       SNAPOFFS 0
-      LENGTH 2.569233
+      LENGTH 7.223883
       LOOP 1
       ALLTAKES 0
       FADEIN 1 0 0 1 0 0 0
       FADEOUT 1 0 0 1 0 0 0
       MUTE 0 0
       SEL 0
-      IGUID {FA585C0C-6759-4608-A109-CBF435358CF9}
+      IGUID {3262842D-9BE5-43E3-A73D-8FA86EF158B9}
       IID 1
-      NAME MVI_6918_loop_3_fade_0.5.mp4
+      NAME MVI_6888_loop_8_fade_0.5.mp4
       VOLPAN 0.0 0 1 -1
       SOFFS 0
       PLAYRATE 1 1 0 -1 0 0.0025
       CHANMODE 0
-      GUID {8D3E98C0-C297-462F-9BBE-FF6747CF9A35}
+      GUID {1BFEF960-52E1-4C1A-9E22-2CAF46D7CC32}
       <SOURCE VIDEO
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\loop_video\rain_video\MVI_6918\MVI_6918_loop_3_fade_0.5.mp4"
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\loop_video\rain_video\MVI_6888\MVI_6888_loop_8_fade_0.5.mp4"
       >
     >
   >

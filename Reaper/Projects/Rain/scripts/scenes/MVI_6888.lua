@@ -1,16 +1,16 @@
--- 场景配方 · 见 subprojects/MVI_6918/video_analysis.md §三
+-- 场景配方 · 见 subprojects/MVI_6888/video_analysis.md §三
 -- 由 create_rain_subproject.py 自动生成
 
 return {
-  scene_id = "MVI_6918",
-  project_name = "Rain · MVI_6918",
+  scene_id = "MVI_6888",
+  project_name = "Rain · MVI_6888",
   series = "rain_sleep",
   duration_hours = 3,
 
   video = {
     track = 8,
-    name = "Video · MVI_6918 loop",
-    path = "assets/loop_video/rain_video/MVI_6918/MVI_6918_loop_3_fade_0.5.mp4",
+    name = "Video · MVI_6888 loop",
+    path = "assets/loop_video/rain_video/MVI_6888/MVI_6888_loop_8_fade_0.5.mp4",
     render_only = true,
   },
 

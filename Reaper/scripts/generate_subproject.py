@@ -32,6 +32,29 @@ REACOMP_VST = [
     "      >",
 ]
 
+REAEQ_VST = [
+    '      <VST "VST: ReaEQ (Cockos)" reaeq.dll 0 "" 1919247729<56535472656571726561657100000000> ""',
+    "        cWVlcu5e7f4CAAAAAQAAAAAAAAACAAAAAAAAAAIAAAABAAAAAAAAAAIAAAAAAAAAzQAAAAEAAAAAABAA",
+    "        IQAAAAUAAAAAAAAAAQAAAAAAAAAAAFlAAAAAAAAA8D+amZmZmZnpPwEIAAAAAQAAAAAAAAAAwHJAAAAAAAAA8D8AAAAAAAAAQAEIAAAAAQAAAAAAAAAAQI9AAAAAAAAA",
+    "        8D8AAAAAAAAAQAEBAAAAAQAAAJ/vruhzybNAMIH/8g6n2z+amZmZmZnpPwEEAAAAAQAAAAAAAAAAAFlAAAAAAAAA8D8AAAAAAAAAQAEBAAAAAQAAAAAAAAAAAPA/AAAA",
+    "        AP0BAABcAQAAAgABAA==",
+    "        AAAQAAAA",
+    "      >",
+]
+
+REAVERBATe_VST = [
+    '      <VST "VST: ReaVerbate (Cockos)" reaverbate.dll 0 "" 1920361016<56535472766238726561766572626174> ""',
+    "        OGJ2cu9e7f4CAAAAAQAAAAAAAAACAAAAAAAAAAIAAAABAAAAAAAAAAIAAAAAAAAAKAAAAAAAAAAAABAA",
+    "        776t3g3wrd5DAgA/AACAP9oEPD817P8+AACAPwAAAAAAAIA/AAAAAA==",
+    "        AAAQAAAA",
+    "      >",
+]
+
+# 轨级 FX：layer id → preset lines（不含 FXCHAIN 外壳）
+TRACK_FX_PRESETS: dict[str, list[str]] = {
+    "6_life": REAVERBATe_VST,
+}
+
 # 视频轨混音时静音（-inf dB），仅最终渲染用
 VIDEO_TRACK_VOL = 0.0
 
@@ -139,40 +162,51 @@ def make_track(
     isbus: tuple[int, int] = (0, 0),
     has_fx: bool = False,
     mute: bool = False,
+    fx_preset: list[str] | None = None,
 ) -> str:
     track_id = guid()
     mutesolo = "1 0 0" if mute else "0 0 0"
-    fx_line = "1" if has_fx else "0"
-    return "\n".join(
-        [
-            f"  <TRACK {{{track_id}}}",
-            f"    NAME {name}",
-            "    PEAKCOL 16576",
-            "    BEAT -1",
-            "    AUTOMODE 0",
-            "    PANLAWFLAGS 3",
-            f"    VOLPAN {vol} 0 -1 -1 1",
-            f"    MUTESOLO {mutesolo}",
-            "    IPHASE 0",
-            "    PLAYOFFS 0 1",
-            f"    ISBUS {isbus[0]} {isbus[1]}",
-            "    BUSCOMP 0 0 0 0 0",
-            "    SHOWINMIX 1 0.6667 0.5 1 0.5 0 0 0 0",
-            "    FIXEDLANES 9 0 0 0 0",
-            "    LANEREC -1 -1 -1 0",
-            "    SEL 0",
-            "    REC 0 0 1 0 0 0 0 0",
-            "    VU 64",
-            "    TRACKHEIGHT 0 0 0 0 0 0 0",
-            "    INQ 0 0 0 0.5 100 0 0 100",
-            "    NCHAN 2",
-            f"    FX {fx_line}",
-            f"    TRACKID {{{track_id}}}",
-            "    PERF 0",
-            "    MIDIOUT -1",
-            "    MAINSEND 1 0",
-        ]
-    )
+    fx_count = 1 if (has_fx or fx_preset) else 0
+    lines = [
+        f"  <TRACK {{{track_id}}}",
+        f"    NAME {name}",
+        "    PEAKCOL 16576",
+        "    BEAT -1",
+        "    AUTOMODE 0",
+        "    PANLAWFLAGS 3",
+        f"    VOLPAN {vol} 0 -1 -1 1",
+        f"    MUTESOLO {mutesolo}",
+        "    IPHASE 0",
+        "    PLAYOFFS 0 1",
+        f"    ISBUS {isbus[0]} {isbus[1]}",
+        "    BUSCOMP 0 0 0 0 0",
+        "    SHOWINMIX 1 0.6667 0.5 1 0.5 0 0 0 0",
+        "    FIXEDLANES 9 0 0 0 0",
+        "    LANEREC -1 -1 -1 0",
+        "    SEL 0",
+        "    REC 0 0 1 0 0 0 0 0",
+        "    VU 64",
+        "    TRACKHEIGHT 0 0 0 0 0 0 0",
+        "    INQ 0 0 0 0.5 100 0 0 100",
+        "    NCHAN 2",
+        f"    FX {fx_count}",
+        f"    TRACKID {{{track_id}}}",
+        "    PERF 0",
+        "    MIDIOUT -1",
+        "    MAINSEND 1 0",
+    ]
+    if fx_preset:
+        lines.append("    <FXCHAIN")
+        lines.append("      SHOW 0")
+        lines.append("      LASTSEL 0")
+        lines.append("      DOCKED 0")
+        lines.append("      BYPASS 0 0 0")
+        lines.extend(fx_preset)
+        lines.append(f"      FLOATPOS 0 0 0 0")
+        lines.append(f"      FXID {{{guid()}}}")
+        lines.append("      WAK 0 0")
+        lines.append("    >")
+    return "\n".join(lines)
 
 
 def js_eq_slider_line(params: list[float]) -> str:
@@ -180,6 +214,31 @@ def js_eq_slider_line(params: list[float]) -> str:
     while len(parts) < 64:
         parts.append("-")
     return " ".join(parts)
+
+
+def make_group_fxchain_reaeq() -> list[str]:
+    lines = [
+        "    <FXCHAIN",
+        "      SHOW 0",
+        "      LASTSEL 0",
+        "      DOCKED 0",
+        "      BYPASS 0 0 0",
+    ]
+    lines.extend(REAEQ_VST)
+    lines.append(f"      FLOATPOS 0 0 0 0")
+    lines.append(f"      FXID {{{guid()}}}")
+    lines.append("      WAK 0 0")
+    lines.append("      BYPASS 0 0 0")
+    lines.extend(REACOMP_VST)
+    lines.extend(
+        [
+            "      FLOATPOS 0 0 0 0",
+            f"      FXID {{{guid()}}}",
+            "      WAK 0 0",
+            "    >",
+        ]
+    )
+    return lines
 
 
 def make_group_fxchain(js_ref: str, params: list[float]) -> list[str]:
@@ -244,7 +303,7 @@ def make_group_track(js_ref: str, params: list[float]) -> str:
         "    MIDIOUT -1",
         "    MAINSEND 1 0",
     ]
-    lines.extend(make_group_fxchain(js_ref, params))
+    lines.extend(make_group_fxchain_reaeq())
     lines.append("  >")
     return "\n".join(lines)
 
@@ -507,6 +566,8 @@ def build_rpp(cfg: dict, repo_root: Path, rpp_dir: Path, media_mode: str = "wsl_
     js_ref = group_js_ref(rpp_dir, repo_root, media_mode)
     body.append(make_group_track(js_ref, GROUP_JS_EQ_PARAMS))
 
+    track_fx_by_name: dict[str, list[str]] = dict(TRACK_FX_PRESETS)
+
     video_track_num = cfg.get("video", {}).get("track")
     for t in sorted(track_names.keys()):
         name = track_names[t]
@@ -517,7 +578,15 @@ def build_rpp(cfg: dict, repo_root: Path, rpp_dir: Path, media_mode: str = "wsl_
         else:
             isbus = (0, 0)
             mute = False
-        body.append(make_track(name, vol, isbus=isbus, mute=mute))
+        body.append(
+            make_track(
+                name,
+                vol,
+                isbus=isbus,
+                mute=mute,
+                fx_preset=track_fx_by_name.get(name),
+            )
+        )
         for item in tracks_by_num[t]:
             body.append(item)
         body.append("  >")

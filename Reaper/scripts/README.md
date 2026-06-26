@@ -27,6 +27,7 @@ Group 父轨存在时，脚本按 **轨名（如 `3_impact`）** 匹配，不依
 | 脚本 | 用途 |
 |------|------|
 | `generate_subproject.py --scene <id>` | 从 `asmr_config.lua` 生成 `.rpp`（含 Group 总线） |
+| **`create_rain_subproject.py --video <mp4>`** | **一键**：loop 视频 → 分析 + 配方 + 脚手架 + `.rpp` |
 | `analyze_video_audio.py --scene <id> --update-doc` | 视频原声 → `video_analysis.md` §二 |
 | `score_mix.py --scene <id>` | 成品 wav 打分 |
 | `repair_rpp_paths.py` | 修复 rpp 内媒体路径 |
@@ -43,11 +44,22 @@ Group 父轨存在时，脚本按 **轨名（如 `3_impact`）** 匹配，不依
 
 ## Rain 子工程流程
 
+**从 loop 视频一键创建（推荐）：**
+
+```bash
+python3 Reaper/scripts/create_rain_subproject.py \
+  --video assets/loop_video/rain_video/MVI_6918/MVI_6918_loop_3_fade_0.5.mp4
+```
+
+自动：探测视频 ·（若有）内嵌音轨七层分析 · 首帧启发式 · `video_analysis.md` + `asmr_config.lua` + `.rpp`（Group **ReaEQ + ReaComp** · 轨 `6_life` **ReaVerbate**）。
+
+**仅重新生成 `.rpp`（配方已写好）：**
+
 ```bash
 python3 Reaper/scripts/generate_subproject.py --scene MVI_6918
 ```
 
-打开 `.rpp` → **`asmr_apply_recipe.lua`** → 手调 Group ReaEQ / Master 限幅 → 渲染 wav → [`scripts/video_render/export_mp4.sh`](../../../scripts/video_render/export_mp4.sh) 合成 mp4 → `score_mix.py`。
+打开 `.rpp` → **`asmr_apply_recipe.lua`**（铺循环/稀疏 + **轨 2 长时音量包络**）→ 手调 Group / Master 限幅 → 渲染 wav → [`scripts/video_render/export_mp4.sh`](../../../scripts/video_render/export_mp4.sh) 合成 mp4 → `score_mix.py`。
 
 `asmr_config.lua` 在子工程 `scripts/` 下（非 `Audio Files/`）。
 
