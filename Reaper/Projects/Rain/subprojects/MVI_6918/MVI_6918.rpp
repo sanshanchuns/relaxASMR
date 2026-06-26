@@ -1,4 +1,4 @@
-<REAPER_PROJECT 0.1 "7.73/win64" 1782400002 0
+<REAPER_PROJECT 0.1 "7.73/win64" 1782451653 0
   <NOTES 0 2
   >
   RIPPLE 0 0
@@ -19,9 +19,9 @@
   VIDEO_CONFIG 0 0 65792
   PANMODE 3
   PANLAWFLAGS 3
-  CURSOR 276
-  ZOOM 2.34557373713304 0 0
-  VZOOMEX 6 271
+  CURSOR 36.70072916666657
+  ZOOM 12.95905317717832 308 0
+  VZOOMEX 6 342
   USE_REC_CFG 0
   RECMODE 1
   SMPTESYNC 0 30 100 40 1000 300 0 0 1 0 0
@@ -34,10 +34,10 @@
   <APPLYFX_CFG
   >
   RENDER_FILE ""
-  RENDER_PATTERN $project_1min
+  RENDER_PATTERN output/$project_3h
   RENDER_FMT 0 2 0
   RENDER_1X 0
-  RENDER_RANGE 2 0 0 0 1000
+  RENDER_RANGE 1 0 0 0 1000
   RENDER_RESAMPLE 3 0 1
   RENDER_ADDTOPROJ 0
   RENDER_STEMS 0
@@ -50,7 +50,7 @@
   TAKELANE 1
   SAMPLERATE 48000 1 0
   <RENDER_CFG
-    IEZNVwAAAAAAAAAAMHUAAAAAAACAAAAAAA8AAHAIAAAAAPBBAQAAAF8AAAAAAA==
+    ZXZhdxgAAQ==
   >
   LOCK 1
   <METRONOME 6 2
@@ -77,7 +77,7 @@
   MASTERTRACKVIEW 1 0.6667 0.5 0.5 0 0 0 0 0 0 0 0 0 0 1
   MASTERHWOUT 0 0 1 0 0 0 0 -1
   MASTER_NCH 2 2
-  MASTER_VOLUME 2.12211305105301 0 -1 -1 1
+  MASTER_VOLUME 1 0 -1 -1 1
   MASTER_PANMODE 3
   MASTER_PANLAWFLAGS 3
   MASTER_FX 0
@@ -92,11 +92,12 @@
   >
   <TEMPOENVEX
     EGUID {63E74D85-0E6A-48A5-9090-8BD519357BB8}
-    ACT 0 -1
-    VIS 1 0 1
+    ACT 1 -1
+    VIS 0 0 1
     LANEHEIGHT 0 0
-    ARM 0
+    ARM 1
     DEFSHAPE 1 -1 -1
+    PT 0.000000000000 60.0000000000 1
   >
   RULERHEIGHT 86 86
   RULERLANE 1 4 "" 0 -1 0
@@ -169,7 +170,7 @@
     BEAT -1
     AUTOMODE 0
     PANLAWFLAGS 3
-    VOLPAN 0.04816847551365 0 -1 -1 1
+    VOLPAN 0.16206043981999 0 -1 -1 1
     MUTESOLO 0 0 0
     IPHASE 0
     PLAYOFFS 0 1
@@ -205,16 +206,16 @@
       FADEOUT 1 0 0 1 0 0 0
       MUTE 0 0
       SEL 0
-      IGUID {7FDE38D6-0EFF-40BD-9C69-DF4F423EAEC6}
-      IID 2224
+      IGUID {5F306364-CF51-45E6-B251-428E4DA0032E}
+      IID 2231
       NAME 6979801635392343310_空气底噪.mp3
       VOLPAN 1 0 1 -1
       SOFFS 0
       PLAYRATE 1 1 0 -1 0 0.0025
       CHANMODE 0
-      GUID {27D11874-13B0-4E54-947C-AE441A3B9C33}
+      GUID {A4381C0F-5442-4046-9424-5374E639A047}
       <SOURCE MP3
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\1_base\白噪音\6979801635392343310_空气底噪.mp3" 1
+        FILE "Audio Files\6979801635392343310_空气底噪.mp3" 1
       >
     >
   >
@@ -224,7 +225,7 @@
     BEAT -1
     AUTOMODE 0
     PANLAWFLAGS 3
-    VOLPAN 0.33398278328423 0 -1 -1 1
+    VOLPAN 1 0 -1 -1 1
     MUTESOLO 0 0 0
     IPHASE 0
     PLAYOFFS 0 1
@@ -252,12 +253,14 @@
       ARM 1
       DEFSHAPE 0 -1 -1
       VOLTYPE 1
-      PT 0 0.92094623 5 2
-      PT 15.0005 0.92151621 5 2
-      PT 30 0.92204917 5 2
-      PT 30.0005 0.92179071 5 2
-      PT 34 0.92193839 5 2
-      PT 34.0005 0.92182163 5 2
+      PT 0 0.92155172 5 2
+      PT 14 0.92204917 5 2
+      PT 14.0005 0.92179071 5 2
+      PT 18 0.92193839 5 2
+      PT 18.0005 0.92182163 5 2
+      PT 19.37947846 0.92186189 5 2
+      PT 19.37997846 0.9216058 5 2
+      PT 35.37997846 0.9218619 5 2
       PT 38.0005 0.92193841 5 2
       PT 41.0005 0.92204919 5 2
       PT 54 0.9225113 5 2
@@ -325,16 +328,16 @@
       FADEOUT 1 0 0 1 0 0 0
       MUTE 0 0
       SEL 0
-      IGUID {598CC5A3-4FCF-44E7-BE63-B316447D5ECB}
-      IID 2226
-      NAME 6969457686995881230_中小雨_雨滴打击地面.mp3
+      IGUID {3952BE51-7EA9-4E6F-9086-B82768A4B46F}
+      IID 2386
+      NAME LQWUCQS_Rain_On_Grass_Loop.mp3
       VOLPAN 1 0 1 -1
       SOFFS 0
       PLAYRATE 1 1 0 -1 0 0.0025
       CHANMODE 0
-      GUID {31715EA9-D9E5-481A-AB3A-D2992BD45E49}
+      GUID {5301D08E-5140-4D4A-B1E8-1AD0E74D076C}
       <SOURCE MP3
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\2_rain\小雨\6969457686995881230_中小雨_雨滴打击地面.mp3" 1
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\rain_sound\3_impact\rain_on_grass\LQWUCQS_Rain_On_Grass_Loop.mp3" 1
       >
     >
   >
@@ -371,7 +374,7 @@
     BEAT -1
     AUTOMODE 0
     PANLAWFLAGS 3
-    VOLPAN 0.01109919329767 0 -1 -1 1
+    VOLPAN 0.08980015007282 0 -1 -1 1
     MUTESOLO 0 0 0
     IPHASE 0
     PLAYOFFS 0 1
@@ -391,3328 +394,6 @@
     PERF 0
     MIDIOUT -1
     MAINSEND 1 0
-    <ITEM
-      POSITION 12
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {54E0599D-87E4-4F7B-B879-F83A210C2BA5}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E4662E26-6D18-4428-8248-D0EC887853A6}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 81.88109052663025
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 122.30123262414362
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 228.92044779010149
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 272.30521535176445
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 373.49677924730253
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 431.2039238606236
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 496.66422854501457
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 572.0700517310953
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 629.39607464945493
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 698.35374348294499
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 793.78812030544361
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 873.85172620089941
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 942.03651659827938
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 991.80396794882893
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 1055.815760578763
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 1134.3956592047355
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 1209.1922963917705
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 1266.7913169941407
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 1345.4416001703705
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 1443.0657500897257
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 1515.9652789428051
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 1557.7293470243683
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 1654.5387403199099
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 1711.0536371836229
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 1808.6794178501884
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 1847.6989185812772
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 1944.0605470865107
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 2013.2710376068815
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 2056.7633288814609
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 2142.2585479253498
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 2203.2630178450563
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 2301.5026571656449
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 2364.9464544505181
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 2421.0767611968968
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 2488.5842046255398
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 2575.5029376605207
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 2664.6631420506287
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 2731.1009323064141
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 2789.0718684502795
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 2856.1602710426569
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 2917.4641000419429
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 2989.1163580725765
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 3062.153312204232
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 3160.5582388678863
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 3223.8011171497228
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 3305.4166429680499
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 3378.9918476973194
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 3433.8356009785939
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 3512.8384712284756
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 3575.8226868590546
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 3637.2732031736064
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 3731.4416115576669
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 3770.4575107047299
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 3858.9182518201737
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 3936.9271464177973
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 3987.8819662420869
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 4085.9575607795637
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 4127.2082360890299
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 4216.2650418261928
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 4301.5889410615382
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 4346.6418224959316
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 4428.8580457078897
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 4508.319139112692
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 4584.8144840278119
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 4638.7792724423871
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 4717.1361141140869
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 4786.7047032693145
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 4844.7259472521791
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 4924.8839747551283
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 4989.9173926085277
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 5092.0864299555205
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 5168.9945553674415
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 5222.6128768869894
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 5281.4342456543181
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 5356.9480470259705
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 5439.2184729325172
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 5522.4254145761397
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 5572.7531371548157
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 5640.357160559699
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 5725.2454850202803
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 5783.9402149716125
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 5847.2457702791498
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 5952.5962098816617
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 5997.374887360781
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 6078.2478891398496
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 6151.1808146980611
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 6203.8909456516221
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 6301.0202724164355
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 6346.7894004213931
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 6440.2182216381434
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 6528.730307271132
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 6580.1310452848429
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 6650.7657110932796
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 6730.1448147743886
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 6774.5053845070197
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 6851.1072336585976
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 6940.8040067837155
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 7003.3566210581866
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 7086.8433765528043
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 7142.4545908765504
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 7203.5676948223236
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 7304.1330538695465
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 7363.4593736917805
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 7449.2581415960594
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 7493.2559791873909
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 7601.3304399540302
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 7673.0555598810952
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 7717.5175313987447
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 7784.8327782956121
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 7846.7852036969043
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 7957.5968719919856
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 8002.1162957937631
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 8067.2947275832066
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 8171.1596715585256
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 8243.6030165329375
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 8282.3796487488253
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 8351.2895792386698
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 8439.9759834836022
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 8516.4240400516392
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 8582.824313314979
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 8655.7525059627096
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 8745.6750042486892
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 8802.9508554732674
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 8880.2567127519524
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 8929.1175393953345
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 8995.2908104574799
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 9065.6442396217153
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 9162.8553532689002
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 9229.6692701082084
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 9314.6301943498729
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 9368.1757378725815
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 9425.1937352198656
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 9507.632462261261
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 9599.472306043328
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 9653.7325258998517
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 9741.5038429826709
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 9778.4560972329618
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 9868.857976636762
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 9928.1282849253021
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 10003.395467297754
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 10101.207743535246
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 10173.966754802095
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 10232.172265845644
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 10280.10206335992
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 10366.825826537211
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 10437.424149854791
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 10494.714973224085
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 10604.068108763409
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 10660.479413560373
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
-    <ITEM
-      POSITION 10723.658248781316
-      SNAPOFFS 0
-      LENGTH 1.5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {96021AD0-B16B-4809-B900-5395C2023697}
-      IID 2050
-      NAME Single_quiet_frog_cr_#4-1780663380763.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {E2EDA225-7A5B-4D99-B763-49B38D22FA1C}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\6_life\蛙鸣\Single_quiet_frog_cr_#4-1780663380763.wav"
-      >
-    >
   >
   <TRACK {1055DC63-0742-4C2B-BB6C-CFB52CE83901}
     NAME 5_env
@@ -3750,16 +431,16 @@
       FADEOUT 1 0 0 1 0 0 0
       MUTE 0 0
       SEL 0
-      IGUID {C1BC8D8D-9FB8-47BA-BFC7-36DD7BFEB1D2}
-      IID 2228
-      NAME 7335268175694646554_电影级森林雨天气素材.mp3
+      IGUID {83880D7C-2ED0-43BE-AB7A-86B9CE9F976F}
+      IID 2388
+      NAME LJF2YRT_Nighttime_Forest_Ambience_with_Light_Rain_01.mp3
       VOLPAN 1 0 1 -1
       SOFFS 0
       PLAYRATE 1 1 0 -1 0 0.0025
       CHANMODE 0
-      GUID {09B7ECA9-0DE7-4B70-9105-A89601C60246}
+      GUID {55F5AA8E-D19C-43C1-A7F7-370128B60599}
       <SOURCE MP3
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\5_env\竹林_雨\7335268175694646554_电影级森林雨天气素材.mp3" 1
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\rain_sound\5_env\forest_rain\LJF2YRT_Nighttime_Forest_Ambience_with_Light_Rain_01.mp3" 1
       >
     >
   >
@@ -3784,7 +465,7 @@
     TRACKHEIGHT 0 0 0 0 0 0 0
     INQ 0 0 0 0.5 100 0 0 100
     NCHAN 2
-    FX 1
+    FX 0
     TRACKID {3B81D0B3-D4CD-4C36-8FDB-5341360B9870}
     PERF 0
     MIDIOUT -1
@@ -3804,6 +485,3306 @@
       FXID {08D6AF3E-E0B7-4073-82DC-C5727F15F7BE}
       WAK 0 0
     >
+    <ITEM
+      POSITION 65.62007895160603
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 127.31529777823279
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 218.18126664785029
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 278.98976863955767
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 375.76886876564555
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 427.53929983787401
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 520.50550874842872
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 557.10017117491668
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 652.06898679754158
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 709.47407574603596
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 807.02563182737379
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 841.95549213186462
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 949.40938074020232
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 981.11827713049638
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 1082.5007573538105
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 1128.4764234405814
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 1205.3253547937895
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 1301.8682874134472
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 1370.8484867803436
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 1416.3247000535493
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 1513.9429575179424
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 1592.4850259653274
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 1662.2127494103338
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 1728.0768985302293
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 1769.6516550112015
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 1866.3282477775506
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 1935.7052495571354
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 1984.0017732382389
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 2073.98137329062
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 2143.8264570264587
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 2203.3048571295626
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 2273.0665921858554
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 2374.7091694862797
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 2426.5117951690236
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 2504.8421655648604
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 2565.8991059516511
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 2661.6277055393066
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 2736.5270445330448
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 2805.4793149033685
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 2854.9458802627305
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 2916.7903542771969
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 2991.4419300100844
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 3083.1042886278578
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 3126.2616799386342
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 3225.3494315938301
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 3275.13524387595
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 3371.0175379023317
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 3432.3578050297847
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 3484.4560399877455
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 3592.6867729469463
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 3649.4513807557464
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 3699.861036160044
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 3808.071461715002
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 3861.5865265732923
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 3916.2237642358486
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 4011.3723498689237
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 4072.002990905135
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 4159.3969038112809
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 4234.5002927451178
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 4309.1951725446943
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 4353.4709516716321
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 4429.0724426906854
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 4507.2509294854017
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 4561.0265167670314
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 4632.0100731641505
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 4711.0092473757004
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 4808.6112163391526
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 4858.4772441178193
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 4931.1872766862534
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 5021.9845268424342
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 5080.1935131178479
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 5133.3819895982715
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 5200.2493144782293
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 5293.0610485501047
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 5363.3775922483819
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 5439.887097757658
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 5508.0551740395222
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 5590.9070259407417
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 5639.6374099508203
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 5711.4619623677436
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 5793.0194360869782
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 5860.8784119680877
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 5950.396353826116
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 6027.4890077800292
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 6073.263250789706
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 6148.9841417219468
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 6200.4463371678421
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 6301.5283377302549
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 6368.4275813176082
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 6429.0639261760389
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 6493.4941559989829
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 6579.6775250664123
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 6669.5553472034608
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 6735.0143785811897
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 6793.3782145574123
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 6860.7907314873228
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 6949.0326425352105
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 6995.0513447843805
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 7095.7140479210148
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 7151.0587859043508
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 7231.8332399552519
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 7306.6376598448805
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 7357.0399080883972
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 7450.3765546106069
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 7503.6938703933756
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 7593.0499431159369
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 7635.8399972270208
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 7719.7667254199196
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 7789.4401948563855
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 7848.2924754485302
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 7939.1487297517315
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 7992.6059908906618
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 8093.4226298977974
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 8171.7912081615877
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 8212.995657952677
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 8284.5282076413132
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 8369.8161191552772
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 8432.5096539930819
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 8488.7065667905226
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 8585.1635729925292
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 8670.3398814078064
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 8731.2121355412219
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 8808.8168779622611
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 8877.2943305174231
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 8921.1600472397604
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 9026.9062103103715
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 9071.0000184470973
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 9151.0358486565656
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 9237.4616510734613
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 9280.9703046119557
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 9359.7168813167173
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 9443.0842502980522
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 9517.9976225209975
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 9604.1752205885277
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 9666.6992473786158
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 9740.7701689645728
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 9798.0897397750377
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 9852.6119835044065
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 9960.8766937726887
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 9999.6764715871577
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 10101.795334503107
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 10170.332359606295
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 10232.634205157201
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 10284.522002892163
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 10351.286953299241
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 10428.171649134718
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 10526.490212573226
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 10581.866047612542
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 10656.765458265141
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
+    <ITEM
+      POSITION 10730.706870745349
+      SNAPOFFS 0
+      LENGTH 1.5
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFB0A61-6256-493E-8C1C-D357E899472F}
+      IID 2235
+      NAME 哇鸣.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9492BF42-550D-428D-8260-D41F8A18117E}
+      <SOURCE WAVE
+        FILE "Audio Files\哇鸣.wav"
+      >
+    >
   >
   <TRACK {F2A5A41C-CC2A-4170-B3AE-68607EA21EE3}
     NAME 7_comfort
@@ -3811,7 +3792,7 @@
     BEAT -1
     AUTOMODE 0
     PANLAWFLAGS 3
-    VOLPAN 0.23456058929776 0 -1 -1 1
+    VOLPAN 0.35148740112729 0 -1 -1 1
     MUTESOLO 0 0 0
     IPHASE 0
     PLAYOFFS 0 1
@@ -3841,16 +3822,16 @@
       FADEOUT 1 0 0 1 0 0 0
       MUTE 0 0
       SEL 0
-      IGUID {1495AA52-C910-432D-BCA8-EB4FE2F668B5}
-      IID 7
-      NAME 小雨击打雨伞.wav
-      VOLPAN 0.45 0 1 -1
+      IGUID {0FD9059B-3DE6-4925-8404-544B865A8ECD}
+      IID 2387
+      NAME 171322_Rain,_Cloth,_Light,_Under_Umbrella,_Close.mp3
+      VOLPAN 1 0 1 -1
       SOFFS 0
       PLAYRATE 1 1 0 -1 0 0.0025
       CHANMODE 0
-      GUID {F3FE961E-6991-40BE-AEA3-CBFD89AAFB02}
-      <SOURCE WAVE
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\rain_sound\3_impact\雨伞\小雨击打雨伞.wav"
+      GUID {38ADC9D7-0ECD-46B0-BD29-7F53F3318E83}
+      <SOURCE MP3
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\rain_sound\3_impact\rain_on_umbrella\171322_Rain,_Cloth,_Light,_Under_Umbrella,_Close.mp3" 1
       >
     >
   >
