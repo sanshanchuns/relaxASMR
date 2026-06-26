@@ -19,7 +19,7 @@ except ImportError:
 SCRIPT_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPT_DIR.parent.parent
 PRESETS_PATH = SCRIPT_DIR / "youtube_presets.json"
-BADGE_4K_PATH = SCRIPT_DIR / "assets" / "4k.png"
+BADGE_4K_PATH = SCRIPT_DIR / "4k.png"
 THUMB_W, THUMB_H = 1280, 720
 BL_MARGIN_LEFT = 60
 BL_MARGIN_RIGHT = 60
@@ -38,6 +38,10 @@ TITLE_FONT_MIN = 14
 BADGE_MAX_HEIGHT = 72
 BADGE_MARGIN_LEFT = 70   # THUMB_MARGIN + 50
 BADGE_MARGIN_BOTTOM = 70
+DEFAULT_THUMB_TITLE = "RAIN ASMR"
+SUBTITLE_MAX_WORDS = 10
+TEXT_SHADOW_OFFSET = (3, 3)
+TEXT_SHADOW_COLOR = (0, 0, 0, 20)
 
 FONT_CANDIDATES = [
     Path("/System/Library/Fonts/Supplemental/Arial Bold.ttf"),
@@ -206,6 +210,350 @@ def extract_frame(video: Path, out_png: Path, t: float) -> None:
     )
 
 
+def _region_stats(img: Image.Image, box: tuple[int, int, int, int]) -> dict[str, float]:
+    crop = img.crop(box).resize((64, 64), Image.Resampling.BILINEAR)
+    flat = crop.get_flattened_data() if hasattr(crop, "get_flattened_data") else crop.getdata()
+    pixels = list(flat)
+    n = len(pixels)
+    if n == 0:
+        return {"r": 0, "g": 0, "b": 0, "brightness": 0}
+    r = sum(p[0] for p in pixels) / n
+    g = sum(p[1] for p in pixels) / n
+    b = sum(p[2] for p in pixels) / n
+    return {"r": r, "g": g, "b": b, "brightness": (r + g + b) / 3}
+
+
+def limit_words(text: str, max_words: int = SUBTITLE_MAX_WORDS) -> str:
+    words = text.split()
+    if len(words) <= max_words:
+        return text
+    return " ".join(words[:max_words])
+
+
+def analyze_frame_scene(frame_path: Path) -> dict:
+    """从缩略图帧启发式推断场景（标题/说明/副标题共用）。"""
+    img = Image.open(frame_path).convert("RGB")
+    w, h = img.size
+
+    top = _region_stats(img, (0, 0, w, h // 5))
+    bg = _region_stats(img, (w // 3, h // 4, 2 * w // 3, h // 2))
+    center = _region_stats(img, (w // 4, h // 3, 3 * w // 4, 2 * h // 3))
+    bottom_left = _region_stats(img, (0, h // 2, w // 2, h))
+    bottom_right = _region_stats(img, (w // 2, h // 2, w, h))
+
+    misty = top["brightness"] > center["brightness"] + 12 or top["b"] > top["r"] + 10
+    water = (
+        bg["b"] > bg["r"] + 8
+        and bg["g"] > bg["r"] + 5
+        and bg["brightness"] > 95
+    )
+    green = center["g"] > center["r"] * 1.06 and center["g"] > center["b"] * 1.02
+    grass = bottom_left["g"] > 90 and bottom_left["g"] > bottom_left["r"] * 1.12
+    path = (
+        abs(bottom_right["r"] - bottom_right["g"]) < 20
+        and 55 < bottom_right["brightness"] < 155
+        and bottom_right["r"] < center["g"]
+    )
+
+    if grass and water and path:
+        key = "park_pond_path"
+    elif grass and water:
+        key = "park_pond"
+    elif green and water and path:
+        key = "grove_pond_path"
+    elif green and water:
+        key = "grove_pond"
+    elif grass and path:
+        key = "park_path"
+    elif green and path:
+        key = "grove_path"
+    elif grass:
+        key = "park"
+    elif green:
+        key = "grove"
+    elif water:
+        key = "pond"
+    else:
+        key = "nature"
+
+    scenes = {
+        "park_pond_path": {
+            "place_zh_short": "公园荷塘",
+            "place_en_short": "Park Lotus Pond",
+            "place_zh_long": "公园荷塘雨景",
+            "place_en_long": "rainy park with lotus pond and stone path",
+            "bullet_zh": "🪷 荷塘湿地 · 蜿蜒石径 · 雨后草坪",
+            "bullet_en": "🪷 Lotus pond and wetland · winding stone path · rain-soaked lawn",
+            "tags_zh": ["公园", "荷塘", "荷花"],
+            "tags_en": ["park", "lotus pond", "lotus"],
+            "hashtags_zh": "#雨声 #ASMR #白噪音 #4K #助眠 #荷花 #公园",
+            "hashtags_en": "#rain #ASMR #whitenoise #4K #sleep #lotus #park",
+            "thumb_place": "park with lotus pond and stone path",
+        },
+        "park_pond": {
+            "place_zh_short": "公园荷塘",
+            "place_en_short": "Park Lotus Pond",
+            "place_zh_long": "公园荷塘雨景",
+            "place_en_long": "rainy park beside a lotus pond",
+            "bullet_zh": "🪷 荷塘荷花 · 雨后草坪 · 远处林木",
+            "bullet_en": "🪷 Lotus pond and flowers · rain-soaked lawn · distant trees",
+            "tags_zh": ["公园", "荷塘", "荷花"],
+            "tags_en": ["park", "lotus pond", "lotus"],
+            "hashtags_zh": "#雨声 #ASMR #白噪音 #4K #助眠 #荷花 #公园",
+            "hashtags_en": "#rain #ASMR #whitenoise #4K #sleep #lotus #park",
+            "thumb_place": "park beside a lotus pond",
+        },
+        "grove_pond_path": {
+            "place_zh_short": "林间荷塘",
+            "place_en_short": "Forest Lotus Grove",
+            "place_zh_long": "林间荷塘雨景",
+            "place_en_long": "rainy forest grove by a lotus pond path",
+            "bullet_zh": "🪷 林间荷塘 · 石径小径 · 雨后绿树",
+            "bullet_en": "🪷 Forest lotus pond · stone path · rain-wet green trees",
+            "tags_zh": ["林间", "荷塘", "小径"],
+            "tags_en": ["forest grove", "lotus pond", "stone path"],
+            "hashtags_zh": "#雨声 #ASMR #白噪音 #4K #助眠 #林间 #荷花",
+            "hashtags_en": "#rain #ASMR #whitenoise #4K #sleep #forest #lotus",
+            "thumb_place": "forest grove by a lotus pond path",
+        },
+        "grove_pond": {
+            "place_zh_short": "林间荷塘",
+            "place_en_short": "Misty Lotus Grove",
+            "place_zh_long": "林间荷塘雨景",
+            "place_en_long": "misty forest grove by a lotus pond",
+            "bullet_zh": "🪷 雾气荷塘 · 雨后林木 · 静谧湿地",
+            "bullet_en": "🪷 Misty lotus pond · rain-wet forest · quiet wetland",
+            "tags_zh": ["林间", "荷塘", "雾气"],
+            "tags_en": ["forest grove", "lotus pond", "misty rain"],
+            "hashtags_zh": "#雨声 #ASMR #白噪音 #4K #助眠 #林间 #荷花",
+            "hashtags_en": "#rain #ASMR #whitenoise #4K #sleep #forest #lotus",
+            "thumb_place": "forest grove by a misty lotus pond",
+        },
+        "park_path": {
+            "place_zh_short": "林间公园",
+            "place_en_short": "Rainy Forest Park",
+            "place_zh_long": "林间公园雨景",
+            "place_en_long": "rainy forest park with a winding stone path",
+            "bullet_zh": "🌳 绿树草坪 · 蜿蜒石径 · 雨后湿地",
+            "bullet_en": "🌳 Green trees and lawn · winding stone path · wet ground after rain",
+            "tags_zh": ["公园", "林间", "石径"],
+            "tags_en": ["forest park", "rainy park", "stone path"],
+            "hashtags_zh": "#雨声 #ASMR #白噪音 #4K #助眠 #公园 #自然音",
+            "hashtags_en": "#rain #ASMR #whitenoise #4K #sleep #park #nature",
+            "thumb_place": "park with a winding stone path",
+        },
+        "grove_path": {
+            "place_zh_short": "林间小径",
+            "place_en_short": "Rainy Forest Path",
+            "place_zh_long": "林间小径雨景",
+            "place_en_long": "rainy forest grove along a stone path",
+            "bullet_zh": "🌳 雨后林木 · 石径蜿蜒 · 静谧林间",
+            "bullet_en": "🌳 Rain-wet forest trees · winding stone path · quiet grove",
+            "tags_zh": ["林间", "小径", "雨景"],
+            "tags_en": ["forest path", "stone path", "rainy forest"],
+            "hashtags_zh": "#雨声 #ASMR #白噪音 #4K #助眠 #林间 #自然音",
+            "hashtags_en": "#rain #ASMR #whitenoise #4K #sleep #forest #nature",
+            "thumb_place": "forest grove along a stone path",
+        },
+        "park": {
+            "place_zh_short": "公园绿地",
+            "place_en_short": "Rainy Green Park",
+            "place_zh_long": "公园绿地雨景",
+            "place_en_long": "green park in the rain",
+            "bullet_zh": "🌳 雨后草坪 · 开阔绿地 · 远处林木",
+            "bullet_en": "🌳 Rain-soaked lawn · open green park · distant trees",
+            "tags_zh": ["公园", "绿地", "雨景"],
+            "tags_en": ["green park", "rainy park", "lawn"],
+            "hashtags_zh": "#雨声 #ASMR #白噪音 #4K #助眠 #公园 #自然音",
+            "hashtags_en": "#rain #ASMR #whitenoise #4K #sleep #park #nature",
+            "thumb_place": "green park in the rain",
+        },
+        "grove": {
+            "place_zh_short": "林间雨景",
+            "place_en_short": "Lush Rainy Grove",
+            "place_zh_long": "林间雨景",
+            "place_en_long": "lush forest grove in the rain",
+            "bullet_zh": "🌳 雨后林木 · 浓绿树冠 · 静谧氛围",
+            "bullet_en": "🌳 Rain-wet trees · lush green canopy · peaceful mood",
+            "tags_zh": ["林间", "雨景", "自然"],
+            "tags_en": ["forest grove", "rainy forest", "lush green"],
+            "hashtags_zh": "#雨声 #ASMR #白噪音 #4K #助眠 #林间 #自然音",
+            "hashtags_en": "#rain #ASMR #whitenoise #4K #sleep #forest #nature",
+            "thumb_place": "lush forest grove in the rain",
+        },
+        "pond": {
+            "place_zh_short": "荷花池",
+            "place_en_short": "Peaceful Lotus Pond",
+            "place_zh_long": "荷花池雨景",
+            "place_en_long": "peaceful lotus pond in the rain",
+            "bullet_zh": "🪷 荷叶荷花 · 雨中湿地 · 静谧水面",
+            "bullet_en": "🪷 Lotus leaves and flowers · rainy wetland · calm water",
+            "tags_zh": ["荷花池", "荷塘", "荷花"],
+            "tags_en": ["lotus pond", "lotus", "pond"],
+            "hashtags_zh": "#雨声 #ASMR #白噪音 #4K #助眠 #荷花 #自然音",
+            "hashtags_en": "#rain #ASMR #whitenoise #4K #sleep #lotus #nature",
+            "thumb_place": "peaceful lotus pond in the rain",
+        },
+        "nature": {
+            "place_zh_short": "自然雨景",
+            "place_en_short": "Peaceful Rain Nature",
+            "place_zh_long": "自然雨景",
+            "place_en_long": "quiet nature scene in the rain",
+            "bullet_zh": "🌧 自然雨声 · 静谧氛围 · 无音乐无人声",
+            "bullet_en": "🌧 Natural rain ambience · peaceful mood · no music or voice",
+            "tags_zh": ["自然", "雨景"],
+            "tags_en": ["nature rain", "ambient"],
+            "hashtags_zh": "#雨声 #ASMR #白噪音 #4K #助眠 #自然音",
+            "hashtags_en": "#rain #ASMR #whitenoise #4K #sleep #nature",
+            "thumb_place": "quiet nature scene in the rain",
+        },
+    }
+
+    scene = dict(scenes[key])
+    scene["scene_key"] = key
+    scene["misty"] = misty
+    mood = "Misty rainy" if misty else "Peaceful rainy"
+    scene["thumb_subtitle"] = limit_words(f"{mood} {scene['thumb_place']}")
+    return scene
+
+
+def auto_thumb_subtitle(frame_path: Path) -> str:
+    return analyze_frame_scene(frame_path)["thumb_subtitle"]
+
+
+def build_rain_youtube_copy(scene: dict, meta: dict) -> dict:
+    """根据画面场景生成 Rain 系列 YouTube 文案。"""
+    duration_zh = meta["duration_human"]
+    duration_en = meta["duration_en"]
+    res = f"{meta['width']}×{meta['height']}"
+    fps = f"{meta['fps']} fps"
+
+    title_zh = f"【4K】{duration_zh}雨声 ASMR · {scene['place_zh_short']}"
+    title_en = f"{duration_en.title()} Rain ASMR in 4K | {scene['place_en_short']}"
+
+    desc_zh = (
+        f"{duration_zh}{scene['place_zh_long']}，4K 超清画面配合真实雨声，"
+        f"适合入睡、专注工作、冥想与减压放松。\n\n"
+        f"🌧 纯自然雨声循环，无音乐无人声\n"
+        f"{scene['bullet_zh']}\n"
+        f"🎧 建议佩戴耳机获得最佳沉浸体验\n"
+        f"⏱ 时长：{duration_zh}\n"
+        f"📺 分辨率：{res} · {fps}\n\n"
+        f"{scene['hashtags_zh']}"
+    )
+    desc_en = (
+        f"{duration_en} of {scene['place_en_long']} — 4K visuals with natural rain sounds "
+        f"for sleep, deep focus, meditation, and stress relief.\n\n"
+        f"🌧 Pure rain ambience, no music, no voice\n"
+        f"{scene['bullet_en']}\n"
+        f"🎧 Headphones recommended for full immersion\n"
+        f"⏱ Duration: {duration_en}\n"
+        f"📺 Resolution: {res} · {fps}\n\n"
+        f"{scene['hashtags_en']}"
+    )
+
+    base_tags_zh = [
+        "雨声", "雨声ASMR", "白噪音", "4K", "ASMR", "自然声音", "助眠", "冥想", "专注",
+    ]
+    base_tags_en = [
+        "rain sounds", "rain ASMR", "white noise", "sleep sounds",
+        "nature sounds", "relaxation", "4K nature",
+    ]
+    tags = base_tags_zh + scene["tags_zh"] + base_tags_en + scene["tags_en"]
+
+    return {
+        "title_zh": title_zh,
+        "title_en": title_en,
+        "description_zh": desc_zh,
+        "description_en": desc_en,
+        "tags": tags,
+    }
+
+
+def resolve_youtube_copy(
+    preset: dict,
+    scene: dict | None,
+    meta: dict,
+    video_stem: str,
+    title_zh_arg: str,
+    title_en_arg: str,
+) -> dict:
+    if scene and preset.get("auto_from_scene"):
+        copy = build_rain_youtube_copy(scene, meta)
+        if title_zh_arg:
+            copy["title_zh"] = title_zh_arg
+        if title_en_arg:
+            copy["title_en"] = title_en_arg
+        copy["subtitle_zh"] = preset.get("subtitle_zh", "睡眠 · 专注 · 冥想 · 减压")
+        copy["subtitle_en"] = preset.get("subtitle_en", "Sleep · Focus · Meditation · Stress Relief")
+        return copy
+
+    title_zh = title_zh_arg or preset.get("title_zh", video_stem)
+    title_en = title_en_arg or preset.get("title_en", video_stem)
+    desc_zh = preset.get("description_zh", "").format(
+        duration=meta["duration_human"],
+        resolution=f"{meta['width']}×{meta['height']}",
+        fps=f"{meta['fps']} fps",
+    )
+    desc_en = preset.get("description_en", "").format(
+        duration=meta["duration_en"],
+        resolution=f"{meta['width']}×{meta['height']}",
+        fps=f"{meta['fps']} fps",
+    )
+    return {
+        "title_zh": title_zh,
+        "title_en": title_en,
+        "description_zh": desc_zh,
+        "description_en": desc_en,
+        "tags": preset.get("tags", []),
+        "subtitle_zh": preset.get("subtitle_zh", ""),
+        "subtitle_en": preset.get("subtitle_en", ""),
+    }
+
+
+def resolve_thumb_text(
+    scene: dict,
+    preset: dict,
+    thumb_title_arg: str,
+    thumb_subtitle_arg: str,
+) -> tuple[str, str]:
+    if thumb_title_arg:
+        thumb_title = thumb_title_arg
+    elif preset.get("thumb_title_en"):
+        thumb_title = preset["thumb_title_en"]
+    else:
+        thumb_title = DEFAULT_THUMB_TITLE
+
+    if thumb_subtitle_arg:
+        thumb_subtitle = limit_words(thumb_subtitle_arg)
+    elif preset.get("thumb_subtitle_en"):
+        thumb_subtitle = limit_words(preset["thumb_subtitle_en"])
+    else:
+        thumb_subtitle = scene["thumb_subtitle"]
+
+    return thumb_title, thumb_subtitle
+
+
+def draw_text_with_shadow(
+    draw: ImageDraw.ImageDraw,
+    xy: tuple[int, int],
+    text: str,
+    font,
+    fill: tuple[int, int, int, int] | tuple[int, int, int],
+    *,
+    anchor: str | None = None,
+) -> None:
+    """先画偏移阴影，再画正文。"""
+    ox, oy = TEXT_SHADOW_OFFSET
+    shadow_xy = (xy[0] + ox, xy[1] + oy)
+    if anchor:
+        draw.text(shadow_xy, text, font=font, fill=TEXT_SHADOW_COLOR, anchor=anchor)
+        draw.text(xy, text, font=font, fill=fill, anchor=anchor)
+    else:
+        draw.text(shadow_xy, text, font=font, fill=TEXT_SHADOW_COLOR)
+        draw.text(xy, text, font=font, fill=fill)
+
+
 def fit_title_font(draw: ImageDraw.ImageDraw, text: str, max_width: int, start_size: int = TITLE_FONT_START):
     for size in range(start_size, TITLE_FONT_MIN - 1, -2):
         font = load_font(size)
@@ -246,7 +594,9 @@ def make_thumbnail(
     font, bbox = fit_title_font(draw, title_en, max_w)
     cx = THUMB_W // 2
     cy = TITLE_TOP_Y
-    draw.text((cx, cy), title_en, font=font, fill=(255, 255, 255, TITLE_ALPHA), anchor="mt")
+    draw_text_with_shadow(
+        draw, (cx, cy), title_en, font, (255, 255, 255, TITLE_ALPHA), anchor="mt",
+    )
 
     if show_4k and badge_path.is_file():
         paste_4k_badge(overlay, badge_path)
@@ -285,10 +635,12 @@ def make_thumbnail_bottom_left(
     title_y = sub_y - BL_GAP_TITLE_SUB - title_h
     badge_y = title_y - BL_GAP_BADGE_TITLE
 
-    draw.text((BL_MARGIN_LEFT, title_y), title_en, font=font_title, fill=(255, 255, 255, 255))
+    draw_text_with_shadow(
+        draw, (BL_MARGIN_LEFT, title_y), title_en, font_title, (255, 255, 255, 255),
+    )
     cy = sub_y
     for line in sub_lines:
-        draw.text((BL_MARGIN_LEFT, cy), line, font=font_sub, fill=(255, 255, 255, 255))
+        draw_text_with_shadow(draw, (BL_MARGIN_LEFT, cy), line, font_sub, (255, 255, 255, 255))
         cy += draw.textbbox((0, 0), line, font=font_sub)[3] - draw.textbbox(
             (0, 0), line, font=font_sub
         )[1]
@@ -309,23 +661,18 @@ def render_markdown(
     parsed: dict,
     preset: dict,
     thumb_name: str,
+    thumb_title: str,
+    thumb_subtitle: str,
+    youtube_copy: dict,
+    scene_key: str = "",
 ) -> str:
-    title_zh = preset.get("title_zh", video.stem)
-    title_en = preset.get("title_en", video.stem)
-    sub_zh = preset.get("subtitle_zh", "")
-    sub_en = preset.get("subtitle_en", "")
-    tags = preset.get("tags", [])
-
-    desc_zh = preset.get("description_zh", "").format(
-        duration=meta["duration_human"],
-        resolution=f"{meta['width']}×{meta['height']}",
-        fps=f"{meta['fps']} fps",
-    )
-    desc_en = preset.get("description_en", "").format(
-        duration=meta["duration_en"],
-        resolution=f"{meta['width']}×{meta['height']}",
-        fps=f"{meta['fps']} fps",
-    )
+    title_zh = youtube_copy["title_zh"]
+    title_en = youtube_copy["title_en"]
+    sub_zh = youtube_copy.get("subtitle_zh", "")
+    sub_en = youtube_copy.get("subtitle_en", "")
+    tags = youtube_copy.get("tags", [])
+    desc_zh = youtube_copy["description_zh"]
+    desc_en = youtube_copy["description_en"]
 
     encoder_note = ""
     enc = parsed.get("encoder", "")
@@ -337,16 +684,16 @@ def render_markdown(
     layout = preset.get("layout", "center")
     if layout == "bottom-left":
         thumb_layout = (
-            f"左下角三行：4K 角标 · `{preset.get('thumb_title_en', title_en)}` "
-            f"({BL_TITLE_SIZE}px) · 副标题 ({BL_SUB_SIZE}px)；"
+            f"左下角三行：4K 角标 · `{thumb_title}` "
+            f"({BL_TITLE_SIZE}px) · 副标题 `{thumb_subtitle}` ({BL_SUB_SIZE}px)；"
             f"间距 4K↔标题 {BL_GAP_BADGE_TITLE}px · 标题↔副标题 {BL_GAP_TITLE_SUB}px"
         )
-        badge_note = preset.get("badge_path", "scripts/video_export/assets/4k.png")
+        badge_note = preset.get("badge_path", "scripts/video_export/4k.png")
     else:
         thumb_layout = (
             f"英文标题水平居中、距顶 {TITLE_TOP_Y}px · 4K 角标左下 · 无时长标签"
         )
-        badge_note = "scripts/video_export/assets/4k.png"
+        badge_note = "scripts/video_export/4k.png"
 
     lines = [
         f"# YouTube 物料 · `{video.name}`",
@@ -367,12 +714,18 @@ def render_markdown(
         f"- 尺寸：1280×720（YouTube 推荐）",
         f"- 布局：{thumb_layout}",
         f"- 4K 角标：`{badge_note}`",
+        f"- 缩略图标题：`{thumb_title}`",
+        f"- 缩略图副标题：`{thumb_subtitle}`",
+    ]
+    if scene_key:
+        lines.append(f"- 画面推断：`{scene_key}`（auto_from_scene）")
+    lines.extend([
         "",
         "## 中文说明",
         "",
         desc_zh,
         "",
-    ]
+    ])
     if sub_zh:
         lines.extend(["", f"**副标题：** {sub_zh}", ""])
     lines.extend([
@@ -425,6 +778,16 @@ def main() -> None:
     parser.add_argument("--thumb-time", type=float, default=8.0, help="Frame time for thumbnail (seconds)")
     parser.add_argument("--title-zh", default="", help="Override Chinese title")
     parser.add_argument("--title-en", default="", help="Override English title")
+    parser.add_argument(
+        "--thumb-title",
+        default="",
+        help="Thumbnail overlay title (default: RAIN ASMR, or preset thumb_title_en)",
+    )
+    parser.add_argument(
+        "--thumb-subtitle",
+        default="",
+        help="Thumbnail subtitle — location/scene (default: auto from frame, ≤10 words)",
+    )
     parser.add_argument("--no-4k-badge", action="store_true", help="Hide 4K badge on thumbnail")
     parser.add_argument(
         "--preset",
@@ -458,8 +821,6 @@ def main() -> None:
 
     title_zh = args.title_zh or preset.get("title_zh", stem)
     title_en = args.title_en or preset.get("title_en", stem)
-    thumb_title = preset.get("thumb_title_en") or args.title_en or title_en
-    thumb_subtitle = preset.get("thumb_subtitle_en", "")
     layout = args.layout or preset.get("layout", "center")
     thumb_time = args.thumb_time if args.thumb_time != 8.0 else preset.get("thumb_time", args.thumb_time)
     badge_path = resolve_badge_path(preset)
@@ -471,6 +832,17 @@ def main() -> None:
 
     print(f"==> Extracting frame at {thumb_time}s ...")
     extract_frame(video, frame_png, float(thumb_time))
+
+    scene = analyze_frame_scene(frame_png)
+    print(f"==> Scene: {scene['scene_key']} · {scene['place_en_short']}")
+
+    youtube_copy = resolve_youtube_copy(
+        preset, scene, meta, stem, args.title_zh, args.title_en,
+    )
+    thumb_title, thumb_subtitle = resolve_thumb_text(
+        scene, preset, args.thumb_title, args.thumb_subtitle,
+    )
+    print(f"==> Thumbnail text: {thumb_title!r} / {thumb_subtitle!r}")
 
     print(f"==> Compositing thumbnail ({layout}) ...")
     if layout == "bottom-left":
@@ -487,7 +859,11 @@ def main() -> None:
     frame_png.unlink(missing_ok=True)
 
     md_path.write_text(
-        render_markdown(video, meta, parsed, preset, "thumbnail.jpg"),
+        render_markdown(
+            video, meta, parsed, preset, "thumbnail.jpg",
+            thumb_title, thumb_subtitle, youtube_copy,
+            scene_key=scene["scene_key"] if preset.get("auto_from_scene") else "",
+        ),
         encoding="utf-8",
     )
 

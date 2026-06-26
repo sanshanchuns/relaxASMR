@@ -8,7 +8,7 @@
 |------|------|
 | `export_mp4.sh` | ffmpeg 合成：`-stream_loop` 视频 + 音频，`-shortest` 跟音频时长 |
 | `generate_youtube_material.sh` | 缩略图 + `youtube.md` 物料（export 成功后可选自动调用） |
-| `generate_youtube_material.py` | 物料生成实现 |
+| `generate_youtube_material.py` | 物料生成（`auto_from_scene` 预设按画面推断标题/说明/标签；`--thumb-title` / `--thumb-subtitle` 可覆盖） |
 | `youtube_presets.json` | 各系列标题/说明模板 |
 
 ## 用法

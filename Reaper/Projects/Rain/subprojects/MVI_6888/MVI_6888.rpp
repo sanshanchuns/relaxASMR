@@ -1,6 +1,5 @@
-<REAPER_PROJECT 0.1 "7.73/win64" 0 0
+<REAPER_PROJECT 0.1 "7.73/win64" 1782460670 0
   <NOTES 0 2
-    Rain · MVI_6888 · 3.0h · sleep series
   >
   RIPPLE 0 0
   GROUPOVERRIDE 0 0 0 0
@@ -20,9 +19,9 @@
   VIDEO_CONFIG 0 0 65792
   PANMODE 3
   PANLAWFLAGS 3
-  CURSOR 0
-  ZOOM 100 0 0
-  VZOOMEX 6 0
+  CURSOR 56.73545833333061
+  ZOOM 0.59757131899841 58 0
+  VZOOMEX 14.80544758 162
   USE_REC_CFG 0
   RECMODE 1
   SMPTESYNC 0 30 100 40 1000 300 0 0 1 0 0
@@ -72,7 +71,7 @@
   SELECTION 0 0
   SELECTION2 0 0
   MASTERAUTOMODE 0
-  MASTERTRACKHEIGHT 0 0
+  MASTERTRACKHEIGHT 82 0
   MASTERPEAKCOL 16576
   MASTERMUTESOLO 0
   MASTERTRACKVIEW 1 0.6667 0.5 0.5 0 0 0 0 0 0 0 0 0 0 1
@@ -140,7 +139,7 @@
         IQAAAAUAAAAAAAAAAQAAAAAAAAAAAFlAAAAAAAAA8D+amZmZmZnpPwEIAAAAAQAAAAAAAAAAwHJAAAAAAAAA8D8AAAAAAAAAQAEIAAAAAQAAAAAAAAAAQI9AAAAAAAAA
         8D8AAAAAAAAAQAEBAAAAAQAAAJ/vruhzybNAMIH/8g6n2z+amZmZmZnpPwEEAAAAAQAAAAAAAAAAAFlAAAAAAAAA8D8AAAAAAAAAQAEBAAAAAQAAAAAAAAAAAPA/AAAA
         AP0BAABcAQAAAgABAA==
-        AAAQAAAA
+        AFByb2dyYW0gMQAQAAAA
       >
       FLOATPOS 0 0 0 0
       FXID {B1F1046C-2680-4627-9EEA-FEDCF86242C9}
@@ -149,7 +148,7 @@
       <VST "VST: ReaComp (Cockos)" reacomp.dll 0 "" 1919247213<5653547265636D726561636F6D700000> ""
         bWNlcu9e7f4EAAAAAQAAAAAAAAACAAAAAAAAAAQAAAAAAAAACAAAAAAAAAACAAAAAQAAAAAAAAACAAAAAAAAAFwAAAAAAAAAAAAQAA==
         776t3g3wrd4AAIA/ED74PKabxDsK16M8AAAAAAAAAAAAAIA/AAAAAAAAAAAAAAAAnNEHMwAAgD8AAAAAzcxMPQAAAAAAAAAAAAAAAAAAgD4AAAAAAAAAAAAAAAA=
-        AAAQAAAA
+        AFByb2dyYW0gMQAQAAAA
       >
       FLOATPOS 0 0 0 0
       FXID {84735E1C-9720-4ED1-BB72-ABF07EE39144}
@@ -162,7 +161,7 @@
     BEAT -1
     AUTOMODE 0
     PANLAWFLAGS 3
-    VOLPAN 0.28 0 -1 -1 1
+    VOLPAN 1 0 -1 -1 1
     MUTESOLO 0 0 0
     IPHASE 0
     PLAYOFFS 0 1
@@ -185,7 +184,7 @@
     <ITEM
       POSITION 0
       SNAPOFFS 0
-      LENGTH 121.344
+      LENGTH 10800
       LOOP 1
       ALLTAKES 0
       FADEIN 1 0 0 1 0 0 0
@@ -211,8 +210,8 @@
     BEAT -1
     AUTOMODE 0
     PANLAWFLAGS 3
-    VOLPAN 1.0 0 -1 -1 1
-    MUTESOLO 0 0 0
+    VOLPAN 1 0 -1 -1 1
+    MUTESOLO 0 2 0
     IPHASE 0
     PLAYOFFS 0 1
     ISBUS 0 0
@@ -220,7 +219,7 @@
     SHOWINMIX 1 0.6667 0.5 1 0.5 0 0 0 0
     FIXEDLANES 9 0 0 0 0
     LANEREC -1 -1 -1 0
-    SEL 0
+    SEL 1
     REC 0 0 1 0 0 0 0 0
     VU 64
     TRACKHEIGHT 0 0 0 0 0 0 0
@@ -231,20 +230,63 @@
     PERF 0
     MIDIOUT -1
     MAINSEND 1 0
+    <VOLENV2
+      EGUID {3C190CD6-ABA7-490C-9598-A83E4715DE17}
+      ACT 1 -1
+      VIS 1 1 1
+      LANEHEIGHT 0 0
+      ARM 1
+      DEFSHAPE 0 -1 -1
+      VOLTYPE 1
+      PT 0 0.92 2
+      PT 327.27272727 0.92760448 2
+      PT 654.54545455 0.9351401 2
+      PT 981.81818182 0.9425386 2
+      PT 1309.09090909 0.949733 2
+      PT 1636.36363636 0.95665812 2
+      PT 1963.63636364 0.96325127 2
+      PT 2290.90909091 0.96945272 2
+      PT 2618.18181818 0.97520632 2
+      PT 2945.45454545 0.98045997 2
+      PT 3272.72727273 0.98516608 2
+      PT 3600 0.98928203 2
+      PT 3927.27272727 0.99277056 2
+      PT 4254.54545455 0.99560007 2
+      PT 4581.81818182 0.99774493 2
+      PT 4909.09090909 0.99918572 2
+      PT 5236.36363636 0.99990939 2
+      PT 5563.63636364 0.99990939 2
+      PT 5890.90909091 0.99918572 2
+      PT 6218.18181818 0.99774493 2
+      PT 6545.45454545 0.99560007 2
+      PT 6872.72727273 0.99277056 2
+      PT 7200 0.98928203 2
+      PT 7527.27272727 0.98516608 2
+      PT 7854.54545455 0.98045997 2
+      PT 8181.81818182 0.97520632 2
+      PT 8509.09090909 0.96945272 2
+      PT 8836.36363636 0.96325127 2
+      PT 9163.63636364 0.95665812 2
+      PT 9490.90909091 0.949733 2
+      PT 9818.18181818 0.9425386 2
+      PT 10145.45454545 0.9351401 2
+      PT 10472.72727273 0.92760448 2
+      PT 10800 0.92 2
+    >
     <ITEM
       POSITION 0
       SNAPOFFS 0
-      LENGTH 200.064
+      LENGTH 10800
       LOOP 1
       ALLTAKES 0
       FADEIN 1 0 0 1 0 0 0
       FADEOUT 1 0 0 1 0 0 0
       MUTE 0 0
-      SEL 0
+      SEL 1
       IGUID {90C49B9D-6B66-4683-88D5-BE751CCC0D63}
       IID 5
       NAME 197192_Rain,_Vegetation,_Light_Rain_In_A_Field_Of_Bananas_Trees_03.mp3
-      VOLPAN 1.0 0 1 -1
+      VOLPAN 1 0 1 -1
       SOFFS 0
       PLAYRATE 1 1 0 -1 0 0.0025
       CHANMODE 0
@@ -302,6 +344,710 @@
         FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\rain_sound\3_impact\rain_on_leaves\152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3" 1
       >
     >
+    <ITEM
+      POSITION 92.54278945599491
+      SNAPOFFS 0
+      LENGTH 180.024
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {AAC74139-76D8-4088-AE75-709105B1B95C}
+      IID 2
+      NAME 152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3
+      VOLPAN 0.5 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {96A1825F-3D31-44AB-9DBE-6C7F815BEE04}
+      <SOURCE MP3
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\rain_sound\3_impact\rain_on_leaves\152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3" 1
+      >
+    >
+    <ITEM
+      POSITION 454.75278873992642
+      SNAPOFFS 0
+      LENGTH 180.024
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {AAC74139-76D8-4088-AE75-709105B1B95C}
+      IID 2
+      NAME 152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3
+      VOLPAN 0.5 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {96A1825F-3D31-44AB-9DBE-6C7F815BEE04}
+      <SOURCE MP3
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\rain_sound\3_impact\rain_on_leaves\152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3" 1
+      >
+    >
+    <ITEM
+      POSITION 920.30713177674147
+      SNAPOFFS 0
+      LENGTH 180.024
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {AAC74139-76D8-4088-AE75-709105B1B95C}
+      IID 2
+      NAME 152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3
+      VOLPAN 0.5 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {96A1825F-3D31-44AB-9DBE-6C7F815BEE04}
+      <SOURCE MP3
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\rain_sound\3_impact\rain_on_leaves\152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3" 1
+      >
+    >
+    <ITEM
+      POSITION 1368.367155767261
+      SNAPOFFS 0
+      LENGTH 180.024
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {AAC74139-76D8-4088-AE75-709105B1B95C}
+      IID 2
+      NAME 152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3
+      VOLPAN 0.5 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {96A1825F-3D31-44AB-9DBE-6C7F815BEE04}
+      <SOURCE MP3
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\rain_sound\3_impact\rain_on_leaves\152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3" 1
+      >
+    >
+    <ITEM
+      POSITION 1591.7339549719954
+      SNAPOFFS 0
+      LENGTH 180.024
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {AAC74139-76D8-4088-AE75-709105B1B95C}
+      IID 2
+      NAME 152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3
+      VOLPAN 0.5 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {96A1825F-3D31-44AB-9DBE-6C7F815BEE04}
+      <SOURCE MP3
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\rain_sound\3_impact\rain_on_leaves\152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3" 1
+      >
+    >
+    <ITEM
+      POSITION 2014.0022099312691
+      SNAPOFFS 0
+      LENGTH 180.024
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {AAC74139-76D8-4088-AE75-709105B1B95C}
+      IID 2
+      NAME 152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3
+      VOLPAN 0.5 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {96A1825F-3D31-44AB-9DBE-6C7F815BEE04}
+      <SOURCE MP3
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\rain_sound\3_impact\rain_on_leaves\152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3" 1
+      >
+    >
+    <ITEM
+      POSITION 2253.8804781329718
+      SNAPOFFS 0
+      LENGTH 180.024
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {AAC74139-76D8-4088-AE75-709105B1B95C}
+      IID 2
+      NAME 152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3
+      VOLPAN 0.5 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {96A1825F-3D31-44AB-9DBE-6C7F815BEE04}
+      <SOURCE MP3
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\rain_sound\3_impact\rain_on_leaves\152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3" 1
+      >
+    >
+    <ITEM
+      POSITION 2435.9621733934196
+      SNAPOFFS 0
+      LENGTH 180.024
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {AAC74139-76D8-4088-AE75-709105B1B95C}
+      IID 2
+      NAME 152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3
+      VOLPAN 0.5 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {96A1825F-3D31-44AB-9DBE-6C7F815BEE04}
+      <SOURCE MP3
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\rain_sound\3_impact\rain_on_leaves\152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3" 1
+      >
+    >
+    <ITEM
+      POSITION 2703.9551391310097
+      SNAPOFFS 0
+      LENGTH 180.024
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {AAC74139-76D8-4088-AE75-709105B1B95C}
+      IID 2
+      NAME 152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3
+      VOLPAN 0.5 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {96A1825F-3D31-44AB-9DBE-6C7F815BEE04}
+      <SOURCE MP3
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\rain_sound\3_impact\rain_on_leaves\152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3" 1
+      >
+    >
+    <ITEM
+      POSITION 2924.2775377787361
+      SNAPOFFS 0
+      LENGTH 180.024
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {AAC74139-76D8-4088-AE75-709105B1B95C}
+      IID 2
+      NAME 152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3
+      VOLPAN 0.5 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {96A1825F-3D31-44AB-9DBE-6C7F815BEE04}
+      <SOURCE MP3
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\rain_sound\3_impact\rain_on_leaves\152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3" 1
+      >
+    >
+    <ITEM
+      POSITION 3176.099131565793
+      SNAPOFFS 0
+      LENGTH 180.024
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {AAC74139-76D8-4088-AE75-709105B1B95C}
+      IID 2
+      NAME 152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3
+      VOLPAN 0.5 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {96A1825F-3D31-44AB-9DBE-6C7F815BEE04}
+      <SOURCE MP3
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\rain_sound\3_impact\rain_on_leaves\152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3" 1
+      >
+    >
+    <ITEM
+      POSITION 3356.099131565793
+      SNAPOFFS 0
+      LENGTH 180.024
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {AAC74139-76D8-4088-AE75-709105B1B95C}
+      IID 2
+      NAME 152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3
+      VOLPAN 0.5 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {96A1825F-3D31-44AB-9DBE-6C7F815BEE04}
+      <SOURCE MP3
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\rain_sound\3_impact\rain_on_leaves\152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3" 1
+      >
+    >
+    <ITEM
+      POSITION 3729.0369822779035
+      SNAPOFFS 0
+      LENGTH 180.024
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {AAC74139-76D8-4088-AE75-709105B1B95C}
+      IID 2
+      NAME 152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3
+      VOLPAN 0.5 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {96A1825F-3D31-44AB-9DBE-6C7F815BEE04}
+      <SOURCE MP3
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\rain_sound\3_impact\rain_on_leaves\152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3" 1
+      >
+    >
+    <ITEM
+      POSITION 4084.2467353068591
+      SNAPOFFS 0
+      LENGTH 180.024
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {AAC74139-76D8-4088-AE75-709105B1B95C}
+      IID 2
+      NAME 152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3
+      VOLPAN 0.5 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {96A1825F-3D31-44AB-9DBE-6C7F815BEE04}
+      <SOURCE MP3
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\rain_sound\3_impact\rain_on_leaves\152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3" 1
+      >
+    >
+    <ITEM
+      POSITION 4341.2384386997401
+      SNAPOFFS 0
+      LENGTH 180.024
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {AAC74139-76D8-4088-AE75-709105B1B95C}
+      IID 2
+      NAME 152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3
+      VOLPAN 0.5 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {96A1825F-3D31-44AB-9DBE-6C7F815BEE04}
+      <SOURCE MP3
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\rain_sound\3_impact\rain_on_leaves\152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3" 1
+      >
+    >
+    <ITEM
+      POSITION 4762.5364823198897
+      SNAPOFFS 0
+      LENGTH 180.024
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {AAC74139-76D8-4088-AE75-709105B1B95C}
+      IID 2
+      NAME 152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3
+      VOLPAN 0.5 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {96A1825F-3D31-44AB-9DBE-6C7F815BEE04}
+      <SOURCE MP3
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\rain_sound\3_impact\rain_on_leaves\152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3" 1
+      >
+    >
+    <ITEM
+      POSITION 5109.8486029130272
+      SNAPOFFS 0
+      LENGTH 180.024
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {AAC74139-76D8-4088-AE75-709105B1B95C}
+      IID 2
+      NAME 152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3
+      VOLPAN 0.5 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {96A1825F-3D31-44AB-9DBE-6C7F815BEE04}
+      <SOURCE MP3
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\rain_sound\3_impact\rain_on_leaves\152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3" 1
+      >
+    >
+    <ITEM
+      POSITION 5552.3531334548561
+      SNAPOFFS 0
+      LENGTH 180.024
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {AAC74139-76D8-4088-AE75-709105B1B95C}
+      IID 2
+      NAME 152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3
+      VOLPAN 0.5 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {96A1825F-3D31-44AB-9DBE-6C7F815BEE04}
+      <SOURCE MP3
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\rain_sound\3_impact\rain_on_leaves\152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3" 1
+      >
+    >
+    <ITEM
+      POSITION 6082.1737024231261
+      SNAPOFFS 0
+      LENGTH 180.024
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {AAC74139-76D8-4088-AE75-709105B1B95C}
+      IID 2
+      NAME 152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3
+      VOLPAN 0.5 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {96A1825F-3D31-44AB-9DBE-6C7F815BEE04}
+      <SOURCE MP3
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\rain_sound\3_impact\rain_on_leaves\152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3" 1
+      >
+    >
+    <ITEM
+      POSITION 6262.1737024231261
+      SNAPOFFS 0
+      LENGTH 180.024
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {AAC74139-76D8-4088-AE75-709105B1B95C}
+      IID 2
+      NAME 152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3
+      VOLPAN 0.5 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {96A1825F-3D31-44AB-9DBE-6C7F815BEE04}
+      <SOURCE MP3
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\rain_sound\3_impact\rain_on_leaves\152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3" 1
+      >
+    >
+    <ITEM
+      POSITION 6655.6179196982321
+      SNAPOFFS 0
+      LENGTH 180.024
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {AAC74139-76D8-4088-AE75-709105B1B95C}
+      IID 2
+      NAME 152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3
+      VOLPAN 0.5 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {96A1825F-3D31-44AB-9DBE-6C7F815BEE04}
+      <SOURCE MP3
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\rain_sound\3_impact\rain_on_leaves\152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3" 1
+      >
+    >
+    <ITEM
+      POSITION 7029.2357925887709
+      SNAPOFFS 0
+      LENGTH 180.024
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {AAC74139-76D8-4088-AE75-709105B1B95C}
+      IID 2
+      NAME 152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3
+      VOLPAN 0.5 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {96A1825F-3D31-44AB-9DBE-6C7F815BEE04}
+      <SOURCE MP3
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\rain_sound\3_impact\rain_on_leaves\152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3" 1
+      >
+    >
+    <ITEM
+      POSITION 7419.5828280203978
+      SNAPOFFS 0
+      LENGTH 180.024
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {AAC74139-76D8-4088-AE75-709105B1B95C}
+      IID 2
+      NAME 152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3
+      VOLPAN 0.5 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {96A1825F-3D31-44AB-9DBE-6C7F815BEE04}
+      <SOURCE MP3
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\rain_sound\3_impact\rain_on_leaves\152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3" 1
+      >
+    >
+    <ITEM
+      POSITION 7890.0824273784292
+      SNAPOFFS 0
+      LENGTH 180.024
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {AAC74139-76D8-4088-AE75-709105B1B95C}
+      IID 2
+      NAME 152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3
+      VOLPAN 0.5 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {96A1825F-3D31-44AB-9DBE-6C7F815BEE04}
+      <SOURCE MP3
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\rain_sound\3_impact\rain_on_leaves\152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3" 1
+      >
+    >
+    <ITEM
+      POSITION 8070.0824273784292
+      SNAPOFFS 0
+      LENGTH 180.024
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {AAC74139-76D8-4088-AE75-709105B1B95C}
+      IID 2
+      NAME 152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3
+      VOLPAN 0.5 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {96A1825F-3D31-44AB-9DBE-6C7F815BEE04}
+      <SOURCE MP3
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\rain_sound\3_impact\rain_on_leaves\152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3" 1
+      >
+    >
+    <ITEM
+      POSITION 8605.7499092851358
+      SNAPOFFS 0
+      LENGTH 180.024
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {AAC74139-76D8-4088-AE75-709105B1B95C}
+      IID 2
+      NAME 152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3
+      VOLPAN 0.5 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {96A1825F-3D31-44AB-9DBE-6C7F815BEE04}
+      <SOURCE MP3
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\rain_sound\3_impact\rain_on_leaves\152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3" 1
+      >
+    >
+    <ITEM
+      POSITION 8893.3007899674631
+      SNAPOFFS 0
+      LENGTH 180.024
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {AAC74139-76D8-4088-AE75-709105B1B95C}
+      IID 2
+      NAME 152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3
+      VOLPAN 0.5 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {96A1825F-3D31-44AB-9DBE-6C7F815BEE04}
+      <SOURCE MP3
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\rain_sound\3_impact\rain_on_leaves\152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3" 1
+      >
+    >
+    <ITEM
+      POSITION 9156.829337725454
+      SNAPOFFS 0
+      LENGTH 180.024
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {AAC74139-76D8-4088-AE75-709105B1B95C}
+      IID 2
+      NAME 152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3
+      VOLPAN 0.5 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {96A1825F-3D31-44AB-9DBE-6C7F815BEE04}
+      <SOURCE MP3
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\rain_sound\3_impact\rain_on_leaves\152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3" 1
+      >
+    >
+    <ITEM
+      POSITION 9623.9956073513767
+      SNAPOFFS 0
+      LENGTH 180.024
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {AAC74139-76D8-4088-AE75-709105B1B95C}
+      IID 2
+      NAME 152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3
+      VOLPAN 0.5 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {96A1825F-3D31-44AB-9DBE-6C7F815BEE04}
+      <SOURCE MP3
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\rain_sound\3_impact\rain_on_leaves\152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3" 1
+      >
+    >
+    <ITEM
+      POSITION 9922.7797587689292
+      SNAPOFFS 0
+      LENGTH 180.024
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {AAC74139-76D8-4088-AE75-709105B1B95C}
+      IID 2
+      NAME 152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3
+      VOLPAN 0.5 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {96A1825F-3D31-44AB-9DBE-6C7F815BEE04}
+      <SOURCE MP3
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\rain_sound\3_impact\rain_on_leaves\152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3" 1
+      >
+    >
+    <ITEM
+      POSITION 10260.650320512872
+      SNAPOFFS 0
+      LENGTH 180.024
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {AAC74139-76D8-4088-AE75-709105B1B95C}
+      IID 2
+      NAME 152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3
+      VOLPAN 0.5 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {96A1825F-3D31-44AB-9DBE-6C7F815BEE04}
+      <SOURCE MP3
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\rain_sound\3_impact\rain_on_leaves\152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3" 1
+      >
+    >
+    <ITEM
+      POSITION 10440.650320512872
+      SNAPOFFS 0
+      LENGTH 180.024
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {AAC74139-76D8-4088-AE75-709105B1B95C}
+      IID 2
+      NAME 152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3
+      VOLPAN 0.5 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {96A1825F-3D31-44AB-9DBE-6C7F815BEE04}
+      <SOURCE MP3
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\rain_sound\3_impact\rain_on_leaves\152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3" 1
+      >
+    >
   >
   <TRACK {AF6F336E-36F3-43E6-A03C-B1AF5319CF2D}
     NAME 4_water
@@ -309,7 +1055,7 @@
     BEAT -1
     AUTOMODE 0
     PANLAWFLAGS 3
-    VOLPAN 1.0 0 -1 -1 1
+    VOLPAN 1 0 -1 -1 1
     MUTESOLO 0 0 0
     IPHASE 0
     PLAYOFFS 0 1
@@ -359,7 +1105,7 @@
     <ITEM
       POSITION 0
       SNAPOFFS 0
-      LENGTH 125.04
+      LENGTH 10800
       LOOP 1
       ALLTAKES 0
       FADEIN 1 0 0 1 0 0 0
@@ -413,7 +1159,7 @@
       <VST "VST: ReaVerbate (Cockos)" reaverbate.dll 0 "" 1920361016<56535472766238726561766572626174> ""
         OGJ2cu9e7f4CAAAAAQAAAAAAAAACAAAAAAAAAAIAAAABAAAAAAAAAAIAAAAAAAAAKAAAAAAAAAAAABAA
         776t3g3wrd5DAgA/AACAP9oEPD817P8+AACAPwAAAAAAAIA/AAAAAA==
-        AAAQAAAA
+        AFByb2dyYW0gMQAQAAAA
       >
       FLOATPOS 0 0 0 0
       FXID {6F282DA1-E509-409C-943E-0845CC47A917}
@@ -427,6 +1173,226 @@
       ALLTAKES 0
       FADEIN 1 0 0 1 0 0 0
       FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {7E175114-6323-4816-9442-A7E6BAD2F3A6}
+      IID 3
+      NAME api_mvi6918_bird_distant.mp3
+      VOLPAN 0.3 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {C0A467CB-782E-4CE5-A4A1-48B1DDF71CFD}
+      <SOURCE MP3
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\elevenlabs_sound\bird\api_mvi6918_bird_distant.mp3" 1
+      >
+    >
+    <ITEM
+      POSITION 441.65917765433215
+      SNAPOFFS 0
+      LENGTH 16.039184
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {7E175114-6323-4816-9442-A7E6BAD2F3A6}
+      IID 3
+      NAME api_mvi6918_bird_distant.mp3
+      VOLPAN 0.3 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {C0A467CB-782E-4CE5-A4A1-48B1DDF71CFD}
+      <SOURCE MP3
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\elevenlabs_sound\bird\api_mvi6918_bird_distant.mp3" 1
+      >
+    >
+    <ITEM
+      POSITION 1216.6755897302448
+      SNAPOFFS 0
+      LENGTH 16.039184
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {7E175114-6323-4816-9442-A7E6BAD2F3A6}
+      IID 3
+      NAME api_mvi6918_bird_distant.mp3
+      VOLPAN 0.3 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {C0A467CB-782E-4CE5-A4A1-48B1DDF71CFD}
+      <SOURCE MP3
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\elevenlabs_sound\bird\api_mvi6918_bird_distant.mp3" 1
+      >
+    >
+    <ITEM
+      POSITION 2383.0780578735594
+      SNAPOFFS 0
+      LENGTH 16.039184
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {7E175114-6323-4816-9442-A7E6BAD2F3A6}
+      IID 3
+      NAME api_mvi6918_bird_distant.mp3
+      VOLPAN 0.3 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {C0A467CB-782E-4CE5-A4A1-48B1DDF71CFD}
+      <SOURCE MP3
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\elevenlabs_sound\bird\api_mvi6918_bird_distant.mp3" 1
+      >
+    >
+    <ITEM
+      POSITION 3676.6033378742741
+      SNAPOFFS 0
+      LENGTH 16.039184
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {7E175114-6323-4816-9442-A7E6BAD2F3A6}
+      IID 3
+      NAME api_mvi6918_bird_distant.mp3
+      VOLPAN 0.3 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {C0A467CB-782E-4CE5-A4A1-48B1DDF71CFD}
+      <SOURCE MP3
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\elevenlabs_sound\bird\api_mvi6918_bird_distant.mp3" 1
+      >
+    >
+    <ITEM
+      POSITION 4901.2900798669943
+      SNAPOFFS 0
+      LENGTH 16.039184
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {7E175114-6323-4816-9442-A7E6BAD2F3A6}
+      IID 3
+      NAME api_mvi6918_bird_distant.mp3
+      VOLPAN 0.3 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {C0A467CB-782E-4CE5-A4A1-48B1DDF71CFD}
+      <SOURCE MP3
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\elevenlabs_sound\bird\api_mvi6918_bird_distant.mp3" 1
+      >
+    >
+    <ITEM
+      POSITION 5693.2899210587666
+      SNAPOFFS 0
+      LENGTH 16.039184
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {7E175114-6323-4816-9442-A7E6BAD2F3A6}
+      IID 3
+      NAME api_mvi6918_bird_distant.mp3
+      VOLPAN 0.3 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {C0A467CB-782E-4CE5-A4A1-48B1DDF71CFD}
+      <SOURCE MP3
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\elevenlabs_sound\bird\api_mvi6918_bird_distant.mp3" 1
+      >
+    >
+    <ITEM
+      POSITION 6696.428935300838
+      SNAPOFFS 0
+      LENGTH 16.039184
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {7E175114-6323-4816-9442-A7E6BAD2F3A6}
+      IID 3
+      NAME api_mvi6918_bird_distant.mp3
+      VOLPAN 0.3 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {C0A467CB-782E-4CE5-A4A1-48B1DDF71CFD}
+      <SOURCE MP3
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\elevenlabs_sound\bird\api_mvi6918_bird_distant.mp3" 1
+      >
+    >
+    <ITEM
+      POSITION 8032.7289360535815
+      SNAPOFFS 0
+      LENGTH 16.039184
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {7E175114-6323-4816-9442-A7E6BAD2F3A6}
+      IID 3
+      NAME api_mvi6918_bird_distant.mp3
+      VOLPAN 0.3 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {C0A467CB-782E-4CE5-A4A1-48B1DDF71CFD}
+      <SOURCE MP3
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\elevenlabs_sound\bird\api_mvi6918_bird_distant.mp3" 1
+      >
+    >
+    <ITEM
+      POSITION 8850.9435867413122
+      SNAPOFFS 0
+      LENGTH 16.039184
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {7E175114-6323-4816-9442-A7E6BAD2F3A6}
+      IID 3
+      NAME api_mvi6918_bird_distant.mp3
+      VOLPAN 0.3 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {C0A467CB-782E-4CE5-A4A1-48B1DDF71CFD}
+      <SOURCE MP3
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\elevenlabs_sound\bird\api_mvi6918_bird_distant.mp3" 1
+      >
+    >
+    <ITEM
+      POSITION 10135.633656196973
+      SNAPOFFS 0
+      LENGTH 16.039184
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
       MUTE 0 0
       SEL 0
       IGUID {7E175114-6323-4816-9442-A7E6BAD2F3A6}
@@ -471,7 +1437,7 @@
     <ITEM
       POSITION 0
       SNAPOFFS 0
-      LENGTH 61.032
+      LENGTH 10800
       LOOP 1
       ALLTAKES 0
       FADEIN 1 0 0 1 0 0 0
@@ -497,8 +1463,8 @@
     BEAT -1
     AUTOMODE 0
     PANLAWFLAGS 3
-    VOLPAN 0.0 0 -1 -1 1
-    MUTESOLO 1 0 0
+    VOLPAN 0 0 -1 -1 1
+    MUTESOLO 0 0 0
     IPHASE 0
     PLAYOFFS 0 1
     ISBUS 2 -1
@@ -520,7 +1486,7 @@
     <ITEM
       POSITION 0
       SNAPOFFS 0
-      LENGTH 7.223883
+      LENGTH 10800
       LOOP 1
       ALLTAKES 0
       FADEIN 1 0 0 1 0 0 0
@@ -530,7 +1496,7 @@
       IGUID {3262842D-9BE5-43E3-A73D-8FA86EF158B9}
       IID 1
       NAME MVI_6888_loop_8_fade_0.5.mp4
-      VOLPAN 0.0 0 1 -1
+      VOLPAN 0 0 1 -1
       SOFFS 0
       PLAYRATE 1 1 0 -1 0 0.0025
       CHANMODE 0
