@@ -1,4 +1,4 @@
-<REAPER_PROJECT 0.1 "7.48/macOS-arm64" 1782457378
+<REAPER_PROJECT 0.1 "7.48/macOS-arm64" 1782471016
   <NOTES 0 2
   >
   RIPPLE 0 0
@@ -19,9 +19,9 @@
   VIDEO_CONFIG 0 0 65792
   PANMODE 3
   PANLAWFLAGS 3
-  CURSOR 24
-  ZOOM 17.99303088412844 0 0
-  VZOOMEX 6 0
+  CURSOR 36
+  ZOOM 3.97625452603206 0 0
+  VZOOMEX 6 132
   USE_REC_CFG 0
   RECMODE 1
   SMPTESYNC 0 30 100 40 1000 300 0 0 1 0 0
@@ -34,7 +34,7 @@
   <APPLYFX_CFG
   >
   RENDER_FILE ""
-  RENDER_PATTERN ""
+  RENDER_PATTERN output/$project
   RENDER_FMT 0 2 0
   RENDER_1X 0
   RENDER_RANGE 1 0 0 0 1000
@@ -50,7 +50,7 @@
   TAKELANE 1
   SAMPLERATE 48000 1 0
   <RENDER_CFG
-    ZXZhdxgAAQ==
+    RlZBWAAAAAAAAAAAMHUAAAAAAACAAAAAAA8AAHAIAAAAAPBBAQAAAF8AAAAAAA==
   >
   LOCK 1
   <METRONOME 6 2
@@ -68,8 +68,8 @@
   GLOBAL_AUTO -1
   TEMPO 60 4 4 1
   PLAYRATE 1 0 0.25 4
-  SELECTION 0 0
-  SELECTION2 0 0
+  SELECTION 60 0
+  SELECTION2 60 0
   MASTERAUTOMODE 0
   MASTERTRACKHEIGHT 0 0
   MASTERPEAKCOL 16576
@@ -106,7 +106,7 @@
     BEAT -1
     AUTOMODE 0
     PANLAWFLAGS 3
-    VOLPAN 1 0 -1 -1 1
+    VOLPAN 1.80666240598934 0 -1 -1 1
     MUTESOLO 0 0 0
     IPHASE 0
     PLAYOFFS 0 1
@@ -114,7 +114,7 @@
     BUSCOMP 0 0 0 0 0
     SHOWINMIX 1 0.6667 0.5 1 0.5 0 0 0 0
     FIXEDLANES 9 0 0 0 0
-    SEL 1
+    SEL 0
     REC 0 0 1 0 0 0 0 0
     VU 64
     TRACKHEIGHT 0 0 0 0 0 0 0
@@ -232,7 +232,10 @@
       ARM 1
       DEFSHAPE 0 -1 -1
       VOLTYPE 1
-      PT 0 0.92 2
+      PT 0 0.92000279 5 2
+      PT 149.76940634 0.92348675 5 2
+      PT 149.76990634 0.92346834 5 2
+      PT 221.76990634 0.92513972 5 2
       PT 327.27272727 0.92760448 2
       PT 654.54545455 0.9351401 2
       PT 981.81818182 0.9425386 2
@@ -277,16 +280,16 @@
       FADEOUT 1 0 0 1 0 0 0
       MUTE 0 0
       SEL 0
-      IGUID {3F423A8A-8469-4886-89C4-D99CC9710600}
-      IID 5
-      NAME 197192_Rain,_Vegetation,_Light_Rain_In_A_Field_Of_Bananas_Trees_03.mp3
+      IGUID {FF7CE169-BA03-C742-90A9-B50ED975DBAF}
+      IID 60
+      NAME 215830_Rain,_General,_Tropical,_Heavy_Monsoon_Rain,_Porch_03-glued.wav
       VOLPAN 1 0 1 -1
       SOFFS 0
       PLAYRATE 1 1 0 -1 0 0.0025
       CHANMODE 0
-      GUID {505E0E67-9401-40D6-9A04-01BC31872CEF}
-      <SOURCE MP3
-        FILE "/Users/angel/Documents/workspace/relaxASMR/assets/sound_effect/rain_sound/2_rain/light_rain/197192_Rain,_Vegetation,_Light_Rain_In_A_Field_Of_Bananas_Trees_03.mp3" 1
+      GUID {31A27119-03F4-7D4B-9673-F45E862992C5}
+      <SOURCE WAVE
+        FILE "Audio Files/215830_Rain,_General,_Tropical,_Heavy_Monsoon_Rain,_Porch_03-glued.wav"
       >
     >
   >
@@ -318,33 +321,11 @@
     <ITEM
       POSITION 0
       SNAPOFFS 0
-      LENGTH 180.024
+      LENGTH 180
       LOOP 0
       ALLTAKES 0
       FADEIN 1 0 0 1 0 0 0
       FADEOUT 1 0 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {49E9E77F-978D-4E21-88F6-17B78E7D4AD7}
-      IID 2
-      NAME 152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3
-      VOLPAN 0.5 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {2CF523D9-A2B0-4640-AC1E-F2B2F5F0F8CD}
-      <SOURCE MP3
-        FILE "/Users/angel/Documents/workspace/relaxASMR/assets/sound_effect/rain_sound/3_impact/rain_on_leaves/152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3" 1
-      >
-    >
-    <ITEM
-      POSITION 67.07768933114517
-      SNAPOFFS 0
-      LENGTH 180.024
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
       MUTE 0 0
       SEL 0
       IGUID {49E9E77F-978D-4E21-88F6-17B78E7D4AD7}
@@ -1056,7 +1037,7 @@
     BUSCOMP 0 0 0 0 0
     SHOWINMIX 1 0.6667 0.5 1 0.5 0 0 0 0
     FIXEDLANES 9 0 0 0 0
-    SEL 0
+    SEL 1
     REC 0 0 1 0 0 0 0 0
     VU 64
     TRACKHEIGHT 0 0 0 0 0 0 0
@@ -1155,204 +1136,6 @@
       FXID {67D32E29-43D7-4462-9688-2386406516C5}
       WAK 0 0
     >
-    <ITEM
-      POSITION 460.74823414483529
-      SNAPOFFS 0
-      LENGTH 16.039184
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {691DB624-3B48-4036-ADAF-938CA10C5169}
-      IID 3
-      NAME api_mvi6918_bird_distant.mp3
-      VOLPAN 0.25 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {311D2669-9398-4B5D-A560-100824FAB937}
-      <SOURCE MP3
-        FILE "/Users/angel/Documents/workspace/relaxASMR/assets/sound_effect/elevenlabs_sound/bird/api_mvi6918_bird_distant.mp3" 1
-      >
-    >
-    <ITEM
-      POSITION 2193.3638954013604
-      SNAPOFFS 0
-      LENGTH 16.039184
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {691DB624-3B48-4036-ADAF-938CA10C5169}
-      IID 3
-      NAME api_mvi6918_bird_distant.mp3
-      VOLPAN 0.25 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {311D2669-9398-4B5D-A560-100824FAB937}
-      <SOURCE MP3
-        FILE "/Users/angel/Documents/workspace/relaxASMR/assets/sound_effect/elevenlabs_sound/bird/api_mvi6918_bird_distant.mp3" 1
-      >
-    >
-    <ITEM
-      POSITION 3871.643678439797
-      SNAPOFFS 0
-      LENGTH 16.039184
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {691DB624-3B48-4036-ADAF-938CA10C5169}
-      IID 3
-      NAME api_mvi6918_bird_distant.mp3
-      VOLPAN 0.25 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {311D2669-9398-4B5D-A560-100824FAB937}
-      <SOURCE MP3
-        FILE "/Users/angel/Documents/workspace/relaxASMR/assets/sound_effect/elevenlabs_sound/bird/api_mvi6918_bird_distant.mp3" 1
-      >
-    >
-    <ITEM
-      POSITION 4922.0922544370687
-      SNAPOFFS 0
-      LENGTH 16.039184
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {691DB624-3B48-4036-ADAF-938CA10C5169}
-      IID 3
-      NAME api_mvi6918_bird_distant.mp3
-      VOLPAN 0.25 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {311D2669-9398-4B5D-A560-100824FAB937}
-      <SOURCE MP3
-        FILE "/Users/angel/Documents/workspace/relaxASMR/assets/sound_effect/elevenlabs_sound/bird/api_mvi6918_bird_distant.mp3" 1
-      >
-    >
-    <ITEM
-      POSITION 6028.6873740654382
-      SNAPOFFS 0
-      LENGTH 16.039184
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {691DB624-3B48-4036-ADAF-938CA10C5169}
-      IID 3
-      NAME api_mvi6918_bird_distant.mp3
-      VOLPAN 0.25 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {311D2669-9398-4B5D-A560-100824FAB937}
-      <SOURCE MP3
-        FILE "/Users/angel/Documents/workspace/relaxASMR/assets/sound_effect/elevenlabs_sound/bird/api_mvi6918_bird_distant.mp3" 1
-      >
-    >
-    <ITEM
-      POSITION 7153.9897038558001
-      SNAPOFFS 0
-      LENGTH 16.039184
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {691DB624-3B48-4036-ADAF-938CA10C5169}
-      IID 3
-      NAME api_mvi6918_bird_distant.mp3
-      VOLPAN 0.25 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {311D2669-9398-4B5D-A560-100824FAB937}
-      <SOURCE MP3
-        FILE "/Users/angel/Documents/workspace/relaxASMR/assets/sound_effect/elevenlabs_sound/bird/api_mvi6918_bird_distant.mp3" 1
-      >
-    >
-    <ITEM
-      POSITION 8271.1742375733102
-      SNAPOFFS 0
-      LENGTH 16.039184
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {691DB624-3B48-4036-ADAF-938CA10C5169}
-      IID 3
-      NAME api_mvi6918_bird_distant.mp3
-      VOLPAN 0.25 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {311D2669-9398-4B5D-A560-100824FAB937}
-      <SOURCE MP3
-        FILE "/Users/angel/Documents/workspace/relaxASMR/assets/sound_effect/elevenlabs_sound/bird/api_mvi6918_bird_distant.mp3" 1
-      >
-    >
-    <ITEM
-      POSITION 8991.1742375733102
-      SNAPOFFS 0
-      LENGTH 16.039184
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {691DB624-3B48-4036-ADAF-938CA10C5169}
-      IID 3
-      NAME api_mvi6918_bird_distant.mp3
-      VOLPAN 0.25 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {311D2669-9398-4B5D-A560-100824FAB937}
-      <SOURCE MP3
-        FILE "/Users/angel/Documents/workspace/relaxASMR/assets/sound_effect/elevenlabs_sound/bird/api_mvi6918_bird_distant.mp3" 1
-      >
-    >
-    <ITEM
-      POSITION 10654.067202654431
-      SNAPOFFS 0
-      LENGTH 16.039184
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0.08 0 1 0 0 0
-      FADEOUT 1 0.08 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {691DB624-3B48-4036-ADAF-938CA10C5169}
-      IID 3
-      NAME api_mvi6918_bird_distant.mp3
-      VOLPAN 0.25 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {311D2669-9398-4B5D-A560-100824FAB937}
-      <SOURCE MP3
-        FILE "/Users/angel/Documents/workspace/relaxASMR/assets/sound_effect/elevenlabs_sound/bird/api_mvi6918_bird_distant.mp3" 1
-      >
-    >
   >
   <TRACK {5170CF2A-CD64-497A-83E4-0C77B2C4F4D5}
     NAME 7_comfort
@@ -1389,16 +1172,16 @@
       FADEOUT 1 0 0 1 0 0 0
       MUTE 0 0
       SEL 0
-      IGUID {C6BF8B3A-AF86-4DD1-9EBA-9ABC97B11986}
-      IID 7
-      NAME 171322_Rain,_Cloth,_Light,_Under_Umbrella,_Close.mp3
-      VOLPAN 0.45 0 1 -1
+      IGUID {E9781AA5-CB0A-F34D-9D38-D109AA6999A8}
+      IID 52
+      NAME NPX3ZYG_Rain_Under_Umbrella_Background.mp3
+      VOLPAN 1 0 1 -1
       SOFFS 0
       PLAYRATE 1 1 0 -1 0 0.0025
       CHANMODE 0
-      GUID {28EE9045-46F1-4FA4-A704-F17CEF4B8413}
+      GUID {578B69CB-F28F-9344-9606-1DDD3291D692}
       <SOURCE MP3
-        FILE "/Users/angel/Documents/workspace/relaxASMR/assets/sound_effect/rain_sound/3_impact/rain_on_umbrella/171322_Rain,_Cloth,_Light,_Under_Umbrella,_Close.mp3" 1
+        FILE "Audio Files/NPX3ZYG_Rain_Under_Umbrella_Background.mp3" 1
       >
     >
   >
@@ -1430,7 +1213,7 @@
     <ITEM
       POSITION 0
       SNAPOFFS 0
-      LENGTH 180
+      LENGTH 10800
       LOOP 1
       ALLTAKES 0
       FADEIN 1 0 0 1 0 0 0
