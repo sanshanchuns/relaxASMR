@@ -18,6 +18,14 @@ SOUND_ROOT = REPO_ROOT / "assets" / "sound_effect" / "rain_sound"
 VIDEO_ROOT = REPO_ROOT / "assets" / "loop_video" / "rain_video"
 TEMPLATE_DOC = SUBPROJECTS / "_template" / "video_analysis.md"
 SCAFFOLD_SRC = RAIN_ROOT / "scripts"  # lua + fx 模板
+REAPER_SCRIPTS = Path(__file__).resolve().parent  # Reaper/scripts（共享 ReaScript）
+SHARED_REAPER_LUA = (
+    "asmr_apply_recipe.lua",
+    "asmr_paths.lua",
+    "asmr_vol_envelope.lua",
+    "asmr_scatter_track.lua",
+    "asmr_loop_track.lua",
+)
 
 SCENE_ID_RE = re.compile(r"(MVI_\d+)", re.I)
 
@@ -433,6 +441,11 @@ def scaffold_subproject(scene_id: str) -> Path:
         dst = scripts / name
         if src.is_file() and src.resolve() != dst.resolve():
             shutil.copy2(src, dst)
+    for name in SHARED_REAPER_LUA:
+        src = REAPER_SCRIPTS / name
+        dst = scripts / name
+        if src.is_file() and src.resolve() != dst.resolve():
+            shutil.copy2(src, dst)
     fx_src = SCAFFOLD_SRC / "fx"
     fx_dest = scripts / "fx"
     if fx_src.is_dir():
@@ -447,7 +460,7 @@ def create_from_video(
     *,
     scene_id: str | None = None,
     duration_hours: float = 3,
-    media_mode: str = "wsl_unc",
+    media_mode: str = "auto",
     skip_generate: bool = False,
 ) -> Path:
     scene_id = derive_scene_id(video, scene_id)
@@ -481,11 +494,13 @@ def create_from_video(
 
     if not skip_generate:
         from generate_subproject import build_rpp, load_config, stage_rain_fx_assets
+        from media_paths import describe_media_mode
 
         config_path = sub_dir / "scripts" / "asmr_config.lua"
         loaded = load_config(config_path)
         stage_rain_fx_assets(sub_dir)
         rpp_path = sub_dir / f"{scene_id}.rpp"
+        print(f"媒体路径: {describe_media_mode(media_mode, REPO_ROOT)}")
         rpp_path.write_text(
             build_rpp(loaded, REPO_ROOT, sub_dir, media_mode),
             encoding="utf-8",

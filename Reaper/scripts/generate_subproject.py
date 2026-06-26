@@ -13,6 +13,12 @@ import uuid
 from pathlib import Path
 
 from asmr_config_parser import load_asmr_config
+from media_paths import (
+    describe_media_mode,
+    media_path_for_rpp,
+    resolve_media_mode,
+    wsl_unc_path,
+)
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SCRIPTS_DIR = Path(__file__).resolve().parent
@@ -103,14 +109,6 @@ def rpp_quote_path(path_str: str) -> str:
     return path_str.replace('"', '\\"')
 
 
-def wsl_unc_path(path: Path) -> str:
-    distro = os.environ.get("WSL_DISTRO_NAME", "Ubuntu")
-    posix = path.resolve().as_posix()
-    if posix.startswith("/"):
-        rest = posix[1:].replace("/", "\\")
-        return f"\\\\wsl.localhost\\{distro}\\{rest}"
-    return posix.replace("/", "\\")
-
 
 def source_type_for(asset: Path) -> tuple[str, str]:
     """返回 (SOURCE 类型, FILE 行尾后缀)。对齐 Demo.rpp：mp3 用 MP3 + \" 1\""""
@@ -124,36 +122,18 @@ def source_type_for(asset: Path) -> tuple[str, str]:
     return "WAVE", ""
 
 
-def stage_media(asset: Path, rpp_dir: Path, media_mode: str) -> tuple[str, str, str]:
+def stage_media(
+    asset: Path, rpp_dir: Path, media_mode: str, repo_root: Path | None = None
+) -> tuple[str, str, str]:
     """返回 (RPP FILE 路径, SOURCE 类型, FILE 行尾后缀)。不复制文件，直接引用 assets。"""
     asset = asset.resolve()
     source_type, file_suffix = source_type_for(asset)
+    mode = resolve_media_mode(media_mode, repo_root)
 
-    if media_mode in ("wsl_unc", "assets"):
+    if mode in ("wsl_unc", "assets"):
         return wsl_unc_path(asset), source_type, file_suffix
 
-    return media_path_for_rpp(asset, rpp_dir, media_mode), source_type, file_suffix
-
-
-def media_path_for_rpp(asset: Path, rpp_dir: Path, path_mode: str) -> str:
-    """RPP 内 FILE 路径。Windows Reaper + WSL 文件请用 relative 或 wsl_unc。"""
-    asset = asset.resolve()
-    rpp_dir = rpp_dir.resolve()
-
-    if path_mode == "wsl_unc":
-        distro = os.environ.get("WSL_DISTRO_NAME", "Ubuntu")
-        posix = asset.as_posix()
-        if posix.startswith("/"):
-            rest = posix[1:].replace("/", "\\")
-            return f"\\\\wsl.localhost\\{distro}\\{rest}"
-        return posix.replace("/", "\\")
-
-    if path_mode == "absolute":
-        return asset.as_posix()
-
-    # relative（默认）：相对 .rpp 所在目录，Windows Reaper 通过 \\wsl$ 打开时可解析
-    rel = os.path.relpath(asset, rpp_dir).replace("/", "\\")
-    return rel
+    return media_path_for_rpp(asset, rpp_dir, mode, repo_root), source_type, file_suffix
 
 
 def make_track(
@@ -321,9 +301,10 @@ def group_js_ref(out_dir: Path, repo_root: Path, media_mode: str) -> str:
     """RPP 内 JS 引用：优先 Effects 名，备用工程内路径。"""
     staged = out_dir / "scripts" / "fx" / "asmr_sleep_hf_eq.jsfx"
     if staged.is_file():
-        if media_mode in ("wsl_unc", "assets"):
+        mode = resolve_media_mode(media_mode, repo_root)
+        if mode in ("wsl_unc", "assets"):
             return wsl_unc_path(staged)
-        return media_path_for_rpp(staged, out_dir, media_mode)
+        return media_path_for_rpp(staged, out_dir, mode, repo_root)
     return GROUP_JS_EQ_NAME
 
 
@@ -369,7 +350,7 @@ def make_item(
     )
 
 
-def build_rpp(cfg: dict, repo_root: Path, rpp_dir: Path, media_mode: str = "wsl_unc") -> str:
+def build_rpp(cfg: dict, repo_root: Path, rpp_dir: Path, media_mode: str = "auto") -> str:
     hours = float(cfg.get("duration_hours", 3))
     total_sec = hours * 3600
     maxprojlen = int(total_sec)
@@ -493,7 +474,7 @@ def build_rpp(cfg: dict, repo_root: Path, rpp_dir: Path, media_mode: str = "wsl_
         track_names[video["track"]] = video.get("id", "video")
         track_vols[video["track"]] = VIDEO_TRACK_VOL
         vp = repo_root / video["path"]
-        file_ref, src_type, file_suffix = stage_media(vp, rpp_dir, media_mode)
+        file_ref, src_type, file_suffix = stage_media(vp, rpp_dir, media_mode, repo_root)
         vp_len = media_duration(vp)
         tracks_by_num[video["track"]].append(
             make_item(
@@ -516,7 +497,7 @@ def build_rpp(cfg: dict, repo_root: Path, rpp_dir: Path, media_mode: str = "wsl_
         track_vols[t] = float(layer.get("vol", 1.0))
         rel = layer["paths"][0]
         ap = repo_root / rel
-        file_ref, src_type, file_suffix = stage_media(ap, rpp_dir, media_mode)
+        file_ref, src_type, file_suffix = stage_media(ap, rpp_dir, media_mode, repo_root)
         tracks_by_num[t].append(
             make_item(
                 ap.name,
@@ -538,7 +519,7 @@ def build_rpp(cfg: dict, repo_root: Path, rpp_dir: Path, media_mode: str = "wsl_
         track_vols[t] = float(layer.get("vol", 1.0))
         rel = layer["paths"][0]
         ap = repo_root / rel
-        file_ref, src_type, file_suffix = stage_media(ap, rpp_dir, media_mode)
+        file_ref, src_type, file_suffix = stage_media(ap, rpp_dir, media_mode, repo_root)
         ap_len = media_duration(ap)
         tracks_by_num[t].append(
             make_item(
@@ -621,9 +602,9 @@ def main() -> None:
     parser.add_argument("--repo", type=Path, default=REPO_ROOT)
     parser.add_argument(
         "--media-mode",
-        choices=("wsl_unc", "assets", "relative", "absolute"),
-        default="wsl_unc",
-        help="wsl_unc/assets=直接引用 assets（WSL UNC，不复制）；relative/absolute",
+        choices=("auto", "wsl_unc", "assets", "relative", "absolute"),
+        default="auto",
+        help="auto=按系统选择（Mac→absolute，Win/WSL→wsl_unc）；或显式指定",
     )
     args = parser.parse_args()
 
@@ -648,6 +629,9 @@ def main() -> None:
     rpp_path = out_dir / f"{scene_id}.rpp"
 
     stage_rain_fx_assets(out_dir)
+
+    mode_label = describe_media_mode(args.media_mode, args.repo)
+    print(f"媒体路径: {mode_label}")
 
     rpp_path.write_text(
         build_rpp(cfg, args.repo, out_dir, args.media_mode),

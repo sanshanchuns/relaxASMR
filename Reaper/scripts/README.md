@@ -10,6 +10,20 @@ Rain / Lake 等工程共用。媒体路径指向仓库 `assets/`。
 | **`asmr_scatter_track.lua`** | **只重做一条稀疏轨**（见下） |
 | **`asmr_loop_track.lua`** | **只循环一条轨**（试验素材长度时） |
 
+### 在 Reaper 里怎么运行
+
+脚本在 **`Reaper/scripts/`**；创建子工程时也会复制到 **`<场景>/scripts/`**（与 `asmr_config.lua` 同目录）。
+
+1. 打开子工程 `.rpp`（例如 `.../MVI_6923/MVI_6923.rpp`），**Ctrl+S 保存一次**
+2. 菜单 **Actions → ReaScript: Load**（或 **New/Load ReaScript**）
+3. 选 **`asmr_apply_recipe.lua`**：
+   - 子工程内：`Reaper/Projects/Rain/subprojects/<场景>/scripts/asmr_apply_recipe.lua`
+   - 或共享目录：`Reaper/scripts/asmr_apply_recipe.lua`
+4. 弹窗选 **确定**（循环+稀疏）→ 完成后 **Ctrl+S**
+5. 日志：**View → Show console**（Mac 上 **`~`** 键）
+
+> 子工程 `scripts/` 里的 `rain_setup_project.lua` 是旧版入口，**请用 `asmr_apply_recipe.lua`**（含轨 2 长时音量包络）。
+
 ## 稀疏散布：只用 `asmr_scatter_track.lua`
 
 | 场景 | 操作 |
@@ -58,6 +72,17 @@ python3 Reaper/scripts/create_rain_subproject.py \
 ```bash
 python3 Reaper/scripts/generate_subproject.py --scene MVI_6918
 ```
+
+`--media-mode` 默认 **auto**（无需手动指定）：
+
+| 运行环境 | 自动选择 | RPP 内路径示例 |
+|----------|----------|----------------|
+| macOS | `absolute` | `/Users/.../assets/...` |
+| WSL 内跑脚本 | `wsl_unc` | `\\wsl.localhost\Ubuntu\home\...` |
+| Windows + 仓库在本机盘 | `absolute` | `C:\...\assets\...` |
+| Linux 原生 | `absolute` | `/home/.../assets/...` |
+
+强制覆盖：`RELAXASMR_MEDIA_MODE=absolute` 或 `--media-mode wsl_unc`。
 
 打开 `.rpp` → **`asmr_apply_recipe.lua`**（铺循环/稀疏 + **轨 2 长时音量包络**）→ 手调 Group / Master 限幅 → 渲染 wav → [`scripts/video_render/export_mp4.sh`](../../../scripts/video_render/export_mp4.sh) 合成 mp4 → `score_mix.py`。
 

@@ -10,6 +10,8 @@
     --video assets/loop_video/rain_video/MVI_6888/MVI_6888_loop_8_fade_0.5.mp4
 
 打开 .rpp 后运行 asmr_apply_recipe.lua（铺 3h 循环/稀疏 + 轨 2 音量包络）。
+
+媒体路径默认 `--media-mode auto`：按运行环境自动选择 absolute / wsl_unc（见 README）。
 """
 
 from __future__ import annotations
@@ -47,8 +49,8 @@ def main() -> None:
     )
     parser.add_argument(
         "--media-mode",
-        choices=("wsl_unc", "assets", "relative", "absolute"),
-        default="wsl_unc",
+        choices=("auto", "wsl_unc", "assets", "relative", "absolute"),
+        default="auto",
     )
     parser.add_argument(
         "--skip-generate",
@@ -84,9 +86,16 @@ def main() -> None:
     if not args.skip_generate:
         print(f"==> 工程:   {sub / f'{scene}.rpp'}")
     print()
-    print("下一步：Reaper 打开 .rpp → 运行 asmr_apply_recipe.lua")
-    print("  · 轨 2 长时音量包络（asmr_config vol_envelope）")
-    print("  · Group 已含 ReaEQ + ReaComp · 6_life 已含 ReaVerbate")
+    apply_lua = sub / "scripts" / "asmr_apply_recipe.lua"
+    shared_lua = SCRIPT_DIR / "asmr_apply_recipe.lua"
+    print("下一步（Reaper）：")
+    print(f"  1. 打开 {sub / f'{scene}.rpp'}")
+    print("  2. Actions → ReaScript: Load → 选 asmr_apply_recipe.lua")
+    if apply_lua.is_file():
+        print(f"     {apply_lua}")
+    else:
+        print(f"     {shared_lua}")
+    print("  3. 弹窗选「确定」= 循环 + 稀疏 + 轨 2 音量包络")
 
 
 if __name__ == "__main__":
