@@ -11,7 +11,7 @@
 from __future__ import annotations
 
 import argparse
-import html
+import html as html_module
 import json
 import os
 import re
@@ -21,6 +21,12 @@ import time
 import urllib.error
 import urllib.parse
 from pathlib import Path
+
+_SCRIPTS_ROOT = Path(__file__).resolve().parents[1]
+if str(_SCRIPTS_ROOT) not in sys.path:
+    sys.path.insert(0, str(_SCRIPTS_ROOT))
+
+from cloak_browser import CloakBrowserSession, is_cloudflare_challenge
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPT_DIR.parent.parent
@@ -144,8 +150,29 @@ def api_url(path: str, creds: dict) -> str:
     return f"{API_BASE}?{urllib.parse.urlencode(params)}"
 
 
-def is_cloudflare_challenge(html: str) -> bool:
-    return "Just a moment..." in html or "cf-chl" in html
+ENVATO_ORIGIN = "https://elements.envato.com"
+ENVATO_PREVIEW_MARKERS = ("preview.m4a", "preview.mp3")
+
+
+def envato_browser_session(
+    creds: dict,
+    *,
+    profile_dir: Path | None = None,
+    headless: bool = True,
+) -> CloakBrowserSession:
+    return CloakBrowserSession(
+        profile_name="envato",
+        profile_dir=profile_dir,
+        headless=headless,
+        cookies=creds.get("cookie"),
+        cookie_domain=".elements.envato.com",
+        warm_up_url=f"{ENVATO_ORIGIN}/",
+        warm_up_wait_for="envato",
+    )
+
+
+def envato_preview_ok(text: str) -> bool:
+    return any(m in text for m in ENVATO_PREVIEW_MARKERS)
 
 
 class CloudflareChallenge(RuntimeError):
@@ -179,10 +206,14 @@ def curl_fetch(url: str, creds: dict, *, accept: str, timeout: int = 60) -> str:
 def fetch_page_html(
     url: str,
     creds: dict,
-    browser: "BrowserFetcher | None" = None,
+    browser: CloakBrowserSession | None = None,
 ) -> str:
     if browser is not None:
-        return browser.fetch_html(url)
+        return browser.fetch(
+            url,
+            wait_for="preview.m4a",
+            success_check=envato_preview_ok,
+        )
     body = curl_fetch(
         url,
         creds,
@@ -196,10 +227,10 @@ def fetch_page_html(
 def fetch_api_payload(
     url: str,
     creds: dict,
-    browser: "BrowserFetcher | None" = None,
+    browser: CloakBrowserSession | None = None,
 ) -> dict | str:
     if browser is not None:
-        body = browser.fetch_body(url)
+        body = browser.fetch_json_or_html(url, html_marker="preview.m4a")
     else:
         body = curl_fetch(url, creds, accept="application/json")
     if is_cloudflare_challenge(body):
@@ -285,7 +316,7 @@ def parse_search_html(page_html: str) -> list[dict]:
         items.append(
             {
                 "id": item_id,
-                "title": html.unescape(title or item_id),  # noqa: html module
+                "title": html_module.unescape(title or item_id),
                 "url": preview_m4a,
                 "preview_m4a": preview_m4a,
                 "preview_mp3": preview_mp3,
@@ -315,7 +346,7 @@ def fetch_search_html(
     defaults: dict,
     *,
     mode: str,
-    browser: "BrowserFetcher | None" = None,
+    browser: CloakBrowserSession | None = None,
     browser_fallback: bool = True,
 ) -> tuple[str, str]:
     prefix = defaults.get("search_path_prefix", "/sound-effects/nature-sounds")
@@ -351,9 +382,7 @@ def fetch_search_html(
             errors.append(f"{current}: {exc}")
 
     if cf_hit and browser_fallback and browser is None:
-        from browser_fetch import BrowserFetcher
-
-        fb = BrowserFetcher(creds)
+        fb = envato_browser_session(creds)
         try:
             return fetch_search_html(
                 keyword,
@@ -376,7 +405,7 @@ def search_items(
     *,
     limit: int,
     mode: str,
-    browser: "BrowserFetcher | None" = None,
+    browser: CloakBrowserSession | None = None,
     browser_fallback: bool = True,
 ) -> list[dict]:
     html, via = fetch_search_html(
@@ -459,7 +488,7 @@ def process_layer(
     global_seen: set[str],
     fetch_mode: str,
     audio_format: str,
-    browser: "BrowserFetcher | None" = None,
+    browser: CloakBrowserSession | None = None,
     browser_fallback: bool = True,
 ) -> list[dict]:
     name = spec.get("name", layer_id)
@@ -608,7 +637,7 @@ def main() -> None:
     parser.add_argument(
         "--browser-profile",
         metavar="DIR",
-        help="CloakBrowser 持久化 profile 目录（默认 .envato_browser_profile）",
+        help="CloakBrowser profile 目录（默认 scripts/cloak_browser/.profiles/envato）",
     )
     args = parser.parse_args()
 
@@ -670,21 +699,25 @@ def main() -> None:
 
     global_seen: set[str] = set()
     total = 0
-    browser: "BrowserFetcher | None" = None
+    browser: CloakBrowserSession | None = None
     browser_fallback = not args.no_browser_fallback
 
     if args.browser:
-        from browser_fetch import BrowserFetcher
-
-        profile = Path(args.browser_profile or ".envato_browser_profile")
-        if not profile.is_absolute():
-            profile = SCRIPT_DIR / profile
-        browser = BrowserFetcher(
+        profile = None
+        if args.browser_profile:
+            profile = Path(args.browser_profile)
+            if not profile.is_absolute():
+                profile = SCRIPT_DIR / profile
+        browser = envato_browser_session(
             creds,
             profile_dir=profile,
             headless=not args.headed,
         )
-        print("==> 使用 CloakBrowser 抓取（profile: {})".format(profile))
+        print(
+            "==> 使用 CloakBrowser 抓取（profile: {})".format(
+                profile or "scripts/cloak_browser/.profiles/envato"
+            )
+        )
 
     try:
         for layer_id in selected:

@@ -1,37 +1,89 @@
 {
   "defaults": {
     "per_keyword": 15,
-    "output_dir": "assets/rain_sound",
+    "output_dir": "assets/sound_effect/rain_sound",
     "search_path_prefix": "/sound-effects/nature-sounds"
   },
   "layers": {
     "1_base": {
       "name": "底噪层",
-      "keywords": ["wind", "light breeze", "forest ambience", "white noise"]
+      "keywords": [
+        "wind",
+        "light breeze",
+        "calm wind",
+        "forest ambience",
+        "air tone",
+        "white noise"
+      ]
     },
     "2_rain": {
       "name": "雨层",
-      "keywords": ["drizzle", "light rain", "rain", "heavy rain", "storm rain"]
+      "keywords": [
+        "drizzle",
+        "light rain",
+        "moderate rain",
+        "rain",
+        "heavy rain",
+        "storm rain",
+        "mist rain"
+      ]
     },
     "3_impact": {
       "name": "击打层",
-      "keywords": ["rain on leaves", "rain on roof", "rain on window", "rain on umbrella"]
+      "keywords": [
+        "rain on leaves",
+        "rain on grass",
+        "rain on roof",
+        "rain on wood",
+        "rain on window",
+        "rain on umbrella",
+        "rain on tent"
+      ]
     },
     "4_water": {
       "name": "水体层",
-      "keywords": ["water drop", "roof drip", "creek", "flowing water", "lake water"]
+      "keywords": [
+        "water drop",
+        "roof drip",
+        "gutter",
+        "puddle",
+        "creek",
+        "flowing water",
+        "river",
+        "lake water"
+      ]
     },
     "5_env": {
       "name": "环境层",
-      "keywords": ["bamboo rain", "forest rain", "city rain"]
+      "keywords": [
+        "bamboo rain",
+        "forest rain",
+        "lakeside rain",
+        "mountain rain",
+        "city rain"
+      ]
     },
     "6_life": {
       "name": "生物层",
-      "keywords": ["birds", "frog", "cricket", "cicada", "duck"]
+      "keywords": [
+        "birds",
+        "water birds",
+        "frog",
+        "cricket",
+        "cicada",
+        "duck"
+      ]
     },
     "7_accent": {
       "name": "点缀层",
-      "keywords": ["thunder", "campfire", "wind chime", "rowing boat"]
+      "keywords": [
+        "thunder",
+        "distant thunder",
+        "campfire",
+        "wind chime",
+        "rowing boat",
+        "paddle"
+      ]
     }
   }
 }

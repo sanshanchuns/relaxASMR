@@ -1,6 +1,6 @@
 # Envato Elements 雨声音效下载
 
-从 [Envato Elements](https://elements.envato.com/) 按 **英文关键词** 搜索音效，每词下载 **Top 15** 预览音频，写入 `assets/rain_sound/` 对应分层目录。
+从 [Envato Elements](https://elements.envato.com/) 按 **英文关键词** 搜索音效，每词下载 **Top 15** 预览音频，写入 `assets/sound_effect/rain_sound/` 对应分层目录。
 
 对标 [capcut_audio](../capcut_audio/README.md) 的分层结构，关键词对齐 [rain_sound_design.md](../../design/rain_series/rain_sound_design.md)（英文版见 [rain_layers.json](rain_layers.json)）。
 
@@ -28,7 +28,7 @@
 - Python 3.8+
 - `curl`
 - 有效的 Envato Elements 订阅账号 Cookie（见 [envato_API.yaml](envato_API.yaml)）
-- **Cloudflare 拦截时**：`pip install -r requirements.txt`（[CloakBrowser](https://github.com/CloakHQ/cloakbrowser)）
+- **Cloudflare 拦截时**：`pip install -r requirements.txt`（共享模块 [cloak_browser](../cloak_browser/README.md)）
 
 ---
 
@@ -119,4 +119,4 @@ manifest 额外字段：`preview_m4a`, `preview_mp3`, `fetch_via`（html / api�
 - 下载的是 Elements **预览音频**（m4a 或 mp3），与浏览器试听一致。
 - 同一层 manifest 会与已有剪映条目 **合并**，不会覆盖 `source=capcut` 记录。
 - Cookie 过期时两种 fetch 都会失败，需更新 `envato_API.yaml`。
-- **Cloudflare**：默认 curl 遇验证页会自动切换 CloakBrowser；或加 `--browser`。首次会下载 ~200MB Chromium 二进制；profile 缓存在 `.envato_browser_profile/`（可 `--browser-profile` 自定义）。WSL 用户若开了系统代理，脚本会自动把 `HTTPS_PROXY` 传给浏览器。
+- **Cloudflare**：默认 curl 遇验证页会自动切换 CloakBrowser（[`scripts/cloak_browser`](/scripts/cloak_browser/README.md)）；或加 `--browser`。Profile 默认 `scripts/cloak_browser/.profiles/envato/`。
