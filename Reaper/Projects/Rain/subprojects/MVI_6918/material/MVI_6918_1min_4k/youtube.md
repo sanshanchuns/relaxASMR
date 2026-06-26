@@ -2,11 +2,11 @@
 
 ## 中文标题
 
-MVI_6918_1min_4k
+【4K】湖畔林间雨声 · 公园雨天治愈 ASMR
 
 ## English Title
 
-MVI_6918_1min_4k
+Lakeside Woodland Rain in 4K | Peaceful Park Rain ASMR
 
 ## 缩略图
 
@@ -19,15 +19,23 @@ MVI_6918_1min_4k
 
 ## 中文说明
 
+4K 湖畔公园雨景：草地、乔木与远景湖面，小雨均匀，画面稳定。1 分钟样片，纯自然雨声，无音乐无人声；完整版 3 小时，适合助眠、冥想与放松。
 
+🎧 建议佩戴耳机 · ⏱ 1 分钟（样片）· 📺 3840×2160
+
+#雨声 #ASMR #4K #助眠 #公园 #湖景
 
 ## English Description
 
+4K lakeside park rain — lawn, trees, and a calm distant lake. Light, steady rainfall. 1-minute sample; pure natural rain, no music or voice. Full 3-hour version for sleep and relaxation.
 
+🎧 Headphones recommended · ⏱ 1 min (sample) · 📺 3840×2160
+
+#rain #ASMR #4K #sleep #park #lake
 
 ## 标签 Tags
 
-（无预设标签，请补充）
+雨声, 公园雨, 湖景, 4K, ASMR, 助眠, rain sounds, rain ASMR, sleep sounds, 4K nature
 
 ## 视频信息
 
