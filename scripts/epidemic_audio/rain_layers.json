@@ -1,89 +1,34 @@
 {
   "defaults": {
     "per_keyword": 15,
-    "output_dir": "assets/sound_effect/rain_sound",
-    "search_path": "/sound-effects/search/"
+    "include_paid": true,
+    "page_size": 50,
+    "output_dir": "assets/sound_effect/rain_sound"
   },
   "layers": {
-    "1_base": {
-      "name": "底噪层",
-      "keywords": [
-        "wind",
-        "light breeze",
-        "calm wind",
-        "forest ambience",
-        "air tone",
-        "white noise"
-      ]
+    "1_rain": {
+      "name": "Rain Layer",
+      "keywords": ["light rain", "gentle rain", "moderate rain", "heavy rain", "drizzle", "rain bed"]
     },
-    "2_rain": {
-      "name": "雨层",
-      "keywords": [
-        "drizzle",
-        "light rain",
-        "moderate rain",
-        "rain",
-        "heavy rain",
-        "storm rain",
-        "mist rain"
-      ]
+    "2_impact": {
+      "name": "Impact Layer",
+      "keywords": ["rain on leaves", "rain on roof", "rain on window", "rain on umbrella", "rain on metal", "rain on concrete"]
     },
-    "3_impact": {
-      "name": "击打层",
-      "keywords": [
-        "rain on leaves",
-        "rain on grass",
-        "rain on roof",
-        "rain on wood",
-        "rain on window",
-        "rain on umbrella",
-        "rain on tent"
-      ]
+    "3_environment": {
+      "name": "Environment Layer",
+      "keywords": ["forest ambience", "forest wind", "lake ambience", "mountain wind", "countryside ambience"]
     },
     "4_water": {
-      "name": "水体层",
-      "keywords": [
-        "water drop",
-        "roof drip",
-        "gutter",
-        "puddle",
-        "creek",
-        "flowing water",
-        "river",
-        "lake water"
-      ]
+      "name": "Water Layer",
+      "keywords": ["water drip", "gutter", "creek", "stream", "puddle", "water runoff"]
     },
-    "5_env": {
-      "name": "环境层",
-      "keywords": [
-        "bamboo rain",
-        "forest rain",
-        "lakeside rain",
-        "mountain rain",
-        "city rain"
-      ]
+    "5_wildlife": {
+      "name": "Wildlife Layer",
+      "keywords": ["bird", "robin", "frog", "cricket", "cicada", "owl"]
     },
-    "6_life": {
-      "name": "生物层",
-      "keywords": [
-        "birds",
-        "water birds",
-        "frog",
-        "cricket",
-        "cicada",
-        "duck"
-      ]
-    },
-    "7_accent": {
-      "name": "点缀层",
-      "keywords": [
-        "thunder",
-        "distant thunder",
-        "campfire",
-        "wind chime",
-        "rowing boat",
-        "paddle"
-      ]
+    "6_human": {
+      "name": "Human Layer",
+      "keywords": ["fire crackle", "fireplace", "clock tick", "book pages", "tent fabric"]
     }
   }
 }

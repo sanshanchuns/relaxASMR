@@ -8,7 +8,7 @@ return {
   duration_hours = 3,
 
   video = {
-    track = 8,
+    track = 7,
     name = "Video · MVI_6918 loop",
     path = "assets/loop_video/rain_video/MVI_6918/MVI_6918_loop_3_fade_0.5.mp4",
     render_only = true,
@@ -17,20 +17,11 @@ return {
   loop_layers = {
     {
       track = 1,
-      id = "1_base",
-      name = "空气底噪",
-      vol = 0.28,
-      paths = {
-        "assets/sound_effect/rain_sound/1_base/air_tone/165877_Ambience,_Room_Tone,_Interior,_Air_Condition,_Unit_A.mp3",
-      },
-    },
-    {
-      track = 2,
-      id = "2_rain",
+      id = "1_rain",
       name = "小雨主雨势",
       vol = 1.0,
       paths = {
-        "assets/sound_effect/rain_sound/2_rain/light_rain/197192_Rain,_Vegetation,_Light_Rain_In_A_Field_Of_Bananas_Trees_03.mp3",
+        "assets/sound_effect/rain_sound/1_rain/intensity/light/197192_Rain,_Vegetation,_Light_Rain_In_A_Field_Of_Bananas_Trees_03.mp3",
       },
       vol_envelope = {
         shape = "single_wave",
@@ -39,33 +30,33 @@ return {
       },
     },
     {
-      track = 5,
-      id = "5_env",
+      track = 3,
+      id = "3_environment",
       name = "林间雨环境",
       vol = 0.22,
       paths = {
-        "assets/sound_effect/rain_sound/5_env/forest_rain/171831_Rain,_Vegetation,_Forest,_Evening,_Medium_Rain,_Distant_Bird.mp3",
+        "assets/sound_effect/rain_sound/3_environment/ambience/forest/171831_Rain,_Vegetation,_Forest,_Evening,_Medium_Rain,_Distant_Bird.mp3",
       },
     },
     {
-      track = 7,
-      id = "7_comfort",
+      track = 6,
+      id = "6_human",
       name = "伞面水滴",
       vol = 0.45,
       paths = {
-        "assets/sound_effect/rain_sound/3_impact/rain_on_umbrella/171322_Rain,_Cloth,_Light,_Under_Umbrella,_Close.mp3",
+        "assets/sound_effect/rain_sound/2_impact/fabric/umbrella/171322_Rain,_Cloth,_Light,_Under_Umbrella,_Close.mp3",
       },
     },
   },
 
   scatter_layers = {
     {
-      track = 3,
-      id = "3_impact",
+      track = 2,
+      id = "2_impact",
       name = "雨打树叶",
       vol = 0.5,
       paths = {
-        "assets/sound_effect/rain_sound/3_impact/rain_on_leaves/152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3",
+        "assets/sound_effect/rain_sound/2_impact/vegetation/leaves/152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3",
       },
       min_gap_min = 3,
       max_gap_min = 8,
@@ -73,8 +64,8 @@ return {
       clear_existing = true,
     },
     {
-      track = 6,
-      id = "6_life",
+      track = 5,
+      id = "5_wildlife",
       name = "远处鸟鸣",
       vol = 0.3,
       paths = {

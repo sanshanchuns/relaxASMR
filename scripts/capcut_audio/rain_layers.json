@@ -1,38 +1,34 @@
 {
   "defaults": {
-    "per_keyword": 100,
+    "per_keyword": 15,
     "include_paid": true,
     "page_size": 50,
-    "output_dir": "assets/rain_sound"
+    "output_dir": "assets/sound_effect/rain_sound"
   },
   "layers": {
-    "1_base": {
-      "name": "底噪层",
-      "keywords": ["风声", "微风", "森林环境", "白噪音"]
+    "1_rain": {
+      "name": "Rain Layer",
+      "keywords": ["light rain", "gentle rain", "moderate rain", "heavy rain", "drizzle", "rain bed"]
     },
-    "2_rain": {
-      "name": "雨层",
-      "keywords": ["小雨", "下雨", "大雨", "暴雨", "毛毛雨"]
+    "2_impact": {
+      "name": "Impact Layer",
+      "keywords": ["rain on leaves", "rain on roof", "rain on window", "rain on umbrella", "rain on metal", "rain on concrete"]
     },
-    "3_impact": {
-      "name": "击打层",
-      "keywords": ["雨打树叶", "雨打屋顶", "雨打窗户", "雨伞"]
+    "3_environment": {
+      "name": "Environment Layer",
+      "keywords": ["forest ambience", "forest wind", "lake ambience", "mountain wind", "countryside ambience"]
     },
     "4_water": {
-      "name": "水体层",
-      "keywords": ["水滴", "屋檐滴水", "溪流", "流水", "湖水"]
+      "name": "Water Layer",
+      "keywords": ["water drip", "gutter", "creek", "stream", "puddle", "water runoff"]
     },
-    "5_env": {
-      "name": "环境层",
-      "keywords": ["竹林 雨", "森林 雨", "城市 雨"]
+    "5_wildlife": {
+      "name": "Wildlife Layer",
+      "keywords": ["bird", "robin", "frog", "cricket", "cicada", "owl"]
     },
-    "6_life": {
-      "name": "生物层",
-      "keywords": ["鸟鸣", "蛙鸣", "蟋蟀", "蝉鸣", "鸭子"]
-    },
-    "7_accent": {
-      "name": "点缀层",
-      "keywords": ["雷声", "篝火", "风铃", "划船"]
+    "6_human": {
+      "name": "Human Layer",
+      "keywords": ["fire crackle", "fireplace", "clock tick", "book pages", "tent fabric"]
     }
   }
 }

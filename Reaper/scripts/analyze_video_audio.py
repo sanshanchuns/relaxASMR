@@ -15,13 +15,12 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
 LAYER_ROWS = [
-    ("1_base", "底噪", "20–500 Hz 稳态宽频 · 风/空气"),
-    ("2_rain", "雨层", "500 Hz–6 kHz 连续能量 · 雨势主体"),
-    ("3_impact", "击打", "2–8 kHz 瞬态峰 · 雨滴撞击"),
-    ("4_water", "水体", "200 Hz–2 kHz 流动/低频纹理 · 湖面/流水"),
-    ("5_env", "环境", "全频稳态混合 · 空间感"),
-    ("6_life", "生物", "1–6 kHz 稀疏瞬态 · 鸟鸣等"),
-    ("7_comfort", "心理舒适", "80Hz–2kHz 近场包裹 · 安全感/放松锚点"),
+    ("1_rain", "雨层", "500 Hz–6 kHz 连续能量 · 雨势主体"),
+    ("2_impact", "击打", "2–8 kHz 瞬态峰 · 雨滴撞击"),
+    ("3_environment", "环境", "空气/风/地点包络 · 空间感"),
+    ("4_water", "水体", "200 Hz–2 kHz 流动 · 滴水/溪流"),
+    ("5_wildlife", "生物", "1–6 kHz 稀疏瞬态 · 鸟鸣等"),
+    ("6_human", "人类", "80Hz–2kHz 近场 · 安全感锚点"),
 ]
 
 
@@ -110,13 +109,12 @@ def layer_scores(stats: dict) -> dict[str, dict]:
         return "无/极弱"
 
     scores = {
-        "1_base": 0.15 * b["sub_low"] / 100 + 0.35 * b["low_mid"] / 100,
-        "2_rain": 0.55 * b["mid"] / 100 + 0.35 * b["high_mid"] / 100 + 0.1 * b["high"] / 100,
-        "3_impact": min(1.0, tr / max(dur * 2, 0.5)) * 0.5 + 0.3 * b["high_mid"] / 100,
+        "1_rain": 0.55 * b["mid"] / 100 + 0.35 * b["high_mid"] / 100 + 0.1 * b["high"] / 100,
+        "2_impact": min(1.0, tr / max(dur * 2, 0.5)) * 0.5 + 0.3 * b["high_mid"] / 100,
+        "3_environment": min(1.0, (b["sub_low"] + b["low_mid"] + b["mid"]) / 100) * 0.7 + 0.15 * b["sub_low"] / 100,
         "4_water": 0.4 * b["low_mid"] / 100 + 0.35 * b["mid"] / 100,
-        "5_env": min(1.0, (b["sub_low"] + b["low_mid"] + b["mid"]) / 100),
-        "6_life": min(1.0, tr / max(dur * 4, 1)) * 0.4,
-        "7_comfort": 0.35 * b["low_mid"] / 100 + 0.25 * b["sub_low"] / 100 + 0.15 * b["mid"] / 100,
+        "5_wildlife": min(1.0, tr / max(dur * 4, 1)) * 0.4,
+        "6_human": 0.35 * b["low_mid"] / 100 + 0.25 * b["sub_low"] / 100 + 0.15 * b["mid"] / 100,
     }
 
     out = {}

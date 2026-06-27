@@ -24,7 +24,7 @@ python3 Reaper/scripts/create_rain_subproject.py \
   --video assets/loop_video/rain_video/<MVI_xxxx>/<...>_loop_*_fade_*.mp4
 ```
 
-产出 `video_analysis.md`、`scripts/asmr_config.lua`、`<scene>.rpp`；打开工程后运行 **`asmr_apply_recipe.lua`**（轨 2 长时包络在配方 `vol_envelope` 里，由脚本写入，不预画在 rpp）。
+产出 `video_analysis.md`、`scripts/asmr_config.lua`、`<scene>.rpp`；打开工程后运行 **`asmr_apply_recipe.lua`**（轨 `1_rain` 长时包络在 `vol_envelope` 里写入）。
 
 **仅生成 `.rpp`（配方已存在）：**
 
@@ -32,33 +32,24 @@ python3 Reaper/scripts/create_rain_subproject.py \
 python3 Reaper/scripts/generate_subproject.py --scene MVI_6918
 ```
 
-生成器将素材 **直接引用** `assets/`（WSL UNC 全路径，不复制到 `Audio Files`）。
-
 **模板自带：**
 
-- 轨 **Group**（Folder 父轨）· **ReaEQ + ReaComp**
-- 轨 1–7 在 Folder 内 · 轨 `6_life` 带 **ReaVerbate** · 轨 8 视频在 Folder 末（静音，仅渲染）
-
-## 打开工程后
-
-1. Reaper 打开 `MVI_6918.rpp`
-2. 运行 `asmr_apply_recipe.lua`（循环 + 稀疏 + 轨 2 包络；**按轨名匹配，不受 Group 占位影响**）
-
-详见 [`Reaper/scripts/README.md`](../../scripts/README.md)。
+- 轨 **Group** · **ReaEQ + ReaComp**
+- 轨 1–6 六层素材 · 轨 `5_wildlife` **ReaVerbate** · 轨 7 视频（静音，仅渲染）
+- **Dynamic** = 无轨，由 `vol_envelope` 等自动化穿插调节
 
 ## 轨布局
 
-| 轨 | 层 | 模式 | 说明 |
-|----|-----|------|------|
-| **Group** | 总线 | Folder | **ReaEQ + ReaComp**（模板自动） |
-| 1 | 1_base | loop | 混音 |
-| 2 | 2_rain | loop | 混音 |
-| 3 | 3_impact | scatter | 混音 |
-| 4 | 4_water | loop | 混音 |
-| 5 | 5_env | loop | 混音 |
-| 6 | 6_life | scatter | 混音 · **ReaVerbate** |
-| 7 | 7_comfort | loop | 心理舒适 · 安全感锚点（可叠多条） |
-| **8** | **视频 looper** | — | **Folder 末轨 · 仅渲染，混音时不改** |
+| 轨 | layer_id | 层 |
+|----|----------|-----|
+| Group | 总线 | ReaEQ + ReaComp |
+| 1 | `1_rain` | Rain（Dynamic 主载包络） |
+| 2 | `2_impact` | Impact scatter |
+| 3 | `3_environment` | Environment loop |
+| 4 | `4_water` | Water |
+| 5 | `5_wildlife` | Wildlife scatter · ReaVerbate |
+| 6 | `6_human` | Human loop |
+| 7 | video | 仅渲染 |
 
 模板定义：[`scripts/layer_template.lua`](scripts/layer_template.lua) · JS 源：[`scripts/fx/asmr_sleep_hf_eq.jsfx`](scripts/fx/asmr_sleep_hf_eq.jsfx)
 

@@ -58,7 +58,7 @@ REAVERBATe_VST = [
 
 # 轨级 FX：layer id → preset lines（不含 FXCHAIN 外壳）
 TRACK_FX_PRESETS: dict[str, list[str]] = {
-    "6_life": REAVERBATe_VST,
+    "5_wildlife": REAVERBATe_VST,
 }
 
 # 视频轨混音时静音（-inf dB），仅最终渲染用
@@ -464,7 +464,7 @@ def build_rpp(cfg: dict, repo_root: Path, rpp_dir: Path, media_mode: str = "auto
         "  >",
     ]
 
-    tracks_by_num: dict[int, list[str]] = {i: [] for i in range(1, 9)}
+    tracks_by_num: dict[int, list[str]] = {i: [] for i in range(1, 8)}
     track_names: dict[int, str] = {}
     track_vols: dict[int, float] = {}
     iid = 1

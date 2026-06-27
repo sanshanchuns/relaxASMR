@@ -31,12 +31,12 @@ SCENE_ID_RE = re.compile(r"(MVI_\d+)", re.I)
 
 # 默认素材目录（相对 sound_effect/rain_sound）
 DEFAULT_ASSET_DIRS = {
-    "1_base": "1_base/air_tone",
-    "2_rain": "2_rain/light_rain",
-    "3_impact": "3_impact/rain_on_leaves",
-    "5_env": "5_env/forest_rain",
-    "7_comfort": "3_impact/rain_on_umbrella",
-    "6_life": "../elevenlabs_sound/bird",  # 相对 repo
+    "1_rain": "1_rain/intensity/light",
+    "2_impact": "2_impact/vegetation/leaves",
+    "3_environment": "3_environment/ambience/forest",
+    "4_water": "4_water/dripping",
+    "5_wildlife": "../elevenlabs_sound/bird",
+    "6_human": "2_impact/fabric/umbrella",
 }
 
 BIRD_FALLBACK = "assets/sound_effect/elevenlabs_sound/bird/api_mvi6918_bird_distant.mp3"
@@ -189,7 +189,7 @@ def build_asmr_config(
 ) -> dict:
     paths: dict[str, str] = {}
     for key, rel in DEFAULT_ASSET_DIRS.items():
-        if key == "6_life":
+        if key == "5_wildlife":
             bird = REPO_ROOT / BIRD_FALLBACK
             paths[key] = BIRD_FALLBACK if bird.is_file() else pick_first_mp3(rel) or BIRD_FALLBACK
         else:
@@ -201,19 +201,19 @@ def build_asmr_config(
     rain_vol = 1.0
     life_vol = 0.3
     if audio_layers:
-        lv = audio_layers.get("2_rain", {}).get("level", "")
+        lv = audio_layers.get("1_rain", {}).get("level", "") or audio_layers.get("2_rain", {}).get("level", "")
         if lv == "强":
-            paths["2_rain"] = pick_first_mp3("2_rain/moderate_rain") or paths.get("2_rain")
-        if audio_layers.get("6_life", {}).get("level") in ("无/极弱", "弱"):
+            paths["1_rain"] = pick_first_mp3("1_rain/intensity/moderate") or paths.get("1_rain")
+        wild = audio_layers.get("5_wildlife", {}) or audio_layers.get("6_life", {})
+        if wild.get("level") in ("无/极弱", "弱"):
             life_vol = 0.25
 
-    # 视觉启发：高绿 → 林间环境
     if visual and visual.get("green_dominant"):
-        paths["5_env"] = pick_first_mp3("5_env/forest_rain") or paths.get("5_env", "")
+        paths["3_environment"] = pick_first_mp3("3_environment/ambience/forest") or paths.get("3_environment", "")
 
-    comfort_note = "伞面水滴"
+    comfort_note = "伞面近场"
     if visual and "umbrella" in video_rel.lower():
-        comfort_note = "伞面水滴（文件名线索）"
+        comfort_note = "伞面近场（文件名线索）"
 
     cfg = {
         "scene_id": scene_id,
@@ -221,7 +221,7 @@ def build_asmr_config(
         "series": "rain_sleep",
         "duration_hours": duration_hours,
         "video": {
-            "track": 8,
+            "track": 7,
             "name": f"Video · {scene_id} loop",
             "path": video_rel,
             "render_only": True,
@@ -229,17 +229,10 @@ def build_asmr_config(
         "loop_layers": [
             {
                 "track": 1,
-                "id": "1_base",
-                "name": "空气底噪",
-                "vol": 0.28,
-                "paths": [paths["1_base"]],
-            },
-            {
-                "track": 2,
-                "id": "2_rain",
+                "id": "1_rain",
                 "name": "小雨主雨势",
                 "vol": rain_vol,
-                "paths": [paths["2_rain"]],
+                "paths": [paths.get("1_rain", "")],
                 "vol_envelope": {
                     "shape": "single_wave",
                     "depth": 0.08,
@@ -247,38 +240,38 @@ def build_asmr_config(
                 },
             },
             {
-                "track": 5,
-                "id": "5_env",
-                "name": "林间雨环境",
-                "vol": 0.22,
-                "paths": [paths["5_env"]],
+                "track": 3,
+                "id": "3_environment",
+                "name": "林间环境",
+                "vol": 0.28,
+                "paths": [paths.get("3_environment", "")],
             },
             {
-                "track": 7,
-                "id": "7_comfort",
+                "track": 6,
+                "id": "6_human",
                 "name": comfort_note,
                 "vol": 0.45,
-                "paths": [paths["7_comfort"]],
+                "paths": [paths.get("6_human", "")],
             },
         ],
         "scatter_layers": [
             {
-                "track": 3,
-                "id": "3_impact",
+                "track": 2,
+                "id": "2_impact",
                 "name": "雨打树叶",
                 "vol": 0.5,
-                "paths": [paths["3_impact"]],
+                "paths": [paths.get("2_impact", "")],
                 "min_gap_min": 3,
                 "max_gap_min": 8,
                 "randomness": 0.6,
                 "clear_existing": True,
             },
             {
-                "track": 6,
-                "id": "6_life",
+                "track": 5,
+                "id": "5_wildlife",
                 "name": "远处鸟鸣",
                 "vol": life_vol,
-                "paths": [paths["6_life"]],
+                "paths": [paths.get("5_wildlife", BIRD_FALLBACK)],
                 "min_gap_min": 12,
                 "max_gap_min": 28,
                 "randomness": 0.55,

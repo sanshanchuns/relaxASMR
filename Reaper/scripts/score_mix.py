@@ -26,13 +26,12 @@ SCRIPTS_DIR = Path(__file__).resolve().parent
 
 # 层 id → 距离区域权重（near/mid/far），用于结构性包裹感评估
 DISTANCE_MAP = {
-    "1_base": {"far": 0.6, "mid": 0.4},     # 空气/底噪铺底
-    "2_rain": {"near": 0.5, "mid": 0.5},    # 主雨，近-中弥漫
-    "3_impact": {"near": 1.0},              # 击打，近场
-    "4_water": {"mid": 1.0},                # 水面，中景
-    "5_env": {"mid": 0.5, "far": 0.5},      # 环境包络
-    "6_life": {"far": 1.0},                 # 远处生物
-    "7_comfort": {"near": 1.0},             # 近场庇护
+    "1_rain": {"near": 0.5, "mid": 0.5},
+    "2_impact": {"near": 1.0},
+    "3_environment": {"mid": 0.5, "far": 0.5},
+    "4_water": {"mid": 1.0},
+    "5_wildlife": {"far": 1.0},
+    "6_human": {"near": 1.0},
 }
 IDEAL_NMF = {"near": 0.40, "mid": 0.40, "far": 0.20}  # rule.md §四
 
@@ -220,7 +219,7 @@ def structural_scores(layers) -> dict:
     safe_ratio = (safe_w - unsafe_w) / (total_w + 1e-9)
     macro_drift = 0.0
     for layer in layers:
-        if layer.get("id") == "2_rain":
+        if layer.get("id") == "1_rain":
             ve = layer.get("vol_envelope") or {}
             depth = float(ve.get("depth", 0) or 0)
             if ve and depth > 0:
