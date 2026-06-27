@@ -65,11 +65,15 @@ def normalize(text: str) -> str:
 
 def classify_boom(name: str, schema: dict) -> str | None:
     n = normalize(name)
+    best: str | None = None
+    best_len = -1
     for rule in schema["boom_rules"]:
+        path = rule["path"]
         for pat in rule["patterns"]:
-            if pat in n:
-                return rule["path"]
-    return None
+            if pat in n and len(path) > best_len:
+                best_len = len(path)
+                best = path
+    return best
 
 
 def count_mp3(dir_path: Path) -> int:
@@ -211,6 +215,79 @@ def from_boom(schema: dict, limit: int) -> tuple[int, int, int]:
     print(f"==> Boom: +{added} mp3, 未匹配 {skipped} wav, 单一性拒绝 {rejected}")
     return added, skipped, rejected
 
+
+CRICKET_BOOM_PRIORITY = [
+    "QP01 0028 Insect crickets isolated.wav",
+    "QP01 0029 Insect crickets active.wav",
+    "QP01 0030 Insect cricket others.wav",
+    "QP01 0085 Prairie day wind crickets.wav",
+]
+
+
+def import_boom_wav(schema: dict, wav: Path, lib_label: str = "boom") -> bool:
+    root = rain_root(schema)
+    if skip_mixed(wav.name, "boom"):
+        return False
+    rel = classify_boom(wav.name, schema)
+    if not rel:
+        return False
+    leaf = classified_leaf(rel, schema)
+    if not leaf:
+        return False
+    dest = dest_for_import(wav, leaf)
+    if dest is None:
+        return False
+    if convert_to_mp3(wav, dest):
+        print(f"  boom [{lib_label}] → {leaf.relative_to(root)}/{dest.name}")
+        return True
+    return False
+
+
+def fill_cricket_boom(schema: dict, limit: int) -> tuple[int, int]:
+    """优先 Nature Essentials QP01 0028，再扫全库 cricket 素材。"""
+    root = rain_root(schema)
+    cricket_leaf = root / "5_wildlife/insects/cricket"
+    cricket_leaf.mkdir(parents=True, exist_ok=True)
+    added, rejected = 0, 0
+
+    for boom_root in schema.get("boom_roots", []):
+        base = Path(boom_root)
+        lib = base / "Boom Library - Nature Essentials"
+        if lib.is_dir():
+            for name in CRICKET_BOOM_PRIORITY:
+                wav = lib / name
+                if not wav.is_file():
+                    continue
+                if count_mp3(cricket_leaf) >= limit:
+                    break
+                if import_boom_wav(schema, wav, "Nature Essentials [priority]"):
+                    added += 1
+                else:
+                    rejected += 1
+
+    for wav, lib_name in iter_boom_wavs(schema):
+        if count_mp3(cricket_leaf) >= limit:
+            break
+        rel = classify_boom(wav.name, schema)
+        if not rel:
+            continue
+        leaf = classified_leaf(rel, schema)
+        if leaf != cricket_leaf:
+            continue
+        if skip_mixed(wav.name, "boom"):
+            rejected += 1
+            continue
+        dest = dest_for_import(wav, leaf)
+        if dest is None:
+            continue
+        if convert_to_mp3(wav, dest):
+            added += 1
+            print(
+                f"  boom [{lib_name}] → {cricket_leaf.relative_to(root)}/{dest.name}"
+            )
+
+    print(f"==> Cricket Boom: +{added} mp3, 跳过/拒绝 {rejected}")
+    return added, rejected
 
 def backup_target(rel_sub: str, schema: dict) -> str:
     mapping = schema.get("backup_subfolder_map", {})
@@ -556,10 +633,40 @@ def main() -> None:
         help="预览 2_impact/water 各目录缺口",
     )
     parser.add_argument(
+        "--fill-birds-stores",
+        action="store_true",
+        help="森林/湖边/小溪常见鸟类各补 10 Epidemic + 10 Envato",
+    )
+    parser.add_argument(
+        "--birds-stores-dry-run",
+        action="store_true",
+        help="预览场景鸟类填充计划",
+    )
+    parser.add_argument(
+        "--fill-amphibians-stores",
+        action="store_true",
+        help="tree_frog/bullfrog/marsh_frog 各补 10 Epidemic + 10 Envato",
+    )
+    parser.add_argument(
+        "--amphibians-stores-dry-run",
+        action="store_true",
+        help="预览两栖类填充缺口",
+    )
+    parser.add_argument(
+        "--fill-cricket",
+        action="store_true",
+        help="蟋蟀：Boom QP01 0028 优先 + Epidemic/Envato 各补 10",
+    )
+    parser.add_argument(
+        "--fill-cricket-stores",
+        action="store_true",
+        help="仅蟋蟀目录补 Epidemic + Envato",
+    )
+    parser.add_argument(
         "--per-source",
         type=int,
         default=10,
-        help="每来源目标条数（vegetation / impact water，默认 10）",
+        help="每来源目标条数（默认 10）",
     )
     args = parser.parse_args()
 
@@ -583,6 +690,9 @@ def main() -> None:
         return
 
     from supplement_stores import (
+        fill_amphibians_stores,
+        fill_birds_stores,
+        fill_cricket_stores,
         fill_impact_water_stores,
         fill_vegetation_stores,
         supplement_from_stores,
@@ -606,6 +716,30 @@ def main() -> None:
         return
     if args.fill_impact_water_stores:
         fill_impact_water_stores(schema, args.per_source)
+        dedupe_dirs(schema)
+        return
+    if args.birds_stores_dry_run:
+        fill_birds_stores(schema, args.per_source, dry_run=True)
+        return
+    if args.fill_birds_stores:
+        fill_birds_stores(schema, args.per_source)
+        dedupe_dirs(schema)
+        return
+    if args.amphibians_stores_dry_run:
+        fill_amphibians_stores(schema, args.per_source, dry_run=True)
+        return
+    if args.fill_amphibians_stores:
+        fill_amphibians_stores(schema, args.per_source)
+        dedupe_dirs(schema)
+        return
+    if args.fill_cricket_stores:
+        fill_cricket_stores(schema, args.per_source)
+        dedupe_dirs(schema)
+        return
+    if args.fill_cricket:
+        relocate_misplaced(schema)
+        fill_cricket_boom(schema, limit)
+        fill_cricket_stores(schema, args.per_source)
         dedupe_dirs(schema)
         return
 

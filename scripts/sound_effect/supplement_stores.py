@@ -16,6 +16,16 @@ SCRIPTS_ROOT = REPO_ROOT / "scripts"
 STORE_META = ".store_sources.json"
 VEGETATION_PREFIX = "2_impact/vegetation"
 IMPACT_WATER_PREFIX = "2_impact/water"
+BIRDS_PREFIX = "5_wildlife/birds"
+AMPHIBIANS_PREFIX = "5_wildlife/amphibians"
+INSECTS_PREFIX = "5_wildlife/insects"
+
+# 场景 → schema 鸟类目录（见 design/rain_series/layers.md）
+SCENE_BIRDS: dict[str, list[str]] = {
+    "forest": ["robin", "sparrow", "blackbird", "crow", "woodpecker", "owl"],
+    "lake": ["duck", "goose", "swan"],
+    "stream": ["duck", "sparrow", "robin"],
+}
 
 
 def _load_module(name: str, path: Path):
@@ -62,11 +72,27 @@ def keywords_for_leaf(rel: str, schema: dict) -> list[str]:
         if cat:
             kws.append(f"{cat} {leaf}")
     elif rel.startswith("5_wildlife/birds/"):
+        kws.insert(0, f"{leaf} call")
         kws.insert(0, f"{leaf} bird")
     elif rel.startswith("5_wildlife/insects/"):
-        kws.insert(0, leaf)
+        name = leaf.replace("_", " ")
+        kws.insert(0, f"{name} chirp")
+        kws.insert(0, name)
+        if leaf == "cricket":
+            kws.append("crickets")
+            kws.append("cricket night")
     elif rel.startswith("5_wildlife/amphibians/"):
-        kws.insert(0, f"{leaf} frog" if "frog" not in leaf else leaf)
+        name = leaf.replace("_", " ")
+        kws.insert(0, f"{name} call")
+        kws.insert(0, name)
+        if leaf == "tree_frog":
+            kws.append("treefrog")
+        elif leaf == "marsh_frog":
+            kws.append("wetland frog")
+            kws.append("pond frog")
+            kws.append("swamp frogs")
+            kws.append("frog pond")
+            kws.append("marsh ambience frog")
     elif rel.startswith("5_wildlife/mammals/"):
         kws.insert(0, leaf)
     elif rel.startswith("6_human/"):
@@ -209,8 +235,10 @@ def _run_store_fill(
         classify_boom,
         canonical_stem,
         convert_to_mp3,
+        count_mp3,
         dest_dir_has_canonical,
         dest_for_import,
+        normalize,
         rain_root,
     )
     from sound_purity import purity_check
@@ -251,8 +279,23 @@ def _run_store_fill(
 
     def title_ok(title: str, item_id: str, target_leaf: Path) -> bool:
         fake = f"{item_id}_{title}.mp3"
-        ok, _ = purity_check(fake)
+        ok, reason = purity_check(fake)
         if not ok:
+            return False
+        if "birds" in target_leaf.parts or "amphibians" in target_leaf.parts or "insects" in target_leaf.parts:
+            species = target_leaf.name.replace("_", " ")
+            n = normalize(title)
+            if species in n:
+                return True
+            if "amphibians" in target_leaf.parts and target_leaf.name == "marsh_frog":
+                if "frog" in n and any(
+                    w in n for w in ("marsh", "swamp", "wetland", "pond")
+                ):
+                    return True
+            classified = classify_boom(fake, schema)
+            if classified:
+                leaf = classified_leaf(classified, schema)
+                return leaf == target_leaf
             return False
         classified = classify_boom(fake, schema)
         if classified:
@@ -332,25 +375,25 @@ def _run_store_fill(
                     if not title_ok(item["title"], str(item["id"]), leaf):
                         rejected += 1
                         continue
-                        with tempfile.TemporaryDirectory() as tmp:
-                            tmp_path = Path(tmp) / f"{item['id']}.mp3"
-                            try:
-                                epidemic_mod.download_file(
-                                    item["url"], tmp_path, epidemic_creds
-                                )
-                            except Exception as exc:
-                                print(
-                                    f"    epidemic 下载失败 {item['id']}: {exc}",
-                                    file=sys.stderr,
-                                )
-                                continue
-                            if import_mp3(
-                                tmp_path, item["title"], str(item["id"]), leaf, "epidemic"
-                            ):
-                                remaining["epidemic"] -= 1
-                                if mode_combined:
-                                    remaining["envato"] = remaining["epidemic"]
-                        time.sleep(0.15)
+                    with tempfile.TemporaryDirectory() as tmp:
+                        tmp_path = Path(tmp) / f"{item['id']}.mp3"
+                        try:
+                            epidemic_mod.download_file(
+                                item["url"], tmp_path, epidemic_creds
+                            )
+                        except Exception as exc:
+                            print(
+                                f"    epidemic 下载失败 {item['id']}: {exc}",
+                                file=sys.stderr,
+                            )
+                            continue
+                        if import_mp3(
+                            tmp_path, item["title"], str(item["id"]), leaf, "epidemic"
+                        ):
+                            remaining["epidemic"] -= 1
+                            if mode_combined:
+                                remaining["envato"] = remaining["epidemic"]
+                    time.sleep(0.15)
 
             if mode_combined:
                 if remaining["epidemic"] <= 0:
@@ -481,6 +524,54 @@ def fill_vegetation_stores(
     return fill_category_stores(schema, VEGETATION_PREFIX, per_source, dry_run=dry_run)
 
 
+def list_scene_bird_targets(
+    schema: dict, per_source: int
+) -> list[tuple[Path, dict[str, int], list[str]]]:
+    """森林 / 湖边 / 小溪场景鸟类，去重后按物种填充。"""
+    from fill_rain_sound import rain_root
+
+    seen: set[str] = set()
+    species: list[str] = []
+    for subs in SCENE_BIRDS.values():
+        for s in subs:
+            if s not in seen:
+                seen.add(s)
+                species.append(s)
+    root = rain_root(schema)
+    targets: list[tuple[Path, dict[str, int], list[str]]] = []
+    for sub in species:
+        leaf = root / "5_wildlife" / "birds" / sub
+        leaf.mkdir(parents=True, exist_ok=True)
+        rel = f"5_wildlife/birds/{sub}"
+        need = {
+            "epidemic": max(0, per_source - count_store_source(leaf, "epidemic")),
+            "envato": max(0, per_source - count_store_source(leaf, "envato")),
+            "_per_source": per_source,
+        }
+        if need["epidemic"] or need["envato"]:
+            targets.append((leaf, need, keywords_for_leaf(rel, schema)))
+    return targets
+
+
+def fill_birds_stores(
+    schema: dict,
+    per_source: int = 10,
+    *,
+    dry_run: bool = False,
+) -> tuple[int, int, int]:
+    """森林/湖边/小溪常见鸟类各补 epidemic×N + envato×N。"""
+    jobs = list_scene_bird_targets(schema, per_source)
+    scenes = ", ".join(SCENE_BIRDS.keys())
+    print(
+        f"==> Scene birds ({scenes}): {len(jobs)} 个物种待补 "
+        f"(各 epidemic×{per_source}, envato×{per_source})"
+    )
+    if dry_run:
+        for scene, subs in SCENE_BIRDS.items():
+            print(f"  [{scene}] {', '.join(subs)}")
+    return _run_store_fill(schema, jobs, dry_run=dry_run)
+
+
 def fill_impact_water_stores(
     schema: dict,
     per_source: int = 10,
@@ -488,3 +579,49 @@ def fill_impact_water_stores(
     dry_run: bool = False,
 ) -> tuple[int, int, int]:
     return fill_category_stores(schema, IMPACT_WATER_PREFIX, per_source, dry_run=dry_run)
+
+
+def fill_amphibians_stores(
+    schema: dict,
+    per_source: int = 10,
+    *,
+    dry_run: bool = False,
+) -> tuple[int, int, int]:
+    """tree_frog / bullfrog / marsh_frog 各补 epidemic×N + envato×N。"""
+    return fill_category_stores(schema, AMPHIBIANS_PREFIX, per_source, dry_run=dry_run)
+
+
+def fill_insects_stores(
+    schema: dict,
+    per_source: int = 10,
+    *,
+    dry_run: bool = False,
+) -> tuple[int, int, int]:
+    return fill_category_stores(schema, INSECTS_PREFIX, per_source, dry_run=dry_run)
+
+
+def fill_cricket_stores(
+    schema: dict,
+    per_source: int = 10,
+    *,
+    dry_run: bool = False,
+) -> tuple[int, int, int]:
+    from fill_rain_sound import rain_root
+
+    root = rain_root(schema)
+    leaf = root / "5_wildlife/insects/cricket"
+    leaf.mkdir(parents=True, exist_ok=True)
+    rel = "5_wildlife/insects/cricket"
+    need = {
+        "epidemic": max(0, per_source - count_store_source(leaf, "epidemic")),
+        "envato": max(0, per_source - count_store_source(leaf, "envato")),
+        "_per_source": per_source,
+    }
+    if not need["epidemic"] and not need["envato"]:
+        print("==> Cricket: epidemic/envato 已达标")
+        return 0, 0, 0
+    print(
+        f"==> Cricket: epidemic 缺 {need['epidemic']}, envato 缺 {need['envato']} "
+        f"(目标各 {per_source})"
+    )
+    return _run_store_fill(schema, [(leaf, need, keywords_for_leaf(rel, schema))], dry_run=dry_run)

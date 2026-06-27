@@ -20,6 +20,17 @@
 |                       | Stream            | Creek、Brook、Stream、Small Waterfall                                                                                                                                               |
 |                       | Standing Water    | Puddle、Standing Water、Ripples、Splash                                                                                                                                             |
 | **5. Wildlife**       | Birds             | Robin、Sparrow、Blackbird、Crow、Woodpecker、Owl、Duck、Goose、Swan                                                                                                                      |
+
+### 场景常见鸟类（叫声素材目录 `5_wildlife/birds/`）
+
+| 场景 | 常见鸟类 | 说明 |
+| ---- | -------- | ---- |
+| **森林** | Robin（鸫）、Sparrow（雀）、Blackbird（乌鸫）、Crow（鸦）、Woodpecker（啄木鸟）、Owl（猫头鹰） | 林冠层与灌丛鸣禽为主，辅以鸦科、啄木鸟与夜行猫头鹰 |
+| **湖边** | Duck（鸭）、Goose（鹅）、Swan（天鹅） | 水禽鸣叫、振翅、戏水声 |
+| **小溪** | Duck、Sparrow、Robin | 近水灌丛雀类 + 溪边水禽，体量较轻 |
+
+声源库目标：上述 9 个物种各 **Epidemic×10 + Envato×10**（`python3 scripts/sound_effect/fill_rain_sound.py --fill-birds-stores`）。
+
 |                       | Amphibians        | Tree Frog、Bullfrog、Marsh Frog                                                                                                                                                    |
 |                       | Insects           | Cricket、Katydid、Cicada、Bee、Dragonfly                                                                                                                                             |
 |                       | Mammals（可选）       | Deer、Fox、Wolf、Horse、Cow、Sheep                                                                                                                                                    |
