@@ -79,5 +79,15 @@
     "subtitle_zh": "睡眠 · 专注 · 冥想 · 减压",
     "subtitle_en": "Sleep · Focus · Meditation · Stress Relief",
     "badge_path": "scripts/video_export/4k.png"
+  },
+  "MVI_6927": {
+    "auto_from_scene": true,
+    "layout": "bottom-left",
+    "thumb_time": 5,
+    "thumb_title_en": "GENTLE RAIN ASMR",
+    "thumb_subtitle_en": "The rain, his sad sister, talks to my heart",
+    "subtitle_zh": "睡眠 · 专注 · 冥想 · 减压",
+    "subtitle_en": "Sleep · Focus · Meditation · Stress Relief",
+    "badge_path": "scripts/video_export/4k.png"
   }
 }

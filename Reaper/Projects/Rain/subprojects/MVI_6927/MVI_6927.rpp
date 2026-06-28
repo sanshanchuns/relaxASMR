@@ -1,4 +1,4 @@
-<REAPER_PROJECT 0.1 "7.48/macOS-arm64" 1782627262
+<REAPER_PROJECT 0.1 "7.48/macOS-arm64" 1782653879
   <NOTES 0 2
   >
   RIPPLE 0 0
@@ -19,13 +19,13 @@
   VIDEO_CONFIG 0 0 65792
   PANMODE 3
   PANLAWFLAGS 3
-  CURSOR 0
-  ZOOM 36.4778079741021 0 0
-  VZOOMEX 6 0
+  CURSOR 6657.5660012878307
+  ZOOM 0.10784722222222 0 0
+  VZOOMEX 6 131
   USE_REC_CFG 0
   RECMODE 1
   SMPTESYNC 0 30 100 40 1000 300 0 0 1 0 0
-  LOOP 0
+  LOOP 1
   LOOPGRAN 0 4
   RECORD_PATH "Audio Files" ""
   <RECORD_CFG
@@ -34,7 +34,7 @@
   <APPLYFX_CFG
   >
   RENDER_FILE ""
-  RENDER_PATTERN ""
+  RENDER_PATTERN output/$project_3h_4k
   RENDER_FMT 0 2 0
   RENDER_1X 0
   RENDER_RANGE 1 0 0 0 1000
@@ -50,7 +50,7 @@
   TAKELANE 1
   SAMPLERATE 48000 1 0
   <RENDER_CFG
-    ZXZhdxgAAQ==
+    RlZBWAAAAAAAAAAAMHUAAAAAAACAAAAAAA8AAHAIAAAAAPBBAQAAAF8AAAAAAA==
   >
   LOCK 1
   <METRONOME 6 2
@@ -106,7 +106,7 @@
     BEAT -1
     AUTOMODE 0
     PANLAWFLAGS 3
-    VOLPAN 1 0 -1 -1 1
+    VOLPAN 3.98107170553497 0 -1 -1 1
     MUTESOLO 0 0 0
     IPHASE 0
     PLAYOFFS 0 1
@@ -126,6 +126,7 @@
     MIDIOUT -1
     MAINSEND 1 0
     <FXCHAIN
+      WNDRECT -207 1545 748 429
       SHOW 0
       LASTSEL 0
       DOCKED 0
@@ -134,8 +135,8 @@
         cWVlcu5e7f4CAAAAAQAAAAAAAAACAAAAAAAAAAIAAAABAAAAAAAAAAIAAAAAAAAAzQAAAAEAAAAAABAA
         IQAAAAUAAAAAAAAAAQAAAAAAAAAAAFlAAAAAAAAA8D+amZmZmZnpPwEIAAAAAQAAAAAAAAAAwHJAAAAAAAAA8D8AAAAAAAAAQAEIAAAAAQAAAAAAAAAAQI9AAAAAAAAA
         8D8AAAAAAAAAQAEBAAAAAQAAAJ/vruhzybNAMIH/8g6n2z+amZmZmZnpPwEEAAAAAQAAAAAAAAAAAFlAAAAAAAAA8D8AAAAAAAAAQAEBAAAAAQAAAAAAAAAAAPA/AAAA
-        AP0BAABcAQAAAgAAAA==
-        AFByb2dyYW0gMQAQAAAA
+        AEACAABrAQAAAgAAAA==
+        AAAQAAAA
       >
       FLOATPOS 0 0 0 0
       FXID {13E9A3B2-937E-4EF7-8132-7AE9DF9FD9D9}
@@ -157,7 +158,7 @@
     BEAT -1
     AUTOMODE 0
     PANLAWFLAGS 3
-    VOLPAN 1 0 -1 -1 1
+    VOLPAN 0.32759970788183 0 -1 -1 1
     MUTESOLO 0 0 0
     IPHASE 0
     PLAYOFFS 0 1
@@ -179,23 +180,23 @@
     <ITEM
       POSITION 0
       SNAPOFFS 0
-      LENGTH 200.064
+      LENGTH 10800
       LOOP 1
       ALLTAKES 0
       FADEIN 1 0 0 1 0 0 0
       FADEOUT 1 0 0 1 0 0 0
       MUTE 0 0
       SEL 0
-      IGUID {E1BB346F-800D-44A3-AF3E-A5E1DB1FC82C}
-      IID 4
-      NAME 179242_Rain,_Vegetation,_Light_Rain_In_A_Field_Of_Bananas_Trees_01.mp3
+      IGUID {6CE2F17F-28E4-8544-A22B-C625F06087D6}
+      IID 72
+      NAME 194399_Rain,_Vegetation,_Rain,_Daytime,_Mid_To_Hard_Rainfall,_Havelock_Island_02.mp3
       VOLPAN 1 0 1 -1
       SOFFS 0
       PLAYRATE 1 1 0 -1 0 0.0025
       CHANMODE 0
-      GUID {5B8CD298-514B-421D-8386-0767694EA2BF}
+      GUID {41B949EE-0476-2D4C-A4B6-5208C884EB1C}
       <SOURCE MP3
-        FILE "/Users/angel/Documents/workspace/relaxASMR/assets/sound_effect/rain_sound/1_rain/intensity/light/179242_Rain,_Vegetation,_Light_Rain_In_A_Field_Of_Bananas_Trees_01.mp3" 1
+        FILE "/Users/angel/Documents/workspace/relaxASMR/assets/sound_effect/rain_sound/1_rain/intensity/drizzle/194399_Rain,_Vegetation,_Rain,_Daytime,_Mid_To_Hard_Rainfall,_Havelock_Island_02.mp3" 1
       >
     >
   >
@@ -227,23 +228,23 @@
     <ITEM
       POSITION 0
       SNAPOFFS 0
-      LENGTH 180.024
-      LOOP 0
+      LENGTH 10800
+      LOOP 1
       ALLTAKES 0
       FADEIN 1 0 0 1 0 0 0
       FADEOUT 1 0 0 1 0 0 0
       MUTE 0 0
       SEL 0
-      IGUID {EC67CDFE-1C2C-4738-BCAC-A1A03F461A4F}
-      IID 2
-      NAME 152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3
-      VOLPAN 0.5 0 1 -1
+      IGUID {D85C2DB0-3704-F742-8E44-0F07E912A6B0}
+      IID 13
+      NAME 8EXVQKS_Rain_On_Leaves_1.mp3
+      VOLPAN 1 0 1 -1
       SOFFS 0
       PLAYRATE 1 1 0 -1 0 0.0025
       CHANMODE 0
-      GUID {7EB09436-0EBB-4451-B1A9-3855F3563A0B}
+      GUID {050EA736-DB93-1349-9B5E-EFF8C6AB889E}
       <SOURCE MP3
-        FILE "/Users/angel/Documents/workspace/relaxASMR/assets/sound_effect/rain_sound/2_impact/vegetation/leaves/152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3" 1
+        FILE "/Users/angel/Documents/workspace/relaxASMR/assets/sound_effect/rain_sound/2_impact/vegetation/leaves/8EXVQKS_Rain_On_Leaves_1.mp3" 1
       >
     >
   >
@@ -261,27 +262,33 @@
     BUSCOMP 0 0 0 0 0
     SHOWINMIX 1 0.6667 0.5 1 0.5 0 0 0 0
     FIXEDLANES 9 0 0 0 0
-    SEL 1
+    SEL 0
     REC 0 0 1 0 0 0 0 0
     VU 64
     TRACKHEIGHT 0 0 0 0 0 0 0
     INQ 0 0 0 0.5 100 0 0 100
     NCHAN 2
-    FX 0
+    FX 1
     TRACKID {C21747E8-BEA2-4391-B206-85636A537BA9}
     PERF 0
     MIDIOUT -1
     MAINSEND 1 0
+    <FXCHAIN
+      WNDRECT -207 1581 724 393
+      SHOW 0
+      LASTSEL 0
+      DOCKED 0
+    >
     <ITEM
       POSITION 0
       SNAPOFFS 0
-      LENGTH 120.024
+      LENGTH 10800
       LOOP 1
       ALLTAKES 0
       FADEIN 1 0 0 1 0 0 0
       FADEOUT 1 0 0 1 0 0 0
       MUTE 0 0
-      SEL 1
+      SEL 0
       IGUID {65EC42ED-746F-426F-9002-B2CA49EFA56B}
       IID 5
       NAME 153479_Rain,_General,_Tropical,_Moderate_Monsoon_Rain_Open_Garage_P.mp3
@@ -323,7 +330,7 @@
     <ITEM
       POSITION 0
       SNAPOFFS 0
-      LENGTH 47.664
+      LENGTH 10800
       LOOP 1
       ALLTAKES 0
       FADEIN 1 0 0 1 0 0 0
@@ -349,7 +356,7 @@
     BEAT -1
     AUTOMODE 0
     PANLAWFLAGS 3
-    VOLPAN 0.28 0 -1 -1 1
+    VOLPAN 0.20079148705394 0 -1 -1 1
     MUTESOLO 0 0 0
     IPHASE 0
     PLAYOFFS 0 1
@@ -357,7 +364,7 @@
     BUSCOMP 0 0 0 0 0
     SHOWINMIX 1 0.6667 0.5 1 0.5 0 0 0 0
     FIXEDLANES 9 0 0 0 0
-    SEL 0
+    SEL 1
     REC 0 0 1 0 0 0 0 0
     VU 64
     TRACKHEIGHT 0 0 0 0 0 0 0
@@ -369,39 +376,260 @@
     MIDIOUT -1
     MAINSEND 1 0
     <FXCHAIN
+      WNDRECT -207 1650 709 324
       SHOW 0
       LASTSEL 0
       DOCKED 0
       BYPASS 0 0 0
       <VST "VST: ReaVerbate (Cockos)" reaverbate.vst.dylib 0 "" 1920361016<56535472766238726561766572626174> ""
         OGJ2cu9e7f4CAAAAAQAAAAAAAAACAAAAAAAAAAIAAAABAAAAAAAAAAIAAAAAAAAAKAAAAAAAAAAAABAA
-        776t3g3wrd5DAgA/AACAP9oEPD817P8+AACAPwAAAAAAAIA/AAAAAA==
-        AFByb2dyYW0gMQAQAAAA
+        776t3g3wrd5DAgA/AACAPzw8PD817P8+AACAPwAAAAAAAIA/AAAAAA==
+        AAAQAAAA
       >
       FLOATPOS 0 0 0 0
       FXID {D309CD21-744A-4240-9373-EBBF5117434A}
       WAK 0 0
     >
     <ITEM
-      POSITION 0
+      POSITION 2
       SNAPOFFS 0
-      LENGTH 10.501224
-      LOOP 0
+      LENGTH 18.01600907029479
+      LOOP 1
       ALLTAKES 0
       FADEIN 1 0 0 1 0 0 0
       FADEOUT 1 0 0 1 0 0 0
       MUTE 0 0
       SEL 0
-      IGUID {FE0FBD02-D740-4DE7-A108-CDC8D4C6F48F}
-      IID 3
-      NAME 9PBX76J_Birds.mp3
-      VOLPAN 0.28 0 1 -1
+      IGUID {CC10D17A-3B9F-2F42-B438-ACCA855FEB68}
+      IID 16
+      NAME BBPKAAC_Birds_Constant_Robin_Tweets_and_Whistles.mp3
+      VOLPAN 1 0 1 -1
       SOFFS 0
       PLAYRATE 1 1 0 -1 0 0.0025
       CHANMODE 0
-      GUID {FA567B3C-1CE3-48E3-B25C-20DB206B3476}
+      GUID {E4B55C6C-1FE9-554F-A800-67974C61C885}
       <SOURCE MP3
-        FILE "/Users/angel/Documents/workspace/relaxASMR/assets/sound_effect/rain_sound/5_wildlife/birds/Hwamei/9PBX76J_Birds.mp3" 1
+        FILE "/Users/angel/Documents/workspace/relaxASMR/assets/sound_effect/rain_sound/5_wildlife/birds/robin/BBPKAAC_Birds_Constant_Robin_Tweets_and_Whistles.mp3" 1
+      >
+    >
+    <ITEM
+      POSITION 192
+      SNAPOFFS 0
+      LENGTH 18.01600907029479
+      LOOP 1
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {BC00CD0F-D931-284A-B20C-7F16638C7332}
+      IID 16
+      NAME BBPKAAC_Birds_Constant_Robin_Tweets_and_Whistles.mp3
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9F467DA2-A26A-144E-955E-322789398CE0}
+      <SOURCE MP3
+        FILE "/Users/angel/Documents/workspace/relaxASMR/assets/sound_effect/rain_sound/5_wildlife/birds/robin/BBPKAAC_Birds_Constant_Robin_Tweets_and_Whistles.mp3" 1
+      >
+    >
+    <ITEM
+      POSITION 432.70263056752685
+      SNAPOFFS 0
+      LENGTH 18.01600907029479
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {CC10D17A-3B9F-2F42-B438-ACCA855FEB68}
+      IID 16
+      NAME BBPKAAC_Birds_Constant_Robin_Tweets_and_Whistles.mp3
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E4B55C6C-1FE9-554F-A800-67974C61C885}
+      <SOURCE MP3
+        FILE "/Users/angel/Documents/workspace/relaxASMR/assets/sound_effect/rain_sound/5_wildlife/birds/robin/BBPKAAC_Birds_Constant_Robin_Tweets_and_Whistles.mp3" 1
+      >
+    >
+    <ITEM
+      POSITION 1470.1167951804805
+      SNAPOFFS 0
+      LENGTH 18.01600907029479
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {CC10D17A-3B9F-2F42-B438-ACCA855FEB68}
+      IID 16
+      NAME BBPKAAC_Birds_Constant_Robin_Tweets_and_Whistles.mp3
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E4B55C6C-1FE9-554F-A800-67974C61C885}
+      <SOURCE MP3
+        FILE "/Users/angel/Documents/workspace/relaxASMR/assets/sound_effect/rain_sound/5_wildlife/birds/robin/BBPKAAC_Birds_Constant_Robin_Tweets_and_Whistles.mp3" 1
+      >
+    >
+    <ITEM
+      POSITION 2649.1875761071278
+      SNAPOFFS 0
+      LENGTH 18.01600907029479
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {CC10D17A-3B9F-2F42-B438-ACCA855FEB68}
+      IID 16
+      NAME BBPKAAC_Birds_Constant_Robin_Tweets_and_Whistles.mp3
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E4B55C6C-1FE9-554F-A800-67974C61C885}
+      <SOURCE MP3
+        FILE "/Users/angel/Documents/workspace/relaxASMR/assets/sound_effect/rain_sound/5_wildlife/birds/robin/BBPKAAC_Birds_Constant_Robin_Tweets_and_Whistles.mp3" 1
+      >
+    >
+    <ITEM
+      POSITION 3957.5037775115452
+      SNAPOFFS 0
+      LENGTH 18.01600907029479
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {CC10D17A-3B9F-2F42-B438-ACCA855FEB68}
+      IID 16
+      NAME BBPKAAC_Birds_Constant_Robin_Tweets_and_Whistles.mp3
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E4B55C6C-1FE9-554F-A800-67974C61C885}
+      <SOURCE MP3
+        FILE "/Users/angel/Documents/workspace/relaxASMR/assets/sound_effect/rain_sound/5_wildlife/birds/robin/BBPKAAC_Birds_Constant_Robin_Tweets_and_Whistles.mp3" 1
+      >
+    >
+    <ITEM
+      POSITION 5086.8089241834268
+      SNAPOFFS 0
+      LENGTH 18.01600907029479
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {CC10D17A-3B9F-2F42-B438-ACCA855FEB68}
+      IID 16
+      NAME BBPKAAC_Birds_Constant_Robin_Tweets_and_Whistles.mp3
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E4B55C6C-1FE9-554F-A800-67974C61C885}
+      <SOURCE MP3
+        FILE "/Users/angel/Documents/workspace/relaxASMR/assets/sound_effect/rain_sound/5_wildlife/birds/robin/BBPKAAC_Birds_Constant_Robin_Tweets_and_Whistles.mp3" 1
+      >
+    >
+    <ITEM
+      POSITION 5949.8199054747765
+      SNAPOFFS 0
+      LENGTH 18.01600907029479
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {CC10D17A-3B9F-2F42-B438-ACCA855FEB68}
+      IID 16
+      NAME BBPKAAC_Birds_Constant_Robin_Tweets_and_Whistles.mp3
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E4B55C6C-1FE9-554F-A800-67974C61C885}
+      <SOURCE MP3
+        FILE "/Users/angel/Documents/workspace/relaxASMR/assets/sound_effect/rain_sound/5_wildlife/birds/robin/BBPKAAC_Birds_Constant_Robin_Tweets_and_Whistles.mp3" 1
+      >
+    >
+    <ITEM
+      POSITION 6683.9117418394981
+      SNAPOFFS 0
+      LENGTH 18.01600907029479
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {CC10D17A-3B9F-2F42-B438-ACCA855FEB68}
+      IID 16
+      NAME BBPKAAC_Birds_Constant_Robin_Tweets_and_Whistles.mp3
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E4B55C6C-1FE9-554F-A800-67974C61C885}
+      <SOURCE MP3
+        FILE "/Users/angel/Documents/workspace/relaxASMR/assets/sound_effect/rain_sound/5_wildlife/birds/robin/BBPKAAC_Birds_Constant_Robin_Tweets_and_Whistles.mp3" 1
+      >
+    >
+    <ITEM
+      POSITION 8024.4428623779595
+      SNAPOFFS 0
+      LENGTH 18.01600907029479
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {CC10D17A-3B9F-2F42-B438-ACCA855FEB68}
+      IID 16
+      NAME BBPKAAC_Birds_Constant_Robin_Tweets_and_Whistles.mp3
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E4B55C6C-1FE9-554F-A800-67974C61C885}
+      <SOURCE MP3
+        FILE "/Users/angel/Documents/workspace/relaxASMR/assets/sound_effect/rain_sound/5_wildlife/birds/robin/BBPKAAC_Birds_Constant_Robin_Tweets_and_Whistles.mp3" 1
+      >
+    >
+    <ITEM
+      POSITION 9654.7803000887179
+      SNAPOFFS 0
+      LENGTH 18.01600907029479
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {CC10D17A-3B9F-2F42-B438-ACCA855FEB68}
+      IID 16
+      NAME BBPKAAC_Birds_Constant_Robin_Tweets_and_Whistles.mp3
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E4B55C6C-1FE9-554F-A800-67974C61C885}
+      <SOURCE MP3
+        FILE "/Users/angel/Documents/workspace/relaxASMR/assets/sound_effect/rain_sound/5_wildlife/birds/robin/BBPKAAC_Birds_Constant_Robin_Tweets_and_Whistles.mp3" 1
       >
     >
   >
@@ -412,7 +640,7 @@
     AUTOMODE 0
     PANLAWFLAGS 3
     VOLPAN 0.38 0 -1 -1 1
-    MUTESOLO 0 0 0
+    MUTESOLO 1 0 0
     IPHASE 0
     PLAYOFFS 0 1
     ISBUS 0 0
@@ -430,28 +658,6 @@
     PERF 0
     MIDIOUT -1
     MAINSEND 1 0
-    <ITEM
-      POSITION 0
-      SNAPOFFS 0
-      LENGTH 15.882449
-      LOOP 1
-      ALLTAKES 0
-      FADEIN 1 0 0 1 0 0 0
-      FADEOUT 1 0 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {75D71AA5-AFFA-468D-923C-6142A9D5D9D5}
-      IID 7
-      NAME N5KW5NM_Fire_Crackle_CU_Pops_Small_Campfire.mp3
-      VOLPAN 0.38 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {CF9461B1-7DBC-4B85-9A9F-F0A3229A8006}
-      <SOURCE MP3
-        FILE "/Users/angel/Documents/workspace/relaxASMR/assets/sound_effect/rain_sound/6_human/fire/fire_crackle/N5KW5NM_Fire_Crackle_CU_Pops_Small_Campfire.mp3" 1
-      >
-    >
   >
   <TRACK {57ED42B5-822F-4550-A895-53F9A735F49A}
     NAME video
@@ -481,7 +687,7 @@
     <ITEM
       POSITION 0
       SNAPOFFS 0
-      LENGTH 23.490133
+      LENGTH 10800
       LOOP 1
       ALLTAKES 0
       FADEIN 1 0 0 1 0 0 0
