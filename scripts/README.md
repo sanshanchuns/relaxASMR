@@ -9,5 +9,6 @@
 | [elevenlabs_audio/](elevenlabs_audio/README.md) | ElevenLabs AI 音效生成 |
 | [ai_audio/](ai_audio/) | AI 音效生成与试听 |
 | [video_render/](video_render/README_video_export.md) | 成片 MP4 导出与 YouTube 物料 |
+| [../benchmark/README.md](../benchmark/README.md) | RS-PASS 成品音频 benchmark（`benchmark/score.py`） |
 
 新做「网页/API 填充」脚本时，若遇 Cloudflare，优先复用 `cloak_browser.CloakBrowserSession`。

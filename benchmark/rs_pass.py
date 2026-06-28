@@ -9,25 +9,33 @@ DEFAULT_DURATION = 300.0
 
 # theory.md RS-PASS 权重
 RS_PASS_WEIGHTS: dict[str, float] = {
-    "n5_peak_loudness": 0.25,
-    "s50_sharpness": 0.20,
-    "r5_roughness": 0.15,
-    "iacc": 0.15,
-    "f50_fluctuation": 0.10,
-    "si_irregularity": 0.10,
-    "tmax_tonality": 0.05,
+    "n5_peak_loudness": 0.22,
+    "s50_sharpness": 0.18,
+    "r5_roughness": 0.13,
+    "iacc": 0.13,
+    "f50_fluctuation": 0.09,
+    "si_irregularity": 0.09,
+    "tmax_tonality": 0.06,
+    "crest_headroom": 0.10,  # peak−RMS，惩罚稀疏尖峰
 }
 
-# 目标域（理论值；脚本用可测代理量标定）
+# 目标域：ideal = 满分甜区；outer = 超出则趋近 0（非仅「不超标即满分」）
 TARGETS = {
-    "sleep": {"n5_sone_max": 3.0},
-    "focus": {"n5_sone_max": 8.0},
-    "s50_acum_max": 1.1,
-    "r5_asper_max": 0.08,
-    "iacc_max": 0.3,
-    "f50_vacil_range": (0.03, 0.18),
-    "tmax_max": 0.02,
-    "si_range": (0.06, 0.28),
+    "sleep": {
+        "n5_sone": {"ideal": (1.0, 2.2), "outer": (0.35, 3.0)},
+        "n5_drift_db": {"ideal": (5.0, 9.0), "outer": (2.0, 14.0)},  # P95−P5 宏观起伏
+    },
+    "focus": {
+        "n5_sone": {"ideal": (2.5, 5.5), "outer": (1.0, 8.0)},
+        "n5_drift_db": {"ideal": (3.0, 9.0), "outer": (1.0, 14.0)},
+    },
+    "s50_acum": {"ideal": (0.40, 0.48), "outer": (0.24, 0.72)},
+    "r5_asper": {"ideal": (0.022, 0.048), "outer": (0.008, 0.09)},
+    "iacc": {"ideal": (0.12, 0.26), "outer": (0.04, 0.48)},  # 过低=假宽，过高=窄
+    "f50_vacil": {"ideal": (0.07, 0.11), "outer": (0.025, 0.17)},
+    "si": {"ideal": (0.14, 0.22), "outer": (0.08, 0.30)},
+    "tmax": {"ideal": (0.0, 0.004), "outer": (0.0, 0.025)},
+    "crest_db": {"ideal": (14.0, 22.0), "outer": (8.0, 32.0)},  # peak−RMS，偶发尖峰
 }
 
 
@@ -228,6 +236,25 @@ def measure_rs_pass(path: Path, duration: float) -> dict:
     }
 
 
+def score_band(value: float, ideal_lo: float, ideal_hi: float, outer_lo: float, outer_hi: float) -> float:
+    """ideal 区间内 1.0；向外线性衰减至 outer 边界为 0。"""
+    if outer_lo >= outer_hi or ideal_lo > ideal_hi:
+        return 0.0
+    if value <= outer_lo or value >= outer_hi:
+        return 0.0
+    if ideal_lo <= value <= ideal_hi:
+        return 1.0
+    if value < ideal_lo:
+        return clip((value - outer_lo) / (ideal_lo - outer_lo))
+    return clip((outer_hi - value) / (outer_hi - ideal_hi))
+
+
+def band_score(value: float, spec: dict) -> float:
+    il, ih = spec["ideal"]
+    ol, oh = spec["outer"]
+    return score_band(value, il, ih, ol, oh)
+
+
 def score_in_range(value: float, lo: float, hi: float, margin: float = 0.5) -> float:
     if lo <= value <= hi:
         return 1.0
@@ -237,93 +264,101 @@ def score_in_range(value: float, lo: float, hi: float, margin: float = 0.5) -> f
 
 
 def score_n5(m: dict, mode: str) -> dict:
-    limit = TARGETS["sleep"]["n5_sone_max"] if mode == "sleep" else TARGETS["focus"]["n5_sone_max"]
-    sone = m["n5_sone_est"]
-    raw = clip(1.0 - max(0.0, sone - limit) / limit)
-    # 过静也略扣（缺乏掩蔽）
-    if sone < 0.15:
-        raw *= 0.85
+    t = TARGETS[mode]
+    sone_raw = band_score(m["n5_sone_est"], t["n5_sone"])
+    drift_db = m["n5_p95_dbfs"] - m["n5_p5_dbfs"]
+    drift_raw = band_score(drift_db, t["n5_drift_db"])
+    raw = 0.65 * sone_raw + 0.35 * drift_raw
     return {
         "score": round(100 * raw, 1),
-        "n5_sone_est": sone,
-        "target_sone_max": limit,
+        "n5_sone_est": m["n5_sone_est"],
+        "n5_drift_db": round(drift_db, 2),
+        "sone_band_score": round(100 * sone_raw, 1),
+        "drift_band_score": round(100 * drift_raw, 1),
         "mode": mode,
         "p95_dbfs": m["n5_p95_dbfs"],
+        "p5_dbfs": m["n5_p5_dbfs"],
     }
 
 
 def score_s50(m: dict) -> dict:
-    limit = TARGETS["s50_acum_max"]
-    raw = clip(1.0 - max(0.0, m["s50_acum_est"] - limit) / limit)
+    raw = band_score(m["s50_acum_est"], TARGETS["s50_acum"])
     return {
         "score": round(100 * raw, 1),
         "s50_acum_est": m["s50_acum_est"],
-        "target_max": limit,
+        "ideal": TARGETS["s50_acum"]["ideal"],
+        "outer": TARGETS["s50_acum"]["outer"],
     }
 
 
 def score_r5(m: dict) -> dict:
-    limit = TARGETS["r5_asper_max"]
-    raw = clip(1.0 - max(0.0, m["r5_asper_est"] - limit) / (limit * 2))
+    raw = band_score(m["r5_asper_est"], TARGETS["r5_asper"])
     return {
         "score": round(100 * raw, 1),
         "r5_asper_est": m["r5_asper_est"],
-        "target_max": limit,
+        "ideal": TARGETS["r5_asper"]["ideal"],
+        "outer": TARGETS["r5_asper"]["outer"],
     }
 
 
 def score_iacc(m: dict) -> dict:
-    """越低越好 → 包裹感越强。"""
-    v = m["iacc"]
-    limit = TARGETS["iacc_max"]
-    if v <= limit:
-        raw = 1.0
-    else:
-        raw = clip(1.0 - (v - limit) / (1.0 - limit))
+    raw = band_score(m["iacc"], TARGETS["iacc"])
     return {
         "score": round(100 * raw, 1),
-        "iacc": v,
-        "target_max": limit,
+        "iacc": m["iacc"],
+        "ideal": TARGETS["iacc"]["ideal"],
+        "outer": TARGETS["iacc"]["outer"],
     }
 
 
 def score_f50(m: dict) -> dict:
-    lo, hi = TARGETS["f50_vacil_range"]
-    raw = score_in_range(m["f50_vacil_est"], lo, hi, margin=0.4)
+    raw = band_score(m["f50_vacil_est"], TARGETS["f50_vacil"])
     return {
         "score": round(100 * raw, 1),
         "f50_vacil_est": m["f50_vacil_est"],
-        "target_range": (lo, hi),
+        "ideal": TARGETS["f50_vacil"]["ideal"],
+        "outer": TARGETS["f50_vacil"]["outer"],
     }
 
 
 def score_si(m: dict) -> dict:
-    lo, hi = TARGETS["si_range"]
-    raw = score_in_range(m["si"], lo, hi, margin=0.35)
+    raw = band_score(m["si"], TARGETS["si"])
     return {
         "score": round(100 * raw, 1),
         "si": m["si"],
-        "target_range": (lo, hi),
+        "ideal": TARGETS["si"]["ideal"],
+        "outer": TARGETS["si"]["outer"],
     }
 
 
 def score_tmax(m: dict) -> dict:
-    limit = TARGETS["tmax_max"]
-    v = m["tmax"]
-    raw = clip(1.0 - max(0.0, v - limit) / (limit * 3 + 1e-9))
+    raw = band_score(m["tmax"], TARGETS["tmax"])
     return {
         "score": round(100 * raw, 1),
-        "tmax": v,
-        "target_max": limit,
+        "tmax": m["tmax"],
+        "ideal": TARGETS["tmax"]["ideal"],
+        "outer": TARGETS["tmax"]["outer"],
+    }
+
+
+def score_crest(m: dict) -> dict:
+    """peak−RMS；稀疏层/导出尖峰会拉低分。"""
+    crest = m["peak_dbfs"] - m["rms_dbfs"]
+    raw = band_score(crest, TARGETS["crest_db"])
+    return {
+        "score": round(100 * raw, 1),
+        "crest_db": round(crest, 2),
+        "ideal": TARGETS["crest_db"]["ideal"],
+        "outer": TARGETS["crest_db"]["outer"],
     }
 
 
 def rs_pass_grade(total: float) -> str:
-    if total >= 90:
+    if total >= 88:
         return "极品"
-    if total >= 75:
+    if total >= 81:
         return "优秀"
-    if total >= 60:
+    if total >= 62:
         return "普通"
     return "劣质"
 
@@ -338,6 +373,7 @@ def score_rs_pass(path: Path, duration: float = DEFAULT_DURATION, mode: str = "s
         "f50_fluctuation": score_f50(m),
         "si_irregularity": score_si(m),
         "tmax_tonality": score_tmax(m),
+        "crest_headroom": score_crest(m),
     }
     total = sum(dims[k]["score"] * RS_PASS_WEIGHTS[k] for k in RS_PASS_WEIGHTS)
     return {

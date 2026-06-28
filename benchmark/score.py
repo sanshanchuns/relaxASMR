@@ -41,6 +41,7 @@ DIM_LABELS = {
     "f50_fluctuation": "波动强度 F_50",
     "si_irregularity": "光谱不规则度 SI",
     "tmax_tonality": "纯音色调度 T_max",
+    "crest_headroom": "峰均差 Crest（稀疏尖峰）",
 }
 
 
@@ -79,16 +80,19 @@ def render_markdown(result: dict) -> str:
         f"- F_50: {m['f50_vacil_est']} Vacil(est)",
         f"- SI: {m['si']}",
         f"- T_max: {m['tmax']}",
-        f"- RMS / Peak: {m['rms_dbfs']} / {m['peak_dbfs']} dBFS",
+        f"- RMS / Peak / Crest: {m['rms_dbfs']} / {m['peak_dbfs']} / "
+        f"{round(m['peak_dbfs'] - m['rms_dbfs'], 2)} dB",
         "",
-        "## 等级（theory.md）",
+        "## 等级（甜区校准 · 代理量）",
+        "",
+        "> 旧版「不超标即满分」已改为 **ideal 甜区** 打分；88+ 应少见。",
         "",
         "| 总分 | 等级 | 含义 |",
         "|------|------|------|",
-        "| ≥90 | 极品 | 深度助眠与冥想 |",
-        "| 75–89 | 优秀 | 高专注心流学习 |",
-        "| 60–74 | 普通 | 偶有突兀或略单调 |",
-        "| <60 | 劣质 | 易疲劳焦虑 |",
+        "| ≥88 | 极品 | 各维接近甜区中心 |",
+        "| 81–87 | 优秀 | 明显好于平均 |",
+        "| 62–80 | 普通 | 合格日常雨片 |",
+        "| <62 | 劣质 | 需返工 |",
     ]
     return "\n".join(lines)
 
