@@ -1,8 +1,7 @@
 # 混音打分规则 · 包裹感 / 安全感
 
 > 把 [`design/rule.md`](../rule.md) 落成可执行的打分标准。  
-> 自动脚本：`Reaper/scripts/score_mix.py`（成品 wav + 可选 `--scene` 配方）。  
-> 本文也供 **无脚本/凭耳朵** 时按规则人工或 agent 打分。
+> 自动脚本：`benchmark/score.py`（RS-PASS · mp4/wav **前 300 秒** · `benchmark/theory.md` §四）。
 
 ## 打分对象：成品 vs 轨道
 
@@ -12,7 +11,7 @@
 | 包裹感的 立体声宽度 / 低频托底 / 混响尾 | **渲染成品 wav** | 混音后才成立，单轨不代表总和 |
 | 包裹感的 距离层数 / 近中远比例 | **配方（轨道/asmr_config）** | 混音后无法拆回，配方里一目了然 |
 
-**结论**：成品测声学 + 配方读结构，二者结合最准。`score_mix.py --wav ... --scene ...` 即此组合。
+**结论**：对 **成品 mp4/wav** 用 `benchmark/score.py` 做 RS-PASS 打分；混音结构（近中远层）仍建议对照配方人工检查。
 
 ---
 
@@ -25,7 +24,7 @@
 | 立体声宽度 | 3.0 | `side/mid` 能量比：0(单声)→0，≥0.6→1；参考 L/R 相关越低越宽 | 成品 |
 | 低频托底 | 2.0 | (sub_low+low_mid) 占比，峰值在 ~25%：`1 − |占比−25|/25` | 成品 |
 
-距离层默认映射（`score_mix.py` 内）：
+距离层默认映射（配方人工对照，benchmark 脚本不读 asmr_config）：
 
 | 层 | 距离区 |
 |----|--------|
@@ -81,4 +80,27 @@
 | 5–6.9 | 及格，结构成立但短板明显 |
 | <5 | 需返工（缺连续床 / 太刺 / 太干太窄） |
 
-阈值为启发式，可按主观盲听校准 `score_mix.py` 中的常量。
+阈值为启发式，可按主观盲听校准 `benchmark/score.py` 中的常量。
+
+---
+
+## 五、theory.md RS-PASS benchmark（`benchmark/score.py`）
+
+依据 **雨声舒缓安逸度评估标准 RS-PASS**（theory.md §四），对渲染 **mp4/wav 前 300s** 打分：
+
+| 指标 | 权重 | 目标域 |
+|------|------|--------|
+| N_5 动态峰值响度 | 25% | 助眠 ≤3 Sone / 专注 ≤8 Sone |
+| S_50 尖锐度 | 20% | ≤1.1 Acum |
+| R_5 粗糙度 | 15% | ≤0.08 Asper |
+| IACC | 15% | ≤0.3（越低包裹感越强） |
+| F_50 波动强度 | 10% | 0.05–0.15 Vacil |
+| SI 光谱不规则度 | 10% | 中高水平 |
+| T_max 纯音色调度 | 5% | ≤0.02 |
+
+```bash
+python3 benchmark/score.py path/to/render.mp4
+python3 benchmark/score.py path/to/mix.wav --mode focus --json --duration 300
+```
+
+等级：≥90 极品 · 75–89 优秀 · 60–74 普通 · <60 劣质。实现见 `benchmark/rs_pass.py`（代理量，非实验室级）。

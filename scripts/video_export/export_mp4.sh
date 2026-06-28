@@ -15,6 +15,8 @@ AUDIO_BITRATE="192k"
 PRESET="medium"
 ENCODER="cpu"   # cpu = libx264 (multi-thread) | nvenc = h264_nvenc (GPU)
 THREADS="0"     # 0 = libx264 auto (use all cores)
+SKIP_BENCHMARK=0
+BENCHMARK_DURATION="300"
 
 format_elapsed() {
   local s=${1%.*}
@@ -123,6 +125,8 @@ Usage: export_mp4.sh -v VIDEO -a AUDIO [-o OUTPUT] [options]
       --audio-bitrate B   Default: 192k
       --preset NAME       cpu: x264 preset (default: medium)
                           nvenc: p1–p7 (default: p5)
+      --skip-benchmark    跳过 theory benchmark（默认在合成成功后运行）
+      --benchmark-duration SEC  benchmark 分析时长（默认 300 秒）
   -h, --help
 
 Example:
@@ -148,6 +152,8 @@ while [[ $# -gt 0 ]]; do
     --bufsize) BUFSIZE="$2"; shift 2 ;;
     --audio-bitrate) AUDIO_BITRATE="$2"; shift 2 ;;
     --preset) PRESET="$2"; shift 2 ;;
+    --skip-benchmark) SKIP_BENCHMARK=1; shift ;;
+    --benchmark-duration) BENCHMARK_DURATION="$2"; shift 2 ;;
     -h|--help) usage; exit 0 ;;
     *) echo "Unknown option: $1" >&2; usage >&2; exit 1 ;;
   esac
@@ -273,12 +279,34 @@ ffprobe -v error -show_entries format=duration,size,bit_rate \
   -show_entries stream=codec_type,width,height,bit_rate \
   -of default=nw=1 "$OUTPUT"
 
-# YouTube material (metadata + thumbnail)
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../" && pwd)"
+SCORE_PY="$REPO_ROOT/benchmark/score.py"
 MATERIAL_SCRIPT="$(dirname "${BASH_SOURCE[0]}")/generate_youtube_material.sh"
+MATERIAL_OK=0
+
 if [[ -x "$MATERIAL_SCRIPT" ]]; then
   echo
   echo "==> Generating YouTube material ..."
-  "$MATERIAL_SCRIPT" "$OUTPUT" || echo "Warning: material generation failed (non-fatal)" >&2
+  if "$MATERIAL_SCRIPT" "$OUTPUT" --benchmark-duration "$BENCHMARK_DURATION"; then
+    MATERIAL_OK=1
+  else
+    echo "Warning: material generation failed (non-fatal)" >&2
+  fi
+fi
+
+# 物料脚本已含 benchmark；仅在没有跑物料或显式跳过时，由 export 单独跑
+if [[ "$SKIP_BENCHMARK" -eq 0 && "$MATERIAL_OK" -eq 0 && -f "$SCORE_PY" ]]; then
+  echo
+  echo "==> Running audio benchmark (theory.md, first ${BENCHMARK_DURATION}s) ..."
+  OUT_STEM=$(basename "${OUTPUT%.*}")
+  python3 "$SCORE_PY" "$OUTPUT" \
+    --duration "$BENCHMARK_DURATION" \
+    --output-dir "$(dirname "$OUTPUT")" \
+    --report-stem "${OUT_STEM}_benchmark" \
+    || echo "Warning: benchmark failed (non-fatal)" >&2
+fi
+
+if [[ "$MATERIAL_OK" -eq 1 ]]; then
   TOTAL_ELAPSED=$(( $(date +%s) - START_TS ))
   echo "==> All done. Finished in $(format_elapsed "$TOTAL_ELAPSED")"
 fi
