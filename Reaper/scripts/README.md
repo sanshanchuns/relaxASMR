@@ -6,7 +6,7 @@ Rain / Lake 等工程共用。媒体路径指向仓库 `assets/`。
 
 | 脚本 | 何时用 |
 |------|--------|
-| **`asmr_apply_recipe.lua`** | **首选** · 铺循环 + 全部稀疏 + 轨 2 音量包络 |
+| **`asmr_apply_recipe.lua`** | **首选** · 铺循环 + 全部稀疏 + **`1_rain` 音量包络（Dynamic）** |
 | **`asmr_scatter_track.lua`** | **只重做一条稀疏轨**（见下） |
 | **`asmr_loop_track.lua`** | **只循环一条轨**（试验素材长度时） |
 
@@ -22,13 +22,13 @@ Rain / Lake 等工程共用。媒体路径指向仓库 `assets/`。
 4. 弹窗选 **确定**（循环+稀疏）→ 完成后 **Ctrl+S**
 5. 日志：**View → Show console**（Mac 上 **`~`** 键）
 
-> 子工程 `scripts/` 里的 `rain_setup_project.lua` 是旧版入口，**请用 `asmr_apply_recipe.lua`**（含轨 2 长时音量包络）。
+> 子工程 `scripts/` 里的 `rain_setup_project.lua` 是旧版入口，**请用 `asmr_apply_recipe.lua`**（含 **`1_rain` 长时音量包络**）。
 
 ## 稀疏散布：只用 `asmr_scatter_track.lua`
 
 | 场景 | 操作 |
 |------|------|
-| **Rain 子工程、配方里已有 scatter_layers** | 输入层 id：`3_impact`、`6_life`（或 `0` 选中当前轨）→ **自动读 asmr_config** |
+| **Rain 子工程、配方里已有 scatter_layers** | 输入层 id：`2_impact`、`5_wildlife`（或 `0` 选中当前轨）→ **自动读 asmr_config** |
 | **无配方 / 临时试间隔** | 输入轨后 **无配方匹配** → 弹出手动参数（时长、间隔、随机度） |
 | **整片 3h 全部稀疏层** | 用 **`asmr_apply_recipe`**，不要逐个跑 scatter |
 
@@ -65,7 +65,7 @@ python3 Reaper/scripts/create_rain_subproject.py \
   --video assets/loop_video/rain_video/MVI_6918/MVI_6918_loop_3_fade_0.5.mp4
 ```
 
-自动：探测视频 ·（若有）内嵌音轨七层分析 · 首帧启发式 · `video_analysis.md` + `asmr_config.lua` + `.rpp`（Group **ReaEQ + ReaComp** · 轨 `6_life` **ReaVerbate**）。
+自动：探测视频 ·（若有）内嵌音轨六层分析 · 首帧启发式 · `video_analysis.md` + `asmr_config.lua` + `.rpp`（Group **ReaEQ + ReaComp** · 轨 `5_wildlife` **ReaVerbate** · 轨 7 视频）。
 
 **仅重新生成 `.rpp`（配方已写好）：**
 
@@ -84,7 +84,7 @@ python3 Reaper/scripts/generate_subproject.py --scene MVI_6918
 
 强制覆盖：`RELAXASMR_MEDIA_MODE=absolute` 或 `--media-mode wsl_unc`。
 
-打开 `.rpp` → **`asmr_apply_recipe.lua`**（铺循环/稀疏 + **轨 2 长时音量包络**）→ 手调 Group / Master 限幅 → 渲染 wav → [`scripts/video_render/export_mp4.sh`](../../../scripts/video_render/export_mp4.sh) 合成 mp4 → `score_mix.py`。
+打开 `.rpp` → **`asmr_apply_recipe.lua`**（铺循环/稀疏 + **`1_rain` 长时音量包络**）→ 手调 Group / Master 限幅 → 渲染 wav → [`scripts/video_render/export_mp4.sh`](../../../scripts/video_render/export_mp4.sh) 合成 mp4 → `score_mix.py`。
 
 `asmr_config.lua` 在子工程 `scripts/` 下（非 `Audio Files/`）。
 

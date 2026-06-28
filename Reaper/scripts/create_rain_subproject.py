@@ -2,7 +2,7 @@
 """从 loop 视频一键创建 Rain 子工程。
 
 流程：探测视频 →（可选）内嵌音轨七层分析 → 首帧启发式 → 生成配方
-→ 脚手架 → generate_subproject（Group ReaEQ+ReaComp · 6_life ReaVerbate）
+→ 脚手架 → generate_subproject（Group ReaEQ+ReaComp · 5_wildlife ReaVerbate）
 
 用法（仓库根目录）：
 
@@ -95,7 +95,7 @@ def main() -> None:
         print(f"     {apply_lua}")
     else:
         print(f"     {shared_lua}")
-    print("  3. 弹窗选「确定」= 循环 + 稀疏 + 轨 2 音量包络")
+    print("  3. 弹窗选「确定」= 循环 + 稀疏 + 1_rain 音量包络（Dynamic）")
 
 
 if __name__ == "__main__":

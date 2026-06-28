@@ -2,7 +2,7 @@
 
 > 子工程：`subprojects/MVI_6927`
 > 视频：`assets/loop_video/rain_video/MVI_6927.mp4`
-> 分析日期：2026-06-27
+> 分析日期：2026-06-28
 > 状态：**Looper 首帧代表全片**（`create_rain_subproject.py` 自动生成，§一 请人工核对）
 > 系列：**Rain 睡眠**
 > 成片时长：**3 h**
@@ -33,9 +33,23 @@
 > 本文件 **无内嵌音轨**，配方依据画面启发 + 睡眠系列默认模板。
 
 ---
+# 三、六层配方 + Dynamic（自动初版）
 
-# 三、七层配方（自动初版）
+> 架构：[rain_sound_design.md](../../../../design/rain_series/rain_sound_design.md)
+> 轨 1–6 = 素材层 · 轨 7 = 视频 · **Dynamic** = `1_rain` 音量包络（无独立轨）
 
-见 `scripts/asmr_config.lua` · `create_rain_subproject.py`
+## 3.1 配方总览
 
-打开工程后运行 **`asmr_apply_recipe.lua`**。
+| 轨 | layer_id | 名称 | 模式 | 音量 |
+|----|----------|------|------|------|
+| 1 | `1_rain` | 小雨主雨势 | loop + **Dynamic** | 1.0 |
+| 3 | `3_environment` | 环境空间 | loop | 0.26 |
+| 4 | `4_water` | 水体/滴水 | loop | 0.18 |
+| 6 | `6_human` | 炉火噼啪 | loop | 0.38 |
+| 2 | `2_impact` | 雨打树叶 | scatter (3–8 min) | 0.5 |
+| 5 | `5_wildlife` | 远处鸟鸣 | scatter (12–28 min) | 0.28 |
+| 7 | video | Video · MVI_6927 loop | render_only | mute |
+
+详细路径见 `scripts/asmr_config.lua` · 生成：`create_rain_subproject.py`
+
+打开工程后运行 **`asmr_apply_recipe.lua`**（铺循环/稀疏 + **`1_rain` 长时音量包络**）。

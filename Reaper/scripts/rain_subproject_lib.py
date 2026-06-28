@@ -29,17 +29,20 @@ SHARED_REAPER_LUA = (
 
 SCENE_ID_RE = re.compile(r"(MVI_\d+)", re.I)
 
-# 默认素材目录（相对 sound_effect/rain_sound）
+# 默认素材目录（相对 sound_effect/rain_sound · 见 design/rain_series/rain_sound_design.md）
 DEFAULT_ASSET_DIRS = {
     "1_rain": "1_rain/intensity/light",
     "2_impact": "2_impact/vegetation/leaves",
     "3_environment": "3_environment/ambience/forest",
     "4_water": "4_water/dripping",
-    "5_wildlife": "../elevenlabs_sound/bird",
-    "6_human": "2_impact/fabric/umbrella",
+    "5_wildlife": "5_wildlife/birds",
+    "6_human": "6_human/fire",
 }
 
 BIRD_FALLBACK = "assets/sound_effect/elevenlabs_sound/bird/api_mvi6918_bird_distant.mp3"
+HUMAN_FALLBACK_DIR = "2_impact/fabric/umbrella"
+WATER_LAKE_DIR = "4_water/standing_water"
+ENV_LAKE_DIR = "3_environment/ambience/lake"
 
 
 def derive_scene_id(video: Path, explicit: str | None = None) -> str:
@@ -123,6 +126,9 @@ def analyze_embedded_audio(video: Path) -> dict | None:
 def analyze_visual_heuristic(video: Path) -> dict:
     """首帧 RGB 粗分析 + 文件名线索（无视觉模型）。"""
     hints: dict = {"filename": video.name}
+    meta = probe_video(video)
+    hints["width"] = meta.get("width", 0)
+    hints["height"] = meta.get("height", 0)
     m_loop = re.search(r"loop_(\d+)", video.name, re.I)
     m_fade = re.search(r"fade_(\d+(?:\.\d+)?)", video.name, re.I)
     if m_loop:
@@ -162,20 +168,31 @@ def analyze_visual_heuristic(video: Path) -> dict:
                 hints["mean_rgb"] = (round(r), round(g), round(b))
                 hints["brightness"] = round(brightness, 1)
                 hints["green_dominant"] = g > r * 1.05 and g > b * 1.05
+                w, h = hints.get("width", 0), hints.get("height", 0)
+                if w > 0 and h > 0:
+                    row_bytes = w * 3
+                    bottom = raw[(h // 2) * row_bytes :]
+                    if bottom:
+                        nb = len(bottom) // 3
+                        br = sum(bottom[i] for i in range(0, len(bottom), 3)) / nb
+                        bg = sum(bottom[i + 1] for i in range(0, len(bottom), 3)) / nb
+                        bb = sum(bottom[i + 2] for i in range(0, len(bottom), 3)) / nb
+                        hints["water_dominant"] = bb > br + 6 and bb > bg - 5
     return hints
 
 
 def pick_first_mp3(rel_dir: str) -> str | None:
     if rel_dir.startswith("../"):
         base = (REPO_ROOT / "assets" / "sound_effect" / rel_dir.replace("../", "")).resolve()
-        prefix = f"assets/sound_effect/{rel_dir.replace('../', '')}"
     else:
-        base = SOUND_ROOT / rel_dir
-        prefix = f"assets/sound_effect/rain_sound/{rel_dir}"
+        base = (SOUND_ROOT / rel_dir).resolve()
     if not base.is_dir():
         return None
-    for p in sorted(base.glob("*.mp3")):
-        return f"{prefix}/{p.name}"
+    for p in sorted(base.rglob("*.mp3")):
+        try:
+            return p.relative_to(REPO_ROOT).as_posix()
+        except ValueError:
+            continue
     return None
 
 
@@ -190,30 +207,55 @@ def build_asmr_config(
     paths: dict[str, str] = {}
     for key, rel in DEFAULT_ASSET_DIRS.items():
         if key == "5_wildlife":
+            picked = pick_first_mp3(rel)
             bird = REPO_ROOT / BIRD_FALLBACK
-            paths[key] = BIRD_FALLBACK if bird.is_file() else pick_first_mp3(rel) or BIRD_FALLBACK
+            paths[key] = picked or (BIRD_FALLBACK if bird.is_file() else "")
+        elif key == "6_human":
+            paths[key] = pick_first_mp3(rel) or pick_first_mp3(HUMAN_FALLBACK_DIR) or ""
         else:
             picked = pick_first_mp3(rel)
             if picked:
                 paths[key] = picked
 
-    # 音频启发：强雨层保持 light_rain；生物层弱则仍可保留稀疏鸟鸣（睡眠系列惯例）
     rain_vol = 1.0
-    life_vol = 0.3
+    env_vol = 0.26
+    water_vol = 0.18
+    human_vol = 0.38
+    impact_vol = 0.5
+    wild_vol = 0.28
+
     if audio_layers:
-        lv = audio_layers.get("1_rain", {}).get("level", "") or audio_layers.get("2_rain", {}).get("level", "")
+        lv = audio_layers.get("1_rain", {}).get("level", "")
         if lv == "强":
-            paths["1_rain"] = pick_first_mp3("1_rain/intensity/moderate") or paths.get("1_rain")
-        wild = audio_layers.get("5_wildlife", {}) or audio_layers.get("6_life", {})
+            paths["1_rain"] = pick_first_mp3("1_rain/intensity/moderate") or paths.get("1_rain", "")
+        elif lv == "弱":
+            paths["1_rain"] = pick_first_mp3("1_rain/intensity/drizzle") or paths.get("1_rain", "")
+
+        wild = audio_layers.get("5_wildlife", {})
         if wild.get("level") in ("无/极弱", "弱"):
-            life_vol = 0.25
+            wild_vol = 0.22
+        elif wild.get("level") == "强":
+            wild_vol = 0.35
 
-    if visual and visual.get("green_dominant"):
-        paths["3_environment"] = pick_first_mp3("3_environment/ambience/forest") or paths.get("3_environment", "")
+        water = audio_layers.get("4_water", {})
+        if water.get("level") in ("中", "强"):
+            water_vol = 0.24
+            paths["4_water"] = pick_first_mp3(WATER_LAKE_DIR) or paths.get("4_water", "")
 
-    comfort_note = "伞面近场"
-    if visual and "umbrella" in video_rel.lower():
-        comfort_note = "伞面近场（文件名线索）"
+    if visual:
+        if visual.get("water_dominant"):
+            paths["3_environment"] = pick_first_mp3(ENV_LAKE_DIR) or paths.get("3_environment", "")
+            paths["4_water"] = pick_first_mp3(WATER_LAKE_DIR) or paths.get("4_water", "")
+            env_vol = 0.24
+            water_vol = 0.22
+        elif visual.get("green_dominant"):
+            paths["3_environment"] = pick_first_mp3("3_environment/ambience/forest") or paths.get("3_environment", "")
+
+    human_name = "近场舒适"
+    if paths.get("6_human", "").find("umbrella") >= 0 or "umbrella" in paths.get("6_human", ""):
+        human_name = "伞面近场"
+    elif paths.get("6_human", "").find("fire") >= 0:
+        human_name = "炉火噼啪"
 
     cfg = {
         "scene_id": scene_id,
@@ -242,15 +284,22 @@ def build_asmr_config(
             {
                 "track": 3,
                 "id": "3_environment",
-                "name": "林间环境",
-                "vol": 0.28,
+                "name": "环境空间",
+                "vol": env_vol,
                 "paths": [paths.get("3_environment", "")],
+            },
+            {
+                "track": 4,
+                "id": "4_water",
+                "name": "水体/滴水",
+                "vol": water_vol,
+                "paths": [paths.get("4_water", "")],
             },
             {
                 "track": 6,
                 "id": "6_human",
-                "name": comfort_note,
-                "vol": 0.45,
+                "name": human_name,
+                "vol": human_vol,
                 "paths": [paths.get("6_human", "")],
             },
         ],
@@ -259,7 +308,7 @@ def build_asmr_config(
                 "track": 2,
                 "id": "2_impact",
                 "name": "雨打树叶",
-                "vol": 0.5,
+                "vol": impact_vol,
                 "paths": [paths.get("2_impact", "")],
                 "min_gap_min": 3,
                 "max_gap_min": 8,
@@ -270,7 +319,7 @@ def build_asmr_config(
                 "track": 5,
                 "id": "5_wildlife",
                 "name": "远处鸟鸣",
-                "vol": life_vol,
+                "vol": wild_vol,
                 "paths": [paths.get("5_wildlife", BIRD_FALLBACK)],
                 "min_gap_min": 12,
                 "max_gap_min": 28,
@@ -281,6 +330,46 @@ def build_asmr_config(
         "fade_sec": 0.08,
     }
     return cfg
+
+
+def recipe_section_md(cfg: dict) -> str:
+    """§三 配方总览（Rain Sound Design 六层 + Dynamic + video）。"""
+    lines = [
+        "# 三、六层配方 + Dynamic（自动初版）",
+        "",
+        "> 架构：[rain_sound_design.md](../../../../design/rain_series/rain_sound_design.md)",
+        "> 轨 1–6 = 素材层 · 轨 7 = 视频 · **Dynamic** = `1_rain` 音量包络（无独立轨）",
+        "",
+        "## 3.1 配方总览",
+        "",
+        "| 轨 | layer_id | 名称 | 模式 | 音量 |",
+        "|----|----------|------|------|------|",
+    ]
+    for layer in cfg.get("loop_layers", []):
+        mode = "loop"
+        if layer.get("vol_envelope"):
+            mode = "loop + **Dynamic**"
+        lines.append(
+            f"| {layer['track']} | `{layer['id']}` | {layer.get('name', '')} | {mode} | {layer.get('vol', 1)} |"
+        )
+    for layer in cfg.get("scatter_layers", []):
+        gap = f"{layer.get('min_gap_min', '?')}–{layer.get('max_gap_min', '?')} min"
+        lines.append(
+            f"| {layer['track']} | `{layer['id']}` | {layer.get('name', '')} | scatter ({gap}) | {layer.get('vol', 1)} |"
+        )
+    video = cfg.get("video", {})
+    if video:
+        lines.append(
+            f"| {video.get('track', 7)} | video | {video.get('name', 'loop')} | render_only | mute |"
+        )
+    lines.extend([
+        "",
+        "详细路径见 `scripts/asmr_config.lua` · 生成：`create_rain_subproject.py`",
+        "",
+        "打开工程后运行 **`asmr_apply_recipe.lua`**（铺循环/稀疏 + **`1_rain` 长时音量包络**）。",
+        "",
+    ])
+    return "\n".join(lines)
 
 
 def lua_quote(s: str) -> str:
@@ -358,6 +447,7 @@ def write_video_analysis(
     probe: dict,
     visual: dict,
     audio: dict | None,
+    cfg: dict,
 ) -> None:
     from analyze_video_audio import LAYER_ROWS, build_markdown
 
@@ -404,7 +494,7 @@ def write_video_analysis(
     if audio:
         video_abs = REPO_ROOT / video_rel
         section = build_markdown(video_abs, audio["stats"], audio["layers"])
-        body = "\n".join(header) + section + "\n---\n\n# 三、七层配方（自动初版）\n\n见 `scripts/asmr_config.lua` · 生成：`create_rain_subproject.py`\n\n打开工程后运行 **`asmr_apply_recipe.lua`**（轨 2 长时包络 + 循环/稀疏）。\n"
+        body = "\n".join(header) + section + "\n---\n\n" + recipe_section_md(cfg)
     else:
         no_audio = [
             "# 二、视频原声拆解",
@@ -413,14 +503,8 @@ def write_video_analysis(
             "",
             "---",
             "",
-            "# 三、七层配方（自动初版）",
-            "",
-            "见 `scripts/asmr_config.lua` · `create_rain_subproject.py`",
-            "",
-            "打开工程后运行 **`asmr_apply_recipe.lua`**。",
-            "",
         ]
-        body = "\n".join(header) + "\n".join(no_audio)
+        body = "\n".join(header) + "\n".join(no_audio) + recipe_section_md(cfg)
 
     path.write_text(body, encoding="utf-8")
 
@@ -483,6 +567,7 @@ def create_from_video(
         probe,
         visual,
         audio,
+        cfg,
     )
 
     if not skip_generate:
