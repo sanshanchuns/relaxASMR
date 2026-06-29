@@ -1,7 +1,7 @@
 # 混音打分规则 · 包裹感 / 安全感
 
 > 把 [`design/rule.md`](../rule.md) 落成可执行的打分标准。  
-> 自动脚本：`benchmark/score.py`（RS-PASS · mp4/wav **前 300 秒** · `benchmark/theory.md` §四）。
+> 自动脚本：`benchmark/score.py`（RS-PASS · mp4/wav **前 1800 秒**（不足则全长）· `benchmark/theory.md` §四）。
 
 ## 打分对象：成品 vs 轨道
 
@@ -86,21 +86,26 @@
 
 ## 五、theory.md RS-PASS benchmark（`benchmark/score.py`）
 
-依据 **雨声舒缓安逸度评估标准 RS-PASS**（theory.md §四），对渲染 **mp4/wav 前 300s** 打分：
+依据 **雨声舒缓安逸度评估标准 RS-PASS**（theory.md §四）与 **三色噪声分类**（§一），对渲染 **mp4/wav 前 1800s**（不足则全长）打分：
 
 | 指标 | 权重 | 目标域 |
 |------|------|--------|
 | N_5 动态峰值响度 | 25% | 助眠 ≤3 Sone / 专注 ≤8 Sone |
-| S_50 尖锐度 | 20% | ≤1.1 Acum |
+| S_50 尖锐度 | 20% | ≤1.1 Acum（白噪类型容忍至 1.35） |
 | R_5 粗糙度 | 15% | ≤0.08 Asper |
 | IACC | 15% | ≤0.3（越低包裹感越强） |
 | F_50 波动强度 | 10% | 0.05–0.15 Vacil |
 | SI 光谱不规则度 | 10% | 中高水平 |
 | T_max 纯音色调度 | 5% | ≤0.02 |
 
+**色噪声类型**（`benchmark/noise_type.py`）：PSD 斜率分类 pink / white / brown，输出类型贴合度；综合分 = **85% RS-PASS + 15% 类型贴合**。省略 `--mode` 时按主类型自动选 sleep（粉/棕）或 focus（白）。
+
+**Reaper 修改建议**（`--rpp` 或从媒体路径自动推断）：读取轨道 vol/FX 与 `asmr_config.lua`，对照 theory §五 前景 60% / 中景 30% / 背景 10%，输出 ReaEQ、素材替换、层能量等建议（`benchmark/recommendations.py`）。
+
 ```bash
 python3 benchmark/score.py path/to/render.mp4
-python3 benchmark/score.py path/to/mix.wav --mode focus --json --duration 300
+python3 benchmark/score.py path/to/mix.wav --mode focus --json --duration 1800
+python3 benchmark/score.py path/to/render.mp4 --rpp Reaper/Projects/Rain/subprojects/MVI_6918/MVI_6918.rpp
 ```
 
 等级：≥90 极品 · 75–89 优秀 · 60–74 普通 · <60 劣质。实现见 `benchmark/rs_pass.py`（代理量，非实验室级）。

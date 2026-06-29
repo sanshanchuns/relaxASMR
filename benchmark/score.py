@@ -1,20 +1,15 @@
 #!/usr/bin/env python3
-"""RS-PASS 雨声舒缓安逸度 benchmark（benchmark/theory.md §四）。
+"""RS-PASS + 色噪声类型 benchmark（benchmark/theory.md §一、§四）。
 
-对渲染成品 mp4 / wav 分析前 N 秒（默认 300s），七项心理声学代理指标：
-
-  N_5   动态峰值响度   25%  助眠 ≤3 Sone / 专注 ≤8 Sone
-  S_50  尖锐度         20%  ≤1.1 Acum
-  R_5   粗糙度         15%  ≤0.08 Asper
-  IACC  双耳互相关     15%  ≤0.3（越低包裹感越强）
-  F_50  波动强度       10%  0.05–0.15 Vacil
-  SI    光谱不规则度   10%  中高水平
-  T_max 纯音色调度     5%   ≤0.02
+对渲染成品 mp4/wav 分析前 N 秒（默认 1800s；不足则分析全长）：
+  - 判断主噪声类型：pink / white / brown
+  - 类型内 RS-PASS 七项指标 + 类型贴合度
+  - 可选读取 .rpp / asmr_config 给出 Reaper 修改建议
 
 用法：
   python3 benchmark/score.py path/to/render.mp4
-  python3 benchmark/score.py path/to/mix.wav --mode focus --json
-  python3 benchmark/score.py path/to/render.mp4 --output-dir material/out/
+  python3 benchmark/score.py path/to/mix.wav --rpp Reaper/Projects/Rain/subprojects/MVI_6918/MVI_6918.rpp
+  python3 benchmark/score.py path/to/render.mp4 --mode sleep --output-dir material/out/
 """
 
 from __future__ import annotations
@@ -24,10 +19,10 @@ import json
 import sys
 from pathlib import Path
 
+from rpp_context import load_project_context
 from rs_pass import (
     DEFAULT_DURATION,
     RS_PASS_WEIGHTS,
-    rs_pass_grade,
     score_rs_pass,
 )
 
@@ -44,16 +39,41 @@ DIM_LABELS = {
     "crest_headroom": "峰均差 Crest（稀疏尖峰）",
 }
 
+PRIORITY_ORDER = {"high": 0, "medium": 1, "low": 2, "info": 3}
+
 
 def render_markdown(result: dict) -> str:
     d = result["dimensions"]
+    nt = result.get("noise_type", {})
+    tf = result.get("type_fit", {})
+    req = result.get("duration_requested_s", result["duration_s"])
+    actual = result["duration_s"]
+    if result.get("duration_file_s") is not None and actual < req - 0.5:
+        dur_desc = f"全长 **{actual:.0f} s**"
+    else:
+        dur_desc = f"前 **{actual:.0f} s**"
     lines = [
         f"# RS-PASS Benchmark · {Path(result['file']).name}",
         "",
-        "> 依据 `benchmark/theory.md` §四 RS-PASS · "
-        f"模式 **{result['mode']}** · 前 **{result['duration_s']:.0f} s**",
+        "> 依据 `benchmark/theory.md` · "
+        f"模式 **{result['mode']}** · 分析 {dur_desc}",
         "",
-        f"**总分 {result['total_score']:.1f} / 100** · **{result['grade']}**",
+        f"**综合分 {result['total_score']:.1f} / 100** · **{result['grade']}** "
+        f"（RS-PASS {result.get('rs_pass_score', result['total_score']):.1f} + "
+        f"类型贴合 {tf.get('type_fit_score', 0):.1f}）",
+        "",
+        "## 色噪声类型（theory §一）",
+        "",
+        f"- **主类型**：{nt.get('label_zh', '?')} (`{nt.get('primary', '?')}`)",
+        f"- **PSD 斜率**：{nt.get('slope')}（理想 {nt.get('ideal_slope')}）· 置信度 {nt.get('confidence')}",
+        f"- **场景**：{nt.get('use_zh', '')}",
+        f"- **类型贴合度**：{tf.get('type_fit_score', 0):.1f} / 100",
+    ]
+    if nt.get("secondary"):
+        lines.append(f"- **次类型提示**：`{nt['secondary']}`")
+    lines += [
+        "",
+        "## RS-PASS 指标",
         "",
         "| 指标 | 得分 / 100 | 权重 |",
         "|------|------------|------|",
@@ -62,16 +82,34 @@ def render_markdown(result: dict) -> str:
         lines.append(
             f"| {DIM_LABELS[key]} | **{d[key]['score']:.1f}** | {int(w * 100)}% |"
         )
-    lines += ["", "## 指标详情", ""]
-    for key in RS_PASS_WEIGHTS:
-        lines.append(f"### {DIM_LABELS[key]}")
-        for k, v in d[key].items():
-            if k != "score":
-                lines.append(f"- {k}: {v}")
-        lines.append("")
-    m = result["measurements"]
+
+    proj = result.get("project") or {}
+    mix = proj.get("mix") or {}
+    if mix.get("role_energy_pct"):
+        lines += [
+            "",
+            "## 混音三层能量（theory §五 · 来自 RPP/配方）",
+            "",
+            "| 层 | 实际 | 目标 |",
+            "|----|------|------|",
+        ]
+        ideal = mix.get("ideal_role_pct", {})
+        for role in ("foreground", "mid", "background"):
+            lines.append(
+                f"| {role} | {mix['role_energy_pct'].get(role, 0)}% | "
+                f"{ideal.get(role, '?')}% |"
+            )
+        if proj.get("rpp_path"):
+            lines.append(f"\n工程：`{proj['rpp_path']}`")
+
+    recs = result.get("recommendations") or []
+    if recs:
+        lines += ["", "## 修改建议", ""]
+        for rec in sorted(recs, key=lambda r: PRIORITY_ORDER.get(r["priority"], 9)):
+            tag = rec["priority"].upper()
+            lines.append(f"- **[{tag}]** {rec['text']}")
+
     lines += [
-        "## 原始测量（代理量，非实验室级）",
         "",
         f"- N_5 响度估计: {m['n5_sone_est']} Sone (P95 {m['n5_p95_dbfs']} dBFS)",
         f"- S_50: {m['s50_acum_est']} Acum(est)",
@@ -115,16 +153,26 @@ def run_benchmark(
     duration: float = DEFAULT_DURATION,
     out_dir: Path | None = None,
     report_stem: str = "benchmark",
-    mode: str = "sleep",
+    mode: str | None = None,
+    rpp_path: Path | None = None,
+    *,
+    auto_mode: bool = True,
 ) -> dict:
-    result = score_rs_pass(path.resolve(), duration=duration, mode=mode)
+    project = load_project_context(rpp_path, path)
+    result = score_rs_pass(
+        path.resolve(),
+        duration=duration,
+        mode=mode,
+        auto_mode=auto_mode,
+        project=project,
+    )
     if out_dir is not None:
         write_results(result, out_dir, report_stem=report_stem)
     return result
 
 
 def main() -> None:
-    ap = argparse.ArgumentParser(description="RS-PASS 雨声舒缓安逸度 benchmark")
+    ap = argparse.ArgumentParser(description="RS-PASS + 色噪声类型 benchmark")
     ap.add_argument("input", type=Path, help="mp4 / wav / ffmpeg 可读音频")
     ap.add_argument(
         "--duration",
@@ -135,17 +183,24 @@ def main() -> None:
     ap.add_argument(
         "--mode",
         choices=("sleep", "focus"),
-        default="sleep",
-        help="N_5 目标域：sleep≤3 Sone / focus≤8 Sone",
+        default=None,
+        help="评估意图；省略则按检测到的噪声类型自动选择",
+    )
+    ap.add_argument(
+        "--no-auto-mode",
+        action="store_true",
+        help="不根据噪声类型自动选择 sleep/focus",
+    )
+    ap.add_argument(
+        "--rpp",
+        type=Path,
+        default=None,
+        help="Reaper 工程 .rpp（省略则尝试从媒体路径推断）",
     )
     ap.add_argument("--json", action="store_true", help="JSON 输出到 stdout")
     ap.add_argument("--markdown", action="store_true", help="Markdown 输出到 stdout")
     ap.add_argument("--output-dir", type=Path, help="写入 benchmark.md / benchmark.json")
-    ap.add_argument(
-        "--report-stem",
-        default="benchmark",
-        help="报告文件名前缀",
-    )
+    ap.add_argument("--report-stem", default="benchmark", help="报告文件名前缀")
     args = ap.parse_args()
 
     path = args.input.resolve()
@@ -158,13 +213,17 @@ def main() -> None:
         out_dir=args.output_dir,
         report_stem=args.report_stem,
         mode=args.mode,
+        rpp_path=args.rpp,
+        auto_mode=not args.no_auto_mode,
     )
 
     if args.output_dir:
         json_path = args.output_dir / f"{args.report_stem}.json"
+        nt = result.get("noise_type", {})
         print(
             f"==> RS-PASS: {result['total_score']:.1f} / 100 "
-            f"({result['grade']}, 前 {result['duration_s']:.0f}s) → {json_path}"
+            f"({result['grade']}, {nt.get('label_zh', '?')}, "
+            f"前 {result['duration_s']:.0f}s) → {json_path}"
         )
 
     if args.json:

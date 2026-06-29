@@ -16,7 +16,7 @@ PRESET="medium"
 ENCODER="cpu"   # cpu = libx264 (multi-thread) | nvenc = h264_nvenc (GPU)
 THREADS="0"     # 0 = libx264 auto (use all cores)
 SKIP_BENCHMARK=0
-BENCHMARK_DURATION="300"
+BENCHMARK_DURATION="1800"
 
 format_elapsed() {
   local s=${1%.*}
@@ -126,7 +126,7 @@ Usage: export_mp4.sh -v VIDEO -a AUDIO [-o OUTPUT] [options]
       --preset NAME       cpu: x264 preset (default: medium)
                           nvenc: p1–p7 (default: p5)
       --skip-benchmark    跳过 theory benchmark（默认在合成成功后运行）
-      --benchmark-duration SEC  benchmark 分析时长（默认 300 秒）
+      --benchmark-duration SEC  benchmark 分析时长（默认 1800 秒；不足则全长）
   -h, --help
 
 Example:

@@ -769,7 +769,7 @@ def render_markdown(
 def run_audio_benchmark(
     video: Path,
     out_dir: Path,
-    duration: float = 300.0,
+    duration: float = 1800.0,
 ) -> dict | None:
     """对合成 mp4/wav 跑 theory benchmark，写入 out_dir/benchmark.md + .json。"""
     score_py = REPO_ROOT / "benchmark" / "score.py"
@@ -844,8 +844,8 @@ def main() -> None:
     parser.add_argument(
         "--benchmark-duration",
         type=float,
-        default=300.0,
-        help="benchmark 分析时长（秒），默认前 300 秒",
+        default=1800.0,
+        help="benchmark 分析时长（秒），默认前 1800 秒；不足则分析全长",
     )
     args = parser.parse_args()
 

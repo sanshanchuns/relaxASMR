@@ -5,7 +5,15 @@ from __future__ import annotations
 import subprocess
 from pathlib import Path
 
-DEFAULT_DURATION = 300.0
+from noise_type import (
+    S50_LIMIT_BY_TYPE,
+    TYPE_META,
+    classify_noise_type,
+    combined_type_score,
+    psd_slope,
+)
+
+DEFAULT_DURATION = 1800.0
 
 # theory.md RS-PASS 权重
 RS_PASS_WEIGHTS: dict[str, float] = {
@@ -41,6 +49,34 @@ TARGETS = {
 
 def clip(x: float, lo: float = 0.0, hi: float = 1.0) -> float:
     return max(lo, min(hi, x))
+
+
+def probe_media_duration(path: Path) -> float | None:
+    proc = subprocess.run(
+        [
+            "ffprobe", "-v", "error",
+            "-show_entries", "format=duration",
+            "-of", "default=noprint_wrappers=1:nokey=1",
+            str(path),
+        ],
+        capture_output=True,
+        text=True,
+    )
+    if proc.returncode != 0:
+        return None
+    try:
+        d = float(proc.stdout.strip())
+    except ValueError:
+        return None
+    return d if d > 0 else None
+
+
+def resolve_analysis_duration(path: Path, duration: float) -> tuple[float, float | None]:
+    """返回 (实际分析秒数, 媒体总时长)。不足 duration 时分析全长。"""
+    file_dur = probe_media_duration(path)
+    if file_dur is None:
+        return duration, None
+    return min(duration, file_dur), file_dur
 
 
 def load_stereo(path: Path, duration: float) -> tuple:
@@ -195,10 +231,32 @@ def tonality_max(mono, sr: int) -> float:
     return float(np.max(prominence) * np.max(p) / total)
 
 
+def band_pct(mono, sr) -> dict:
+    import numpy as np
+
+    fft = np.abs(np.fft.rfft(mono))
+    freqs = np.fft.rfftfreq(len(mono), 1 / sr)
+    power = fft ** 2
+
+    def be(lo, hi):
+        return float(np.sum(power[(freqs >= lo) & (freqs < hi)]))
+
+    bands = {
+        "sub_low": be(20, 200),
+        "low_mid": be(200, 500),
+        "mid": be(500, 2000),
+        "high_mid": be(2000, 6000),
+        "high_5k": be(5000, sr / 2),
+    }
+    total = sum(bands.values()) or 1.0
+    return {k: round(100 * v / total, 2) for k, v in bands.items()}
+
+
 def measure_rs_pass(path: Path, duration: float) -> dict:
     import numpy as np
 
-    L, R, sr = load_stereo(path, duration)
+    analyze_dur, file_dur = resolve_analysis_duration(path, duration)
+    L, R, sr = load_stereo(path, analyze_dur)
     mono = (L + R) / 2.0
     actual_dur = len(mono) / sr
 
@@ -214,6 +272,8 @@ def measure_rs_pass(path: Path, duration: float) -> dict:
     f50 = envelope_modulation_depth(mono, sr, 0.08, 1.2) * 0.65
     si = spectral_irregularity(mono, sr)
     tmax = tonality_max(mono, sr)
+    bp = band_pct(mono, sr)
+    slope = psd_slope(mono, sr)
 
     rms = float(np.sqrt(np.mean(mono ** 2)))
     rms_dbfs = 20 * np.log10(max(rms, 1e-12))
@@ -221,6 +281,8 @@ def measure_rs_pass(path: Path, duration: float) -> dict:
 
     return {
         "source": str(path),
+        "duration_requested_s": round(duration, 2),
+        "duration_file_s": round(file_dur, 2) if file_dur is not None else None,
         "duration_analyzed_s": round(actual_dur, 2),
         "n5_sone_est": round(n5_sone, 3),
         "n5_p95_dbfs": round(p95_db, 2),
@@ -231,6 +293,8 @@ def measure_rs_pass(path: Path, duration: float) -> dict:
         "f50_vacil_est": round(f50, 4),
         "si": round(si, 4),
         "tmax": round(tmax, 4),
+        "psd_slope": round(slope, 3),
+        "band_pct": bp,
         "rms_dbfs": round(rms_dbfs, 2),
         "peak_dbfs": round(peak_dbfs, 2),
     }
@@ -363,11 +427,30 @@ def rs_pass_grade(total: float) -> str:
     return "劣质"
 
 
-def score_rs_pass(path: Path, duration: float = DEFAULT_DURATION, mode: str = "sleep") -> dict:
+def score_rs_pass(
+    path: Path,
+    duration: float = DEFAULT_DURATION,
+    mode: str | None = None,
+    *,
+    auto_mode: bool = True,
+    project: dict | None = None,
+) -> dict:
+    from recommendations import build_recommendations
+
     m = measure_rs_pass(path, duration)
+    noise = classify_noise_type(m["psd_slope"])
+    primary = noise["primary"]
+    type_fit = combined_type_score(m["psd_slope"], primary, m["band_pct"])
+
+    eval_mode = mode
+    if eval_mode is None and auto_mode:
+        eval_mode = TYPE_META[primary]["recommended_mode"]
+    elif eval_mode is None:
+        eval_mode = "sleep"
+
     dims = {
-        "n5_peak_loudness": score_n5(m, mode),
-        "s50_sharpness": score_s50(m),
+        "n5_peak_loudness": score_n5(m, eval_mode),
+        "s50_sharpness": score_s50(m, primary),
         "r5_roughness": score_r5(m),
         "iacc": score_iacc(m),
         "f50_fluctuation": score_f50(m),
@@ -375,16 +458,42 @@ def score_rs_pass(path: Path, duration: float = DEFAULT_DURATION, mode: str = "s
         "tmax_tonality": score_tmax(m),
         "crest_headroom": score_crest(m),
     }
-    total = sum(dims[k]["score"] * RS_PASS_WEIGHTS[k] for k in RS_PASS_WEIGHTS)
-    return {
+    rs_pass_total = sum(dims[k]["score"] * RS_PASS_WEIGHTS[k] for k in RS_PASS_WEIGHTS)
+
+    # 综合分：RS-PASS 85% + 类型贴合 15%
+    total = 0.85 * rs_pass_total + 0.15 * type_fit["type_fit_score"]
+
+    result = {
         "standard": "RS-PASS",
         "theory": "benchmark/theory.md",
         "file": str(path),
-        "mode": mode,
+        "mode": eval_mode,
+        "mode_requested": mode,
+        "duration_requested_s": m.get("duration_requested_s", duration),
+        "duration_file_s": m.get("duration_file_s"),
         "duration_s": m["duration_analyzed_s"],
         "total_score": round(total, 1),
+        "rs_pass_score": round(rs_pass_total, 1),
         "grade": rs_pass_grade(total),
         "weights": RS_PASS_WEIGHTS,
         "dimensions": dims,
         "measurements": m,
+        "noise_type": {
+            **noise,
+            "label_zh": TYPE_META[primary]["label_zh"],
+            "use_zh": TYPE_META[primary]["use_zh"],
+            "recommended_mode": TYPE_META[primary]["recommended_mode"],
+        },
+        "type_fit": type_fit,
+        "project": {
+            "rpp_path": (project or {}).get("rpp_path"),
+            "config_path": (project or {}).get("config_path"),
+            "mix": (project or {}).get("mix"),
+        }
+        if project
+        else None,
     }
+    result["recommendations"] = build_recommendations(
+        result, project, intent_mode=mode or eval_mode
+    )
+    return result

@@ -10,7 +10,7 @@
 | `generate_youtube_material.sh` | 缩略图 + `youtube.md` 物料（export 成功后可选自动调用） |
 | `generate_youtube_material.py` | 物料生成 + **benchmark**（`material/<stem>/benchmark.md`） |
 | `youtube_presets.json` | 各系列标题/说明模板 |
-| [`../../benchmark/score.py`](../../benchmark/score.py) | RS-PASS 单独打分（默认前 300s） |
+| [`../../benchmark/score.py`](../../benchmark/score.py) | RS-PASS 单独打分（默认前 1800s，不足则全长） |
 
 ## 用法
 
@@ -31,7 +31,7 @@ scripts/video_export/export_mp4.sh \
 | `--encoder nvenc` | NVIDIA GPU `h264_nvenc` |
 | `-d SEC` | 限制输出时长（默认跟音频全长） |
 | `--skip-benchmark` | 跳过 theory 音频 benchmark |
-| `--benchmark-duration SEC` | benchmark 分析时长（默认 300） |
+| `--benchmark-duration SEC` | benchmark 分析时长（默认 1800；不足则全长） |
 
 合成成功后会自动跑 **YouTube 物料**（含 benchmark）。若物料失败，export 会在 mp4 同目录写入 `<stem>_benchmark.json`。
 
@@ -39,7 +39,7 @@ scripts/video_export/export_mp4.sh \
 
 ```bash
 python3 benchmark/score.py path/to/render.mp4
-python3 benchmark/score.py path/to/mix.wav --mode sleep --duration 300
+python3 benchmark/score.py path/to/mix.wav --mode sleep --duration 1800
 ```
 
 单独生成物料 + benchmark：
