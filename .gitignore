@@ -5,6 +5,8 @@
 *.WAV
 *.wav
 
+*Zone.Identifier
+
 # Reaper proxy files
 *.RPP-PROX
 *.rpp-PROX
