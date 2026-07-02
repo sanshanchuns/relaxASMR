@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from rpp_context import IDEAL_LAYER_ENERGY, LAYER_ROLE
+from rpp_context import IDEAL_LAYER_ENERGY, LAYER_ROLE, _has_material_keyword
 
 # layer_id → 默认 Reaper 轨名
 LAYER_TRACK_NAMES = {
@@ -20,15 +20,17 @@ BACKGROUND_LAYERS = ("1_rain",)
 SCATTER_LAYERS = ("5_wildlife",)
 
 
-def _track_name(layer_id: str, layers: list[dict]) -> str:
+def _track_label(layer_id: str, layers: list[dict]) -> tuple[str, int | None]:
     for layer in layers:
         if layer.get("id") == layer_id:
-            return layer.get("name") or layer_id
-    return LAYER_TRACK_NAMES.get(layer_id, layer_id)
+            return layer.get("name") or layer_id, layer.get("track")
+    return LAYER_TRACK_NAMES.get(layer_id, layer_id), None
 
 
-def _layer_map(layers: list[dict]) -> dict[str, dict]:
-    return {l["id"]: l for l in layers if l.get("id")}
+def _label_text(track_num: int | None, layer_id: str, name: str) -> str:
+    if track_num is not None:
+        return f"轨 {track_num} · `{layer_id}` · {name}"
+    return f"`{layer_id}` · {name}"
 
 
 def _vol_action(
@@ -37,21 +39,24 @@ def _vol_action(
     factor: float,
     reason: str,
     *,
+    track_num: int | None = None,
     priority: str = "medium",
     auto_apply: bool = True,
 ) -> dict:
     factor = max(0.5, min(1.5, factor))
     pct = (factor - 1.0) * 100
     sign = "+" if pct >= 0 else ""
+    label = _label_text(track_num, layer_id, track_name)
     return {
         "layer_id": layer_id,
+        "track": track_num,
         "track_name": track_name,
         "action": "adjust_vol",
         "params": {"factor": round(factor, 3)},
         "priority": priority,
         "auto_apply": auto_apply,
         "reason": reason,
-        "text": f"轨 `{track_name}`：{reason}（音量 {sign}{pct:.0f}%）",
+        "text": f"{label}：{reason}（音量 {sign}{pct:.0f}%）",
     }
 
 
@@ -60,11 +65,19 @@ def _note(
     track_name: str | None,
     text: str,
     *,
+    track_num: int | None = None,
     priority: str = "info",
     target: str = "track",
 ) -> dict:
+    if track_name and layer_id:
+        body = f"{_label_text(track_num, layer_id, track_name)}：{text}"
+    elif track_name:
+        body = f"轨 `{track_name}`：{text}"
+    else:
+        body = text
     return {
         "layer_id": layer_id,
+        "track": track_num,
         "track_name": track_name,
         "target": target,
         "action": "note",
@@ -72,8 +85,12 @@ def _note(
         "priority": priority,
         "auto_apply": False,
         "reason": text,
-        "text": text if track_name is None else f"轨 `{track_name}`：{text}",
+        "text": body,
     }
+
+
+def _layer_map(layers: list[dict]) -> dict[str, dict]:
+    return {l["id"]: l for l in layers if l.get("id")}
 
 
 def _merge_vol_actions(actions: list[dict]) -> list[dict]:
@@ -96,8 +113,13 @@ def _merge_vol_actions(actions: list[dict]) -> list[dict]:
         f = prev["params"]["factor"]
         pct = (f - 1.0) * 100
         sign = "+" if pct >= 0 else ""
-        tn = prev.get("track_name", key)
-        prev["text"] = f"轨 `{tn}`：{prev['reason']}（合计 {sign}{pct:.0f}%）"
+        lid = prev.get("layer_id") or key
+        label = _label_text(
+            prev.get("track"),
+            lid,
+            prev.get("track_name") or lid,
+        )
+        prev["text"] = f"{label}：{prev['reason']}（合计 {sign}{pct:.0f}%）"
     return others + list(merged.values())
 
 
@@ -120,20 +142,25 @@ def build_track_actions(result: dict, project: dict | None) -> list[dict]:
     mode = result.get("mode", "sleep")
     actions: list[dict] = []
 
+    def layer_ref(lid: str) -> tuple[str, int | None]:
+        return _track_label(lid, layers)
+
     # ── 三层能量 ──
     bg_actual = role_pct.get("background", 0)
     bg_target = ideal_pct.get("background", 10)
     if bg_actual > bg_target * 1.55:
         lid = "1_rain"
-        if lid in layer_by_id and layer_by_id[lid].get("vol", 0) > 0:
+        if lid in layer_by_id and layer_by_id[lid].get("active", True) and layer_by_id[lid].get("vol", 0) > 0:
             ratio = bg_target / max(bg_actual, 1)
             factor = max(0.72, min(0.92, ratio ** 0.45))
+            name, tnum = layer_ref(lid)
             actions.append(
                 _vol_action(
                     lid,
-                    _track_name(lid, layers),
+                    name,
                     factor,
                     f"背景层 {bg_actual}% 高于目标 {bg_target}%",
+                    track_num=tnum,
                     priority="high" if bg_actual > bg_target * 2 else "medium",
                 )
             )
@@ -143,13 +170,15 @@ def build_track_actions(result: dict, project: dict | None) -> list[dict]:
     if fg_actual < fg_target * 0.55:
         boost = min(1.28, max(1.08, (fg_target / max(fg_actual, 1)) ** 0.35))
         for lid in FOREGROUND_LAYERS:
-            if lid in layer_by_id and layer_by_id[lid].get("vol", 0) > 0:
+            if lid in layer_by_id and layer_by_id[lid].get("active", True) and layer_by_id[lid].get("vol", 0) > 0:
+                name, tnum = layer_ref(lid)
                 actions.append(
                     _vol_action(
                         lid,
-                        _track_name(lid, layers),
+                        name,
                         boost,
                         f"前景层 {fg_actual}% 低于目标 {fg_target}%",
+                        track_num=tnum,
                         priority="high" if fg_actual < fg_target * 0.4 else "medium",
                     )
                 )
@@ -159,13 +188,15 @@ def build_track_actions(result: dict, project: dict | None) -> list[dict]:
     if mid_actual < mid_target * 0.5:
         boost = min(1.22, max(1.1, (mid_target / max(mid_actual, 1)) ** 0.3))
         for lid in MID_LAYERS:
-            if lid in layer_by_id and layer_by_id[lid].get("vol", 0) > 0:
+            if lid in layer_by_id and layer_by_id[lid].get("active", True) and layer_by_id[lid].get("vol", 0) > 0:
+                name, tnum = layer_ref(lid)
                 actions.append(
                     _vol_action(
                         lid,
-                        _track_name(lid, layers),
+                        name,
                         boost,
                         f"中景层 {mid_actual}% 低于目标 {mid_target}%",
+                        track_num=tnum,
                         priority="medium",
                     )
                 )
@@ -184,6 +215,7 @@ def build_track_actions(result: dict, project: dict | None) -> list[dict]:
                     "action": "add_fx",
                     "params": {
                         "fx": "asmr_sleep_hf_eq.jsfx",
+                        "js_name": "relaxASMR/asmr_sleep_hf_eq.jsfx",
                         "search_paths": ["scripts/fx", "Reaper/scripts/fx"],
                     },
                     "priority": "high",
@@ -198,31 +230,35 @@ def build_track_actions(result: dict, project: dict | None) -> list[dict]:
                 layer = layer_by_id.get(lid)
                 if not layer:
                     continue
-                blob = " ".join(layer.get("paths", [])).lower()
-                if any(k in blob for k in ("metal", "tin", "steel")):
+                blob = " ".join(layer.get("paths", []))
+                if any(_has_material_keyword(blob, k) for k in ("metal", "tin", "steel")):
+                    name, tnum = layer_ref(lid)
                     actions.append(
                         _vol_action(
                             lid,
-                            _track_name(lid, layers),
+                            name,
                             0.78,
                             "金属类 impact 导致 S_50 偏高",
+                            track_num=tnum,
                             priority="high",
                         )
                     )
 
     f50 = dims.get("f50_fluctuation", {}).get("score", 100)
     rain = layer_by_id.get("1_rain")
-    if f50 < 72 and rain and not rain.get("vol_envelope") and rain.get("vol", 0) > 0:
+    if f50 < 72 and rain and rain.get("active", True) and not rain.get("vol_envelope") and rain.get("vol", 0) > 0:
+        rain_name, rain_num = layer_ref("1_rain")
         actions.append(
             {
                 "layer_id": "1_rain",
-                "track_name": _track_name("1_rain", layers),
+                "track": rain_num,
+                "track_name": rain_name,
                 "action": "add_vol_envelope",
                 "params": {"depth": 0.08, "peak_at": "center", "shape": "single_wave"},
                 "priority": "medium",
                 "auto_apply": True,
                 "reason": f"波动强度 F_50 得分 {f50:.0f}，主雨层缺 macro 起伏",
-                "text": "轨 `1_rain`：添加 single_wave 音量包络 depth=0.08",
+                "text": f"{_label_text(rain_num, '1_rain', rain_name)}：添加 single_wave 音量包络 depth=0.08",
             }
         )
 
@@ -232,24 +268,28 @@ def build_track_actions(result: dict, project: dict | None) -> list[dict]:
         cut = 0.82 if crest < 55 else 0.88
         for lid in SCATTER_LAYERS:
             layer = layer_by_id.get(lid)
-            if layer and layer.get("mode") == "scatter" and layer.get("vol", 0) > 0:
+            if layer and layer.get("active", True) and layer.get("mode") == "scatter" and layer.get("vol", 0) > 0:
+                name, tnum = layer_ref(lid)
                 actions.append(
                     _vol_action(
                         lid,
-                        _track_name(lid, layers),
+                        name,
                         cut,
                         "稀疏层尖峰 / 动态峰值偏高",
+                        track_num=tnum,
                         priority="high" if n5 < 65 else "medium",
                     )
                 )
 
     iacc = dims.get("iacc", {}).get("score", 100)
     if iacc < 72:
+        rain_name, rain_num = layer_ref("1_rain")
         actions.append(
             _note(
                 "1_rain",
-                _track_name("1_rain", layers),
+                rain_name,
                 "IACC 偏高：请为 L/R 使用相位解耦的不同素材（无法自动替换文件）",
+                track_num=rain_num,
                 priority="medium",
             )
         )
@@ -267,22 +307,26 @@ def build_track_actions(result: dict, project: dict | None) -> list[dict]:
 
     r5 = dims.get("r5_roughness", {}).get("score", 100)
     if r5 < 70:
+        imp_name, imp_num = layer_ref("2_impact")
         actions.append(
             _note(
                 "2_impact",
-                _track_name("2_impact", layers),
+                imp_name,
                 "粗糙度偏高：考虑换更低 Asper 的落叶/细雨 impact 素材",
+                track_num=imp_num,
                 priority="medium",
             )
         )
 
     tmax = dims.get("tmax_tonality", {}).get("score", 100)
     if tmax < 75:
+        imp_name, imp_num = layer_ref("2_impact")
         actions.append(
             _note(
                 "2_impact",
-                _track_name("2_impact", layers),
+                imp_name,
                 "纯音调 T_max 偏高：检查 ETFE/金属共振，必要时 Group 加窄带陷波",
+                track_num=imp_num,
                 priority="high",
             )
         )

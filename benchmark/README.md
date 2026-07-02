@@ -26,8 +26,8 @@ python3 benchmark/score.py path/to/render.mp4
 
 # Reaper 混音打分（Lua asmr_score_mix.lua 内部调用 scoring_bridge → 本目录）
 python3 scripts/video_export/scoring_bridge.py preview.wav \
-  --output-dir output/scoring --rpp path/to/scene.rpp \
-  --report-stem mix_score --summary-file output/scoring/mix_score_summary.txt
+  --output-dir output/score --rpp path/to/scene.rpp \
+  --report-stem mix_score --summary-file output/score/mix_score_summary.txt
 
 # 带 RPP 轨级建议
 python3 benchmark/score.py path/to/mix.wav \
@@ -37,7 +37,7 @@ python3 benchmark/score.py path/to/mix.wav \
 ## Reaper 集成
 
 - **`Reaper/scripts/asmr_score_mix.lua`** — 渲染混音 → `scoring_bridge.py` → 本 benchmark
-- 输出 `output/scoring/mix_score.md` + `mix_score_actions.lua`（轨级一键修改）
+- 输出 `output/score/mix_score.md` + `mix_score_actions.lua`（轨级一键修改）
 
 ## 依赖
 

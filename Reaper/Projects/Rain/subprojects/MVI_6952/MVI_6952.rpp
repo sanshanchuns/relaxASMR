@@ -1,4 +1,4 @@
-<REAPER_PROJECT 0.1 "7.48/macOS-arm64" 1782973948
+<REAPER_PROJECT 0.1 "7.48/macOS-arm64" 1782979291
   <NOTES 0 2
   >
   RIPPLE 0 0
@@ -14,14 +14,14 @@
   PANLAW 1
   PROJOFFS 0 0 0
   MAXPROJLEN 1 10800
-  GRID 3199 8 1 8 1 0 0 0
+  GRID 3199 8 1 8 1 0 1 0
   TIMEMODE 5 9 -1 60 0 0 -1
   VIDEO_CONFIG 0 0 65792
   PANMODE 3
   PANLAWFLAGS 3
-  CURSOR 44
-  ZOOM 6.99192723940246 0 0
-  VZOOMEX 6 0
+  CURSOR 48
+  ZOOM 8.62659953592042 0 0
+  VZOOMEX 6 53
   USE_REC_CFG 0
   RECMODE 1
   SMPTESYNC 0 30 100 40 1000 300 0 0 1 0 0
@@ -34,10 +34,10 @@
   <APPLYFX_CFG
   >
   RENDER_FILE ""
-  RENDER_PATTERN ""
+  RENDER_PATTERN output/$project
   RENDER_FMT 0 2 0
   RENDER_1X 0
-  RENDER_RANGE 1 0 0 0 1000
+  RENDER_RANGE 2 0 0 0 1000
   RENDER_RESAMPLE 3 0 1
   RENDER_ADDTOPROJ 0
   RENDER_STEMS 0
@@ -77,7 +77,7 @@
   MASTERTRACKVIEW 1 0.6667 0.5 0.5 0 0 0 0 0 0 0 0 0 0 1
   MASTERHWOUT 0 0 1 0 0 0 0 -1
   MASTER_NCH 2 2
-  MASTER_VOLUME 1 0 -1 -1 1
+  MASTER_VOLUME 2.21617158793837 0 -1 -1 1
   MASTER_PANMODE 3
   MASTER_PANLAWFLAGS 3
   MASTER_FX 0
@@ -114,7 +114,7 @@
     BUSCOMP 0 0 0 0 0
     SHOWINMIX 1 0.6667 0.5 1 0.5 0 0 0 0
     FIXEDLANES 9 0 0 0 0
-    SEL 1
+    SEL 0
     REC 0 0 1 0 0 0 0 0
     VU 64
     TRACKHEIGHT 0 0 0 0 0 0 0
@@ -157,7 +157,7 @@
     BEAT -1
     AUTOMODE 0
     PANLAWFLAGS 3
-    VOLPAN 1 0 -1 -1 1
+    VOLPAN 0.72 0 -1 -1 1
     MUTESOLO 0 0 0
     IPHASE 0
     PLAYOFFS 0 1
@@ -165,7 +165,7 @@
     BUSCOMP 0 0 0 0 0
     SHOWINMIX 1 0.6667 0.5 1 0.5 0 0 0 0
     FIXEDLANES 9 0 0 0 0
-    SEL 0
+    SEL 1
     REC 0 0 1 0 0 0 0 0
     VU 64
     TRACKHEIGHT 0 0 0 0 0 0 0
@@ -179,23 +179,23 @@
     <ITEM
       POSITION 0
       SNAPOFFS 0
-      LENGTH 220
+      LENGTH 190
       LOOP 1
       ALLTAKES 0
       FADEIN 1 0 0 1 0 0 0
       FADEOUT 1 0 0 1 0 0 0
       MUTE 0 0
       SEL 0
-      IGUID {172498B0-BC8E-DF41-9EC2-E6C7AF2BBA5C}
-      IID 38
-      NAME 83YU97Z_Medium_Rain_on_Grass_and_Cement-glued-01.wav
+      IGUID {5837D92C-E268-DA4E-9012-D682EA1FE68E}
+      IID 67
+      NAME 173647_Rain,_Vegetation,_Rain,_Daytime,_Mid_To_Hard_Rainfall,_Havelock_Island,_Second_02_Crest_F50-glued-02.wav
       VOLPAN 1 0 1 -1
       SOFFS 0
       PLAYRATE 1 1 0 -1 0 0.0025
       CHANMODE 0
-      GUID {EE27193B-8BC7-2D41-A27F-335E68F8BD16}
+      GUID {237360F3-7888-8746-B42D-90ED2C49B94B}
       <SOURCE WAVE
-        FILE "Audio Files/83YU97Z_Medium_Rain_on_Grass_and_Cement-glued-01.wav"
+        FILE "Audio Files/173647_Rain,_Vegetation,_Rain,_Daytime,_Mid_To_Hard_Rainfall,_Havelock_Island,_Second_02_Crest_F50-glued-02.wav"
       >
     >
   >
@@ -205,7 +205,7 @@
     BEAT -1
     AUTOMODE 0
     PANLAWFLAGS 3
-    VOLPAN 0.5 0 -1 -1 1
+    VOLPAN 0.64 0 -1 -1 1
     MUTESOLO 0 0 0
     IPHASE 0
     PLAYOFFS 0 1
@@ -253,7 +253,7 @@
     BEAT -1
     AUTOMODE 0
     PANLAWFLAGS 3
-    VOLPAN 0.26 0 -1 -1 1
+    VOLPAN 0.3172 0 -1 -1 1
     MUTESOLO 0 0 0
     IPHASE 0
     PLAYOFFS 0 1
@@ -301,7 +301,7 @@
     BEAT -1
     AUTOMODE 0
     PANLAWFLAGS 3
-    VOLPAN 0.18 0 -1 -1 1
+    VOLPAN 0.8781896667659 0 -1 -1 1
     MUTESOLO 0 0 0
     IPHASE 0
     PLAYOFFS 0 1
@@ -323,23 +323,23 @@
     <ITEM
       POSITION 0
       SNAPOFFS 0
-      LENGTH 220
+      LENGTH 310.84929166666666
       LOOP 1
       ALLTAKES 0
       FADEIN 1 0 0 1 0 0 0
       FADEOUT 1 0 0 1 0 0 0
       MUTE 0 0
       SEL 0
-      IGUID {A27C031B-C560-0F47-92F8-F162CDF8680F}
-      IID 29
-      NAME 237672_Rain,_Plastic,_Drips_On_Verandah_Roof-glued.wav
+      IGUID {5FA4456F-95D0-D041-8197-A138A77B68DB}
+      IID 55
+      NAME AMBTrop_AMAZON-Pre_Dawn_Drips_Heavy_B00M_3DS13_2.0.mp3
       VOLPAN 1 0 1 -1
       SOFFS 0
       PLAYRATE 1 1 0 -1 0 0.0025
       CHANMODE 0
-      GUID {4D9C3DB6-3030-BC48-A7C9-C7510E8DF265}
-      <SOURCE WAVE
-        FILE "Audio Files/237672_Rain,_Plastic,_Drips_On_Verandah_Roof-glued.wav"
+      GUID {A2E5E453-3B22-204F-81AC-52D307A2929E}
+      <SOURCE MP3
+        FILE "/Users/angel/Documents/workspace/relaxASMR/assets/sound_effect/rain_sound/4_water/dripping/branch_drip/AMBTrop_AMAZON-Pre_Dawn_Drips_Heavy_B00M_3DS13_2.0.mp3" 1
       >
     >
   >
@@ -349,7 +349,7 @@
     BEAT -1
     AUTOMODE 0
     PANLAWFLAGS 3
-    VOLPAN 0.18947831560292 0 -1 -1 1
+    VOLPAN 0.16674091773057 0 -1 -1 1
     MUTESOLO 0 0 0
     IPHASE 0
     PLAYOFFS 0 1
@@ -606,28 +606,6 @@
     PERF 0
     MIDIOUT -1
     MAINSEND 1 0
-    <ITEM
-      POSITION 0
-      SNAPOFFS 0
-      LENGTH 220
-      LOOP 1
-      ALLTAKES 0
-      FADEIN 1 0 0 1 0 0 0
-      FADEOUT 1 0 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {3EA4E9AE-B8D7-465A-B87D-CCAE8189857B}
-      IID 7
-      NAME N5KW5NM_Fire_Crackle_CU_Pops_Small_Campfire.mp3
-      VOLPAN 0.38 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {DB2BBCF9-006C-4B9A-93F2-78A5D2E8BF45}
-      <SOURCE MP3
-        FILE "/Users/angel/Documents/workspace/relaxASMR/assets/sound_effect/rain_sound/6_human/fire/fire_crackle/N5KW5NM_Fire_Crackle_CU_Pops_Small_Campfire.mp3" 1
-      >
-    >
   >
   <TRACK {F2DCC3AF-0718-4C32-BAC5-5080B3CB7233}
     NAME video

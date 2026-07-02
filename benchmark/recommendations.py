@@ -3,13 +3,17 @@
 from __future__ import annotations
 
 from noise_type import TYPE_META
+from rpp_context import _has_material_keyword
 
 
 def _fmt_track(layer: dict) -> str:
     tid = layer.get("track")
+    lid = layer.get("id", "")
     name = layer.get("name", layer.get("id", "?"))
+    if tid and lid:
+        return f"轨 {tid} · `{lid}` · {name}"
     if tid:
-        return f"轨 {tid} `{name}`"
+        return f"轨 {tid} · {name}"
     return f"`{name}`"
 
 
@@ -190,7 +194,10 @@ def build_recommendations(
     for role, target in ideal.items():
         actual = role_pct.get(role, 0)
         if actual < target * 0.55:
-            missing_layers = [l for l in layers if l.get("role") == role and l.get("vol", 0) > 0]
+            missing_layers = [
+                l for l in layers
+                if l.get("role") == role and l.get("active", True) and l.get("vol", 0) > 0
+            ]
             if role == "foreground" and not missing_layers:
                 recs.append(
                     {
@@ -241,7 +248,10 @@ def build_recommendations(
         metal_layers = [
             l for l in layers
             if l.get("role") == "foreground"
-            and any(k in " ".join(l.get("paths", [])).lower() for k in ("metal", "tin", "steel"))
+            and any(
+                _has_material_keyword(" ".join(l.get("paths", [])), k)
+                for k in ("metal", "tin", "steel")
+            )
         ]
         hint = _fmt_track(metal_layers[0]) if metal_layers else "`2_impact`"
         recs.append(

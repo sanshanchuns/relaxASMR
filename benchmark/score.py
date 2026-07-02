@@ -46,6 +46,7 @@ def render_markdown(result: dict) -> str:
     d = result["dimensions"]
     nt = result.get("noise_type", {})
     tf = result.get("type_fit", {})
+    proj = result.get("project") or {}
     req = result.get("duration_requested_s", result["duration_s"])
     actual = result["duration_s"]
     if result.get("duration_file_s") is not None and actual < req - 0.5:
@@ -57,6 +58,11 @@ def render_markdown(result: dict) -> str:
         "",
         "> 依据 `benchmark/theory.md` · "
         f"模式 **{result['mode']}** · 分析 {dur_desc}",
+    ]
+    scene_id = (proj.get("mix") or {}).get("scene_id")
+    if scene_id:
+        lines.append(f"> 场景：**{scene_id}** · 配方 `asmr_config.lua`")
+    lines += [
         "",
         f"**综合分 {result['total_score']:.1f} / 100** · **{result['grade']}** "
         f"（RS-PASS {result.get('rs_pass_score', result['total_score']):.1f} + "
@@ -83,7 +89,6 @@ def render_markdown(result: dict) -> str:
             f"| {DIM_LABELS[key]} | **{d[key]['score']:.1f}** | {int(w * 100)}% |"
         )
 
-    proj = result.get("project") or {}
     mix = proj.get("mix") or {}
     if mix.get("role_energy_pct"):
         lines += [
@@ -118,9 +123,15 @@ def render_markdown(result: dict) -> str:
         ]
         for act in track_actions:
             auto = "是" if act.get("auto_apply") and act.get("action") != "note" else "否"
-            track = act.get("track_name") or act.get("layer_id") or act.get("target") or "—"
+            tid = act.get("track")
+            lid = act.get("layer_id")
+            name = act.get("track_name") or lid or act.get("target") or "—"
+            if tid and lid:
+                track = f"{tid} · `{lid}` · {name}"
+            else:
+                track = name
             lines.append(
-                f"| `{track}` | {act.get('priority', '?')} | {auto} | "
+                f"| {track} | {act.get('priority', '?')} | {auto} | "
                 f"{act.get('text', act.get('reason', ''))} |"
             )
 
@@ -179,7 +190,7 @@ def write_actions_lua(actions: list, path: Path) -> None:
     for act in actions:
         lines.append("  {")
         for key in (
-            "layer_id", "track_name", "target", "action", "priority",
+            "layer_id", "track", "track_name", "target", "action", "priority",
             "auto_apply", "reason", "text",
         ):
             val = act.get(key)

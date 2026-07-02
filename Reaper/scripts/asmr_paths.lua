@@ -114,8 +114,13 @@ function M.track_for_layer(spec)
       if name == id then return tr end
     end
   end
-  local n = spec.track or 1
-  return reaper.GetTrack(0, n - 1)
+  local n = spec.track
+  if n and n >= 1 then
+    local tr = reaper.GetTrack(0, n)
+    if tr then return tr end
+    return reaper.GetTrack(0, n - 1)
+  end
+  return nil
 end
 
 return M

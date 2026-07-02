@@ -38,50 +38,60 @@ def parse_rpp(rpp_path: Path) -> dict:
     text = rpp_path.read_text(encoding="utf-8", errors="replace")
     tracks: list[dict] = []
     group_fx: list[str] = []
-    in_track = False
-    in_group = False
-    current: dict = {}
+    stack: list[str] = []
+    current: dict | None = None
 
     for line in text.splitlines():
         stripped = line.strip()
+
         if stripped.startswith("<TRACK "):
-            in_track = True
             current = {"fx": [], "items": []}
+            stack = ["track"]
             continue
-        if in_track and stripped == ">":
-            if current.get("name"):
-                if in_group or current.get("is_bus") == "1":
-                    group_fx.extend(current.get("fx", []))
-                else:
-                    tracks.append(current)
-            in_track = False
-            in_group = False
-            current = {}
+
+        if stripped.startswith("<"):
+            if stack:
+                stack.append("nested")
             continue
-        if not in_track:
+
+        if stripped == ">":
+            if not stack:
+                continue
+            stack.pop()
+            if stack or current is None:
+                continue
+            name = current.get("name", "")
+            if name.lower() == "group":
+                group_fx.extend(current.get("fx", []))
+            elif name.lower() != "video" and name:
+                tracks.append(current)
+            current = None
             continue
-        if stripped.startswith("NAME "):
+
+        if not stack or stack[0] != "track" or current is None:
+            continue
+
+        if stripped.startswith("FILE "):
+            m = re.search(r'FILE "([^"]+)"', stripped)
+            if m:
+                current.setdefault("items", []).append(m.group(1))
+        elif len(stack) == 1 and stripped.startswith("NAME "):
             current["name"] = stripped[5:].strip()
-            in_group = current["name"].lower() == "group"
-        elif stripped.startswith("VOLPAN "):
+        elif len(stack) == 1 and stripped.startswith("VOLPAN "):
             parts = stripped.split()
             if len(parts) >= 2:
                 try:
                     current["vol"] = float(parts[1])
                 except ValueError:
                     pass
-        elif stripped.startswith("ISBUS "):
+        elif len(stack) == 1 and stripped.startswith("ISBUS "):
             parts = stripped.split()
             if len(parts) >= 2:
                 current["is_bus"] = parts[1]
-        elif "ReaEQ" in stripped or "ReaComp" in stripped:
+        elif len(stack) == 1 and ("ReaEQ" in stripped or "ReaComp" in stripped):
             m = re.search(r'"VST: ([^"]+)"', stripped)
             if m:
                 current.setdefault("fx", []).append(m.group(1))
-        elif stripped.startswith("FILE "):
-            m = re.search(r'FILE "([^"]+)"', stripped)
-            if m:
-                current.setdefault("items", []).append(m.group(1))
 
     audio_tracks = [t for t in tracks if t.get("name", "").lower() not in ("video", "group")]
     return {
@@ -112,8 +122,40 @@ def infer_layer_id(track_name: str) -> str:
     return name
 
 
+def _index_rpp_tracks(tracks: list[dict]) -> dict[str, dict]:
+    """layer_id → RPP 轨（含 items / vol）。"""
+    idx: dict[str, dict] = {}
+    for t in tracks:
+        lid = infer_layer_id(t.get("name", ""))
+        if lid:
+            idx[lid] = t
+    return idx
+
+
+def _sync_layer_with_rpp(layer: dict, rpp_track: dict | None) -> None:
+    """以 RPP 实际 item 为准；空轨视为未参与混音（vol=0）。"""
+    if not rpp_track:
+        layer["active"] = False
+        layer["vol"] = 0.0
+        return
+
+    items = rpp_track.get("items") or []
+    if not items:
+        layer["active"] = False
+        layer["vol"] = 0.0
+        layer["paths"] = []
+        return
+
+    layer["active"] = True
+    rpp_vol = rpp_track.get("vol")
+    if rpp_vol is not None:
+        layer["vol"] = float(rpp_vol)
+    layer["paths"] = items
+
+
 def analyze_mix_structure(rpp_ctx: dict, cfg: dict | None) -> dict:
     tracks = rpp_ctx.get("tracks", [])
+    rpp_by_id = _index_rpp_tracks(tracks)
     layers: list[dict] = []
 
     if cfg:
@@ -123,37 +165,39 @@ def analyze_mix_structure(rpp_ctx: dict, cfg: dict | None) -> dict:
                 vol = float(layer.get("vol", 0) or 0)
                 role = LAYER_ROLE.get(lid, "accent")
                 paths = layer.get("paths", [])
-                layers.append(
-                    {
-                        "id": lid,
-                        "name": layer.get("name", lid),
-                        "track": layer.get("track"),
-                        "vol": vol,
-                        "mode": mode,
-                        "role": role,
-                        "paths": paths,
-                        "vol_envelope": layer.get("vol_envelope"),
-                    }
-                )
+                entry = {
+                    "id": lid,
+                    "name": layer.get("name", lid),
+                    "track": layer.get("track"),
+                    "vol": vol,
+                    "mode": mode,
+                    "role": role,
+                    "paths": list(paths),
+                    "vol_envelope": layer.get("vol_envelope"),
+                    "active": vol > 0,
+                }
+                _sync_layer_with_rpp(entry, rpp_by_id.get(lid))
+                layers.append(entry)
     else:
         for t in tracks:
             lid = infer_layer_id(t.get("name", ""))
             vol = float(t.get("vol", 1.0))
-            layers.append(
-                {
-                    "id": lid,
-                    "name": t.get("name", lid),
-                    "track": None,
-                    "vol": vol,
-                    "mode": "rpp",
-                    "role": LAYER_ROLE.get(lid, "accent"),
-                    "paths": t.get("items", []),
-                }
-            )
+            entry = {
+                "id": lid,
+                "name": t.get("name", lid),
+                "track": None,
+                "vol": vol,
+                "mode": "rpp",
+                "role": LAYER_ROLE.get(lid, "accent"),
+                "paths": t.get("items", []),
+                "active": bool(t.get("items")),
+            }
+            _sync_layer_with_rpp(entry, t)
+            layers.append(entry)
 
     role_energy: dict[str, float] = {k: 0.0 for k in IDEAL_LAYER_ENERGY}
     for layer in layers:
-        if layer["vol"] <= 0:
+        if not layer.get("active", True) or layer["vol"] <= 0:
             continue
         w = layer["vol"] ** 2
         if layer["mode"] == "scatter":
@@ -167,10 +211,11 @@ def analyze_mix_structure(rpp_ctx: dict, cfg: dict | None) -> dict:
 
     materials: list[str] = []
     for layer in layers:
-        blob = " ".join(layer.get("paths", []) + [layer.get("name", "")]).lower()
-        for mat, kws in MATERIAL_HINTS.items():
-            if any(k in blob for k in kws):
-                materials.append(mat)
+        if not layer.get("active", True):
+            continue
+        blob = " ".join(layer.get("paths", []) + [layer.get("name", "")])
+        for mat in _detect_materials(blob):
+            materials.append(mat)
 
     return {
         "layers": layers,
@@ -181,6 +226,22 @@ def analyze_mix_structure(rpp_ctx: dict, cfg: dict | None) -> dict:
         "scene_id": (cfg or {}).get("scene_id"),
         "series": (cfg or {}).get("series"),
     }
+
+
+def _has_material_keyword(blob: str, keyword: str) -> bool:
+    """避免 'tin' 误匹配 Vegetation 等子串。"""
+    low = blob.lower()
+    if keyword.isascii() and re.fullmatch(r"[a-z0-9_]+", keyword):
+        return bool(re.search(rf"(?<![a-z0-9_]){re.escape(keyword)}(?![a-z0-9_])", low))
+    return keyword.lower() in low
+
+
+def _detect_materials(blob: str) -> list[str]:
+    found: list[str] = []
+    for mat, kws in MATERIAL_HINTS.items():
+        if any(_has_material_keyword(blob, kw) for kw in kws):
+            found.append(mat)
+    return found
 
 
 def find_rpp_for_media(media_path: Path) -> Path | None:
