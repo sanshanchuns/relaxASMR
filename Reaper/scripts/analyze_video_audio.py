@@ -58,7 +58,8 @@ def analyze_wav(samples: list[float], sr: int) -> dict:
     x = np.array(samples, dtype=np.float64)
     rms = float(np.sqrt(np.mean(x * x)))
     rms_db = 20 * math.log10(rms) if rms > 0 else -120.0
-    peak_db = 20 * math.log10(float(np.max(np.abs(x)))) if len(x) else -120.0
+    peak = float(np.max(np.abs(x))) if len(x) else 0.0
+    peak_db = 20 * math.log10(peak) if peak > 0 else -120.0
 
     fft = np.abs(np.fft.rfft(x))
     freqs = np.fft.rfftfreq(len(x), 1 / sr)
