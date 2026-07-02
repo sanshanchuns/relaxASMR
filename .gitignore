@@ -31,3 +31,4 @@ __pycache__/
 *.py[cod]
 *$py.class
 scripts/cloak_browser/.profiles/
+gui/user_config.json

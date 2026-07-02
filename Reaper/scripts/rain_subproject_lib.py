@@ -7,6 +7,7 @@ import re
 import shutil
 import subprocess
 import tempfile
+from collections.abc import Callable
 from datetime import date
 from pathlib import Path
 
@@ -181,19 +182,23 @@ def analyze_visual_heuristic(video: Path) -> dict:
     return hints
 
 
-def pick_first_mp3(rel_dir: str) -> str | None:
+def pick_first_mp3(rel_dir: str) -> tuple[str | None, str]:
+    """从声源目录选取首个 mp3，返回 (仓库相对路径, 选取理由)。"""
     if rel_dir.startswith("../"):
         base = (REPO_ROOT / "assets" / "sound_effect" / rel_dir.replace("../", "")).resolve()
+        base_desc = rel_dir
     else:
         base = (SOUND_ROOT / rel_dir).resolve()
+        base_desc = f"rain_sound/{rel_dir}"
     if not base.is_dir():
-        return None
+        return None, f"目录不存在：`{base_desc}`"
     for p in sorted(base.rglob("*.mp3")):
         try:
-            return p.relative_to(REPO_ROOT).as_posix()
+            rel = p.relative_to(REPO_ROOT).as_posix()
+            return rel, f"从 `{base_desc}` 按字母序选取 `{p.name}`"
         except ValueError:
             continue
-    return None
+    return None, f"`{base_desc}` 下未找到 mp3"
 
 
 def build_asmr_config(
@@ -203,19 +208,51 @@ def build_asmr_config(
     duration_hours: float = 3,
     audio_layers: dict | None = None,
     visual: dict | None = None,
-) -> dict:
+) -> tuple[dict, dict[str, str]]:
     paths: dict[str, str] = {}
+    rationales: dict[str, str] = {}
+
+    default_reasons = {
+        "1_rain": "Rain 睡眠系列默认轻雨主层",
+        "2_impact": "默认雨打树叶（vegetation/leaves）",
+        "3_environment": "默认林间环境 ambience",
+        "4_water": "默认滴水/细流",
+        "5_wildlife": "默认远处鸟鸣 scatter",
+        "6_human": "默认近场安全感锚点（炉火）",
+    }
+
     for key, rel in DEFAULT_ASSET_DIRS.items():
         if key == "5_wildlife":
-            picked = pick_first_mp3(rel)
-            bird = REPO_ROOT / BIRD_FALLBACK
-            paths[key] = picked or (BIRD_FALLBACK if bird.is_file() else "")
-        elif key == "6_human":
-            paths[key] = pick_first_mp3(rel) or pick_first_mp3(HUMAN_FALLBACK_DIR) or ""
-        else:
-            picked = pick_first_mp3(rel)
+            picked, reason = pick_first_mp3(rel)
             if picked:
                 paths[key] = picked
+                rationales[key] = reason
+            else:
+                bird = REPO_ROOT / BIRD_FALLBACK
+                if bird.is_file():
+                    paths[key] = BIRD_FALLBACK
+                    rationales[key] = f"rain_sound 无可用鸟鸣 → 回退 `{BIRD_FALLBACK}`"
+                else:
+                    rationales[key] = reason
+        elif key == "6_human":
+            picked, reason = pick_first_mp3(rel)
+            if picked:
+                paths[key] = picked
+                rationales[key] = reason
+            else:
+                fb, fb_reason = pick_first_mp3(HUMAN_FALLBACK_DIR)
+                if fb:
+                    paths[key] = fb
+                    rationales[key] = f"默认炉火目录无素材 → {fb_reason}"
+                else:
+                    rationales[key] = reason
+        else:
+            picked, reason = pick_first_mp3(rel)
+            if picked:
+                paths[key] = picked
+                rationales[key] = f"{default_reasons[key]} · {reason}"
+            else:
+                rationales[key] = reason
 
     rain_vol = 1.0
     env_vol = 0.26
@@ -227,29 +264,57 @@ def build_asmr_config(
     if audio_layers:
         lv = audio_layers.get("1_rain", {}).get("level", "")
         if lv == "强":
-            paths["1_rain"] = pick_first_mp3("1_rain/intensity/moderate") or paths.get("1_rain", "")
+            picked, reason = pick_first_mp3("1_rain/intensity/moderate")
+            if picked:
+                paths["1_rain"] = picked
+            rationales["1_rain"] = f"内嵌音轨 1_rain 判为「强」→ 改用 moderate · {reason}"
         elif lv == "弱":
-            paths["1_rain"] = pick_first_mp3("1_rain/intensity/drizzle") or paths.get("1_rain", "")
+            picked, reason = pick_first_mp3("1_rain/intensity/drizzle")
+            if picked:
+                paths["1_rain"] = picked
+            rationales["1_rain"] = f"内嵌音轨 1_rain 判为「弱」→ 改用 drizzle · {reason}"
 
         wild = audio_layers.get("5_wildlife", {})
-        if wild.get("level") in ("无/极弱", "弱"):
+        wl = wild.get("level", "")
+        if wl in ("无/极弱", "弱"):
             wild_vol = 0.22
-        elif wild.get("level") == "强":
+            rationales["5_wildlife"] = (
+                rationales.get("5_wildlife", "")
+                + f" · 原声 wildlife「{wl}」→ scatter 音量降至 {wild_vol}"
+            ).strip(" ·")
+        elif wl == "强":
             wild_vol = 0.35
+            rationales["5_wildlife"] = (
+                rationales.get("5_wildlife", "")
+                + f" · 原声 wildlife「强」→ scatter 音量升至 {wild_vol}"
+            ).strip(" ·")
 
         water = audio_layers.get("4_water", {})
-        if water.get("level") in ("中", "强"):
+        wlv = water.get("level", "")
+        if wlv in ("中", "强"):
             water_vol = 0.24
-            paths["4_water"] = pick_first_mp3(WATER_LAKE_DIR) or paths.get("4_water", "")
+            picked, reason = pick_first_mp3(WATER_LAKE_DIR)
+            if picked:
+                paths["4_water"] = picked
+            rationales["4_water"] = f"内嵌音轨 4_water 判为「{wlv}」→ 倾向静水/湖面 · {reason}"
 
     if visual:
         if visual.get("water_dominant"):
-            paths["3_environment"] = pick_first_mp3(ENV_LAKE_DIR) or paths.get("3_environment", "")
-            paths["4_water"] = pick_first_mp3(WATER_LAKE_DIR) or paths.get("4_water", "")
+            env_picked, env_reason = pick_first_mp3(ENV_LAKE_DIR)
+            water_picked, water_reason = pick_first_mp3(WATER_LAKE_DIR)
+            if env_picked:
+                paths["3_environment"] = env_picked
+            if water_picked:
+                paths["4_water"] = water_picked
+            rationales["3_environment"] = f"首帧下半区偏蓝（水面启发）→ lake ambience · {env_reason}"
+            rationales["4_water"] = f"首帧水面启发 + 原声水体线索 → standing_water · {water_reason}"
             env_vol = 0.24
             water_vol = 0.22
         elif visual.get("green_dominant"):
-            paths["3_environment"] = pick_first_mp3("3_environment/ambience/forest") or paths.get("3_environment", "")
+            picked, reason = pick_first_mp3("3_environment/ambience/forest")
+            if picked:
+                paths["3_environment"] = picked
+            rationales["3_environment"] = f"首帧绿色偏多 → 强化林间 ambience · {reason}"
 
     human_name = "近场舒适"
     if paths.get("6_human", "").find("umbrella") >= 0 or "umbrella" in paths.get("6_human", ""):
@@ -329,10 +394,20 @@ def build_asmr_config(
         ],
         "fade_sec": 0.08,
     }
-    return cfg
+    return cfg, rationales
 
 
-def recipe_section_md(cfg: dict) -> str:
+def _layer_paths_from_cfg(cfg: dict) -> dict[str, str]:
+    out: dict[str, str] = {}
+    for layer in cfg.get("loop_layers", []) + cfg.get("scatter_layers", []):
+        lid = layer.get("id", "")
+        paths = [p for p in layer.get("paths", []) if p]
+        if lid and paths:
+            out[lid] = paths[0]
+    return out
+
+
+def recipe_section_md(cfg: dict, rationales: dict[str, str] | None = None) -> str:
     """§三 配方总览（Rain Sound Design 六层 + Dynamic + video）。"""
     lines = [
         "# 三、六层配方 + Dynamic（自动初版）",
@@ -364,8 +439,31 @@ def recipe_section_md(cfg: dict) -> str:
         )
     lines.extend([
         "",
-        "详细路径见 `scripts/asmr_config.lua` · 生成：`create_rain_subproject.py`",
+        "详细路径见 `scripts/asmr_config.lua` · 生成：`create_rain_subproject.py` / GUI",
         "",
+    ])
+    if rationales:
+        layer_paths = _layer_paths_from_cfg(cfg)
+        lines.extend([
+            "## 3.2 声源选取理由",
+            "",
+            "| layer_id | 素材 | 选取理由 |",
+            "|----------|------|----------|",
+        ])
+        for lid in (
+            "1_rain",
+            "2_impact",
+            "3_environment",
+            "4_water",
+            "5_wildlife",
+            "6_human",
+        ):
+            path = layer_paths.get(lid, "—")
+            reason = rationales.get(lid, "—")
+            short = f"`{Path(path).name}`" if path and path != "—" else "—"
+            lines.append(f"| `{lid}` | {short} | {reason} |")
+        lines.append("")
+    lines.extend([
         "打开工程后运行 **`asmr_apply_recipe.lua`**（铺循环/稀疏 + **`1_rain` 长时音量包络**）。",
         "",
     ])
@@ -448,6 +546,7 @@ def write_video_analysis(
     visual: dict,
     audio: dict | None,
     cfg: dict,
+    rationales: dict[str, str] | None = None,
 ) -> None:
     from analyze_video_audio import LAYER_ROWS, build_markdown
 
@@ -494,7 +593,7 @@ def write_video_analysis(
     if audio:
         video_abs = REPO_ROOT / video_rel
         section = build_markdown(video_abs, audio["stats"], audio["layers"])
-        body = "\n".join(header) + section + "\n---\n\n" + recipe_section_md(cfg)
+        body = "\n".join(header) + section + "\n---\n\n" + recipe_section_md(cfg, rationales)
     else:
         no_audio = [
             "# 二、视频原声拆解",
@@ -504,7 +603,7 @@ def write_video_analysis(
             "---",
             "",
         ]
-        body = "\n".join(header) + "\n".join(no_audio) + recipe_section_md(cfg)
+        body = "\n".join(header) + "\n".join(no_audio) + recipe_section_md(cfg, rationales)
 
     path.write_text(body, encoding="utf-8")
 
@@ -539,15 +638,33 @@ def create_from_video(
     duration_hours: float = 3,
     media_mode: str = "auto",
     skip_generate: bool = False,
+    on_progress: Callable[[str], None] | None = None,
 ) -> Path:
+    def log(msg: str) -> None:
+        if on_progress:
+            on_progress(msg)
+        else:
+            print(msg)
+
     scene_id = derive_scene_id(video, scene_id)
+    log(f"场景 ID: {scene_id}")
     video_abs, video_rel = ensure_video_in_assets(video, scene_id)
+    log(f"视频: {video_rel}")
+
+    log("探测视频元数据…")
     probe = probe_video(video_abs)
+    log("分析首帧画面启发…")
     visual = analyze_visual_heuristic(video_abs)
-    audio = analyze_embedded_audio(video_abs) if probe["has_audio"] else None
+    if probe["has_audio"]:
+        log("分析内嵌音轨（七层听感）…")
+        audio = analyze_embedded_audio(video_abs)
+    else:
+        log("无内嵌音轨，使用画面启发 + 默认模板")
+        audio = None
     audio_layers = audio["layers"] if audio else None
 
-    cfg = build_asmr_config(
+    log("生成配方并挑选声源…")
+    cfg, rationales = build_asmr_config(
         scene_id,
         video_rel,
         duration_hours=duration_hours,
@@ -555,6 +672,7 @@ def create_from_video(
         visual=visual,
     )
 
+    log("写入脚手架与配方…")
     sub_dir = scaffold_subproject(scene_id)
     lua = config_to_lua(cfg)
     (sub_dir / "scripts" / "asmr_config.lua").write_text(lua, encoding="utf-8")
@@ -568,20 +686,24 @@ def create_from_video(
         visual,
         audio,
         cfg,
+        rationales,
     )
 
     if not skip_generate:
         from generate_subproject import build_rpp, load_config, stage_rain_fx_assets
         from media_paths import describe_media_mode
 
+        log("生成 Reaper 工程 (.rpp)…")
         config_path = sub_dir / "scripts" / "asmr_config.lua"
         loaded = load_config(config_path)
         stage_rain_fx_assets(sub_dir)
         rpp_path = sub_dir / f"{scene_id}.rpp"
-        print(f"媒体路径: {describe_media_mode(media_mode, REPO_ROOT)}")
+        log(f"媒体路径: {describe_media_mode(media_mode, REPO_ROOT)}")
         rpp_path.write_text(
             build_rpp(loaded, REPO_ROOT, sub_dir, media_mode),
             encoding="utf-8",
         )
+        log(f"工程: {rpp_path.relative_to(REPO_ROOT)}")
 
+    log("完成")
     return sub_dir

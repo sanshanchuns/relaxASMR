@@ -1,45 +1,21 @@
-# RS-PASS 音频 Benchmark（本仓库内置）
+# benchmark
 
-对 Rain 系列**渲染成品**或 **Reaper 混音预览**做 **RS-PASS** 七维 + 色噪声类型打分。  
-理论：[theory.md](theory.md) · 人工对照：[design/rain_series/scoring_rubric.md](../design/rain_series/scoring_rubric.md)
+## 现状
 
-> **Reaper / 导出流水线**使用本目录，**不依赖** sibling `youtube_analysis`。  
-> `youtube_analysis` 仍保留 YouTube 批量、频道、细分调研等扩展能力。
+**RS-PASS 自动打分脚本已移除。** 实测表明，基于 `theory.md` §四 的代理指标（响度、尖锐度、粗糙度等）**无法有效指导混音决策**，与爆款成品的听感差距较大。
 
-## 文件
+本目录仅保留 [`theory.md`](theory.md) 作为**声学背景参考**（色噪声分类、LEV 包裹感、三层声景结构等），不再维护 `score.py` 及 Reaper/导出流水线中的打分集成。
 
-| 文件 | 说明 |
-|------|------|
-| `score.py` | CLI + `run_benchmark()` |
-| `rs_pass.py` | 七维测量与加权计分 |
-| `noise_type.py` | 粉/白/棕噪声分类 |
-| `recommendations.py` | 文本修改建议 |
-| `track_actions.py` | 轨级可执行建议（供 Reaper 一键应用） |
-| `rpp_context.py` | 解析 `.rpp` + `asmr_config.lua` |
-| `theory.md` | RS-PASS 指标定义 |
+## 后续方向：爆款声纹
 
-## 用法
+混音质量评估将改为 **对标爆款样本的声纹指纹**：
 
-```bash
-# 单文件（默认前 300s，不足则全长）
-python3 benchmark/score.py path/to/render.mp4
+- 从已验证的高播放 Rain/Lake 成品中提取频谱、动态、空间等特征
+- 与当前渲染成品做相似度 / 距离对比
+- 用「离爆款有多远」指导层能量、EQ、素材替换——而非 RS-PASS 百分制
 
-# Reaper 混音打分（Lua asmr_score_mix.lua 内部调用 scoring_bridge → 本目录）
-python3 scripts/video_export/scoring_bridge.py preview.wav \
-  --output-dir output/score --rpp path/to/scene.rpp \
-  --report-stem mix_score --summary-file output/score/mix_score_summary.txt
+（实现待建，目录规划：`benchmark/viral_fingerprint/` 或同级模块。）
 
-# 带 RPP 轨级建议
-python3 benchmark/score.py path/to/mix.wav \
-  --rpp Reaper/Projects/Rain/subprojects/MVI_6918/MVI_6918.rpp
-```
+## 人工评估
 
-## Reaper 集成
-
-- **`Reaper/scripts/asmr_score_mix.lua`** — 渲染混音 → `scoring_bridge.py` → 本 benchmark
-- 输出 `output/score/mix_score.md` + `mix_score_actions.lua`（轨级一键修改）
-
-## 依赖
-
-- Python 3 · numpy · ffmpeg · ffprobe
-- 与 `youtube_analysis` 的 `scoring/` 同源，可独立演进
+配方与成品仍可参考 [`design/rain_series/scoring_rubric.md`](../design/rain_series/scoring_rubric.md) 中的 **包裹感 / 安全感** 人工量表（§一–§四）。

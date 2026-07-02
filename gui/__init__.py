@@ -1,0 +1,1 @@
+"""relaxASMR Tkinter GUI。"""

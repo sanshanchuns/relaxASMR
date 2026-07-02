@@ -1,4 +1,4 @@
-<REAPER_PROJECT 0.1 "7.73/win64" 1783006055 0
+<REAPER_PROJECT 0.1 "7.73/win64" 1783008339 0
   <NOTES 0 2
   >
   RIPPLE 0 0
@@ -19,8 +19,8 @@
   VIDEO_CONFIG 0 0 65792
   PANMODE 3
   PANLAWFLAGS 3
-  CURSOR 42
-  ZOOM 50.47430263272117 1960 0
+  CURSOR 4
+  ZOOM 100 0 0
   VZOOMEX 6 0
   USE_REC_CFG 0
   RECMODE 1
@@ -68,8 +68,8 @@
   GLOBAL_AUTO -1
   TEMPO 60 4 4 1
   PLAYRATE 1 0 0.25 4
-  SELECTION 92 92
-  SELECTION2 92 92
+  SELECTION 0 0
+  SELECTION2 0 0
   MASTERAUTOMODE 0
   MASTERTRACKHEIGHT 0 0
   MASTERPEAKCOL 16576
@@ -103,7 +103,7 @@
   RULERLANE 2 8 "" 0 -1 0
   <PROJBAY
   >
-  <TRACK {72083F5B-53C1-470A-B565-E77318AD458E}
+  <TRACK {360F660A-7E41-406B-ABF8-120C0597D66A}
     NAME Group
     PEAKCOL 16576
     BEAT -1
@@ -125,7 +125,7 @@
     INQ 0 0 0 0.5 100 0 0 100
     NCHAN 2
     FX 1
-    TRACKID {72083F5B-53C1-470A-B565-E77318AD458E}
+    TRACKID {360F660A-7E41-406B-ABF8-120C0597D66A}
     PERF 0
     MIDIOUT -1
     MAINSEND 1 0
@@ -142,7 +142,7 @@
         AFByb2dyYW0gMQAQAAAA
       >
       FLOATPOS 0 0 0 0
-      FXID {0432D164-BD45-4AEA-BC11-64714E537E58}
+      FXID {938D1268-F991-4796-B35E-3F4DEE380D60}
       WAK 0 0
       BYPASS 0 0 0
       <VST "VST: ReaComp (Cockos)" reacomp.dll 0 "" 1919247213<5653547265636D726561636F6D700000> ""
@@ -151,11 +151,11 @@
         AFByb2dyYW0gMQAQAAAA
       >
       FLOATPOS 0 0 0 0
-      FXID {0EBCF5D7-CA4B-4439-A381-D65E4F59E357}
+      FXID {1BF88D13-8BA8-4FE7-9BBE-DF8F60540ACC}
       WAK 0 0
     >
   >
-  <TRACK {4DF85823-A88E-4DDF-84B5-491455CA7CCC}
+  <TRACK {464618A1-4740-4720-AAAB-53643ECA6831}
     NAME 1_rain
     PEAKCOL 16576
     BEAT -1
@@ -177,7 +177,7 @@
     INQ 0 0 0 0.5 100 0 0 100
     NCHAN 2
     FX 0
-    TRACKID {4DF85823-A88E-4DDF-84B5-491455CA7CCC}
+    TRACKID {464618A1-4740-4720-AAAB-53643ECA6831}
     PERF 0
     MIDIOUT -1
     MAINSEND 1 0
@@ -190,21 +190,21 @@
       FADEIN 1 0 0 1 0 0 0
       FADEOUT 1 0 0 1 0 0 0
       MUTE 0 0
-      SEL 1
-      IGUID {CD324A04-ACBF-4ACF-939A-DF937870B14B}
+      SEL 0
+      IGUID {B61395B1-F265-4ABE-842D-ABC65BE875E0}
       IID 4
-      NAME 173647_Rain,_Vegetation,_Rain,_Daytime,_Mid_To_Hard_Rainfall,_Havelock_Island,_Second_02_Crest_F50.mp3
+      NAME 173647_Rain,_Vegetation,_Rain,_Daytime,_Mid_To_Hard_Rainfall,_Havelock_Island,_Second_02.mp3
       VOLPAN 1 0 1 -1
       SOFFS 0
       PLAYRATE 1 1 0 -1 0 0.0025
       CHANMODE 0
-      GUID {1AC252A4-445D-4243-81A5-72EE8FFB1D7F}
+      GUID {FADEDF28-5236-449C-B440-52B2343DE1D8}
       <SOURCE MP3
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\rain_sound\1_rain\intensity\drizzle\173647_Rain,_Vegetation,_Rain,_Daytime,_Mid_To_Hard_Rainfall,_Havelock_Island,_Second_02_Crest_F50.mp3" 1
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\rain_sound\1_rain\intensity\drizzle\173647_Rain,_Vegetation,_Rain,_Daytime,_Mid_To_Hard_Rainfall,_Havelock_Island,_Second_02.mp3" 1
       >
     >
   >
-  <TRACK {9C30AD19-DF14-402A-8C6F-20A272D37867}
+  <TRACK {08B93CB0-BA1B-4D96-9EB3-2CC53E264038}
     NAME 2_impact
     PEAKCOL 16576
     BEAT -1
@@ -226,34 +226,34 @@
     INQ 0 0 0 0.5 100 0 0 100
     NCHAN 2
     FX 0
-    TRACKID {9C30AD19-DF14-402A-8C6F-20A272D37867}
+    TRACKID {08B93CB0-BA1B-4D96-9EB3-2CC53E264038}
     PERF 0
     MIDIOUT -1
     MAINSEND 1 0
     <ITEM
       POSITION 0
       SNAPOFFS 0
-      LENGTH 60.048
+      LENGTH 180.024
       LOOP 0
       ALLTAKES 0
       FADEIN 1 0 0 1 0 0 0
       FADEOUT 1 0 0 1 0 0 0
       MUTE 0 0
       SEL 0
-      IGUID {8EB0EDB8-3E53-4EA4-BA51-D11311A288D0}
+      IGUID {A97B8C57-78E7-42FA-B889-4F288424DDA8}
       IID 2
-      NAME 180385_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Hard_Palm_Leaves,_Havelock_Island_02_Crest_F50_N5.mp3
+      NAME 152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3
       VOLPAN 0.5 0 1 -1
       SOFFS 0
       PLAYRATE 1 1 0 -1 0 0.0025
       CHANMODE 0
-      GUID {8BC889AD-6566-4945-B9C8-317755437281}
+      GUID {37489600-50A0-4AA0-B2C1-A83A00A943F7}
       <SOURCE MP3
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\rain_sound\2_impact\vegetation\leaves\180385_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Hard_Palm_Leaves,_Havelock_Island_02_Crest_F50_N5.mp3" 1
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\rain_sound\2_impact\vegetation\leaves\152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea.mp3" 1
       >
     >
   >
-  <TRACK {4899D16E-1872-4E44-A1DC-EE9B44417FC5}
+  <TRACK {616A3D88-5285-4396-BA5A-8597AD6E1BFD}
     NAME 3_environment
     PEAKCOL 16576
     BEAT -1
@@ -275,7 +275,7 @@
     INQ 0 0 0 0.5 100 0 0 100
     NCHAN 2
     FX 0
-    TRACKID {4899D16E-1872-4E44-A1DC-EE9B44417FC5}
+    TRACKID {616A3D88-5285-4396-BA5A-8597AD6E1BFD}
     PERF 0
     MIDIOUT -1
     MAINSEND 1 0
@@ -289,20 +289,20 @@
       FADEOUT 1 0 0 1 0 0 0
       MUTE 0 0
       SEL 0
-      IGUID {702B0A3E-2493-40EE-98A7-7143D91AB948}
+      IGUID {73E7A15D-0C5A-43B5-88F4-E7606281828B}
       IID 5
       NAME 153479_Rain,_General,_Tropical,_Moderate_Monsoon_Rain_Open_Garage_P.mp3
       VOLPAN 0.26 0 1 -1
       SOFFS 0
       PLAYRATE 1 1 0 -1 0 0.0025
       CHANMODE 0
-      GUID {6CCE9E5E-E5BC-46FB-B58F-CDE545E3F7DF}
+      GUID {0F0B2033-F78E-40E1-A8E2-E4A95B9389D6}
       <SOURCE MP3
         FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\rain_sound\3_environment\ambience\forest\153479_Rain,_General,_Tropical,_Moderate_Monsoon_Rain_Open_Garage_P.mp3" 1
       >
     >
   >
-  <TRACK {6B02AB15-DB9D-42FB-AC91-5CB947856A9F}
+  <TRACK {66B7EEA3-BB13-42BB-9E49-5EAB7A82BA3E}
     NAME 4_water
     PEAKCOL 16576
     BEAT -1
@@ -324,7 +324,7 @@
     INQ 0 0 0 0.5 100 0 0 100
     NCHAN 2
     FX 0
-    TRACKID {6B02AB15-DB9D-42FB-AC91-5CB947856A9F}
+    TRACKID {66B7EEA3-BB13-42BB-9E49-5EAB7A82BA3E}
     PERF 0
     MIDIOUT -1
     MAINSEND 1 0
@@ -338,20 +338,20 @@
       FADEOUT 1 0 0 1 0 0 0
       MUTE 0 0
       SEL 0
-      IGUID {5B0E8884-B5DE-4386-BBD4-D56742968569}
+      IGUID {2A7EF440-7F53-4829-B189-E6CC920D082C}
       IID 6
       NAME ARMGJCH_Stone_Splash_in_Puddle.mp3
       VOLPAN 0.24 0 1 -1
       SOFFS 0
       PLAYRATE 1 1 0 -1 0 0.0025
       CHANMODE 0
-      GUID {55124B5F-9898-43A7-8270-86C2700C4F23}
+      GUID {B1467404-03EE-42D7-8A92-41C58823F96C}
       <SOURCE MP3
         FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\rain_sound\4_water\standing_water\puddle\ARMGJCH_Stone_Splash_in_Puddle.mp3" 1
       >
     >
   >
-  <TRACK {F900F067-CA72-4CF3-A7FE-425B9A787E52}
+  <TRACK {F6734AB1-469E-4EFB-8375-DF82556C6C1B}
     NAME 5_wildlife
     PEAKCOL 16576
     BEAT -1
@@ -373,7 +373,7 @@
     INQ 0 0 0 0.5 100 0 0 100
     NCHAN 2
     FX 1
-    TRACKID {F900F067-CA72-4CF3-A7FE-425B9A787E52}
+    TRACKID {F6734AB1-469E-4EFB-8375-DF82556C6C1B}
     PERF 0
     MIDIOUT -1
     MAINSEND 1 0
@@ -388,7 +388,7 @@
         AFByb2dyYW0gMQAQAAAA
       >
       FLOATPOS 0 0 0 0
-      FXID {5BFD13FA-C12B-4F9E-BB7E-6DEE57D82A4D}
+      FXID {A826E65B-A7A9-4BC3-87D3-81C852175D35}
       WAK 0 0
     >
     <ITEM
@@ -401,20 +401,20 @@
       FADEOUT 1 0 0 1 0 0 0
       MUTE 0 0
       SEL 0
-      IGUID {58A6EEF5-5A20-419B-8034-EC4DF84DDA2C}
+      IGUID {520C4FAD-5927-4156-A5BD-AD2AAD5094D9}
       IID 3
       NAME 9PBX76J_Birds.mp3
       VOLPAN 0.22 0 1 -1
       SOFFS 0
       PLAYRATE 1 1 0 -1 0 0.0025
       CHANMODE 0
-      GUID {15EFB975-4EA6-444A-8C9A-A494EDF41CC7}
+      GUID {28C03E67-D01B-4714-9A7B-EB74BFDB338D}
       <SOURCE MP3
         FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\rain_sound\5_wildlife\birds\Hwamei\9PBX76J_Birds.mp3" 1
       >
     >
   >
-  <TRACK {F0FBD501-6C3C-4E1C-AF87-023BAD4F4441}
+  <TRACK {C42C1416-72E7-4465-A1AF-92977EEE66E5}
     NAME 6_human
     PEAKCOL 16576
     BEAT -1
@@ -436,7 +436,7 @@
     INQ 0 0 0 0.5 100 0 0 100
     NCHAN 2
     FX 0
-    TRACKID {F0FBD501-6C3C-4E1C-AF87-023BAD4F4441}
+    TRACKID {C42C1416-72E7-4465-A1AF-92977EEE66E5}
     PERF 0
     MIDIOUT -1
     MAINSEND 1 0
@@ -450,20 +450,20 @@
       FADEOUT 1 0 0 1 0 0 0
       MUTE 0 0
       SEL 0
-      IGUID {6219B222-1B3A-4627-A075-49ED3B4EFECE}
+      IGUID {04BA0288-E8CD-42E2-A5C7-05F087DF4BE2}
       IID 7
       NAME N5KW5NM_Fire_Crackle_CU_Pops_Small_Campfire.mp3
       VOLPAN 0.38 0 1 -1
       SOFFS 0
       PLAYRATE 1 1 0 -1 0 0.0025
       CHANMODE 0
-      GUID {EFC2C6DF-816B-48FC-AFB6-9D7AB6CEA980}
+      GUID {E6D58875-DFF0-446C-90EA-601BA33F0520}
       <SOURCE MP3
         FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\rain_sound\6_human\fire\fire_crackle\N5KW5NM_Fire_Crackle_CU_Pops_Small_Campfire.mp3" 1
       >
     >
   >
-  <TRACK {1CC41043-3579-4061-B01C-5F7666464DA3}
+  <TRACK {DDC26AE2-CE25-4067-86D6-60CF45D29F1D}
     NAME video
     PEAKCOL 16576
     BEAT -1
@@ -485,30 +485,30 @@
     INQ 0 0 0 0.5 100 0 0 100
     NCHAN 2
     FX 0
-    TRACKID {1CC41043-3579-4061-B01C-5F7666464DA3}
+    TRACKID {DDC26AE2-CE25-4067-86D6-60CF45D29F1D}
     PERF 0
     MIDIOUT -1
     MAINSEND 1 0
     <ITEM
       POSITION 0
       SNAPOFFS 0
-      LENGTH 3.2032
+      LENGTH 6.5065
       LOOP 1
       ALLTAKES 0
       FADEIN 1 0 0 1 0 0 0
       FADEOUT 1 0 0 1 0 0 0
       MUTE 0 0
       SEL 0
-      IGUID {688DF80E-8CD5-4AD3-8E33-2FA5C23AA573}
+      IGUID {EED708E3-1602-452E-9B27-D7FEB6AED07F}
       IID 1
-      NAME MVI_6991_loop_0.58_dur_4_fade_0.5.mp4
+      NAME MVI_6970_loop_0.99_dur_7_fade_0.5.mp4
       VOLPAN 0 0 1 -1
       SOFFS 0
       PLAYRATE 1 1 0 -1 0 0.0025
       CHANMODE 0
-      GUID {A94F3503-6B0D-4A26-95D4-D3D2AF1EE909}
+      GUID {8F8F0545-1B34-46DE-8A13-272EEC85366B}
       <SOURCE VIDEO
-        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\loop_video\rain_video\MVI_6991\MVI_6991_loop_0.58_dur_4_fade_0.5.mp4"
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\loop_video\rain_video\MVI_6970\MVI_6970_loop_0.99_dur_7_fade_0.5.mp4"
       >
     >
   >

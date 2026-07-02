@@ -8,7 +8,7 @@
 | [capcut_audio/](capcut_audio/README.md) | 剪映音效 / 音乐下载 |
 | [elevenlabs_audio/](elevenlabs_audio/README.md) | ElevenLabs AI 音效生成 |
 | [ai_audio/](ai_audio/) | AI 音效生成与试听 |
-| [video_export/](video_export/README_video_export.md) | 成片 MP4 导出、YouTube 物料、RS-PASS 桥接 |
-| [../benchmark/README.md](../benchmark/README.md) | RS-PASS 打分（本仓库内置 · Reaper/导出用） |
+| [video_export/](video_export/README_video_export.md) | 成片 MP4 导出、YouTube 物料 |
+| [../benchmark/README.md](../benchmark/README.md) | 声学理论参考 · 爆款声纹（规划中） |
 
 新做「网页/API 填充」脚本时，若遇 Cloudflare，优先复用 `cloak_browser.CloakBrowserSession`。

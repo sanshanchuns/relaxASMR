@@ -766,42 +766,6 @@ def render_markdown(
     return "\n".join(lines)
 
 
-def run_audio_benchmark(
-    video: Path,
-    out_dir: Path,
-    duration: float = 1800.0,
-) -> dict | None:
-    """对合成 mp4/wav 跑 theory benchmark，写入 out_dir/benchmark.md + .json。"""
-    score_py = REPO_ROOT / "benchmark" / "score.py"
-    if not score_py.is_file():
-        print("Warning: benchmark/score.py not found, skip", file=sys.stderr)
-        return None
-    print(f"==> Running RS-PASS benchmark (theory.md §四, first {duration:.0f}s) ...")
-    proc = subprocess.run(
-        [
-            sys.executable,
-            str(score_py),
-            str(video),
-            "--duration",
-            str(duration),
-            "--output-dir",
-            str(out_dir),
-        ],
-        capture_output=True,
-        text=True,
-        encoding="utf-8",
-    )
-    if proc.stdout:
-        print(proc.stdout.rstrip())
-    if proc.returncode != 0:
-        print(proc.stderr or "benchmark failed", file=sys.stderr)
-        return None
-    bench_json = out_dir / "benchmark.json"
-    if bench_json.is_file():
-        return json.loads(bench_json.read_text(encoding="utf-8"))
-    return None
-
-
 def main() -> None:
     parser = argparse.ArgumentParser(description="Generate YouTube material for exported MP4")
     parser.add_argument("video", type=Path, help="Path to MP4 file")
@@ -835,17 +799,6 @@ def main() -> None:
         choices=("center", "bottom-left"),
         default="",
         help="Thumbnail layout (default from preset or center)",
-    )
-    parser.add_argument(
-        "--skip-benchmark",
-        action="store_true",
-        help="跳过 theory 音频 benchmark",
-    )
-    parser.add_argument(
-        "--benchmark-duration",
-        type=float,
-        default=1800.0,
-        help="benchmark 分析时长（秒），默认前 1800 秒；不足则分析全长",
     )
     args = parser.parse_args()
 
@@ -917,12 +870,6 @@ def main() -> None:
     print(f"==> Done: {out_dir}/")
     print(f"    youtube.md")
     print(f"    thumbnail.jpg")
-
-    if not args.skip_benchmark:
-        run_audio_benchmark(video, out_dir, duration=args.benchmark_duration)
-        if (out_dir / "benchmark.md").is_file():
-            print(f"    benchmark.md")
-            print(f"    benchmark.json")
 
 
 if __name__ == "__main__":

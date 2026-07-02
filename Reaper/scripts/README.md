@@ -2,28 +2,13 @@
 
 Rain / Lake 等工程共用。媒体路径指向仓库 `assets/`。
 
-## 日常只用这 4 个（Reaper 里）
+## 日常只用这 3 个（Reaper 里）
 
 | 脚本 | 何时用 |
 |------|--------|
 | **`asmr_apply_recipe.lua`** | **首选** · 铺循环 + 全部稀疏 + **`1_rain` 音量包络（Dynamic）** |
 | **`asmr_scatter_track.lua`** | **只重做一条稀疏轨**（见下） |
 | **`asmr_loop_track.lua`** | **只循环一条轨**（试验素材长度时） |
-| **`asmr_score_mix.lua`** | **RS-PASS 混音打分**（唯一入口：渲染 → 打分 → 可选一键改轨） |
-
-### RS-PASS 混音打分（`asmr_score_mix.lua` · 唯一入口）
-
-> 只需 Load 这一个脚本。轨级「一键应用」已内联，**不要**再 Load `asmr_score_apply.lua`（已删除）。
-
-1. 保存 `.rpp` · 混音调好后运行脚本（共享 `Reaper/scripts/` 或子工程 `scripts/`）
-2. **有时间选区** → 只渲染并分析选区（最长 300s）
-3. **无选区** → 从工程开头分析前 300s（长工程不会渲染 3h 全长）
-4. 报告 → `<场景>/output/score/mix_score.md` · 含 RS-PASS 七维 + 色噪声类型 + RPP 修改建议
-5. 依赖本仓库 **`benchmark/`**（经 `scripts/video_export/scoring_bridge.py` 调用）· 需 python3 + ffmpeg
-6. 自定义分析时长：Reaper **ExtState** `relaxASMR` / `score_duration`（秒）
-7. **打分后**弹出轨级建议；可 **一键应用** 音量微调 / `1_rain` 包络 / Group HF EQ（换素材类须手动）
-
-Windows Reaper + WSL 工程时会自动 `wsl python3 …`。
 
 ### 在 Reaper 里怎么运行
 
@@ -58,17 +43,15 @@ Group 父轨存在时，脚本按 **轨名（如 `3_impact`）** 匹配，不依
 | `generate_subproject.py --scene <id>` | 从 `asmr_config.lua` 生成 `.rpp`（含 Group 总线） |
 | **`create_rain_subproject.py --video <mp4>`** | **一键**：loop 视频 → 分析 + 配方 + 脚手架 + `.rpp` |
 | `analyze_video_audio.py --scene <id> --update-doc` | 视频原声 → `video_analysis.md` §二 |
-| **`asmr_score_mix.lua`** | **RS-PASS 混音打分**（时间选区 / 整工程前 300s → `output/score/`） |
-| [`benchmark/score.py`](../../benchmark/score.py) | 成品 / 混音 RS-PASS（本仓库内置） |
 | `repair_rpp_paths.py` | 修复 rpp 内媒体路径 |
-| [`scripts/video_export/export_mp4.sh`](../../scripts/video_export/export_mp4.sh) | 循环视频 + 音频 → MP4（含物料 + benchmark） |
+| [`scripts/video_export/export_mp4.sh`](../../scripts/video_export/export_mp4.sh) | 循环视频 + 音频 → MP4（含 YouTube 物料） |
 
 ## 库文件（勿单独加载）
 
 | 文件 | 说明 |
 |------|------|
 | `asmr_paths.lua` | 仓库根、`asmr_config`、按层 id 找轨 |
-| `asmr_vol_envelope.lua` | 长时音量包络（由 apply_recipe / score_mix 调用） |
+| `asmr_vol_envelope.lua` | 长时音量包络（由 apply_recipe 调用） |
 | `asmr_config_parser.py` | Python 读配方 |
 | `dump_asmr_config.lua` | 配方 → JSON（generate 用） |
 
@@ -100,7 +83,9 @@ python3 Reaper/scripts/generate_subproject.py --scene MVI_6918
 
 强制覆盖：`RELAXASMR_MEDIA_MODE=absolute` 或 `--media-mode wsl_unc`。
 
-打开 `.rpp` → **`asmr_apply_recipe.lua`**（铺循环/稀疏 + **`1_rain` 长时音量包络**）→ 手调 Group / Master 限幅 → 渲染 wav → [`scripts/video_export/export_mp4.sh`](../../../scripts/video_export/export_mp4.sh) 合成 mp4（自动物料 + benchmark）。
+打开 `.rpp` → **`asmr_apply_recipe.lua`**（铺循环/稀疏 + **`1_rain` 长时音量包络**）→ 手调 Group / Master 限幅 → 渲染 wav → [`scripts/video_export/export_mp4.sh`](../../../scripts/video_export/export_mp4.sh) 合成 mp4（自动 YouTube 物料）。
+
+混音质量：人工对照 [`design/rain_series/scoring_rubric.md`](../../design/rain_series/scoring_rubric.md)；后续 **爆款声纹** 见 [`benchmark/README.md`](../../benchmark/README.md)。
 
 `asmr_config.lua` 在子工程 `scripts/` 下（非 `Audio Files/`）。
 
