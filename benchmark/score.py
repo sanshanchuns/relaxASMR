@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """RS-PASS + 色噪声类型 benchmark（benchmark/theory.md §一、§四）。
 
-对渲染成品 mp4/wav 分析前 N 秒（默认 1800s；不足则分析全长）：
+对渲染成品 mp4/wav 分析前 N 秒（默认 300s；不足则分析全长）：
   - 判断主噪声类型：pink / white / brown
   - 类型内 RS-PASS 七项指标 + 类型贴合度
   - 可选读取 .rpp / asmr_config 给出 Reaper 修改建议
@@ -109,18 +109,39 @@ def render_markdown(result: dict) -> str:
             tag = rec["priority"].upper()
             lines.append(f"- **[{tag}]** {rec['text']}")
 
+    track_actions = result.get("track_actions") or []
+    if track_actions:
+        lines += ["", "## 轨级修改建议", ""]
+        lines += [
+            "| 轨 | 优先级 | 自动 | 建议 |",
+            "|----|--------|------|------|",
+        ]
+        for act in track_actions:
+            auto = "是" if act.get("auto_apply") and act.get("action") != "note" else "否"
+            track = act.get("track_name") or act.get("layer_id") or act.get("target") or "—"
+            lines.append(
+                f"| `{track}` | {act.get('priority', '?')} | {auto} | "
+                f"{act.get('text', act.get('reason', ''))} |"
+            )
+
+    m = result.get("measurements") or {}
+    if m:
+        lines += [
+            "",
+            "## 原始测量（代理量）",
+            "",
+            f"- N_5 响度估计: {m.get('n5_sone_est', '?')} Sone (P95 {m.get('n5_p95_dbfs', '?')} dBFS)",
+            f"- S_50: {m.get('s50_acum_est', '?')} Acum(est)",
+            f"- R_5: {m.get('r5_asper_est', '?')} Asper(est)",
+            f"- IACC: {m.get('iacc', '?')}",
+            f"- F_50: {m.get('f50_vacil_est', '?')} Vacil(est)",
+            f"- SI: {m.get('si', '?')}",
+            f"- T_max: {m.get('tmax', '?')}",
+            f"- RMS / Peak / Crest: {m.get('rms_dbfs', '?')} / {m.get('peak_dbfs', '?')} / "
+            f"{round(m.get('peak_dbfs', 0) - m.get('rms_dbfs', 0), 2)} dB",
+        ]
+
     lines += [
-        "",
-        f"- N_5 响度估计: {m['n5_sone_est']} Sone (P95 {m['n5_p95_dbfs']} dBFS)",
-        f"- S_50: {m['s50_acum_est']} Acum(est)",
-        f"- R_5: {m['r5_asper_est']} Asper(est)",
-        f"- IACC: {m['iacc']}",
-        f"- F_50: {m['f50_vacil_est']} Vacil(est)",
-        f"- SI: {m['si']}",
-        f"- T_max: {m['tmax']}",
-        f"- RMS / Peak / Crest: {m['rms_dbfs']} / {m['peak_dbfs']} / "
-        f"{round(m['peak_dbfs'] - m['rms_dbfs'], 2)} dB",
-        "",
         "## 等级（甜区校准 · 代理量）",
         "",
         "> 旧版「不超标即满分」已改为 **ideal 甜区** 打分；88+ 应少见。",
@@ -146,6 +167,81 @@ def write_results(
     md_path.write_text(render_markdown(result), encoding="utf-8")
     json_path.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
     return md_path, json_path
+
+
+def _lua_str(s: str) -> str:
+    return json.dumps(s, ensure_ascii=False)
+
+
+def write_actions_lua(actions: list, path: Path) -> None:
+    """生成 Reaper loadfile 可读的 Lua 表。"""
+    lines = ["return {"]
+    for act in actions:
+        lines.append("  {")
+        for key in (
+            "layer_id", "track_name", "target", "action", "priority",
+            "auto_apply", "reason", "text",
+        ):
+            val = act.get(key)
+            if val is None:
+                lines.append(f"    {key} = nil,")
+            elif isinstance(val, bool):
+                lines.append(f"    {key} = {'true' if val else 'false'},")
+            elif isinstance(val, (int, float)):
+                lines.append(f"    {key} = {val},")
+            else:
+                lines.append(f"    {key} = {_lua_str(str(val))},")
+        params = act.get("params") or {}
+        lines.append("    params = {")
+        for pk, pv in params.items():
+            if isinstance(pv, bool):
+                lines.append(f"      {pk} = {'true' if pv else 'false'},")
+            elif isinstance(pv, (int, float)):
+                lines.append(f"      {pk} = {pv},")
+            elif isinstance(pv, list):
+                items = ", ".join(_lua_str(str(x)) for x in pv)
+                lines.append(f"      {pk} = {{{items}}},")
+            else:
+                lines.append(f"      {pk} = {_lua_str(str(pv))},")
+        lines.append("    },")
+        lines.append("  },")
+    lines.append("}")
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def write_summary(result: dict, path: Path, *, report_stem: str = "benchmark") -> None:
+    """键值行摘要，供 Reaper Lua 读取。"""
+    nt = result.get("noise_type", {})
+    tf = result.get("type_fit", {})
+    dims = result.get("dimensions", {})
+    weak = sorted(
+        ((k, dims[k]["score"]) for k in dims),
+        key=lambda x: x[1],
+    )[:3]
+    weak_txt = ", ".join(f"{k}={v:.0f}" for k, v in weak)
+    out_dir = path.parent
+    actions_lua = out_dir / f"{report_stem}_actions.lua"
+    actions = result.get("track_actions") or []
+    if actions:
+        write_actions_lua(actions, actions_lua)
+    auto_n = sum(1 for a in actions if a.get("auto_apply") and a.get("action") != "note")
+    lines = [
+        f"total_score={result.get('total_score', 0)}",
+        f"rs_pass_score={result.get('rs_pass_score', 0)}",
+        f"type_fit_score={tf.get('type_fit_score', 0)}",
+        f"grade={result.get('grade', '')}",
+        f"mode={result.get('mode', '')}",
+        f"noise_type={nt.get('label_zh', '')}",
+        f"noise_primary={nt.get('primary', '')}",
+        f"duration_s={result.get('duration_s', 0)}",
+        f"report_md={out_dir / (report_stem + '.md')}",
+        f"report_json={out_dir / (report_stem + '.json')}",
+        f"actions_lua={actions_lua if actions else ''}",
+        f"track_actions_count={len(actions)}",
+        f"track_actions_auto={auto_n}",
+        f"weak_dims={weak_txt}",
+    ]
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
 def run_benchmark(
@@ -201,6 +297,12 @@ def main() -> None:
     ap.add_argument("--markdown", action="store_true", help="Markdown 输出到 stdout")
     ap.add_argument("--output-dir", type=Path, help="写入 benchmark.md / benchmark.json")
     ap.add_argument("--report-stem", default="benchmark", help="报告文件名前缀")
+    ap.add_argument(
+        "--summary-file",
+        type=Path,
+        default=None,
+        help="写入 key=value 摘要（供 Reaper Lua 读取）",
+    )
     args = ap.parse_args()
 
     path = args.input.resolve()
@@ -216,6 +318,9 @@ def main() -> None:
         rpp_path=args.rpp,
         auto_mode=not args.no_auto_mode,
     )
+
+    if args.summary_file is not None:
+        write_summary(result, args.summary_file, report_stem=args.report_stem)
 
     if args.output_dir:
         json_path = args.output_dir / f"{args.report_stem}.json"

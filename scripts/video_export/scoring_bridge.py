@@ -1,25 +1,16 @@
 #!/usr/bin/env python3
-"""调用 sibling 工程 youtube_analysis 的 RS-PASS 打分（见 ../youtube_analysis/README.md）。"""
+"""RS-PASS 打分桥接：Reaper Lua / 导出流水线 → 本仓库 benchmark/。"""
 
 from __future__ import annotations
 
 import json
-import os
 import subprocess
 import sys
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_YOUTUBE_ANALYSIS = REPO_ROOT.parent / "youtube_analysis"
-
-
-def resolve_youtube_analysis_root() -> Path | None:
-    env = os.environ.get("YOUTUBE_ANALYSIS_ROOT", "").strip()
-    if env:
-        root = Path(env).expanduser().resolve()
-        return root if (root / "scoring").is_dir() else None
-    root = DEFAULT_YOUTUBE_ANALYSIS.resolve()
-    return root if (root / "scoring").is_dir() else None
+BENCHMARK_DIR = REPO_ROOT / "benchmark"
+SCORE_PY = BENCHMARK_DIR / "score.py"
 
 
 def run_scoring(
@@ -30,16 +21,11 @@ def run_scoring(
     report_stem: str = "benchmark",
     rpp: Path | None = None,
     mode: str | None = None,
+    summary_file: Path | None = None,
 ) -> dict | None:
     """对单个媒体文件跑 RS-PASS，写入 out_dir/{report_stem}.md|.json。"""
-    root = resolve_youtube_analysis_root()
-    if root is None:
-        hint = DEFAULT_YOUTUBE_ANALYSIS
-        print(
-            f"Warning: youtube_analysis not found at {hint} "
-            f"(or set YOUTUBE_ANALYSIS_ROOT), skip scoring",
-            file=sys.stderr,
-        )
+    if not SCORE_PY.is_file():
+        print(f"Warning: {SCORE_PY} not found, skip scoring", file=sys.stderr)
         return None
 
     media = media.resolve()
@@ -48,11 +34,8 @@ def run_scoring(
 
     cmd = [
         sys.executable,
-        "-m",
-        "scoring",
+        str(SCORE_PY),
         str(media),
-        "--task",
-        "file",
         "--duration",
         str(duration),
         "--output-dir",
@@ -64,11 +47,13 @@ def run_scoring(
         cmd.extend(["--rpp", str(rpp.resolve())])
     if mode is not None:
         cmd.extend(["--mode", mode])
+    if summary_file is not None:
+        cmd.extend(["--summary-file", str(summary_file.resolve())])
 
-    print(f"==> RS-PASS scoring (youtube_analysis, first {duration:.0f}s) ...")
+    print(f"==> RS-PASS scoring (benchmark/, first {duration:.0f}s) ...")
     proc = subprocess.run(
         cmd,
-        cwd=str(root),
+        cwd=str(BENCHMARK_DIR),
         capture_output=True,
         text=True,
         encoding="utf-8",
@@ -88,13 +73,14 @@ def run_scoring(
 def main() -> None:
     import argparse
 
-    ap = argparse.ArgumentParser(description="Call youtube_analysis RS-PASS scoring")
+    ap = argparse.ArgumentParser(description="Call relaxASMR benchmark/score.py")
     ap.add_argument("media", type=Path, help="mp4 / wav 等成品")
     ap.add_argument("--output-dir", type=Path, required=True)
     ap.add_argument("--duration", type=float, default=300.0)
     ap.add_argument("--report-stem", default="benchmark")
     ap.add_argument("--rpp", type=Path, default=None)
     ap.add_argument("--mode", choices=("sleep", "focus"), default=None)
+    ap.add_argument("--summary-file", type=Path, default=None)
     args = ap.parse_args()
 
     result = run_scoring(
@@ -104,6 +90,7 @@ def main() -> None:
         report_stem=args.report_stem,
         rpp=args.rpp,
         mode=args.mode,
+        summary_file=args.summary_file,
     )
     sys.exit(0 if result else 1)
 

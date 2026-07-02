@@ -13,7 +13,7 @@ from noise_type import (
     psd_slope,
 )
 
-DEFAULT_DURATION = 1800.0
+DEFAULT_DURATION = 300.0
 
 # theory.md RS-PASS 权重
 RS_PASS_WEIGHTS: dict[str, float] = {
@@ -436,6 +436,7 @@ def score_rs_pass(
     project: dict | None = None,
 ) -> dict:
     from recommendations import build_recommendations
+    from track_actions import build_track_actions
 
     m = measure_rs_pass(path, duration)
     noise = classify_noise_type(m["psd_slope"])
@@ -450,7 +451,7 @@ def score_rs_pass(
 
     dims = {
         "n5_peak_loudness": score_n5(m, eval_mode),
-        "s50_sharpness": score_s50(m, primary),
+        "s50_sharpness": score_s50(m),
         "r5_roughness": score_r5(m),
         "iacc": score_iacc(m),
         "f50_fluctuation": score_f50(m),
@@ -496,4 +497,5 @@ def score_rs_pass(
     result["recommendations"] = build_recommendations(
         result, project, intent_mode=mode or eval_mode
     )
+    result["track_actions"] = build_track_actions(result, project)
     return result

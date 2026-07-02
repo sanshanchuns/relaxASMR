@@ -2,13 +2,26 @@
 
 Rain / Lake 等工程共用。媒体路径指向仓库 `assets/`。
 
-## 日常只用这 3 个（Reaper 里）
+## 日常只用这 4 个（Reaper 里）
 
 | 脚本 | 何时用 |
 |------|--------|
 | **`asmr_apply_recipe.lua`** | **首选** · 铺循环 + 全部稀疏 + **`1_rain` 音量包络（Dynamic）** |
 | **`asmr_scatter_track.lua`** | **只重做一条稀疏轨**（见下） |
 | **`asmr_loop_track.lua`** | **只循环一条轨**（试验素材长度时） |
+| **`asmr_score_mix.lua`** | **RS-PASS 混音打分**（时间选区或整工程前 300s） |
+
+### RS-PASS 混音打分（`asmr_score_mix.lua`）
+
+1. 保存 `.rpp` · 混音调好后运行脚本（共享 `Reaper/scripts/` 或子工程 `scripts/`）
+2. **有时间选区** → 只渲染并分析选区（最长 300s）
+3. **无选区** → 从工程开头分析前 300s（长工程不会渲染 3h 全长）
+4. 报告 → `<场景>/output/scoring/mix_score.md` · 含 RS-PASS 七维 + 色噪声类型 + RPP 修改建议
+5. 依赖本仓库 **`benchmark/`**（经 `scripts/video_export/scoring_bridge.py` 调用）· 需 python3 + ffmpeg
+6. 自定义分析时长：Reaper **ExtState** `relaxASMR` / `score_duration`（秒）
+7. **打分后**弹出轨级建议；可 **一键应用** 音量微调 / `1_rain` 包络 / Group HF EQ（换素材类须手动）
+
+Windows Reaper + WSL 工程时会自动 `wsl python3 …`。
 
 ### 在 Reaper 里怎么运行
 
@@ -43,7 +56,8 @@ Group 父轨存在时，脚本按 **轨名（如 `3_impact`）** 匹配，不依
 | `generate_subproject.py --scene <id>` | 从 `asmr_config.lua` 生成 `.rpp`（含 Group 总线） |
 | **`create_rain_subproject.py --video <mp4>`** | **一键**：loop 视频 → 分析 + 配方 + 脚手架 + `.rpp` |
 | `analyze_video_audio.py --scene <id> --update-doc` | 视频原声 → `video_analysis.md` §二 |
-| `benchmark/score.py <mp4>` | 成品 mp4/wav 前 60s · theory 五维 benchmark |
+| **`asmr_score_mix.lua`** | **RS-PASS 混音打分**（时间选区 / 整工程前 300s → `output/scoring/`） |
+| [`benchmark/score.py`](../../benchmark/score.py) | 成品 / 混音 RS-PASS（本仓库内置） |
 | `repair_rpp_paths.py` | 修复 rpp 内媒体路径 |
 | [`scripts/video_export/export_mp4.sh`](../../scripts/video_export/export_mp4.sh) | 循环视频 + 音频 → MP4（含物料 + benchmark） |
 
