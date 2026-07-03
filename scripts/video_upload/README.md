@@ -54,6 +54,8 @@ PYTHONPATH=scripts python3 -m video_upload \
 
 上传成功后写入 `upload_record.json`（含 `video_id`、URL）。
 
+**上传固定元数据**：分类 Travel & Events（19）、语言 English；字幕认证需在 Studio 手动勾选（API 不支持）。
+
 ## GUI
 
 见 [`gui/README.md`](../../gui/README.md) 第 6 步「上传到 YouTube」。

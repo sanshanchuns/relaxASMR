@@ -35,8 +35,10 @@ SCOPES = [
     "https://www.googleapis.com/auth/youtube",
 ]
 
-# YouTube category: 10 = Music（睡眠/环境音频道常用）
-DEFAULT_CATEGORY_ID = "10"
+# YouTube 上传固定元数据（与 Studio 默认对齐）
+DEFAULT_CATEGORY_ID = "19"  # Travel & Events（旅游与活动）
+DEFAULT_VIDEO_LANGUAGE = "en"  # English（标题/说明/音轨语言）
+# 字幕认证「This content has never aired on television in the U.S.」无公开 API 字段，需在 Studio 高级设置手动确认
 
 
 def resolve_account_paths(
@@ -282,6 +284,8 @@ def upload_video(
             "description": description[:5000],
             "tags": tag_list,
             "categoryId": category_id,
+            "defaultLanguage": DEFAULT_VIDEO_LANGUAGE,
+            "defaultAudioLanguage": DEFAULT_VIDEO_LANGUAGE,
         },
         "status": {
             "privacyStatus": privacy_status,
@@ -362,6 +366,7 @@ def upload_from_material(
     service = get_youtube_service(creds_path, tok_path, account=account_name, on_log=on_log)
 
     log(f"上传视频：{video_path.name}（{privacy_status}）…")
+    log(f"  分类：Travel & Events · 语言：English")
     def prog(pct: int) -> None:
         if on_progress:
             on_progress(pct)
@@ -394,6 +399,8 @@ def upload_from_material(
         "privacy_status": privacy_status,
         "video_file": video_path.name,
         "account": account_name,
+        "category_id": DEFAULT_CATEGORY_ID,
+        "video_language": DEFAULT_VIDEO_LANGUAGE,
     }
     record_path = material_dir / "upload_record.json"
     record_path.write_text(json.dumps(record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
