@@ -8,6 +8,7 @@ import json
 import re
 import subprocess
 import sys
+from collections.abc import Callable
 from pathlib import Path
 
 try:
@@ -200,14 +201,19 @@ def resize_badge(badge_path: Path) -> Image.Image:
 
 
 def extract_frame(video: Path, out_png: Path, t: float) -> None:
-    subprocess.run(
+    proc = subprocess.run(
         [
             "ffmpeg", "-y", "-ss", str(t), "-i", str(video),
             "-vframes", "1", "-q:v", "2", str(out_png),
         ],
-        check=True,
         capture_output=True,
+        text=True,
     )
+    if proc.returncode != 0:
+        err = (proc.stderr or proc.stdout or "ffmpeg failed").strip()
+        raise RuntimeError(f"ffmpeg 截帧失败 @ {t}s：{err}")
+    if not out_png.is_file() or out_png.stat().st_size == 0:
+        raise RuntimeError(f"ffmpeg 截帧失败 @ {t}s：输出为空（视频可能短于 {t}s）")
 
 
 def _region_stats(img: Image.Image, box: tuple[int, int, int, int]) -> dict[str, float]:
@@ -415,6 +421,144 @@ def analyze_frame_scene(frame_path: Path) -> dict:
     mood = "Misty rainy" if misty else "Peaceful rainy"
     scene["thumb_subtitle"] = limit_words(f"{mood} {scene['thumb_place']}")
     return scene
+
+
+# scripts/video_export/material_ref/forest_rain.md — 爆款标题/描述/Tags/封面叠字模版
+FOREST_RAIN_REF = Path(__file__).resolve().parent / "material_ref" / "forest_rain.md"
+
+FOREST_RAIN_THUMB_HEAVY_SCENES = frozenset({
+    "grove_path",
+    "grove_pond_path",
+    "park_path",
+    "park_pond_path",
+})
+FOREST_RAIN_CORE_TAGS = [
+    "rain sounds",
+    "rain",
+    "rain sounds for sleeping",
+    "rain and thunder",
+    "rain and thunder sounds",
+    "heavy rain",
+    "sleep",
+    "insomnia",
+    "white noise",
+    "sleep sounds",
+    "4k rain loop",
+    "rain at night",
+]
+
+FOREST_RAIN_SCENE_TAGS = [
+    "nature sounds",
+    "thunder sounds",
+    "thunder",
+    "thunderstorm",
+    "thunderstorm sounds",
+    "relaxing rain",
+    "asmr",
+    "forest rain",
+]
+
+VIRAL_SCENE_RAIN: dict[str, str] = {
+    "grove": "Calming Rain on Forest Leaves",
+    "grove_path": "Heavy Rain on Forest Path",
+    "grove_pond": "Rain on Misty Forest Grove",
+    "grove_pond_path": "Rain on Forest Grove Path",
+    "park": "Gentle Rain on Green Park",
+    "park_path": "Rain on Forest Park Path",
+    "park_pond": "Rain Beside a Lotus Pond",
+    "park_pond_path": "Rain on Park Lotus Path",
+    "pond": "Peaceful Rain on Lotus Pond",
+    "nature": "Calming Rain in Nature",
+}
+
+
+def duration_title_en(meta: dict) -> str:
+    """3 hour(s) → 3 Hours；用于爆款标题。"""
+    s = int(meta["duration_s"])
+    h = s // 3600
+    m = (s % 3600) // 60
+    if h >= 1:
+        return f"{h} Hour{'s' if h != 1 else ''}"
+    if m >= 1:
+        return f"{m} Minutes"
+    return f"{s} Seconds"
+
+
+def viral_format_en(meta: dict, *, show_4k: bool) -> str:
+    """三段式「格式」：本系列为循环雨景实景（非黑屏）。"""
+    dur = duration_title_en(meta)
+    k4 = "4K " if show_4k else ""
+    return f"{dur} {k4}Rain Loop ASMR".strip()
+
+
+def viral_format_zh(meta: dict, *, show_4k: bool) -> str:
+    dur = meta["duration_human"]
+    k4 = "4K " if show_4k else ""
+    return f"{dur}{k4}雨景循环 ASMR"
+
+
+def forest_rain_benefit_en(scene_key: str, scene_rain: str) -> str:
+    if scene_key in FOREST_RAIN_THUMB_HEAVY_SCENES or scene_rain.startswith("Heavy"):
+        return "Overcome Stress to Sleep Instantly"
+    return "Deep Sleep Instantly"
+
+
+def build_forest_rain_youtube_copy(scene: dict, meta: dict, *, show_4k: bool = False) -> dict:
+    """按 material_ref/forest_rain.md T1：利益 | 场景 | 格式（雨景循环，非黑屏）。"""
+    scene_key = scene.get("scene_key", "nature")
+    scene_rain = VIRAL_SCENE_RAIN.get(scene_key, f"Calming Rain on {scene['place_en_short']}")
+    hear = scene.get("thumb_place", scene["place_en_long"])
+    benefit = forest_rain_benefit_en(scene_key, scene_rain)
+    fmt_en = viral_format_en(meta, show_4k=show_4k)
+    fmt_zh = viral_format_zh(meta, show_4k=show_4k)
+
+    title_en = f"{benefit} | {scene_rain} | {fmt_en}"
+    title_zh = f"深度入眠 | {scene['place_zh_short']}雨声 | {fmt_zh}"
+
+    desc_en = (
+        f"Fall asleep fast with gentle rain sounds on {hear}.\n\n"
+        "✅ Deep sleep & beat insomnia\n"
+        "✅ Anxiety / stress / tinnitus relief\n"
+        "✅ Perfect for study, meditation, baby sleep\n\n"
+        f"What you'll see & hear: seamless {hear} rain loop, soft ambience, distant thunder...\n\n"
+        "Subscribe for more relaxing rain sounds 🌧️\n"
+        "Like if this helped you sleep!\n\n"
+        "#rainsounds #sleepsounds #asmr #whitenoise #insomnia #relaxingrain #forestrain"
+    )
+    desc_zh = (
+        f"伴着{scene['place_zh_long']}的雨声快速入睡。\n\n"
+        "✅ 深度睡眠 · 缓解失眠\n"
+        "✅ 减轻焦虑、压力与耳鸣\n"
+        "✅ 适合学习、冥想、宝宝入睡\n\n"
+        f"你将听到：{scene['bullet_zh']}\n\n"
+        "订阅获取更多放松雨声 🌧️\n"
+        "有帮助请点赞！\n\n"
+        "#雨声 #助眠 #ASMR #白噪音 #失眠 #放松雨声 #森林雨"
+    )
+
+    tags = list(dict.fromkeys(FOREST_RAIN_CORE_TAGS + FOREST_RAIN_SCENE_TAGS + scene.get("tags_en", [])))
+
+    return {
+        "title_zh": title_zh,
+        "title_en": title_en,
+        "description_zh": desc_zh,
+        "description_en": desc_en,
+        "tags": tags,
+        "subtitle_zh": "睡眠 · 专注 · 冥想 · 减压",
+        "subtitle_en": "Sleep · Focus · Meditation · Stress Relief",
+    }
+
+
+def build_forest_rain_thumb_text(scene: dict, meta: dict, *, show_4k: bool = False) -> tuple[str, str]:
+    """封面叠字：T1 利益 | 场景 | 格式（雨景循环，非黑屏）。"""
+    scene_key = scene.get("scene_key", "nature")
+    scene_rain = VIRAL_SCENE_RAIN.get(scene_key, f"Calming Rain on {scene['place_en_short']}")
+    benefit = forest_rain_benefit_en(scene_key, scene_rain)
+    fmt_en = viral_format_en(meta, show_4k=show_4k)
+
+    thumb_title = "Overcome Stress to Sleep" if benefit.startswith("Overcome") else "Deep Sleep Instantly"
+    thumb_subtitle = limit_words(f"{scene_rain} | {fmt_en}", max_words=14)
+    return thumb_title, thumb_subtitle
 
 
 def auto_thumb_subtitle(frame_path: Path) -> str:
@@ -766,6 +910,116 @@ def render_markdown(
     return "\n".join(lines)
 
 
+def generate_material(
+    video: Path,
+    *,
+    output_dir: Path | None = None,
+    preset_key: str | None = None,
+    copy_style: str = "forest_rain",
+    thumb_time: float | None = None,
+    title_zh: str = "",
+    title_en: str = "",
+    thumb_title: str = "",
+    thumb_subtitle: str = "",
+    layout: str = "",
+    on_progress: Callable[[str], None] | None = None,
+) -> Path:
+    """生成 YouTube 物料（缩略图 + youtube.md）。返回输出目录。"""
+
+    def log(msg: str) -> None:
+        if on_progress:
+            on_progress(msg)
+        else:
+            print(msg)
+
+    video = video.resolve()
+    if not video.is_file():
+        raise FileNotFoundError(f"找不到视频：{video}")
+
+    stem = video.stem
+    parsed = parse_basename(stem)
+    key = preset_key or parsed.get("project", stem)
+    preset = load_preset(key)
+    if not preset and preset_key:
+        preset = load_preset("rain_asmr")
+    if not preset:
+        preset = {"auto_from_scene": True, "layout": "bottom-left", "thumb_time": 120}
+
+    meta = ffprobe_video(video)
+    out_dir = output_dir or (video.parent / "material" / stem)
+    out_dir.mkdir(parents=True, exist_ok=True)
+
+    use_layout = layout or preset.get("layout", "center")
+    use_thumb_time = thumb_time if thumb_time is not None else preset.get("thumb_time", 8.0)
+    dur = float(meta["duration_s"])
+    if use_thumb_time >= dur:
+        use_thumb_time = max(0.5, dur * 0.35)
+        log(f"视频时长 {dur:.1f}s，截帧时间调整为 {use_thumb_time:.1f}s")
+    badge_path = resolve_badge_path(preset)
+    show_4k = "4k" in stem.lower() or meta["width"] >= 3840
+
+    frame_png = out_dir / "_frame.png"
+    thumb_jpg = out_dir / "thumbnail.jpg"
+    md_path = out_dir / "youtube.md"
+
+    log(f"截取缩略图帧 @ {use_thumb_time}s …")
+    extract_frame(video, frame_png, float(use_thumb_time))
+
+    scene = analyze_frame_scene(frame_png)
+    log(f"画面场景：{scene['scene_key']} · {scene['place_en_short']}")
+
+    if copy_style == "forest_rain" and scene:
+        youtube_copy = build_forest_rain_youtube_copy(scene, meta, show_4k=show_4k)
+        if title_zh:
+            youtube_copy["title_zh"] = title_zh
+        if title_en:
+            youtube_copy["title_en"] = title_en
+        viral_title, viral_sub = build_forest_rain_thumb_text(scene, meta, show_4k=show_4k)
+        thumb_title_resolved = thumb_title or preset.get("thumb_title_en") or viral_title
+        thumb_subtitle_resolved = limit_words(
+            thumb_subtitle or preset.get("thumb_subtitle_en") or viral_sub,
+            max_words=14,
+        )
+    else:
+        youtube_copy = resolve_youtube_copy(preset, scene, meta, stem, title_zh, title_en)
+        thumb_title_resolved, thumb_subtitle_resolved = resolve_thumb_text(
+            scene, preset, thumb_title, thumb_subtitle,
+        )
+    log(f"缩略图文案：{thumb_title_resolved!r} / {thumb_subtitle_resolved!r}")
+
+    log(f"合成缩略图（{use_layout}）…")
+    if use_layout == "bottom-left":
+        make_thumbnail_bottom_left(
+            frame_png,
+            thumb_jpg,
+            thumb_title_resolved,
+            thumb_subtitle_resolved,
+            show_4k=show_4k,
+            badge_path=badge_path,
+        )
+    else:
+        make_thumbnail(frame_png, thumb_jpg, thumb_title_resolved, show_4k=show_4k, badge_path=badge_path)
+    frame_png.unlink(missing_ok=True)
+
+    md_path.write_text(
+        render_markdown(
+            video,
+            meta,
+            parsed,
+            preset,
+            "thumbnail.jpg",
+            thumb_title_resolved,
+            thumb_subtitle_resolved,
+            youtube_copy,
+            scene_key=scene["scene_key"] if preset.get("auto_from_scene") or copy_style == "forest_rain" else "",
+        ),
+        encoding="utf-8",
+    )
+    log(f"已写入：{out_dir / 'youtube.md'}")
+    log(f"已写入：{out_dir / 'thumbnail.jpg'}")
+    return out_dir
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Generate YouTube material for exported MP4")
     parser.add_argument("video", type=Path, help="Path to MP4 file")
@@ -800,6 +1054,12 @@ def main() -> None:
         default="",
         help="Thumbnail layout (default from preset or center)",
     )
+    parser.add_argument(
+        "--style",
+        choices=("forest_rain", "classic"),
+        default="forest_rain",
+        help="文案风格：forest_rain=material_ref/forest_rain.md 爆款模版",
+    )
     args = parser.parse_args()
 
     video = args.video.resolve()
@@ -807,69 +1067,31 @@ def main() -> None:
         print(f"Error: video not found: {video}", file=sys.stderr)
         sys.exit(1)
 
-    stem = video.stem
-    parsed = parse_basename(stem)
-    preset_key = args.preset or parsed.get("project", stem)
-    preset = load_preset(preset_key)
-    if args.preset and not preset:
+    out_dir = args.output_dir
+    if out_dir is None:
+        out_dir = video.parent / "material" / video.stem
+
+    preset_key = args.preset or parse_basename(video.stem).get("project", video.stem)
+    if args.preset and not load_preset(preset_key):
         print(f"Error: unknown preset '{args.preset}'", file=sys.stderr)
         sys.exit(1)
-    meta = ffprobe_video(video)
 
-    out_dir = args.output_dir or (video.parent / "material" / stem)
-    out_dir.mkdir(parents=True, exist_ok=True)
-
-    title_zh = args.title_zh or preset.get("title_zh", stem)
-    title_en = args.title_en or preset.get("title_en", stem)
-    layout = args.layout or preset.get("layout", "center")
-    thumb_time = args.thumb_time if args.thumb_time != 8.0 else preset.get("thumb_time", args.thumb_time)
-    badge_path = resolve_badge_path(preset)
-    show_4k = not args.no_4k_badge and ("4k" in stem.lower() or meta["width"] >= 3840)
-
-    frame_png = out_dir / "_frame.png"
-    thumb_jpg = out_dir / "thumbnail.jpg"
-    md_path = out_dir / "youtube.md"
-
-    print(f"==> Extracting frame at {thumb_time}s ...")
-    extract_frame(video, frame_png, float(thumb_time))
-
-    scene = analyze_frame_scene(frame_png)
-    print(f"==> Scene: {scene['scene_key']} · {scene['place_en_short']}")
-
-    youtube_copy = resolve_youtube_copy(
-        preset, scene, meta, stem, args.title_zh, args.title_en,
+    thumb_time = args.thumb_time if args.thumb_time != 8.0 else None
+    generate_material(
+        video,
+        output_dir=out_dir,
+        preset_key=preset_key if args.preset else None,
+        copy_style=args.style,
+        thumb_time=thumb_time,
+        title_zh=args.title_zh,
+        title_en=args.title_en,
+        thumb_title=args.thumb_title,
+        thumb_subtitle=args.thumb_subtitle,
+        layout=args.layout,
     )
-    thumb_title, thumb_subtitle = resolve_thumb_text(
-        scene, preset, args.thumb_title, args.thumb_subtitle,
-    )
-    print(f"==> Thumbnail text: {thumb_title!r} / {thumb_subtitle!r}")
-
-    print(f"==> Compositing thumbnail ({layout}) ...")
-    if layout == "bottom-left":
-        make_thumbnail_bottom_left(
-            frame_png,
-            thumb_jpg,
-            thumb_title,
-            thumb_subtitle,
-            show_4k=show_4k,
-            badge_path=badge_path,
-        )
-    else:
-        make_thumbnail(frame_png, thumb_jpg, thumb_title, show_4k=show_4k, badge_path=badge_path)
-    frame_png.unlink(missing_ok=True)
-
-    md_path.write_text(
-        render_markdown(
-            video, meta, parsed, preset, "thumbnail.jpg",
-            thumb_title, thumb_subtitle, youtube_copy,
-            scene_key=scene["scene_key"] if preset.get("auto_from_scene") else "",
-        ),
-        encoding="utf-8",
-    )
-
     print(f"==> Done: {out_dir}/")
-    print(f"    youtube.md")
-    print(f"    thumbnail.jpg")
+    print("    youtube.md")
+    print("    thumbnail.jpg")
 
 
 if __name__ == "__main__":

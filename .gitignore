@@ -32,3 +32,7 @@ __pycache__/
 *$py.class
 scripts/cloak_browser/.profiles/
 gui/user_config.json
+scripts/video_upload/credentials.json
+scripts/video_upload/token.json
+scripts/video_upload/config/credentials_*.json
+scripts/video_upload/config/token_*.json

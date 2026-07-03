@@ -28,6 +28,9 @@ from gui.reaper_launch import (  # noqa: E402
     is_wsl,
     open_reaper_project,
 )
+from gui.folder_open import open_folder  # noqa: E402
+from gui.import_reload import load_module, load_scripts_module  # noqa: E402
+from gui.youtube_material import find_material_dir, find_subproject_mp4, material_output_dir  # noqa: E402
 
 CONFIG_PATH = Path(__file__).resolve().parent / "user_config.json"
 
@@ -36,7 +39,7 @@ class RelaxAsmrApp(tk.Tk):
     def __init__(self) -> None:
         super().__init__()
         self.title("relaxASMR · Rain 子工程")
-        self.geometry("820x620")
+        self.geometry("820x780")
         self.minsize(720, 520)
 
         self.video_path: Path | None = None
@@ -44,6 +47,7 @@ class RelaxAsmrApp(tk.Tk):
         self.scene_id: str | None = None
         self.subproject_dir: Path | None = None
         self.rpp_path: Path | None = None
+        self.material_dir: Path | None = None
         self._busy = False
 
         self._load_config()
@@ -130,6 +134,58 @@ class RelaxAsmrApp(tk.Tk):
         self.lbl_rpp = ttk.Label(sec3, text="工程：—", wraplength=760)
         self.lbl_rpp.pack(anchor=tk.W, pady=(8, 0))
 
+        # --- 4. YouTube 物料 ---
+        sec4 = ttk.LabelFrame(root, text="4. 生成 YouTube 物料", padding=10)
+        sec4.pack(fill=tk.X, **pad)
+
+        row4 = ttk.Frame(sec4)
+        row4.pack(fill=tk.X)
+        self.btn_youtube = ttk.Button(row4, text="一键生成油管物料", command=self._generate_youtube)
+        self.btn_youtube.pack(side=tk.LEFT)
+        self.btn_open_material = ttk.Button(row4, text="打开物料目录", command=self._open_material)
+        self.btn_open_material.pack(side=tk.LEFT, padx=(8, 0))
+
+        self.lbl_mp4 = ttk.Label(sec4, text="成片 MP4：—", wraplength=760)
+        self.lbl_mp4.pack(anchor=tk.W, pady=(8, 0))
+        self.lbl_material = ttk.Label(sec4, text="输出：—", wraplength=760)
+        self.lbl_material.pack(anchor=tk.W, pady=(4, 0))
+
+        # --- 5. 上传到 YouTube ---
+        sec5 = ttk.LabelFrame(root, text="5. 上传到 YouTube", padding=10)
+        sec5.pack(fill=tk.X, **pad)
+
+        row5 = ttk.Frame(sec5)
+        row5.pack(fill=tk.X)
+        ttk.Label(row5, text="可见性").pack(side=tk.LEFT)
+        self.privacy_var = tk.StringVar(value=self._cfg.get("youtube_privacy", "unlisted"))
+        ttk.Combobox(
+            row5,
+            textvariable=self.privacy_var,
+            values=("unlisted", "private", "public"),
+            width=10,
+            state="readonly",
+        ).pack(side=tk.LEFT, padx=(8, 16))
+        ttk.Label(row5, text="标题/描述").pack(side=tk.LEFT)
+        self.upload_lang_var = tk.StringVar(value=self._cfg.get("youtube_language", "en"))
+        ttk.Combobox(
+            row5,
+            textvariable=self.upload_lang_var,
+            values=("en", "zh"),
+            width=6,
+            state="readonly",
+        ).pack(side=tk.LEFT, padx=(8, 16))
+        self.use_leo_usa_var = tk.BooleanVar(
+            value=self._cfg.get("youtube_account", "leo") == "leo_usa"
+        )
+        ttk.Checkbutton(row5, text="leo_usa", variable=self.use_leo_usa_var).pack(
+            side=tk.LEFT, padx=(0, 16)
+        )
+        self.btn_upload = ttk.Button(row5, text="上传到 YouTube", command=self._upload_youtube)
+        self.btn_upload.pack(side=tk.LEFT)
+
+        self.lbl_upload = ttk.Label(sec5, text="上传：—", wraplength=760)
+        self.lbl_upload.pack(anchor=tk.W, pady=(8, 0))
+
         # --- 日志 ---
         sec_log = ttk.LabelFrame(root, text="日志", padding=8)
         sec_log.pack(fill=tk.BOTH, expand=True, **pad)
@@ -144,6 +200,19 @@ class RelaxAsmrApp(tk.Tk):
             p = Path(last_video)
             if p.is_file():
                 self._set_video(p, from_import=False)
+
+        self._refresh_output_mp4_label()
+
+        last_material = self._cfg.get("last_material_dir")
+        if last_material:
+            p = Path(last_material)
+            if p.is_dir():
+                self.material_dir = p
+        self._refresh_material_label()
+
+        last_upload = self._cfg.get("last_upload_url")
+        if last_upload:
+            self.lbl_upload.configure(text=f"上传：{last_upload}")
 
         if is_wsl():
             self._log("WSL 环境：打开工程将调用 Windows 版 Reaper（勿用 Linux xdg-open）")
@@ -163,6 +232,44 @@ class RelaxAsmrApp(tk.Tk):
         self._busy = busy
         state = tk.DISABLED if busy else tk.NORMAL
         self.btn_create.configure(state=state)
+        self.btn_youtube.configure(state=state)
+        self.btn_upload.configure(state=state)
+
+    def _refresh_output_mp4_label(self) -> None:
+        if not self.scene_id:
+            self.lbl_mp4.configure(text="成片 MP4：—")
+            return
+        mp4 = find_subproject_mp4(self.scene_id, LIB_REPO_ROOT)
+        if mp4:
+            try:
+                rel = mp4.relative_to(LIB_REPO_ROOT)
+            except ValueError:
+                rel = mp4
+            self.lbl_mp4.configure(text=f"成片 MP4：{rel}")
+        else:
+            out = LIB_REPO_ROOT / "Reaper" / "Projects" / "Rain" / "subprojects" / self.scene_id / "output"
+            self.lbl_mp4.configure(text=f"成片 MP4：未找到（请先 export_mp4 导出到 {out.relative_to(LIB_REPO_ROOT)}/）")
+        self._refresh_material_label()
+
+    def _refresh_material_label(self) -> None:
+        if self.material_dir and self.material_dir.is_dir():
+            try:
+                rel = self.material_dir.relative_to(LIB_REPO_ROOT)
+            except ValueError:
+                rel = self.material_dir
+            self.lbl_material.configure(text=f"输出：{rel}/")
+            return
+        if self.scene_id:
+            found = find_material_dir(self.scene_id, LIB_REPO_ROOT)
+            if found:
+                self.material_dir = found
+                try:
+                    rel = found.relative_to(LIB_REPO_ROOT)
+                except ValueError:
+                    rel = found
+                self.lbl_material.configure(text=f"输出：{rel}/")
+                return
+        self.lbl_material.configure(text="输出：—")
 
     def _set_video(self, video: Path, *, from_import: bool) -> None:
         try:
@@ -191,6 +298,7 @@ class RelaxAsmrApp(tk.Tk):
         if rpp.is_file():
             self._set_rpp(rpp)
             self.lbl_sub.configure(text=f"子工程：{sub.relative_to(LIB_REPO_ROOT)}")
+        self._refresh_output_mp4_label()
 
     def _video_dialog_initialdir(self) -> str:
         saved = self._cfg.get("last_video_dir")
@@ -244,6 +352,7 @@ class RelaxAsmrApp(tk.Tk):
                     self._set_rpp(rpp)
                     rel_sub = sub.relative_to(LIB_REPO_ROOT)
                     self.lbl_sub.configure(text=f"子工程：{rel_sub}")
+                    self._refresh_output_mp4_label()
                     self._cfg["duration_hours"] = duration
                     self._save_config()
                     messagebox.showinfo(
@@ -254,9 +363,9 @@ class RelaxAsmrApp(tk.Tk):
 
                 self.after(0, done_ok)
             except Exception as exc:
-                def done_err() -> None:
-                    self._log(f"错误：{exc}")
-                    messagebox.showerror("创建失败", str(exc))
+                def done_err(err: BaseException = exc) -> None:
+                    self._log(f"错误：{err}")
+                    messagebox.showerror("创建失败", str(err))
 
                 self.after(0, done_err)
             finally:
@@ -298,6 +407,170 @@ class RelaxAsmrApp(tk.Tk):
             self._log(f"已打开：{self.rpp_path.name}")
         except Exception as exc:
             messagebox.showerror("打开失败", str(exc))
+
+    def _generate_youtube(self) -> None:
+        if self._busy:
+            return
+        if not self.scene_id:
+            messagebox.showwarning("提示", "请先导入视频或创建子工程。")
+            return
+        mp4 = find_subproject_mp4(self.scene_id, LIB_REPO_ROOT)
+        if not mp4 or not mp4.is_file():
+            out = LIB_REPO_ROOT / "Reaper" / "Projects" / "Rain" / "subprojects" / self.scene_id / "output"
+            messagebox.showwarning(
+                "提示",
+                f"子工程 output 下未找到 MP4。\n\n请先渲染并运行 export_mp4.sh 导出到：\n{out}",
+            )
+            return
+
+        self._set_busy(True)
+        self._log("—— 开始生成 YouTube 物料 ——")
+        scene = self.scene_id
+        preset = scene
+
+        def worker() -> None:
+            try:
+                yt_mod = load_module(
+                    LIB_REPO_ROOT / "scripts" / "video_export" / "generate_youtube_material.py",
+                    "relaxasmr_generate_youtube_material",
+                )
+                out_dir = yt_mod.generate_material(
+                    mp4,
+                    output_dir=material_output_dir(mp4),
+                    preset_key=preset,
+                    copy_style="forest_rain",
+                    on_progress=self._log,
+                )
+
+                def done_ok() -> None:
+                    self.material_dir = out_dir
+                    self._cfg["last_material_dir"] = str(out_dir)
+                    self._save_config()
+                    self._refresh_material_label()
+                    try:
+                        rel = out_dir.relative_to(LIB_REPO_ROOT)
+                    except ValueError:
+                        rel = out_dir
+                    messagebox.showinfo(
+                        "完成",
+                        f"YouTube 物料已生成：\n{rel}/\n\n"
+                        "· thumbnail.jpg\n"
+                        "· youtube.md（标题 / 描述 / Tags）\n\n"
+                        "文案风格：scripts/video_export/material_ref/forest_rain.md 爆款模版",
+                    )
+
+                self.after(0, done_ok)
+            except Exception as exc:
+                def done_err(err: BaseException = exc) -> None:
+                    self._log(f"错误：{err}")
+                    messagebox.showerror("生成失败", str(err))
+
+                self.after(0, done_err)
+            finally:
+                self.after(0, lambda: self._set_busy(False))
+
+        threading.Thread(target=worker, daemon=True).start()
+
+    def _open_material(self) -> None:
+        if not self.scene_id:
+            messagebox.showwarning("提示", "请先选择场景或生成物料。")
+            return
+        target = self.material_dir
+        if not target or not target.is_dir():
+            target = find_material_dir(self.scene_id, LIB_REPO_ROOT)
+        if not target or not target.is_dir():
+            root = (
+                LIB_REPO_ROOT
+                / "Reaper"
+                / "Projects"
+                / "Rain"
+                / "subprojects"
+                / self.scene_id
+                / "output"
+                / "material"
+            )
+            messagebox.showwarning(
+                "提示",
+                f"尚未找到物料目录。\n\n请先生成油管物料，或确认目录存在：\n{root}",
+            )
+            return
+        try:
+            open_folder(target)
+            self.material_dir = target
+            self._refresh_material_label()
+            self._log(f"已打开物料目录：{target}")
+        except Exception as exc:
+            messagebox.showerror("打开失败", str(exc))
+
+    def _upload_youtube(self) -> None:
+        if self._busy:
+            return
+        if not self.scene_id:
+            messagebox.showwarning("提示", "请先选择场景。")
+            return
+        material = self.material_dir
+        if not material or not material.is_dir():
+            material = find_material_dir(self.scene_id, LIB_REPO_ROOT)
+        if not material or not (material / "youtube.md").is_file():
+            messagebox.showwarning("提示", "请先生成 YouTube 物料（youtube.md + thumbnail.jpg）。")
+            return
+
+        account = "leo_usa" if self.use_leo_usa_var.get() else "leo"
+        privacy = self.privacy_var.get()
+        language = self.upload_lang_var.get()
+        self._cfg["youtube_privacy"] = privacy
+        self._cfg["youtube_language"] = language
+        self._cfg["youtube_account"] = account
+        self._save_config()
+
+        try:
+            up_mod = load_scripts_module("video_upload.youtube_upload")
+            creds_path, _, _ = up_mod.resolve_account_paths(account)
+        except Exception as exc:
+            messagebox.showerror("账号配置错误", str(exc))
+            return
+
+        if not creds_path.is_file():
+            messagebox.showerror(
+                "缺少凭据",
+                f"请将 Google OAuth 客户端 JSON 放到：\n{creds_path}\n\n见 scripts/video_upload/README.md",
+            )
+            return
+
+        self._set_busy(True)
+        self._log("—— 开始上传到 YouTube ——")
+        self._log(f"账号：{account}")
+        self._log("首次上传需在浏览器完成 OAuth 授权")
+
+        def worker() -> None:
+            try:
+                up_mod = load_scripts_module("video_upload.youtube_upload")
+                record = up_mod.upload_from_material(
+                    material,
+                    language=language,
+                    privacy_status=privacy,
+                    account=account,
+                    on_log=self._log,
+                )
+
+                def done_ok() -> None:
+                    url = record["url"]
+                    self._cfg["last_upload_url"] = url
+                    self._save_config()
+                    self.lbl_upload.configure(text=f"上传：{url}")
+                    messagebox.showinfo("上传完成", f"视频已上传：\n{url}\n\n可见性：{privacy}")
+
+                self.after(0, done_ok)
+            except Exception as exc:
+                def done_err(err: BaseException = exc) -> None:
+                    self._log(f"错误：{err}")
+                    messagebox.showerror("上传失败", str(err))
+
+                self.after(0, done_err)
+            finally:
+                self.after(0, lambda: self._set_busy(False))
+
+        threading.Thread(target=worker, daemon=True).start()
 
 
 def main() -> None:
