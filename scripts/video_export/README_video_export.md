@@ -11,7 +11,7 @@
 ## 典型流程
 
 ```bash
-# 1. Reaper 渲染 wav 后合成 mp4
+# 1. Reaper 渲染 wav 后合成 mp4（默认输出名按视频宽度加 _4k / _fhd / _720p 后缀）
 scripts/video_export/export_mp4.sh \
   -v assets/loop_video/rain_video/MVI_6918/MVI_6918_loop_3_fade_0.5.mp4 \
   -a Reaper/Projects/Rain/subprojects/MVI_6918/output/MVI_6918_3h.wav

@@ -44,16 +44,54 @@ probe_duration_sec() {
   awk "BEGIN {printf \"%.3f\", $d}"
 }
 
-default_output_from_audio() {
+probe_video_width() {
+  local path="$1"
+  local w
+  w=$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$path" 2>/dev/null || true)
+  if [[ "$w" =~ ^[0-9]+$ ]]; then
+    printf '%s' "$w"
+    return 0
+  fi
+  return 1
+}
+
+resolution_suffix_from_width() {
+  local w="$1"
+  if [[ "$w" -ge 3840 ]]; then
+    printf '_4k'
+  elif [[ "$w" -ge 1920 ]]; then
+    printf '_fhd'
+  elif [[ "$w" -ge 1280 ]]; then
+    printf '_720p'
+  else
+    printf '_%sp' "$w"
+  fi
+}
+
+strip_resolution_suffix() {
+  local stem="$1"
+  local token
+  for token in _4k _fhd _1080p _720p _hd; do
+    if [[ "$stem" == *"$token" ]]; then
+      stem="${stem%"$token"}"
+    fi
+  done
+  printf '%s' "$stem"
+}
+
+default_output_path() {
   local audio="$1"
-  local dir base stem
+  local video="$2"
+  local dir base stem suffix width
   dir=$(dirname "$audio")
   base=$(basename "$audio")
-  stem="${base%.*}"
-  if [[ "$stem" =~ _4k$ ]]; then
-    printf '%s/%s.mp4' "$dir" "$stem"
+  stem=$(strip_resolution_suffix "${base%.*}")
+  if width=$(probe_video_width "$video"); then
+    suffix=$(resolution_suffix_from_width "$width")
+    printf '%s/%s%s.mp4' "$dir" "$stem" "$suffix"
   else
-    printf '%s/%s_4k.mp4' "$dir" "$stem"
+    echo "Warning: could not probe video width; output name has no resolution suffix" >&2
+    printf '%s/%s.mp4' "$dir" "$stem"
   fi
 }
 
@@ -113,7 +151,8 @@ Usage: export_mp4.sh -v VIDEO -a AUDIO [-o OUTPUT] [options]
 
   -v, --video PATH       Video source (looped to match audio)
   -a, --audio PATH       Audio source (WAV etc.; sets duration)
-  -o, --output PATH      Output .mp4 (default: same dir as audio, <stem>_4k.mp4)
+  -o, --output PATH      Output .mp4 (default: <audio_dir>/<stem>_<res>.mp4;
+                         res from video width: _4k ≥3840, _fhd ≥1920, _720p ≥1280)
   -d, --duration SEC     Cap output length (default: full audio)
       --encoder MODE     cpu (libx264, default) | nvenc (GPU h264_nvenc)
       --threads N        libx264 thread count, 0=auto (default: 0)
@@ -129,7 +168,8 @@ Example:
   scripts/video_export/export_mp4.sh \
     -v assets/loop_video/rain_video/MVI_6918/MVI_6918_loop_3_fade_0.5.mp4 \
     -a Reaper/Projects/Rain/subprojects/MVI_6918/output/MVI_6918_3h.wav
-  # => Reaper/Projects/Rain/subprojects/MVI_6918/output/MVI_6918_3h_4k.mp4
+  # 4K source => .../MVI_6918_3h_4k.mp4
+  # 1080p source => .../MVI_6918_3h_fhd.mp4
 
   scripts/video_export/export_mp4.sh ... -o custom/path/out.mp4 --encoder nvenc
 EOF
@@ -159,10 +199,6 @@ if [[ -z "$VIDEO" || -z "$AUDIO" ]]; then
   exit 1
 fi
 
-if [[ -z "$OUTPUT" ]]; then
-  OUTPUT=$(default_output_from_audio "$AUDIO")
-fi
-
 if [[ ! -f "$VIDEO" ]]; then
   echo "Error: video not found: $VIDEO" >&2
   exit 1
@@ -171,6 +207,10 @@ fi
 if [[ ! -f "$AUDIO" ]]; then
   echo "Error: audio not found: $AUDIO" >&2
   exit 1
+fi
+
+if [[ -z "$OUTPUT" ]]; then
+  OUTPUT=$(default_output_path "$AUDIO" "$VIDEO")
 fi
 
 case "$ENCODER" in
@@ -245,6 +285,9 @@ ffmpeg_args+=(
 )
 
 echo "==> Video:  $VIDEO (looped)"
+if video_w=$(probe_video_width "$VIDEO" 2>/dev/null); then
+  echo "==> Video size: ${video_w}px wide ($(resolution_suffix_from_width "$video_w" | tr -d '_') suffix)"
+fi
 echo "==> Audio:  $AUDIO"
 echo "==> Output: $OUTPUT"
 echo "==> Video encode: ${ENCODE_DESC} ${VIDEO_BITRATE} max ${MAXRATE} (60fps source)"
