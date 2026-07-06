@@ -900,96 +900,94 @@ Heavy Rain
 【场景】
 Init                    初始化
 
-Big Leafy Symphony      大树叶雨声
-Deluge On Metal Shelter 金属雨棚暴雨
-Downpour At Downspout   落水管暴雨
-Downpour On Car Port    车棚暴雨
-Dreamy Flora            梦幻花园
-Drenched Lakeside Jetty 湖畔码头
-Drips And Puddles       滴水水洼
-Drop Ballet On The Porch 门廊滴雨
-Drops On Plastic Shield 塑料雨棚
-Gentle Avenue Drizzle   林荫细雨
-Gentle Drops Of Autumn  秋日细雨
-Glassy Shelter          玻璃雨棚
-
-Humming Busstation      雨中公交站
-Interior Car Shower     车内听雨
-Leafy Rhythm Forest     森林叶雨
-Metallic Canopy Madness 金属棚暴雨
-Mild Urban Drizzle      城市小雨
-Narrow Alleyway Dripping 小巷滴雨
-Softest Urban Drizzle   极轻细雨
-Soothing Flora Tickles  花草轻雨
-Stirring Water Whirls   水面涟漪
-Storming Balcony Patter 阳台暴雨
-Urban Midnight Rain     午夜都市雨
-Vibrant Wetland Flora   湿地雨林
-Whispering Jungle Shower 雨林低语
+01.Big Leafy Symphony      大树叶雨声        13 + 06 + 05
+02.Deluge On Metal Shelter 金属雨棚暴雨      
+03.Downpour At Downspout   落水管暴雨
+04.Downpour On Car Port    车棚暴雨
+05.Dreamy Flora            梦幻花园          13 + 06 + 05
+06.Drenched Lakeside Jetty 湖畔码头          07 + 06 + 18
+07.Drips And Puddles       滴水水洼
+08.Drop Ballet On The Porch 门廊滴雨
+09.Drops On Plastic Shield 塑料雨棚
+10.Gentle Avenue Drizzle   林荫细雨          09 + 06 + 02
+11.Gentle Drops Of Autumn  秋日细雨          15 + 06 + 02
+12.Glassy Shelter          玻璃雨棚
+13.Humming Busstation      雨中公交站
+14.Interior Car Shower     车内听雨
+15.Leafy Rhythm Forest     森林叶雨          13 + 06 + 04
+16.Metallic Canopy Madness 金属棚暴雨
+17.Mild Urban Drizzle      城市小雨
+18.Narrow Alleyway Dripping 小巷滴雨
+19.Softest Urban Drizzle   极轻细雨          16 + 13 + 03
+20.Soothing Flora Tickles  花草轻雨          02 + 06 + 04
+21.Stirring Water Whirls   水面涟漪          15 + 06 + 17
+22.Storming Balcony Patter 阳台暴雨
+23.Urban Midnight Rain     午夜都市雨
+24.Vibrant Wetland Flora   湿地雨林          13 + 06 + 04
+25.Whispering Jungle Shower 雨林低语         07 + 05 + 04
 
 ----
 
 【Distant】远景
 
-Airy Breeze         空灵微风
-Airy Flow           空灵气流
-Balanced Flow       均衡气流
-Balanced Sizzle     均衡沙沙
-Breezy Hiss         微风嘶响
-Broadband Shower    宽频阵雨
-Cold Stream         寒流雨声
-Dense Stream        密集雨流
-Distant Veil        远方雨幕
-Echo River          河谷回声
-Expansive Shower    辽阔阵雨
-Flowing Rumble      流动轰鸣
-Forest Whisper      森林低语
-Gentle Swish        轻柔沙响
-Immersive Fuzz      沉浸雨幕
-Slow Waterfall      缓瀑雨声
-Spooky Whisper      幽暗低语
-Strong Hiss         强烈嘶响
-Thick Shower        浓密阵雨
-Warm Buzz           温暖嗡鸣
+01.Airy Breeze         空灵微风
+02.Airy Flow           空灵气流
+03.Balanced Flow       均衡气流
+04.Balanced Sizzle     均衡沙沙
+05.Breezy Hiss         微风嘶响
+06.Broadband Shower    宽频阵雨
+07.Cold Stream         寒流雨声
+08.Dense Stream        密集雨流
+09.Distant Veil        远方雨幕
+10.Echo River          河谷回声
+11.Expansive Shower    辽阔阵雨
+12.Flowing Rumble      流动轰鸣
+13.Forest Whisper      森林低语
+14.Gentle Swish        轻柔沙响
+15.Immersive Fuzz      沉浸雨幕
+16.Slow Waterfall      缓瀑雨声
+17.Spooky Whisper      幽暗低语
+18.Strong Hiss         强烈嘶响
+19.Thick Shower        浓密阵雨
+20.Warm Buzz           温暖嗡鸣
 
 【Space】空间
 
-Building Canopy     楼宇雨棚
-Building Gutter     建筑排水槽
-Building Overflow   建筑溢水
-Building Rooftops   楼顶雨声
-Foliage Canopy      树冠
-Foliage Dense       茂密树林
-Inner Yard          庭院
-Metal Tanks         金属储罐
-Street Dense        密集街区
-Street Drain        街道排水沟
-Street Tarmac       柏油路面
-Urban Alley         城市小巷
-Walls Concrete      混凝土墙
-Wood Deck           木平台
-Workshop Yard       工坊院落
-
+01.Building Canopy     楼宇雨棚
+02.Building Gutter     建筑排水槽
+03.Building Overflow   建筑溢水
+04.Building Rooftops   楼顶雨声
+05.Foliage Canopy      树冠
+06.Foliage Dense       茂密树林
+07.Inner Yard          庭院
+08.Metal Tanks         金属储罐
+09.Street Dense        密集街区
+10.Street Drain        街道排水沟
+11.Street Tarmac       柏油路面
+12.Urban Alley         城市小巷
+13.Walls Concrete      混凝土墙
+14.Wood Deck           木平台
+15.Workshop Yard       工坊院落
 
 【Close】近景
 
-Brick Diffuse      砖墙（漫反射）
-Concrete           混凝土
-Concrete Diffuse   混凝土（漫反射）
-Foliage Lush       茂密植被
-Foliage Yielding   稀疏植被
-Glass Roof         玻璃屋顶
-Glass Thin         薄玻璃
-Glass Tonal        共振玻璃
-Stone Echoing      回声石墙
-Metal Diffuse      金属（漫反射）
-Metal Roof         金属屋顶
-Metal Thin         薄金属板
-Metal Tonal        共振金属
-Plastic Roof       塑料屋顶
-Plastic Thin       薄塑料板
-Plastic Tonal      共振塑料
-Water              水面
-Wood Roof          木屋顶
-Wood Thin          薄木板
-Wood Tonal         共振木材
+01.Brick Diffuse      砖墙（漫反射）
+02.Concrete           混凝土
+03.Concrete Diffuse   混凝土（漫反射）
+04.Foliage Lush       茂密植被
+05.Foliage Yielding   稀疏植被
+06.Glass Roof         玻璃屋顶
+07.Glass Thin         薄玻璃
+08.Glass Tonal        共振玻璃
+09.Stone Echoing      回声石墙
+10.Metal Diffuse      金属（漫反射）
+11.Metal Roof         金属屋顶
+12.Metal Thin         薄金属板
+13.Metal Tonal        共振金属
+14.Plastic Roof       塑料屋顶
+15.Plastic Thin       薄塑料板
+16.Plastic Tonal      共振塑料
+17.Water              水面
+18.Wood Roof          木屋顶
+19.Wood Thin          薄木板
+20.Wood Tonal         共振木材
