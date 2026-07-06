@@ -358,10 +358,6 @@ def build_asmr_config(
                 "name": "雨打树叶",
                 "vol": impact_vol,
                 "paths": [paths.get("2_impact", "")],
-                "min_gap_min": 3,
-                "max_gap_min": 8,
-                "randomness": 0.6,
-                "clear_existing": True,
             },
             {
                 "track": 5,
@@ -369,10 +365,6 @@ def build_asmr_config(
                 "name": "远处鸟鸣",
                 "vol": wild_vol,
                 "paths": [paths.get("5_wildlife", BIRD_FALLBACK)],
-                "min_gap_min": 12,
-                "max_gap_min": 28,
-                "randomness": 0.55,
-                "clear_existing": True,
             },
         ],
         "fade_sec": 0.08,
@@ -411,9 +403,8 @@ def recipe_section_md(cfg: dict, rationales: dict[str, str] | None = None) -> st
             f"| {layer['track']} | `{layer['id']}` | {layer.get('name', '')} | {mode} | {layer.get('vol', 1)} |"
         )
     for layer in cfg.get("scatter_layers", []):
-        gap = f"{layer.get('min_gap_min', '?')}–{layer.get('max_gap_min', '?')} min"
         lines.append(
-            f"| {layer['track']} | `{layer['id']}` | {layer.get('name', '')} | scatter ({gap}) | {layer.get('vol', 1)} |"
+            f"| {layer['track']} | `{layer['id']}` | {layer.get('name', '')} | scatter（手动散布） | {layer.get('vol', 1)} |"
         )
     video = cfg.get("video", {})
     if video:
@@ -447,7 +438,7 @@ def recipe_section_md(cfg: dict, rationales: dict[str, str] | None = None) -> st
             lines.append(f"| `{lid}` | {short} | {reason} |")
         lines.append("")
     lines.extend([
-        "打开工程后运行 **`asmr_apply_recipe.lua`**（铺循环/稀疏 + **`1_rain` 长时音量包络**）。",
+        "打开工程后运行 **`asmr_apply_recipe.lua`**（铺循环 + **`1_rain` 音量包络**），再逐轨运行 **`asmr_scatter_track.lua`** 散布稀疏层。",
         "",
     ])
     return "\n".join(lines)
@@ -509,10 +500,6 @@ def config_to_lua(cfg: dict) -> str:
         for p in layer["paths"]:
             lines.append(f"        {lua_quote(p)},")
         lines.append("      },")
-        lines.append(f"      min_gap_min = {layer['min_gap_min']},")
-        lines.append(f"      max_gap_min = {layer['max_gap_min']},")
-        lines.append(f"      randomness = {layer['randomness']},")
-        lines.append(f"      clear_existing = {str(layer['clear_existing']).lower()},")
         lines.append("    },")
     lines.append("  },")
     lines.append("")

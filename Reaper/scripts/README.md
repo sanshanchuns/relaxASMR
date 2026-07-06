@@ -6,8 +6,8 @@ Rain / Lake 等工程共用。媒体路径指向仓库 `assets/`。
 
 | 脚本 | 何时用 |
 |------|--------|
-| **`asmr_apply_recipe.lua`** | **首选** · 铺循环 + 全部稀疏 + **`1_rain` 音量包络（Dynamic）** |
-| **`asmr_scatter_track.lua`** | **只重做一条稀疏轨**（见下） |
+| **`asmr_apply_recipe.lua`** | **首选** · 铺循环 + **`1_rain` 音量包络（Dynamic）** |
+| **`asmr_scatter_track.lua`** | **稀疏层散布**（手动填间隔/随机度，逐轨运行） |
 | **`asmr_loop_track.lua`** | **只循环一条轨**（试验素材长度时） |
 
 ### 在 Reaper 里怎么运行
@@ -19,20 +19,19 @@ Rain / Lake 等工程共用。媒体路径指向仓库 `assets/`。
 3. 选 **`asmr_apply_recipe.lua`**：
    - 子工程内：`Reaper/Projects/Rain/subprojects/<场景>/scripts/asmr_apply_recipe.lua`
    - 或共享目录：`Reaper/scripts/asmr_apply_recipe.lua`
-4. 弹窗选 **确定**（循环+稀疏）→ 完成后 **Ctrl+S**
+4. 弹窗选 **确定**（循环 + 音量包络）→ 完成后对 `2_impact`、`5_wildlife` 等逐轨运行 **`asmr_scatter_track.lua`** → **Ctrl+S**
 5. 日志：**View → Show console**（Mac 上 **`~`** 键）
 
 > 子工程 `scripts/` 里的 `rain_setup_project.lua` 是旧版入口，**请用 `asmr_apply_recipe.lua`**（含 **`1_rain` 长时音量包络**）。
 
-## 稀疏散布：只用 `asmr_scatter_track.lua`
+## 稀疏散布：`asmr_scatter_track.lua`
 
 | 场景 | 操作 |
 |------|------|
-| **Rain 子工程、配方里已有 scatter_layers** | 输入层 id：`2_impact`、`5_wildlife`（或 `0` 选中当前轨）→ **自动读 asmr_config** |
-| **无配方 / 临时试间隔** | 输入轨后 **无配方匹配** → 弹出手动参数（时长、间隔、随机度） |
-| **整片 3h 全部稀疏层** | 用 **`asmr_apply_recipe`**，不要逐个跑 scatter |
+| **Impact / Wildlife 等稀疏轨** | 输入层 id：`2_impact`、`5_wildlife`（或 `0` 选中当前轨）→ **弹窗填参数**（时长、间隔、随机度） |
+| **整片循环层** | 先用 **`asmr_apply_recipe`**，再逐轨 scatter |
 
-已删除 `asmr_scatter_config_track.lua`（功能合并进 `asmr_scatter_track`）。
+不再从 `asmr_config.lua` 读取间隔/随机度；配方里 `scatter_layers` 仅保留轨号、素材路径与音量。
 
 Group 父轨存在时，脚本按 **轨名（如 `3_impact`）** 匹配，不依赖 TCP 轨号。
 

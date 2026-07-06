@@ -1,4 +1,4 @@
-<REAPER_PROJECT 0.1 "7.48/macOS-arm64" 1783326144
+<REAPER_PROJECT 0.1 "7.73/win64" 1783332589 0
   <NOTES 0 2
   >
   RIPPLE 0 0
@@ -15,13 +15,13 @@
   PROJOFFS 0 0 0
   MAXPROJLEN 1 10800
   GRID 3199 8 1 8 1 0 0 0
-  TIMEMODE 5 9 -1 60 0 0 -1
+  TIMEMODE 5 9 -1 60 0 0 -1 0
   VIDEO_CONFIG 0 0 65792
   PANMODE 3
   PANLAWFLAGS 3
-  CURSOR 6912
-  ZOOM 0.10597222222222 124 0
-  VZOOMEX 6 0
+  CURSOR 62
+  ZOOM 9.20679420416251 0 0
+  VZOOMEX 6 18
   USE_REC_CFG 0
   RECMODE 1
   SMPTESYNC 0 30 100 40 1000 300 0 0 1 0 0
@@ -34,7 +34,7 @@
   <APPLYFX_CFG
   >
   RENDER_FILE ""
-  RENDER_PATTERN $project
+  RENDER_PATTERN output/$project_fhd_3h
   RENDER_FMT 0 2 0
   RENDER_1X 0
   RENDER_RANGE 2 0 0 0 1000
@@ -50,7 +50,7 @@
   TAKELANE 1
   SAMPLERATE 48000 1 0
   <RENDER_CFG
-    ZXZhdxgAAQ==
+    IEZNVwAAAAAAAAAAmDoAAAAAAACAAAAAgAcAADgEAAAAAPBBAQAAAF8AAAAAAA==
   >
   LOCK 1
   <METRONOME 6 2
@@ -98,6 +98,9 @@
     ARM 0
     DEFSHAPE 1 -1 -1
   >
+  RULERHEIGHT 86 86
+  RULERLANE 1 4 "" 0 -1 0
+  RULERLANE 2 8 "" 0 -1 0
   <PROJBAY
   >
   <TRACK {D6D5CD53-4325-4E80-B350-35E4E46DAAA9}
@@ -114,7 +117,8 @@
     BUSCOMP 0 0 0 0 0
     SHOWINMIX 1 0.6667 0.5 1 0.5 0 0 0 0
     FIXEDLANES 9 0 0 0 0
-    SEL 0
+    LANEREC -1 -1 -1 0
+    SEL 1
     REC 0 0 1 0 0 0 0 0
     VU 64
     TRACKHEIGHT 0 0 0 0 0 0 0
@@ -126,22 +130,23 @@
     MIDIOUT -1
     MAINSEND 1 0
     <FXCHAIN
+      WNDRECT 53 81 655 408
       SHOW 0
       LASTSEL 0
       DOCKED 0
       BYPASS 0 0 0
-      <VST "VST: ReaEQ (Cockos)" reaeq.vst.dylib 0 "" 1919247729<56535472656571726561657100000000> ""
+      <VST "VST: ReaEQ (Cockos)" reaeq.dll 0 "" 1919247729<56535472656571726561657100000000> ""
         cWVlcu5e7f4CAAAAAQAAAAAAAAACAAAAAAAAAAIAAAABAAAAAAAAAAIAAAAAAAAAzQAAAAEAAAAAABAA
-        IQAAAAUAAAAAAAAAAQAAAAAAAAAAAFlAAAAAAAAA8D+amZmZmZnpPwEIAAAAAQAAAAAAAAAAwHJAAAAAAAAA8D8AAAAAAAAAQAEIAAAAAQAAAAAAAAAAQI9AAAAAAAAA
+        IQAAAAUAAAAAAAAAAQAAABYcNwJsjVhAHNl7ybJU8D+amZmZmZnpPwEIAAAAAQAAAKse3ZRHB3NACwAAAAAA8D8AAAAAAAAAQAEIAAAAAQAAADHFJJZQ1Y5AAwAAAAAA
         8D8AAAAAAAAAQAEBAAAAAQAAAJ/vruhzybNAMIH/8g6n2z+amZmZmZnpPwEEAAAAAQAAAAAAAAAAAFlAAAAAAAAA8D8AAAAAAAAAQAEBAAAAAQAAAAAAAAAAAPA/AAAA
         AP0BAABcAQAAAgAAAA==
-        AFByb2dyYW0gMQAQAAAA
+        AAAQAAAA
       >
       FLOATPOS 0 0 0 0
       FXID {EFF890D3-8536-4725-9FA2-741CF05FDA00}
       WAK 0 0
       BYPASS 0 0 0
-      <VST "VST: ReaComp (Cockos)" reacomp.vst.dylib 0 "" 1919247213<5653547265636D726561636F6D700000> ""
+      <VST "VST: ReaComp (Cockos)" reacomp.dll 0 "" 1919247213<5653547265636D726561636F6D700000> ""
         bWNlcu9e7f4EAAAAAQAAAAAAAAACAAAAAAAAAAQAAAAAAAAACAAAAAAAAAACAAAAAQAAAAAAAAACAAAAAAAAAFwAAAAAAAAAAAAQAA==
         776t3g3wrd4AAIA/ED74PKabxDsK16M8AAAAAAAAAAAAAIA/AAAAAAAAAAAAAAAAnNEHMwAAgD8AAAAAzcxMPQAAAAAAAAAAAAAAAAAAgD4AAAAAAAAAAAAAAAA=
         AFByb2dyYW0gMQAQAAAA
@@ -158,14 +163,15 @@
     AUTOMODE 0
     PANLAWFLAGS 3
     VOLPAN 0.70462939198009 0 -1 -1 1
-    MUTESOLO 0 0 0
+    MUTESOLO 0 2 0
     IPHASE 0
     PLAYOFFS 0 1
     ISBUS 0 0
     BUSCOMP 0 0 0 0 0
     SHOWINMIX 1 0.6667 0.5 1 0.5 0 0 0 0
     FIXEDLANES 9 0 0 0 0
-    SEL 1
+    LANEREC -1 -1 -1 0
+    SEL 0
     REC 0 0 1 0 0 0 0 0
     VU 64
     TRACKHEIGHT 0 0 0 0 0 0 0
@@ -176,28 +182,6 @@
     PERF 0
     MIDIOUT -1
     MAINSEND 1 0
-    <ITEM
-      POSITION 0
-      SNAPOFFS 0
-      LENGTH 10800
-      LOOP 1
-      ALLTAKES 0
-      FADEIN 1 0 0 1 0 0 0
-      FADEOUT 1 0 0 1 0 0 0
-      MUTE 0 0
-      SEL 1
-      IGUID {39673071-1907-E44A-9D18-3459AFE9AB76}
-      IID 38
-      NAME 179242_Rain,_Vegetation,_Light_Rain_In_A_Field_Of_Bananas_Trees_01-glued-02.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {B555C564-5C74-6743-A200-B7EF653DA19C}
-      <SOURCE WAVE
-        FILE "Audio Files/179242_Rain,_Vegetation,_Light_Rain_In_A_Field_Of_Bananas_Trees_01-glued-02.wav"
-      >
-    >
   >
   <TRACK {E3EEE73E-79E8-42AB-A771-3E29C006683E}
     NAME 2_impact
@@ -205,7 +189,7 @@
     BEAT -1
     AUTOMODE 0
     PANLAWFLAGS 3
-    VOLPAN 0.5 0 -1 -1 1
+    VOLPAN 0.15480329951752 0 -1 -1 1
     MUTESOLO 0 0 0
     IPHASE 0
     PLAYOFFS 0 1
@@ -213,6 +197,7 @@
     BUSCOMP 0 0 0 0 0
     SHOWINMIX 1 0.6667 0.5 1 0.5 0 0 0 0
     FIXEDLANES 9 0 0 0 0
+    LANEREC -1 -1 -1 0
     SEL 0
     REC 0 0 1 0 0 0 0 0
     VU 64
@@ -227,23 +212,23 @@
     <ITEM
       POSITION 0
       SNAPOFFS 0
-      LENGTH 10800
+      LENGTH 69
       LOOP 1
       ALLTAKES 0
       FADEIN 1 0 0 1 0 0 0
       FADEOUT 1 0 0 1 0 0 0
       MUTE 0 0
       SEL 0
-      IGUID {C65C04C6-9536-774F-8EE2-85E008331C7C}
-      IID 16
-      NAME 152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea-glued-01.wav
+      IGUID {F272BBC2-BBD2-46FC-A8C0-0A64AB5B2FA8}
+      IID 96
+      NAME 202640_Rain,_Concrete,_Light_Rain,_On_Cement,_Light_Wind-glued-01.wav
       VOLPAN 1 0 1 -1
       SOFFS 0
       PLAYRATE 1 1 0 -1 0 0.0025
       CHANMODE 0
-      GUID {8686FB07-9312-DC44-BE6F-EE7CD8F8696B}
+      GUID {938E47A6-1720-4D72-989C-BD6059A22D0D}
       <SOURCE WAVE
-        FILE "Audio Files/152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea-glued-01.wav"
+        FILE "Audio Files\202640_Rain,_Concrete,_Light_Rain,_On_Cement,_Light_Wind-glued-01.wav"
       >
     >
   >
@@ -261,6 +246,7 @@
     BUSCOMP 0 0 0 0 0
     SHOWINMIX 1 0.6667 0.5 1 0.5 0 0 0 0
     FIXEDLANES 9 0 0 0 0
+    LANEREC -1 -1 -1 0
     SEL 0
     REC 0 0 1 0 0 0 0 0
     VU 64
@@ -309,6 +295,7 @@
     BUSCOMP 0 0 0 0 0
     SHOWINMIX 1 0.6667 0.5 1 0.5 0 0 0 0
     FIXEDLANES 9 0 0 0 0
+    LANEREC -1 -1 -1 0
     SEL 0
     REC 0 0 1 0 0 0 0 0
     VU 64
@@ -320,28 +307,6 @@
     PERF 0
     MIDIOUT -1
     MAINSEND 1 0
-    <ITEM
-      POSITION 0
-      SNAPOFFS 0
-      LENGTH 10800
-      LOOP 1
-      ALLTAKES 0
-      FADEIN 1 0 0 1 0 0 0
-      FADEOUT 1 0 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {483CE1E5-5FAB-AD48-8857-87C083A9E94B}
-      IID 24
-      NAME 237672_Rain,_Plastic,_Drips_On_Verandah_Roof-glued-01.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {58C6A130-0FCA-9B48-B20E-1808D276C51B}
-      <SOURCE WAVE
-        FILE "Audio Files/237672_Rain,_Plastic,_Drips_On_Verandah_Roof-glued-01.wav"
-      >
-    >
   >
   <TRACK {324C21CA-A6DA-4DD2-A288-E57D4AA4D261}
     NAME 5_wildlife
@@ -357,6 +322,7 @@
     BUSCOMP 0 0 0 0 0
     SHOWINMIX 1 0.6667 0.5 1 0.5 0 0 0 0
     FIXEDLANES 9 0 0 0 0
+    LANEREC -1 -1 -1 0
     SEL 0
     REC 0 0 1 0 0 0 0 0
     VU 64
@@ -373,7 +339,7 @@
       LASTSEL 0
       DOCKED 0
       BYPASS 0 0 0
-      <VST "VST: ReaVerbate (Cockos)" reaverbate.vst.dylib 0 "" 1920361016<56535472766238726561766572626174> ""
+      <VST "VST: ReaVerbate (Cockos)" reaverbate.dll 0 "" 1920361016<56535472766238726561766572626174> ""
         OGJ2cu9e7f4CAAAAAQAAAAAAAAACAAAAAAAAAAIAAAABAAAAAAAAAAIAAAAAAAAAKAAAAAAAAAAAABAA
         776t3g3wrd5DAgA/AACAP9oEPD817P8+AACAPwAAAAAAAIA/AAAAAA==
         AFByb2dyYW0gMQAQAAAA
@@ -383,201 +349,663 @@
       WAK 0 0
     >
     <ITEM
-      POSITION 0
+      POSITION 394.89616145889738
       SNAPOFFS 0
-      LENGTH 10.501224
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0 0 1 0 0 0
-      FADEOUT 1 0 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {0A7D8F7B-6739-4362-A241-BB826356FA3A}
-      IID 3
-      NAME 9PBX76J_Birds.mp3
-      VOLPAN 0.22 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {88A49493-7EC1-4ECC-94D0-948F577B08CA}
-      <SOURCE MP3
-        FILE "/Users/angel/Documents/workspace/relaxASMR/assets/sound_effect/rain_sound/5_wildlife/birds/Hwamei/9PBX76J_Birds.mp3" 1
-      >
-    >
-    <ITEM
-      POSITION 896
-      SNAPOFFS 0
-      LENGTH 10.501224
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0 0 1 0 0 0
-      FADEOUT 1 0 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {C3069631-2D71-3D42-A989-D1752C90F256}
-      IID 3
-      NAME 9PBX76J_Birds.mp3
-      VOLPAN 0.22 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {233C13E5-2078-9E4E-8B71-8F73A2EFEFD1}
-      <SOURCE MP3
-        FILE "/Users/angel/Documents/workspace/relaxASMR/assets/sound_effect/rain_sound/5_wildlife/birds/Hwamei/9PBX76J_Birds.mp3" 1
-      >
-    >
-    <ITEM
-      POSITION 3092.8323792752135
-      SNAPOFFS 0
-      LENGTH 10.501224
+      LENGTH 7.49320833333333
       LOOP 0
       ALLTAKES 0
       FADEIN 1 0.08 0 1 0 0 0
       FADEOUT 1 0.08 0 1 0 0 0
       MUTE 0 0
       SEL 0
-      IGUID {0A7D8F7B-6739-4362-A241-BB826356FA3A}
-      IID 3
-      NAME 9PBX76J_Birds.mp3
-      VOLPAN 0.22 0 1 -1
+      IGUID {157C549C-7D29-47C2-A59A-0775FEE4AC1F}
+      IID 54
+      NAME 9PBX76J_Birds-glued.wav
+      VOLPAN 1 0 1 -1
       SOFFS 0
       PLAYRATE 1 1 0 -1 0 0.0025
       CHANMODE 0
-      GUID {88A49493-7EC1-4ECC-94D0-948F577B08CA}
-      <SOURCE MP3
-        FILE "/Users/angel/Documents/workspace/relaxASMR/assets/sound_effect/rain_sound/5_wildlife/birds/Hwamei/9PBX76J_Birds.mp3" 1
+      GUID {98EFE411-4B9F-4452-8A58-1A7B7D391C91}
+      <SOURCE WAVE
+        FILE "Audio Files\9PBX76J_Birds-glued.wav"
       >
     >
     <ITEM
-      POSITION 3988.0465590702343
+      POSITION 732.28184188066211
       SNAPOFFS 0
-      LENGTH 10.501224
+      LENGTH 7.49320833333333
       LOOP 0
       ALLTAKES 0
       FADEIN 1 0.08 0 1 0 0 0
       FADEOUT 1 0.08 0 1 0 0 0
       MUTE 0 0
       SEL 0
-      IGUID {0A7D8F7B-6739-4362-A241-BB826356FA3A}
-      IID 3
-      NAME 9PBX76J_Birds.mp3
-      VOLPAN 0.22 0 1 -1
+      IGUID {157C549C-7D29-47C2-A59A-0775FEE4AC1F}
+      IID 54
+      NAME 9PBX76J_Birds-glued.wav
+      VOLPAN 1 0 1 -1
       SOFFS 0
       PLAYRATE 1 1 0 -1 0 0.0025
       CHANMODE 0
-      GUID {88A49493-7EC1-4ECC-94D0-948F577B08CA}
-      <SOURCE MP3
-        FILE "/Users/angel/Documents/workspace/relaxASMR/assets/sound_effect/rain_sound/5_wildlife/birds/Hwamei/9PBX76J_Birds.mp3" 1
+      GUID {98EFE411-4B9F-4452-8A58-1A7B7D391C91}
+      <SOURCE WAVE
+        FILE "Audio Files\9PBX76J_Birds-glued.wav"
       >
     >
     <ITEM
-      POSITION 5763.7525663693668
+      POSITION 984.60132579495348
       SNAPOFFS 0
-      LENGTH 10.501224
+      LENGTH 7.49320833333333
       LOOP 0
       ALLTAKES 0
       FADEIN 1 0.08 0 1 0 0 0
       FADEOUT 1 0.08 0 1 0 0 0
       MUTE 0 0
       SEL 0
-      IGUID {97163C4E-0BFC-E747-AC89-28A02CE8AECD}
-      IID 3
-      NAME 9PBX76J_Birds.mp3
-      VOLPAN 0.22 0 1 -1
+      IGUID {157C549C-7D29-47C2-A59A-0775FEE4AC1F}
+      IID 54
+      NAME 9PBX76J_Birds-glued.wav
+      VOLPAN 1 0 1 -1
       SOFFS 0
       PLAYRATE 1 1 0 -1 0 0.0025
       CHANMODE 0
-      GUID {3DB9CDB0-052E-0F4D-B260-76B29DEFB3D7}
-      <SOURCE MP3
-        FILE "/Users/angel/Documents/workspace/relaxASMR/assets/sound_effect/rain_sound/5_wildlife/birds/Hwamei/9PBX76J_Birds.mp3" 1
+      GUID {98EFE411-4B9F-4452-8A58-1A7B7D391C91}
+      <SOURCE WAVE
+        FILE "Audio Files\9PBX76J_Birds-glued.wav"
       >
     >
     <ITEM
-      POSITION 7194.0602087542647
+      POSITION 1426.3918911061091
       SNAPOFFS 0
-      LENGTH 10.501224
+      LENGTH 7.49320833333333
       LOOP 0
       ALLTAKES 0
       FADEIN 1 0.08 0 1 0 0 0
       FADEOUT 1 0.08 0 1 0 0 0
       MUTE 0 0
       SEL 0
-      IGUID {F4E2B3A0-0810-244F-981C-851F25D7972F}
-      IID 3
-      NAME 9PBX76J_Birds.mp3
-      VOLPAN 0.22 0 1 -1
+      IGUID {157C549C-7D29-47C2-A59A-0775FEE4AC1F}
+      IID 54
+      NAME 9PBX76J_Birds-glued.wav
+      VOLPAN 1 0 1 -1
       SOFFS 0
       PLAYRATE 1 1 0 -1 0 0.0025
       CHANMODE 0
-      GUID {54B590D2-0DBC-D144-B416-E66A838DBEA2}
-      <SOURCE MP3
-        FILE "/Users/angel/Documents/workspace/relaxASMR/assets/sound_effect/rain_sound/5_wildlife/birds/Hwamei/9PBX76J_Birds.mp3" 1
+      GUID {98EFE411-4B9F-4452-8A58-1A7B7D391C91}
+      <SOURCE WAVE
+        FILE "Audio Files\9PBX76J_Birds-glued.wav"
       >
     >
     <ITEM
-      POSITION 8356.8805221092189
+      POSITION 1727.8508448477758
       SNAPOFFS 0
-      LENGTH 10.501224
+      LENGTH 7.49320833333333
       LOOP 0
       ALLTAKES 0
       FADEIN 1 0.08 0 1 0 0 0
       FADEOUT 1 0.08 0 1 0 0 0
       MUTE 0 0
       SEL 0
-      IGUID {C39993D2-5FEB-804F-9A52-AF67E8A26A7B}
-      IID 3
-      NAME 9PBX76J_Birds.mp3
-      VOLPAN 0.22 0 1 -1
+      IGUID {157C549C-7D29-47C2-A59A-0775FEE4AC1F}
+      IID 54
+      NAME 9PBX76J_Birds-glued.wav
+      VOLPAN 1 0 1 -1
       SOFFS 0
       PLAYRATE 1 1 0 -1 0 0.0025
       CHANMODE 0
-      GUID {B8372766-BB31-1449-894D-5E2F0406B020}
-      <SOURCE MP3
-        FILE "/Users/angel/Documents/workspace/relaxASMR/assets/sound_effect/rain_sound/5_wildlife/birds/Hwamei/9PBX76J_Birds.mp3" 1
+      GUID {98EFE411-4B9F-4452-8A58-1A7B7D391C91}
+      <SOURCE WAVE
+        FILE "Audio Files\9PBX76J_Birds-glued.wav"
       >
     >
     <ITEM
-      POSITION 9893.4138420720828
+      POSITION 2174.4463779691141
       SNAPOFFS 0
-      LENGTH 10.501224
+      LENGTH 7.49320833333333
       LOOP 0
       ALLTAKES 0
       FADEIN 1 0.08 0 1 0 0 0
       FADEOUT 1 0.08 0 1 0 0 0
       MUTE 0 0
       SEL 0
-      IGUID {0A7D8F7B-6739-4362-A241-BB826356FA3A}
-      IID 3
-      NAME 9PBX76J_Birds.mp3
-      VOLPAN 0.22 0 1 -1
+      IGUID {157C549C-7D29-47C2-A59A-0775FEE4AC1F}
+      IID 54
+      NAME 9PBX76J_Birds-glued.wav
+      VOLPAN 1 0 1 -1
       SOFFS 0
       PLAYRATE 1 1 0 -1 0 0.0025
       CHANMODE 0
-      GUID {88A49493-7EC1-4ECC-94D0-948F577B08CA}
-      <SOURCE MP3
-        FILE "/Users/angel/Documents/workspace/relaxASMR/assets/sound_effect/rain_sound/5_wildlife/birds/Hwamei/9PBX76J_Birds.mp3" 1
+      GUID {98EFE411-4B9F-4452-8A58-1A7B7D391C91}
+      <SOURCE WAVE
+        FILE "Audio Files\9PBX76J_Birds-glued.wav"
       >
     >
     <ITEM
-      POSITION 10684.805928758973
+      POSITION 2464.9464829578765
       SNAPOFFS 0
-      LENGTH 10.501224
+      LENGTH 7.49320833333333
       LOOP 0
       ALLTAKES 0
       FADEIN 1 0.08 0 1 0 0 0
       FADEOUT 1 0.08 0 1 0 0 0
       MUTE 0 0
       SEL 0
-      IGUID {0A7D8F7B-6739-4362-A241-BB826356FA3A}
-      IID 3
-      NAME 9PBX76J_Birds.mp3
-      VOLPAN 0.22 0 1 -1
+      IGUID {157C549C-7D29-47C2-A59A-0775FEE4AC1F}
+      IID 54
+      NAME 9PBX76J_Birds-glued.wav
+      VOLPAN 1 0 1 -1
       SOFFS 0
       PLAYRATE 1 1 0 -1 0 0.0025
       CHANMODE 0
-      GUID {88A49493-7EC1-4ECC-94D0-948F577B08CA}
-      <SOURCE MP3
-        FILE "/Users/angel/Documents/workspace/relaxASMR/assets/sound_effect/rain_sound/5_wildlife/birds/Hwamei/9PBX76J_Birds.mp3" 1
+      GUID {98EFE411-4B9F-4452-8A58-1A7B7D391C91}
+      <SOURCE WAVE
+        FILE "Audio Files\9PBX76J_Birds-glued.wav"
+      >
+    >
+    <ITEM
+      POSITION 2772.0906060583839
+      SNAPOFFS 0
+      LENGTH 7.49320833333333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {157C549C-7D29-47C2-A59A-0775FEE4AC1F}
+      IID 54
+      NAME 9PBX76J_Birds-glued.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {98EFE411-4B9F-4452-8A58-1A7B7D391C91}
+      <SOURCE WAVE
+        FILE "Audio Files\9PBX76J_Birds-glued.wav"
+      >
+    >
+    <ITEM
+      POSITION 3049.7929348298026
+      SNAPOFFS 0
+      LENGTH 7.49320833333333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {157C549C-7D29-47C2-A59A-0775FEE4AC1F}
+      IID 54
+      NAME 9PBX76J_Birds-glued.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {98EFE411-4B9F-4452-8A58-1A7B7D391C91}
+      <SOURCE WAVE
+        FILE "Audio Files\9PBX76J_Birds-glued.wav"
+      >
+    >
+    <ITEM
+      POSITION 3453.6921416935925
+      SNAPOFFS 0
+      LENGTH 7.49320833333333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {157C549C-7D29-47C2-A59A-0775FEE4AC1F}
+      IID 54
+      NAME 9PBX76J_Birds-glued.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {98EFE411-4B9F-4452-8A58-1A7B7D391C91}
+      <SOURCE WAVE
+        FILE "Audio Files\9PBX76J_Birds-glued.wav"
+      >
+    >
+    <ITEM
+      POSITION 3759.8805750698302
+      SNAPOFFS 0
+      LENGTH 7.49320833333333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {157C549C-7D29-47C2-A59A-0775FEE4AC1F}
+      IID 54
+      NAME 9PBX76J_Birds-glued.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {98EFE411-4B9F-4452-8A58-1A7B7D391C91}
+      <SOURCE WAVE
+        FILE "Audio Files\9PBX76J_Birds-glued.wav"
+      >
+    >
+    <ITEM
+      POSITION 4091.9683919800559
+      SNAPOFFS 0
+      LENGTH 7.49320833333333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {157C549C-7D29-47C2-A59A-0775FEE4AC1F}
+      IID 54
+      NAME 9PBX76J_Birds-glued.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {98EFE411-4B9F-4452-8A58-1A7B7D391C91}
+      <SOURCE WAVE
+        FILE "Audio Files\9PBX76J_Birds-glued.wav"
+      >
+    >
+    <ITEM
+      POSITION 4629.2853065576528
+      SNAPOFFS 0
+      LENGTH 7.49320833333333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {157C549C-7D29-47C2-A59A-0775FEE4AC1F}
+      IID 54
+      NAME 9PBX76J_Birds-glued.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {98EFE411-4B9F-4452-8A58-1A7B7D391C91}
+      <SOURCE WAVE
+        FILE "Audio Files\9PBX76J_Birds-glued.wav"
+      >
+    >
+    <ITEM
+      POSITION 4900.2059277187564
+      SNAPOFFS 0
+      LENGTH 7.49320833333333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {157C549C-7D29-47C2-A59A-0775FEE4AC1F}
+      IID 54
+      NAME 9PBX76J_Birds-glued.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {98EFE411-4B9F-4452-8A58-1A7B7D391C91}
+      <SOURCE WAVE
+        FILE "Audio Files\9PBX76J_Birds-glued.wav"
+      >
+    >
+    <ITEM
+      POSITION 5155.7127863244677
+      SNAPOFFS 0
+      LENGTH 7.49320833333333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {157C549C-7D29-47C2-A59A-0775FEE4AC1F}
+      IID 54
+      NAME 9PBX76J_Birds-glued.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {98EFE411-4B9F-4452-8A58-1A7B7D391C91}
+      <SOURCE WAVE
+        FILE "Audio Files\9PBX76J_Birds-glued.wav"
+      >
+    >
+    <ITEM
+      POSITION 5500.1066223732196
+      SNAPOFFS 0
+      LENGTH 7.49320833333333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {157C549C-7D29-47C2-A59A-0775FEE4AC1F}
+      IID 54
+      NAME 9PBX76J_Birds-glued.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {98EFE411-4B9F-4452-8A58-1A7B7D391C91}
+      <SOURCE WAVE
+        FILE "Audio Files\9PBX76J_Birds-glued.wav"
+      >
+    >
+    <ITEM
+      POSITION 6003.2454165637328
+      SNAPOFFS 0
+      LENGTH 7.49320833333333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {157C549C-7D29-47C2-A59A-0775FEE4AC1F}
+      IID 54
+      NAME 9PBX76J_Birds-glued.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {98EFE411-4B9F-4452-8A58-1A7B7D391C91}
+      <SOURCE WAVE
+        FILE "Audio Files\9PBX76J_Birds-glued.wav"
+      >
+    >
+    <ITEM
+      POSITION 6351.1160133443964
+      SNAPOFFS 0
+      LENGTH 7.49320833333333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {157C549C-7D29-47C2-A59A-0775FEE4AC1F}
+      IID 54
+      NAME 9PBX76J_Birds-glued.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {98EFE411-4B9F-4452-8A58-1A7B7D391C91}
+      <SOURCE WAVE
+        FILE "Audio Files\9PBX76J_Birds-glued.wav"
+      >
+    >
+    <ITEM
+      POSITION 6584.2408788131788
+      SNAPOFFS 0
+      LENGTH 7.49320833333333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {157C549C-7D29-47C2-A59A-0775FEE4AC1F}
+      IID 54
+      NAME 9PBX76J_Birds-glued.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {98EFE411-4B9F-4452-8A58-1A7B7D391C91}
+      <SOURCE WAVE
+        FILE "Audio Files\9PBX76J_Birds-glued.wav"
+      >
+    >
+    <ITEM
+      POSITION 6961.3179652090212
+      SNAPOFFS 0
+      LENGTH 7.49320833333333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {157C549C-7D29-47C2-A59A-0775FEE4AC1F}
+      IID 54
+      NAME 9PBX76J_Birds-glued.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {98EFE411-4B9F-4452-8A58-1A7B7D391C91}
+      <SOURCE WAVE
+        FILE "Audio Files\9PBX76J_Birds-glued.wav"
+      >
+    >
+    <ITEM
+      POSITION 7292.0414345279096
+      SNAPOFFS 0
+      LENGTH 7.49320833333333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {157C549C-7D29-47C2-A59A-0775FEE4AC1F}
+      IID 54
+      NAME 9PBX76J_Birds-glued.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {98EFE411-4B9F-4452-8A58-1A7B7D391C91}
+      <SOURCE WAVE
+        FILE "Audio Files\9PBX76J_Birds-glued.wav"
+      >
+    >
+    <ITEM
+      POSITION 7613.7517839017464
+      SNAPOFFS 0
+      LENGTH 7.49320833333333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {157C549C-7D29-47C2-A59A-0775FEE4AC1F}
+      IID 54
+      NAME 9PBX76J_Birds-glued.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {98EFE411-4B9F-4452-8A58-1A7B7D391C91}
+      <SOURCE WAVE
+        FILE "Audio Files\9PBX76J_Birds-glued.wav"
+      >
+    >
+    <ITEM
+      POSITION 8083.0965896898524
+      SNAPOFFS 0
+      LENGTH 7.49320833333333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {157C549C-7D29-47C2-A59A-0775FEE4AC1F}
+      IID 54
+      NAME 9PBX76J_Birds-glued.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {98EFE411-4B9F-4452-8A58-1A7B7D391C91}
+      <SOURCE WAVE
+        FILE "Audio Files\9PBX76J_Birds-glued.wav"
+      >
+    >
+    <ITEM
+      POSITION 8321.5192552440512
+      SNAPOFFS 0
+      LENGTH 7.49320833333333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {157C549C-7D29-47C2-A59A-0775FEE4AC1F}
+      IID 54
+      NAME 9PBX76J_Birds-glued.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {98EFE411-4B9F-4452-8A58-1A7B7D391C91}
+      <SOURCE WAVE
+        FILE "Audio Files\9PBX76J_Birds-glued.wav"
+      >
+    >
+    <ITEM
+      POSITION 8804.996208217819
+      SNAPOFFS 0
+      LENGTH 7.49320833333333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {157C549C-7D29-47C2-A59A-0775FEE4AC1F}
+      IID 54
+      NAME 9PBX76J_Birds-glued.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {98EFE411-4B9F-4452-8A58-1A7B7D391C91}
+      <SOURCE WAVE
+        FILE "Audio Files\9PBX76J_Birds-glued.wav"
+      >
+    >
+    <ITEM
+      POSITION 9071.6216064765667
+      SNAPOFFS 0
+      LENGTH 7.49320833333333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {157C549C-7D29-47C2-A59A-0775FEE4AC1F}
+      IID 54
+      NAME 9PBX76J_Birds-glued.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {98EFE411-4B9F-4452-8A58-1A7B7D391C91}
+      <SOURCE WAVE
+        FILE "Audio Files\9PBX76J_Birds-glued.wav"
+      >
+    >
+    <ITEM
+      POSITION 9384.5983491551724
+      SNAPOFFS 0
+      LENGTH 7.49320833333333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {157C549C-7D29-47C2-A59A-0775FEE4AC1F}
+      IID 54
+      NAME 9PBX76J_Birds-glued.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {98EFE411-4B9F-4452-8A58-1A7B7D391C91}
+      <SOURCE WAVE
+        FILE "Audio Files\9PBX76J_Birds-glued.wav"
+      >
+    >
+    <ITEM
+      POSITION 9756.2136825481266
+      SNAPOFFS 0
+      LENGTH 7.49320833333333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {157C549C-7D29-47C2-A59A-0775FEE4AC1F}
+      IID 54
+      NAME 9PBX76J_Birds-glued.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {98EFE411-4B9F-4452-8A58-1A7B7D391C91}
+      <SOURCE WAVE
+        FILE "Audio Files\9PBX76J_Birds-glued.wav"
+      >
+    >
+    <ITEM
+      POSITION 10190.58831381307
+      SNAPOFFS 0
+      LENGTH 7.49320833333333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {157C549C-7D29-47C2-A59A-0775FEE4AC1F}
+      IID 54
+      NAME 9PBX76J_Birds-glued.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {98EFE411-4B9F-4452-8A58-1A7B7D391C91}
+      <SOURCE WAVE
+        FILE "Audio Files\9PBX76J_Birds-glued.wav"
+      >
+    >
+    <ITEM
+      POSITION 10365.042431410477
+      SNAPOFFS 0
+      LENGTH 7.49320833333333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {157C549C-7D29-47C2-A59A-0775FEE4AC1F}
+      IID 54
+      NAME 9PBX76J_Birds-glued.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {98EFE411-4B9F-4452-8A58-1A7B7D391C91}
+      <SOURCE WAVE
+        FILE "Audio Files\9PBX76J_Birds-glued.wav"
       >
     >
   >
@@ -595,6 +1023,7 @@
     BUSCOMP 0 0 0 0 0
     SHOWINMIX 1 0.6667 0.5 1 0.5 0 0 0 0
     FIXEDLANES 9 0 0 0 0
+    LANEREC -1 -1 -1 0
     SEL 0
     REC 0 0 1 0 0 0 0 0
     VU 64
@@ -621,6 +1050,7 @@
     BUSCOMP 0 0 0 0 0
     SHOWINMIX 1 0.6667 0.5 1 0.5 0 0 0 0
     FIXEDLANES 9 0 0 0 0
+    LANEREC -1 -1 -1 0
     SEL 0
     REC 0 0 1 0 0 0 0 0
     VU 64
@@ -642,16 +1072,16 @@
       FADEOUT 1 0 0 1 0 0 0
       MUTE 0 0
       SEL 0
-      IGUID {5E084D08-144F-4BA6-990E-4531CDF5F521}
-      IID 1
+      IGUID {80645ED3-913A-4DA0-A652-7DC4E786A3EA}
+      IID 53
       NAME MVI_6919_loop_08_0.97_dur_4_fade_0.5_01.mp4
-      VOLPAN 0 0 1 -1
+      VOLPAN 1 0 1 -1
       SOFFS 0
       PLAYRATE 1 1 0 -1 0 0.0025
       CHANMODE 0
-      GUID {D6CC8C00-BF83-438C-8461-CA5202175411}
+      GUID {38F19814-B2A7-44ED-96B3-C016F11649B5}
       <SOURCE VIDEO
-        FILE "/Users/angel/Documents/workspace/relaxASMR/assets/loop_video/rain_video/MVI_6919/MVI_6919_loop_08_0.97_dur_4_fade_0.5_01.mp4"
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\loop_video\rain_video\MVI_6919\MVI_6919_loop_08_0.97_dur_4_fade_0.5_01.mp4"
       >
     >
   >

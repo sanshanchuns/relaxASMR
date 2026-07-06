@@ -24,7 +24,7 @@ python3 Reaper/scripts/create_rain_subproject.py \
   --video assets/loop_video/rain_video/<MVI_xxxx>/<...>_loop_*_fade_*.mp4
 ```
 
-产出 `video_analysis.md`、`scripts/asmr_config.lua`、`<scene>.rpp`；打开工程后运行 **`asmr_apply_recipe.lua`**（轨 `1_rain` 长时包络在 `vol_envelope` 里写入）。
+产出 `video_analysis.md`、`scripts/asmr_config.lua`、`<scene>.rpp`；打开工程后运行 **`asmr_apply_recipe.lua`**（铺循环 + `1_rain` 包络），再逐轨 **`asmr_scatter_track.lua`**（手动填散布参数）。
 
 **仅生成 `.rpp`（配方已存在）：**
 
