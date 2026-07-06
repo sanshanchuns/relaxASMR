@@ -30,6 +30,7 @@ from gui.reaper_launch import (  # noqa: E402
 )
 from gui.folder_open import open_folder  # noqa: E402
 from gui.import_reload import load_module, load_scripts_module  # noqa: E402
+from gui.rain_vst_ui import RainVstSection  # noqa: E402
 from gui.youtube_material import (  # noqa: E402
     RAIN_THUMB_TITLE,
     find_material_dir,
@@ -92,6 +93,10 @@ class RelaxAsmrApp(tk.Tk):
 
         self.lbl_scene = ttk.Label(sec1, text="场景 ID：—")
         self.lbl_scene.pack(anchor=tk.W, pady=(6, 0))
+
+        # --- 1.5 RAIN VST 参数分析 ---
+        self.rain_vst = RainVstSection(root, log_fn=self._log, busy_guard=self)
+        self.rain_vst.pack(fill=tk.X, **pad)
 
         # --- 2. 新建 Reaper 子工程 + YouTube 物料 ---
         sec2 = ttk.LabelFrame(root, text="2. 新建 Reaper 子工程 + YouTube 物料", padding=10)
