@@ -898,33 +898,33 @@ Heavy Rain
 
 
 【场景】
-Init                    初始化
+Init                    初始化                                 Density/Intensity  Wetness/Distance  MASS/Intensity  STRENGTH/Intensity   PRESENCE/Intensity
 
-01.Big Leafy Symphony      大树叶雨声        13 + 06 + 05
+01.Big Leafy Symphony      大树叶雨声        13 + 06 + 05             50/20              50/50         81/59              66/33                82/63    
 02.Deluge On Metal Shelter 金属雨棚暴雨      
 03.Downpour At Downspout   落水管暴雨
 04.Downpour On Car Port    车棚暴雨
-05.Dreamy Flora            梦幻花园          13 + 06 + 05
-06.Drenched Lakeside Jetty 湖畔码头          07 + 06 + 18
+05.Dreamy Flora            梦幻花园          13 + 06 + 05             56/63              18/78         69/68              52/64                52/50
+06.Drenched Lakeside Jetty 湖畔码头          07 + 06 + 18             46/25              20/65         85/69              79/60                58/64
 07.Drips And Puddles       滴水水洼
 08.Drop Ballet On The Porch 门廊滴雨
 09.Drops On Plastic Shield 塑料雨棚
-10.Gentle Avenue Drizzle   林荫细雨          09 + 06 + 02
-11.Gentle Drops Of Autumn  秋日细雨          15 + 06 + 02
+10.Gentle Avenue Drizzle   林荫细雨          09 + 06 + 02             50/53              83/82         85/20              55/30                75/60
+11.Gentle Drops Of Autumn  秋日细雨          15 + 06 + 02             55/0               40/56         50/50              50/50                51/74
 12.Glassy Shelter          玻璃雨棚
 13.Humming Busstation      雨中公交站
 14.Interior Car Shower     车内听雨
-15.Leafy Rhythm Forest     森林叶雨          13 + 06 + 04
+15.Leafy Rhythm Forest     森林叶雨          13 + 06 + 04             50/50              0/57          50/50              50/50                50/62
 16.Metallic Canopy Madness 金属棚暴雨
 17.Mild Urban Drizzle      城市小雨
 18.Narrow Alleyway Dripping 小巷滴雨
-19.Softest Urban Drizzle   极轻细雨          16 + 13 + 03
-20.Soothing Flora Tickles  花草轻雨          02 + 06 + 04
-21.Stirring Water Whirls   水面涟漪          15 + 06 + 17
+19.Softest Urban Drizzle   极轻细雨          16 + 13 + 03              
+20.Soothing Flora Tickles  花草轻雨          02 + 06 + 04             46/48              18/72         77/65              55/38                63/70
+21.Stirring Water Whirls   水面涟漪          15 + 06 + 17             100/70             100/63        50/50              100/91               49/100
 22.Storming Balcony Patter 阳台暴雨
 23.Urban Midnight Rain     午夜都市雨
-24.Vibrant Wetland Flora   湿地雨林          13 + 06 + 04
-25.Whispering Jungle Shower 雨林低语         07 + 05 + 04
+24.Vibrant Wetland Flora   湿地雨林          13 + 06 + 04             50/50              52/70         79/57              55/58                69/68
+25.Whispering Jungle Shower 雨林低语         07 + 05 + 04             52/32              50/78         100/51             86/74                21/21
 
 ----
 
