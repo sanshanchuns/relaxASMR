@@ -931,6 +931,8 @@ def generate_material(
     title_en: str = "",
     thumb_title: str = "",
     thumb_subtitle: str = "",
+    thumb_subtitle_place_only: bool = False,
+    show_4k_badge: bool | None = None,
     layout: str = "",
     on_progress: Callable[[str], None] | None = None,
 ) -> Path:
@@ -966,7 +968,10 @@ def generate_material(
         use_thumb_time = max(0.5, dur * 0.35)
         log(f"视频时长 {dur:.1f}s，截帧时间调整为 {use_thumb_time:.1f}s")
     badge_path = resolve_badge_path(preset)
-    show_4k = "4k" in stem.lower() or meta["width"] >= 3840
+    if show_4k_badge is None:
+        show_4k = "4k" in stem.lower() or meta["width"] >= 3840
+    else:
+        show_4k = show_4k_badge
 
     frame_png = out_dir / "_frame.png"
     thumb_jpg = out_dir / "thumbnail.jpg"
@@ -986,15 +991,20 @@ def generate_material(
             youtube_copy["title_en"] = title_en
         viral_title, viral_sub = build_forest_rain_thumb_text(scene, meta, show_4k=show_4k)
         thumb_title_resolved = thumb_title or preset.get("thumb_title_en") or viral_title
-        thumb_subtitle_resolved = limit_words(
-            thumb_subtitle or preset.get("thumb_subtitle_en") or viral_sub,
-            max_words=14,
-        )
+        if thumb_subtitle_place_only and scene:
+            thumb_subtitle_resolved = scene["place_en_short"]
+        else:
+            thumb_subtitle_resolved = limit_words(
+                thumb_subtitle or preset.get("thumb_subtitle_en") or viral_sub,
+                max_words=14,
+            )
     else:
         youtube_copy = resolve_youtube_copy(preset, scene, meta, stem, title_zh, title_en)
         thumb_title_resolved, thumb_subtitle_resolved = resolve_thumb_text(
             scene, preset, thumb_title, thumb_subtitle,
         )
+        if thumb_subtitle_place_only and scene:
+            thumb_subtitle_resolved = scene["place_en_short"]
     log(f"缩略图文案：{thumb_title_resolved!r} / {thumb_subtitle_resolved!r}")
 
     log(f"合成缩略图（{use_layout}）…")
@@ -1097,6 +1107,7 @@ def main() -> None:
         title_en=args.title_en,
         thumb_title=args.thumb_title,
         thumb_subtitle=args.thumb_subtitle,
+        show_4k_badge=False if args.no_4k_badge else None,
         layout=args.layout,
     )
     print(f"==> Done: {out_dir}/")

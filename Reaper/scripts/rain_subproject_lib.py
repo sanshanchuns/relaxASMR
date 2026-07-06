@@ -37,11 +37,10 @@ DEFAULT_ASSET_DIRS = {
     "3_environment": "3_environment/ambience/forest",
     "4_water": "4_water/dripping",
     "5_wildlife": "5_wildlife/birds",
-    "6_human": "6_human/fire",
+    # 6_human 不自动选素材 — Rain 场景默认轨 6 留白，按画面在 Reaper 中手动选配
 }
 
 BIRD_FALLBACK = "assets/sound_effect/elevenlabs_sound/bird/api_mvi6918_bird_distant.mp3"
-HUMAN_FALLBACK_DIR = "2_impact/fabric/umbrella"
 WATER_LAKE_DIR = "4_water/standing_water"
 ENV_LAKE_DIR = "3_environment/ambience/lake"
 
@@ -218,8 +217,11 @@ def build_asmr_config(
         "3_environment": "默认林间环境 ambience",
         "4_water": "默认滴水/细流",
         "5_wildlife": "默认远处鸟鸣 scatter",
-        "6_human": "默认近场安全感锚点（炉火）",
     }
+
+    rationales["6_human"] = (
+        "Rain 场景默认留白（不自动配篝火/伞）；按画面在 Reaper 轨 6 手动放置素材"
+    )
 
     for key, rel in DEFAULT_ASSET_DIRS.items():
         if key == "5_wildlife":
@@ -234,18 +236,6 @@ def build_asmr_config(
                     rationales[key] = f"rain_sound 无可用鸟鸣 → 回退 `{BIRD_FALLBACK}`"
                 else:
                     rationales[key] = reason
-        elif key == "6_human":
-            picked, reason = pick_first_mp3(rel)
-            if picked:
-                paths[key] = picked
-                rationales[key] = reason
-            else:
-                fb, fb_reason = pick_first_mp3(HUMAN_FALLBACK_DIR)
-                if fb:
-                    paths[key] = fb
-                    rationales[key] = f"默认炉火目录无素材 → {fb_reason}"
-                else:
-                    rationales[key] = reason
         else:
             picked, reason = pick_first_mp3(rel)
             if picked:
@@ -257,7 +247,6 @@ def build_asmr_config(
     rain_vol = 1.0
     env_vol = 0.26
     water_vol = 0.18
-    human_vol = 0.38
     impact_vol = 0.5
     wild_vol = 0.28
 
@@ -316,12 +305,6 @@ def build_asmr_config(
                 paths["3_environment"] = picked
             rationales["3_environment"] = f"首帧绿色偏多 → 强化林间 ambience · {reason}"
 
-    human_name = "近场舒适"
-    if paths.get("6_human", "").find("umbrella") >= 0 or "umbrella" in paths.get("6_human", ""):
-        human_name = "伞面近场"
-    elif paths.get("6_human", "").find("fire") >= 0:
-        human_name = "炉火噼啪"
-
     cfg = {
         "scene_id": scene_id,
         "project_name": f"Rain · {scene_id}",
@@ -363,9 +346,9 @@ def build_asmr_config(
             {
                 "track": 6,
                 "id": "6_human",
-                "name": human_name,
-                "vol": human_vol,
-                "paths": [paths.get("6_human", "")],
+                "name": "留白（待选）",
+                "vol": 0.0,
+                "paths": [],
             },
         ],
         "scatter_layers": [
@@ -501,8 +484,9 @@ def config_to_lua(cfg: dict) -> str:
         lines.append(f"      name = {lua_quote(layer['name'])},")
         lines.append(f"      vol = {layer['vol']},")
         lines.append("      paths = {")
-        for p in layer["paths"]:
-            lines.append(f"        {lua_quote(p)},")
+        for p in layer.get("paths") or []:
+            if p:
+                lines.append(f"        {lua_quote(p)},")
         lines.append("      },")
         if layer.get("vol_envelope"):
             ve = layer["vol_envelope"]
