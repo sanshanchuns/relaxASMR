@@ -212,7 +212,7 @@ SCENE_PRESETS: dict[str, ScenePreset] = {
         glgn=0.251, glhp=0.0, gllp=0.04, glon=1.0, gldr=1.0,
     ),
     "path": ScenePreset(
-        "林间小径", "Woodland Path Rain",
+        "草地公园小径", "Grass Park Path Rain",
         l1=140, l2=530, l3=870, adv=0,
         bgwi=0.72, bgpn=0.5,
         bgeq1x=0.55, bgeq1y=0.45, bgeq2x=0.55, bgeq2y=0.48,
@@ -249,6 +249,19 @@ SCENE_PRESETS: dict[str, ScenePreset] = {
         eq1x=0.72, eq1y=0.58, eq2x=0.55, eq2y=0.55,
         eq3x=0.62, eq3y=0.55,
         glgn=0.251, glhp=0.0, gllp=0.0, glon=1.0, gldr=1.0,
+    ),
+    "shelter": ScenePreset(
+        "窗前听雨", "Sheltered Rain",
+        l1=230, l2=500, l3=820, adv=1,
+        bgwi=0.70, bgpn=0.5,
+        bgeq1x=0.50, bgeq1y=0.45, bgeq2x=0.55, bgeq2y=0.50,
+        bgeq3x=0.60, bgeq3y=0.50,
+        spbl=0.40, spwi=0.60, sppn=0.5,
+        sucd=0.15, suwi=0.40, supn=0.5,
+        rfdn=0.55, rfin=0.35, rffc=0.50, rfch=0.10,
+        eq1x=0.60, eq1y=0.50, eq2x=0.55, eq2y=0.48,
+        eq3x=0.58, eq3y=0.55,
+        glgn=0.251, glhp=0.10, gllp=0.20, glon=1.0, gldr=1.0,
     ),
     "default": ScenePreset(
         "自然雨景", "Natural Rain",
@@ -351,8 +364,9 @@ def extract_first_frame(
 
     cmd = [
         "ffmpeg", "-i", str(video_path),
-        "-vf", "select=eq(n\\,0)",
+        "-vf", "select=eq(n\\,0),scale=1280:720",
         "-vframes", "1",
+        "-q:v", "2",
         "-y", str(output_path),
     ]
     try:
@@ -681,7 +695,7 @@ def _classify_scene(analysis: FrameAnalysis) -> None:
         a.tonality_reason = "水面反射声能，高频略增"
 
     # --- 2. Bamboo (vertical lines + green + some brown) ---
-    elif (a.vertical_lines > 35 and a.green_pct > 15
+    elif (a.vertical_lines > 35 and a.horizontal_lines < 60 and a.green_pct > 15
           and a.brown_pct > 5 and a.brightness < 120):
         a.scene_type = "bamboo"
         a.scene_description = (
@@ -697,7 +711,36 @@ def _classify_scene(analysis: FrameAnalysis) -> None:
         a.tonality_desc = "清脆通透"
         a.tonality_reason = "竹竿硬质表面产生清脆敲击声"
 
-    # --- 3. Forest / canopy (green dominant + not too bright) ---
+    # --- 3. Shelter / Window / Indoor (structural lines + lower green) ---
+    elif a.horizontal_lines > 30 and a.vertical_lines > 30 and a.green_pct < 25:
+        a.scene_type = "shelter"
+        a.scene_description = (
+            "窗前/遮蔽场景，检测到明显的水平与垂直结构线条（窗框/屋檐/建筑结构）"
+            f"，绿色占比较少 ({a.green_pct:.1f}%)"
+        )
+        a.rain_level = "medium"
+        a.rain_level_reason = "遮蔽环境下，中等雨势"
+        a.distance_level = "near"
+        a.distance_reason = "靠近遮蔽物/窗户，近景击打感强"
+        a.wetness_desc = "隔绝湿润"
+        a.wetness_reason = "室内或廊下，环境湿度感适中"
+        a.tonality_desc = "温暖偏闷"
+        a.tonality_reason = "遮蔽物或窗户阻挡/吸收了部分高频声音"
+
+    # --- 4. Grass Park Path (highly textured, green + brown) ---
+    elif a.horizontal_lines > 40 and a.vertical_lines > 40 and a.green_pct > 10 and a.brown_pct > 10:
+        a.scene_type = "path"
+        a.scene_description = "草地公园小径，棕色（泥土/落叶/石块）与绿色共存"
+        a.rain_level = "medium"
+        a.rain_level_reason = "开放路径，雨水直接落地"
+        a.distance_level = "medium"
+        a.distance_reason = "两侧树木提供适度遮挡"
+        a.wetness_desc = "泥泞湿润"
+        a.wetness_reason = "地面泥土/石板吸水，雨滴溅射"
+        a.tonality_desc = "中频温暖"
+        a.tonality_reason = "泥土和落叶衰减高频"
+
+    # --- 5. Forest / canopy (green dominant + not too bright) ---
     elif a.green_pct > 25 and a.brightness < 100:
         if a.sky_pct < 10 and a.foliage_density > 35:
             a.scene_type = "canopy"
@@ -714,7 +757,7 @@ def _classify_scene(analysis: FrameAnalysis) -> None:
         a.tonality_desc = "低沉绵密"
         a.tonality_reason = "大量树叶吸收高频，低频占主导"
 
-    # --- 4. Garden (green + bright) ---
+    # --- 6. Garden (green + bright) ---
     elif a.green_pct > 15 and a.brightness >= 100:
         a.scene_type = "garden"
         a.scene_description = "花园/花草场景，绿色适中，整体明亮"
@@ -727,7 +770,7 @@ def _classify_scene(analysis: FrameAnalysis) -> None:
         a.tonality_desc = "明亮活泼"
         a.tonality_reason = "光线充足场景，高频细节丰富"
 
-    # --- 5. Night scene (very dark) ---
+    # --- 7. Night scene (very dark) ---
     elif a.brightness < 60:
         a.scene_type = "night"
         a.scene_description = "夜间场景，整体亮度很低"
@@ -740,20 +783,7 @@ def _classify_scene(analysis: FrameAnalysis) -> None:
         a.tonality_desc = "低沉温暖"
         a.tonality_reason = "夜景缺少高频视觉信息，声场偏暖"
 
-    # --- 6. Path (brown + green) ---
-    elif a.brown_pct > 10 and a.green_pct > 10:
-        a.scene_type = "path"
-        a.scene_description = "林间小径，棕色（泥土/落叶）与绿色共存"
-        a.rain_level = "medium"
-        a.rain_level_reason = "开放路径，雨水直接落地"
-        a.distance_level = "medium"
-        a.distance_reason = "两侧树木提供适度遮挡"
-        a.wetness_desc = "泥泞湿润"
-        a.wetness_reason = "地面泥土吸水，砾石溅射"
-        a.tonality_desc = "中频温暖"
-        a.tonality_reason = "泥土和落叶衰减高频"
-
-    # --- 7. Open / bright scene ---
+    # --- 8. Open / bright scene ---
     elif a.sky_pct > 40:
         a.scene_type = "open"
         a.scene_description = "开阔场景，天空占比大"
@@ -766,7 +796,7 @@ def _classify_scene(analysis: FrameAnalysis) -> None:
         a.tonality_desc = "清亮直接"
         a.tonality_reason = "无障碍物衰减声音"
 
-    # --- 8. Default ---
+    # --- 9. Default ---
     else:
         a.scene_description = "自然场景，未匹配特定类型"
         a.rain_level = "medium"
@@ -1305,6 +1335,11 @@ def analyze_video(
     Returns:
         The output directory path containing the generated files.
     """
+def analyze_video(
+    video_path: Path,
+    output_dir: Path,
+    on_progress: Callable[[str], None] | None = None,
+) -> Path:
     video_path = Path(video_path)
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -1315,30 +1350,41 @@ def analyze_video(
     video_id = extract_video_id(video_path)
     _notify(on_progress, f"开始分析: {video_id}")
 
-    # Step 1: Extract first frame
-    frame_path = output_dir / f"{video_id}.png"
-    extract_first_frame(video_path, frame_path, on_progress)
+    # Step 1: Extract first frame to temporary path
+    temp_frame = output_dir / f"{video_id}_temp.jpg"
+    extract_first_frame(video_path, temp_frame, on_progress)
 
-    # Step 2: Analyze frame
-    analysis = analyze_frame(frame_path, on_progress)
+    # Step 2: Analyze frame with AI CLIP Engine
+    import sys
+    # Ensure local path is accessible for CLIP engine
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+    from scripts.rain_vst_clip_engine import analyze_and_map_with_clip, generate_ai_report
+    
+    params, ai_results = analyze_and_map_with_clip(str(temp_frame), on_progress)
 
-    # Step 3: Map to VST params
-    _notify(on_progress, "正在映射 VST 参数")
-    params = map_to_vst_params(analysis)
+    scene_name = params.scene_cn
+    final_prefix = f"{video_id}_{scene_name}"
 
-    # Step 4: Generate .rain config file
+    final_frame = output_dir / f"{final_prefix}.jpg"
+    if final_frame.exists():
+        final_frame.unlink()
+    temp_frame.rename(final_frame)
+    _notify(on_progress, f"首帧已保存: {final_frame.name}")
+
+    # Step 3: Generate .rain config file
     _notify(on_progress, "正在生成 .rain 配置文件")
-    rain_path = generate_rain_file(video_id, params, output_dir)
+    rain_path = generate_rain_file(final_prefix, params, output_dir)
     _notify(on_progress, f"配置文件已保存: {rain_path.name}")
 
-    # Step 5: Generate markdown report
+    # Step 4: Generate Markdown report
     _notify(on_progress, "正在生成报告")
-    report = generate_report(video_id, analysis, params)
-    report_path = output_dir / f"{video_id}.md"
+    report = generate_ai_report(final_prefix, params, ai_results)
+    
+    report_path = output_dir / f"{final_prefix}.md"
     report_path.write_text(report, encoding="utf-8")
     _notify(on_progress, f"报告已保存: {report_path.name}")
 
-    return output_dir
+    return output_dir, scene_name
 
 
 # ---------------------------------------------------------------------------
@@ -1368,19 +1414,16 @@ def main() -> None:
         print(f"错误: 视频文件不存在: {video_path}", file=sys.stderr)
         sys.exit(1)
 
-    output_dir: Path = args.output_dir or video_path.parent
+    default_vst_params = Path(__file__).resolve().parents[1] / "assets" / "sound_effect" / "rain_sound" / "1_rain" / "vst_params"
+    output_dir: Path = args.output_dir or default_vst_params
     output_dir = output_dir.resolve()
 
     def progress(msg: str) -> None:
         print(f"  → {msg}")
 
     try:
-        result_dir = analyze_video(video_path, output_dir, on_progress=progress)
-        video_id = extract_video_id(video_path)
-        print(f"\n完成! 输出目录: {result_dir}")
-        print(f"  报告: {result_dir / f'{video_id}.md'}")
-        print(f"  配置: {result_dir / f'{video_id}.rain'}")
-        print(f"  首帧: {result_dir / f'{video_id}.png'}")
+        out_dir, scene_name = analyze_video(video_path, output_dir, on_progress=progress)
+        print(f"\n完成! 输出目录: {out_dir}\n  场景名: {scene_name} (相关文件已生成)")
     except RuntimeError as exc:
         print(f"错误: {exc}", file=sys.stderr)
         sys.exit(1)

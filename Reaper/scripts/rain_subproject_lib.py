@@ -208,103 +208,6 @@ def build_asmr_config(
     audio_layers: dict | None = None,
     visual: dict | None = None,
 ) -> tuple[dict, dict[str, str]]:
-    paths: dict[str, str] = {}
-    rationales: dict[str, str] = {}
-
-    default_reasons = {
-        "1_rain": "Rain 睡眠系列默认轻雨主层",
-        "2_impact": "默认雨打树叶（vegetation/leaves）",
-        "3_environment": "默认林间环境 ambience",
-        "4_water": "默认滴水/细流",
-        "5_wildlife": "默认远处鸟鸣 scatter",
-    }
-
-    rationales["6_human"] = (
-        "Rain 场景默认留白（不自动配篝火/伞）；按画面在 Reaper 轨 6 手动放置素材"
-    )
-
-    for key, rel in DEFAULT_ASSET_DIRS.items():
-        if key == "5_wildlife":
-            picked, reason = pick_first_mp3(rel)
-            if picked:
-                paths[key] = picked
-                rationales[key] = reason
-            else:
-                bird = REPO_ROOT / BIRD_FALLBACK
-                if bird.is_file():
-                    paths[key] = BIRD_FALLBACK
-                    rationales[key] = f"rain_sound 无可用鸟鸣 → 回退 `{BIRD_FALLBACK}`"
-                else:
-                    rationales[key] = reason
-        else:
-            picked, reason = pick_first_mp3(rel)
-            if picked:
-                paths[key] = picked
-                rationales[key] = f"{default_reasons[key]} · {reason}"
-            else:
-                rationales[key] = reason
-
-    rain_vol = 1.0
-    env_vol = 0.26
-    water_vol = 0.18
-    impact_vol = 0.5
-    wild_vol = 0.28
-
-    if audio_layers:
-        lv = audio_layers.get("1_rain", {}).get("level", "")
-        if lv == "强":
-            picked, reason = pick_first_mp3("1_rain/intensity/moderate")
-            if picked:
-                paths["1_rain"] = picked
-            rationales["1_rain"] = f"内嵌音轨 1_rain 判为「强」→ 改用 moderate · {reason}"
-        elif lv == "弱":
-            picked, reason = pick_first_mp3("1_rain/intensity/drizzle")
-            if picked:
-                paths["1_rain"] = picked
-            rationales["1_rain"] = f"内嵌音轨 1_rain 判为「弱」→ 改用 drizzle · {reason}"
-
-        wild = audio_layers.get("5_wildlife", {})
-        wl = wild.get("level", "")
-        if wl in ("无/极弱", "弱"):
-            wild_vol = 0.22
-            rationales["5_wildlife"] = (
-                rationales.get("5_wildlife", "")
-                + f" · 原声 wildlife「{wl}」→ scatter 音量降至 {wild_vol}"
-            ).strip(" ·")
-        elif wl == "强":
-            wild_vol = 0.35
-            rationales["5_wildlife"] = (
-                rationales.get("5_wildlife", "")
-                + f" · 原声 wildlife「强」→ scatter 音量升至 {wild_vol}"
-            ).strip(" ·")
-
-        water = audio_layers.get("4_water", {})
-        wlv = water.get("level", "")
-        if wlv in ("中", "强"):
-            water_vol = 0.24
-            picked, reason = pick_first_mp3(WATER_LAKE_DIR)
-            if picked:
-                paths["4_water"] = picked
-            rationales["4_water"] = f"内嵌音轨 4_water 判为「{wlv}」→ 倾向静水/湖面 · {reason}"
-
-    if visual:
-        if visual.get("water_dominant"):
-            env_picked, env_reason = pick_first_mp3(ENV_LAKE_DIR)
-            water_picked, water_reason = pick_first_mp3(WATER_LAKE_DIR)
-            if env_picked:
-                paths["3_environment"] = env_picked
-            if water_picked:
-                paths["4_water"] = water_picked
-            rationales["3_environment"] = f"首帧下半区偏蓝（水面启发）→ lake ambience · {env_reason}"
-            rationales["4_water"] = f"首帧水面启发 + 原声水体线索 → standing_water · {water_reason}"
-            env_vol = 0.24
-            water_vol = 0.22
-        elif visual.get("green_dominant"):
-            picked, reason = pick_first_mp3("3_environment/ambience/forest")
-            if picked:
-                paths["3_environment"] = picked
-            rationales["3_environment"] = f"首帧绿色偏多 → 强化林间 ambience · {reason}"
-
     cfg = {
         "scene_id": scene_id,
         "project_name": f"Rain · {scene_id}",
@@ -321,27 +224,22 @@ def build_asmr_config(
                 "track": 1,
                 "id": "1_rain",
                 "name": "小雨主雨势",
-                "vol": rain_vol,
-                "paths": [paths.get("1_rain", "")],
-                "vol_envelope": {
-                    "shape": "single_wave",
-                    "depth": 0.08,
-                    "peak_at": "center",
-                },
+                "vol": 1.0,
+                "paths": [],
             },
             {
                 "track": 3,
                 "id": "3_environment",
                 "name": "环境空间",
-                "vol": env_vol,
-                "paths": [paths.get("3_environment", "")],
+                "vol": 0.26,
+                "paths": [],
             },
             {
                 "track": 4,
                 "id": "4_water",
                 "name": "水体/滴水",
-                "vol": water_vol,
-                "paths": [paths.get("4_water", "")],
+                "vol": 0.18,
+                "paths": [],
             },
             {
                 "track": 6,
@@ -356,20 +254,20 @@ def build_asmr_config(
                 "track": 2,
                 "id": "2_impact",
                 "name": "雨打树叶",
-                "vol": impact_vol,
-                "paths": [paths.get("2_impact", "")],
+                "vol": 0.5,
+                "paths": [],
             },
             {
                 "track": 5,
                 "id": "5_wildlife",
                 "name": "远处鸟鸣",
-                "vol": wild_vol,
-                "paths": [paths.get("5_wildlife", BIRD_FALLBACK)],
+                "vol": 0.28,
+                "paths": [],
             },
         ],
         "fade_sec": 0.08,
     }
-    return cfg, rationales
+    return cfg, {}
 
 
 def _layer_paths_from_cfg(cfg: dict) -> dict[str, str]:
@@ -634,7 +532,7 @@ def create_from_video(
         audio = None
     audio_layers = audio["layers"] if audio else None
 
-    log("生成配方并挑选声源…")
+    log("生成空白 7 轨道配方…")
     cfg, rationales = build_asmr_config(
         scene_id,
         video_rel,
@@ -643,7 +541,7 @@ def create_from_video(
         visual=visual,
     )
 
-    log("写入脚手架与配方…")
+    log("写入 Reaper 轨道结构…")
     sub_dir = scaffold_subproject(scene_id)
     lua = config_to_lua(cfg)
     (sub_dir / "scripts" / "asmr_config.lua").write_text(lua, encoding="utf-8")

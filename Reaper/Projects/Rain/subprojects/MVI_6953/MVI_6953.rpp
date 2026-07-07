@@ -1,4 +1,4 @@
-<REAPER_PROJECT 0.1 "7.73/win64" 1783407053 0
+<REAPER_PROJECT 0.1 "7.73/win64" 1783409289 0
   <NOTES 0 2
   >
   RIPPLE 0 0
@@ -14,14 +14,14 @@
   PANLAW 1
   PROJOFFS 0 0 0
   MAXPROJLEN 1 10800
-  GRID 3199 8 1 8 1 0 1 0
+  GRID 3199 8 1 8 1 0 0 0
   TIMEMODE 5 9 -1 60 0 0 -1 0
   VIDEO_CONFIG 0 0 65792
   PANMODE 3
   PANLAWFLAGS 3
-  CURSOR 38
-  ZOOM 12.14239828165943 286 0
-  VZOOMEX 6 109
+  CURSOR 40
+  ZOOM 16.30802197577497 121 0
+  VZOOMEX 6 0
   USE_REC_CFG 0
   RECMODE 1
   SMPTESYNC 0 30 100 40 1000 300 0 0 1 0 0
@@ -37,7 +37,7 @@
   RENDER_PATTERN output/$project
   RENDER_FMT 0 2 0
   RENDER_1X 0
-  RENDER_RANGE 2 0 0 0 1000
+  RENDER_RANGE 1 0 0 0 1000
   RENDER_RESAMPLE 3 0 1
   RENDER_ADDTOPROJ 0
   RENDER_STEMS 0
@@ -68,8 +68,8 @@
   GLOBAL_AUTO -1
   TEMPO 60 4 4 1
   PLAYRATE 1 0 0.25 4
-  SELECTION 60 0
-  SELECTION2 60 0
+  SELECTION 30 0
+  SELECTION2 30 0
   MASTERAUTOMODE 0
   MASTERTRACKHEIGHT 0 0
   MASTERPEAKCOL 16576
@@ -77,7 +77,7 @@
   MASTERTRACKVIEW 1 0.6667 0.5 0.5 0 0 0 0 0 0 0 0 0 0 1
   MASTERHWOUT 0 0 1 0 0 0 0 -1
   MASTER_NCH 2 2
-  MASTER_VOLUME 2.21617158793837 0 -1 -1 1
+  MASTER_VOLUME 1.31013106676666 0 -1 -1 1
   MASTER_PANMODE 3
   MASTER_PANLAWFLAGS 3
   MASTER_FX 0
@@ -103,7 +103,7 @@
   RULERLANE 2 8 "" 0 -1 0
   <PROJBAY
   >
-  <TRACK {179CDDEF-4A7D-484F-9318-6572DCFD855A}
+  <TRACK {2DF268E4-9E24-42C6-B4D8-C7121F4022D3}
     NAME Group
     PEAKCOL 16576
     BEAT -1
@@ -125,7 +125,7 @@
     INQ 0 0 0 0.5 100 0 0 100
     NCHAN 2
     FX 1
-    TRACKID {179CDDEF-4A7D-484F-9318-6572DCFD855A}
+    TRACKID {2DF268E4-9E24-42C6-B4D8-C7121F4022D3}
     PERF 0
     MIDIOUT -1
     MAINSEND 1 0
@@ -138,11 +138,11 @@
         cWVlcu5e7f4CAAAAAQAAAAAAAAACAAAAAAAAAAIAAAABAAAAAAAAAAIAAAAAAAAAzQAAAAEAAAAAABAA
         IQAAAAUAAAAAAAAAAQAAAAAAAAAAAFlAAAAAAAAA8D+amZmZmZnpPwEIAAAAAQAAAAAAAAAAwHJAAAAAAAAA8D8AAAAAAAAAQAEIAAAAAQAAAAAAAAAAQI9AAAAAAAAA
         8D8AAAAAAAAAQAEBAAAAAQAAAJ/vruhzybNAMIH/8g6n2z+amZmZmZnpPwEEAAAAAQAAAAAAAAAAAFlAAAAAAAAA8D8AAAAAAAAAQAEBAAAAAQAAAAAAAAAAAPA/AAAA
-        AP0BAABcAQAAAgAAAA==
+        AP0BAABcAQAAAgABAA==
         AFByb2dyYW0gMQAQAAAA
       >
       FLOATPOS 0 0 0 0
-      FXID {CFB4CFC7-037B-433A-AEB6-E0CBA6F76857}
+      FXID {0CAF32A6-7062-41F6-A373-B4043C4245B8}
       WAK 0 0
       BYPASS 0 0 0
       <VST "VST: ReaComp (Cockos)" reacomp.dll 0 "" 1919247213<5653547265636D726561636F6D700000> ""
@@ -151,213 +151,17 @@
         AFByb2dyYW0gMQAQAAAA
       >
       FLOATPOS 0 0 0 0
-      FXID {1B3AAB89-8D1B-415F-85EB-624DEF02D7E2}
+      FXID {C085939D-5352-48DC-AF38-730C013BA13D}
       WAK 0 0
     >
   >
-  <TRACK {9E3AD34F-7CE5-4C5D-B0FB-46435017CA05}
+  <TRACK {CD2EF22B-6500-4EE1-8F11-532D51B0C79D}
     NAME 1_rain
     PEAKCOL 16576
     BEAT -1
     AUTOMODE 0
     PANLAWFLAGS 3
-    VOLPAN 0.72 0 -1 -1 1
-    MUTESOLO 0 0 0
-    IPHASE 0
-    PLAYOFFS 0 1
-    ISBUS 0 0
-    BUSCOMP 0 0 0 0 0
-    SHOWINMIX 1 0.6667 0.5 1 0.5 0 0 0 0
-    FIXEDLANES 9 0 0 0 0
-    LANEREC -1 -1 -1 0
-    SEL 0
-    REC 0 0 1 0 0 0 0 0
-    VU 64
-    TRACKHEIGHT 0 0 0 0 0 0 0
-    INQ 0 0 0 0.5 100 0 0 100
-    NCHAN 2
-    FX 0
-    TRACKID {9E3AD34F-7CE5-4C5D-B0FB-46435017CA05}
-    PERF 0
-    MIDIOUT -1
-    MAINSEND 1 0
-    <ITEM
-      POSITION 0
-      SNAPOFFS 0
-      LENGTH 190
-      LOOP 1
-      ALLTAKES 0
-      FADEIN 1 0 0 1 0 0 0
-      FADEOUT 1 0 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {5837D92C-E268-DA4E-9012-D682EA1FE68E}
-      IID 67
-      NAME 173647_Rain,_Vegetation,_Rain,_Daytime,_Mid_To_Hard_Rainfall,_Havelock_Island,_Second_02_Crest_F50-glued-02.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {237360F3-7888-8746-B42D-90ED2C49B94B}
-      <SOURCE WAVE
-        FILE "Audio Files/173647_Rain,_Vegetation,_Rain,_Daytime,_Mid_To_Hard_Rainfall,_Havelock_Island,_Second_02_Crest_F50-glued-02.wav"
-      >
-    >
-  >
-  <TRACK {E672AEA7-AB5E-47E0-BCCF-3B29ABA07776}
-    NAME 2_impact
-    PEAKCOL 16576
-    BEAT -1
-    AUTOMODE 0
-    PANLAWFLAGS 3
-    VOLPAN 0.64 0 -1 -1 1
-    MUTESOLO 0 0 0
-    IPHASE 0
-    PLAYOFFS 0 1
-    ISBUS 0 0
-    BUSCOMP 0 0 0 0 0
-    SHOWINMIX 1 0.6667 0.5 1 0.5 0 0 0 0
-    FIXEDLANES 9 0 0 0 0
-    LANEREC -1 -1 -1 0
-    SEL 0
-    REC 0 0 1 0 0 0 0 0
-    VU 64
-    TRACKHEIGHT 0 0 0 0 0 0 0
-    INQ 0 0 0 0.5 100 0 0 100
-    NCHAN 2
-    FX 0
-    TRACKID {E672AEA7-AB5E-47E0-BCCF-3B29ABA07776}
-    PERF 0
-    MIDIOUT -1
-    MAINSEND 1 0
-    <ITEM
-      POSITION 0
-      SNAPOFFS 0
-      LENGTH 220
-      LOOP 1
-      ALLTAKES 0
-      FADEIN 1 0 0 1 0 0 0
-      FADEOUT 1 0 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {122A4F2C-299D-BE41-AEF7-8915CBC0EAD0}
-      IID 26
-      NAME 152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea-glued-01.wav
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {D0FD3430-F2B9-FD43-8716-E7FC5CEC1C29}
-      <SOURCE WAVE
-        FILE "Audio Files/152602_Rain,_Vegetation,_Rain,_Daytime,_Rain_Drops_Hitting_Palm_Lea-glued-01.wav"
-      >
-    >
-  >
-  <TRACK {157E86D9-6E01-4E99-A2BA-E7B2BCC457C3}
-    NAME 3_environment
-    PEAKCOL 16576
-    BEAT -1
-    AUTOMODE 0
-    PANLAWFLAGS 3
-    VOLPAN 0.3172 0 -1 -1 1
-    MUTESOLO 0 0 0
-    IPHASE 0
-    PLAYOFFS 0 1
-    ISBUS 0 0
-    BUSCOMP 0 0 0 0 0
-    SHOWINMIX 1 0.6667 0.5 1 0.5 0 0 0 0
-    FIXEDLANES 9 0 0 0 0
-    LANEREC -1 -1 -1 0
-    SEL 0
-    REC 0 0 1 0 0 0 0 0
-    VU 64
-    TRACKHEIGHT 0 0 0 0 0 0 0
-    INQ 0 0 0 0.5 100 0 0 100
-    NCHAN 2
-    FX 0
-    TRACKID {157E86D9-6E01-4E99-A2BA-E7B2BCC457C3}
-    PERF 0
-    MIDIOUT -1
-    MAINSEND 1 0
-    <ITEM
-      POSITION 0
-      SNAPOFFS 0
-      LENGTH 220
-      LOOP 1
-      ALLTAKES 0
-      FADEIN 1 0 0 1 0 0 0
-      FADEOUT 1 0 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {FD1F81AF-7553-4B84-B95E-23BFA3FB1EA3}
-      IID 5
-      NAME 153479_Rain,_General,_Tropical,_Moderate_Monsoon_Rain_Open_Garage_P.mp3
-      VOLPAN 0.26 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {B05C4BD6-ADEC-4A4F-AEAF-30E2D5183726}
-      <SOURCE MP3
-        FILE "/Users/angel/Documents/workspace/relaxASMR/assets/sound_effect/rain_sound/3_environment/ambience/forest/153479_Rain,_General,_Tropical,_Moderate_Monsoon_Rain_Open_Garage_P.mp3" 1
-      >
-    >
-  >
-  <TRACK {7C485F7D-B5AA-4302-9F93-53508F3626BD}
-    NAME 4_water
-    PEAKCOL 16576
-    BEAT -1
-    AUTOMODE 0
-    PANLAWFLAGS 3
-    VOLPAN 0.8781896667659 0 -1 -1 1
-    MUTESOLO 0 0 0
-    IPHASE 0
-    PLAYOFFS 0 1
-    ISBUS 0 0
-    BUSCOMP 0 0 0 0 0
-    SHOWINMIX 1 0.6667 0.5 1 0.5 0 0 0 0
-    FIXEDLANES 9 0 0 0 0
-    LANEREC -1 -1 -1 0
-    SEL 0
-    REC 0 0 1 0 0 0 0 0
-    VU 64
-    TRACKHEIGHT 0 0 0 0 0 0 0
-    INQ 0 0 0 0.5 100 0 0 100
-    NCHAN 2
-    FX 0
-    TRACKID {7C485F7D-B5AA-4302-9F93-53508F3626BD}
-    PERF 0
-    MIDIOUT -1
-    MAINSEND 1 0
-    <ITEM
-      POSITION 0
-      SNAPOFFS 0
-      LENGTH 310.84929166666666
-      LOOP 1
-      ALLTAKES 0
-      FADEIN 1 0 0 1 0 0 0
-      FADEOUT 1 0 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {5FA4456F-95D0-D041-8197-A138A77B68DB}
-      IID 55
-      NAME AMBTrop_AMAZON-Pre_Dawn_Drips_Heavy_B00M_3DS13_2.0.mp3
-      VOLPAN 1 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {A2E5E453-3B22-204F-81AC-52D307A2929E}
-      <SOURCE MP3
-        FILE "/Users/angel/Documents/workspace/relaxASMR/assets/sound_effect/rain_sound/4_water/dripping/branch_drip/AMBTrop_AMAZON-Pre_Dawn_Drips_Heavy_B00M_3DS13_2.0.mp3" 1
-      >
-    >
-  >
-  <TRACK {06FE9662-090C-4A6F-A4FB-D564DD7DF507}
-    NAME 5_wildlife
-    PEAKCOL 16576
-    BEAT -1
-    AUTOMODE 0
-    PANLAWFLAGS 3
-    VOLPAN 0.16674091773057 0 -1 -1 1
+    VOLPAN 1 0 -1 -1 1
     MUTESOLO 0 0 0
     IPHASE 0
     PLAYOFFS 0 1
@@ -373,230 +177,46 @@
     INQ 0 0 0 0.5 100 0 0 100
     NCHAN 2
     FX 1
-    TRACKID {06FE9662-090C-4A6F-A4FB-D564DD7DF507}
+    TRACKID {CD2EF22B-6500-4EE1-8F11-532D51B0C79D}
     PERF 0
     MIDIOUT -1
     MAINSEND 1 0
     <FXCHAIN
+      WNDRECT 2580 197 1267 793
       SHOW 0
       LASTSEL 0
       DOCKED 0
-      BYPASS 0 0 0
-      <VST "VST: ReaVerbate (Cockos)" reaverbate.dll 0 "" 1920361016<56535472766238726561766572626174> ""
-        OGJ2cu9e7f4CAAAAAQAAAAAAAAACAAAAAAAAAAIAAAABAAAAAAAAAAIAAAAAAAAAKAAAAAAAAAAAABAA
-        776t3g3wrd5DAgA/AACAP9oEPD817P8+AACAPwAAAAAAAIA/AAAAAA==
-        AFByb2dyYW0gMQAQAAAA
-      >
-      FLOATPOS 0 0 0 0
-      FXID {00BA6F7A-C17E-468B-B0F9-A8DA70F77099}
-      WAK 0 0
     >
     <ITEM
-      POSITION 1
+      POSITION 0
       SNAPOFFS 0
-      LENGTH 6
-      LOOP 0
+      LENGTH 10800
+      LOOP 1
       ALLTAKES 0
       FADEIN 1 0 0 1 0 0 0
       FADEOUT 1 0 0 1 0 0 0
       MUTE 0 0
       SEL 0
-      IGUID {313EEDA7-36A0-4881-9124-659621E46803}
-      IID 3
-      NAME 9PBX76J_Birds.mp3
-      VOLPAN 0.22 0 1 -1
-      SOFFS 1
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {22076A66-5E04-47B2-AEEF-43D4F10746EF}
-      <SOURCE MP3
-        FILE "/Users/angel/Documents/workspace/relaxASMR/assets/sound_effect/rain_sound/5_wildlife/birds/Hwamei/9PBX76J_Birds.mp3" 1
-      >
-    >
-    <ITEM
-      POSITION 14
-      SNAPOFFS 0
-      LENGTH 3
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0 0 1 0 0 0
-      FADEOUT 1 0 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {6078EC76-E545-794E-AF0C-A5F5BC5A6217}
-      IID 3
-      NAME 9PBX76J_Birds.mp3
-      VOLPAN 0.22 0 1 -1
+      IGUID {BD23D7DD-96FB-4B0A-91D1-19EB2AA810FB}
+      IID 38
+      NAME MVI_6953_密林木栈道淅沥小雨.wav
+      VOLPAN 1 0 1 -1
       SOFFS 0
       PLAYRATE 1 1 0 -1 0 0.0025
       CHANMODE 0
-      GUID {3AA181BC-95E3-D145-837F-308198ABAC5A}
-      <SOURCE MP3
-        FILE "/Users/angel/Documents/workspace/relaxASMR/assets/sound_effect/rain_sound/5_wildlife/birds/Hwamei/9PBX76J_Birds.mp3" 1
-      >
-    >
-    <ITEM
-      POSITION 16
-      SNAPOFFS 0
-      LENGTH 3
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0 0 1 0 0 0
-      FADEOUT 1 0 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {43A5F91B-EDF9-7447-BEC6-4DECF579F184}
-      IID 3
-      NAME 9PBX76J_Birds.mp3
-      VOLPAN 0.22 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {0120451C-3CE5-A24B-B9A9-9911FA87BDB2}
-      <SOURCE MP3
-        FILE "/Users/angel/Documents/workspace/relaxASMR/assets/sound_effect/rain_sound/5_wildlife/birds/Hwamei/9PBX76J_Birds.mp3" 1
-      >
-    >
-    <ITEM
-      POSITION 19
-      SNAPOFFS 0
-      LENGTH 3
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0 0 1 0 0 0
-      FADEOUT 1 0 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {AE77EFD6-1B93-E74B-B70A-465723057F33}
-      IID 3
-      NAME 9PBX76J_Birds.mp3
-      VOLPAN 0.22 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {AF4E06A8-AF42-1246-9A78-B03B73F53EC1}
-      <SOURCE MP3
-        FILE "/Users/angel/Documents/workspace/relaxASMR/assets/sound_effect/rain_sound/5_wildlife/birds/Hwamei/9PBX76J_Birds.mp3" 1
-      >
-    >
-    <ITEM
-      POSITION 37
-      SNAPOFFS 0
-      LENGTH 5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0 0 1 0 0 0
-      FADEOUT 1 0 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {B44D2EA7-8992-DA4A-A6AD-75A4CD02D5A9}
-      IID 3
-      NAME 9PBX76J_Birds.mp3
-      VOLPAN 0.22 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {2ED3645B-E548-FF43-83EF-DE59020DEC77}
-      <SOURCE MP3
-        FILE "/Users/angel/Documents/workspace/relaxASMR/assets/sound_effect/rain_sound/5_wildlife/birds/Hwamei/9PBX76J_Birds.mp3" 1
-      >
-    >
-    <ITEM
-      POSITION 75
-      SNAPOFFS 0
-      LENGTH 5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0 0 1 0 0 0
-      FADEOUT 1 0 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {8ABD7FC1-7F34-4441-A23E-EE02A322097D}
-      IID 3
-      NAME 9PBX76J_Birds.mp3
-      VOLPAN 0.22 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {54BDAB0D-17CC-8646-8127-052CCA23FEB4}
-      <SOURCE MP3
-        FILE "/Users/angel/Documents/workspace/relaxASMR/assets/sound_effect/rain_sound/5_wildlife/birds/Hwamei/9PBX76J_Birds.mp3" 1
-      >
-    >
-    <ITEM
-      POSITION 111
-      SNAPOFFS 0
-      LENGTH 3
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0 0 1 0 0 0
-      FADEOUT 1 0 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {D131AA16-3762-6B42-B760-89E60883BC9B}
-      IID 3
-      NAME 9PBX76J_Birds.mp3
-      VOLPAN 0.22 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {1491036D-BDDE-974B-B359-C975B09B187A}
-      <SOURCE MP3
-        FILE "/Users/angel/Documents/workspace/relaxASMR/assets/sound_effect/rain_sound/5_wildlife/birds/Hwamei/9PBX76J_Birds.mp3" 1
-      >
-    >
-    <ITEM
-      POSITION 148
-      SNAPOFFS 0
-      LENGTH 5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0 0 1 0 0 0
-      FADEOUT 1 0 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {206E6A47-7B31-6246-A7E9-17C51DA23D17}
-      IID 3
-      NAME 9PBX76J_Birds.mp3
-      VOLPAN 0.22 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {3B2F901D-95A6-7645-8C64-9F5B37928C89}
-      <SOURCE MP3
-        FILE "/Users/angel/Documents/workspace/relaxASMR/assets/sound_effect/rain_sound/5_wildlife/birds/Hwamei/9PBX76J_Birds.mp3" 1
-      >
-    >
-    <ITEM
-      POSITION 192
-      SNAPOFFS 0
-      LENGTH 5
-      LOOP 0
-      ALLTAKES 0
-      FADEIN 1 0 0 1 0 0 0
-      FADEOUT 1 0 0 1 0 0 0
-      MUTE 0 0
-      SEL 0
-      IGUID {914FB461-89BD-5747-8CD3-095CC82FDCFE}
-      IID 3
-      NAME 9PBX76J_Birds.mp3
-      VOLPAN 0.22 0 1 -1
-      SOFFS 0
-      PLAYRATE 1 1 0 -1 0 0.0025
-      CHANMODE 0
-      GUID {97080693-A9C9-F549-BA3E-4AF35C1B3ACB}
-      <SOURCE MP3
-        FILE "/Users/angel/Documents/workspace/relaxASMR/assets/sound_effect/rain_sound/5_wildlife/birds/Hwamei/9PBX76J_Birds.mp3" 1
+      GUID {A83B0ACF-19A7-4D27-BD74-229C0685124F}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\sound_effect\rain_sound\1_rain\MVI_6953_密林木栈道淅沥小雨.wav"
       >
     >
   >
-  <TRACK {95E66A40-E692-4805-B621-90321051046E}
-    NAME 6_human
+  <TRACK {8C4FD748-82AB-4759-BE6F-DF40C738F9FE}
+    NAME 2_impact
     PEAKCOL 16576
     BEAT -1
     AUTOMODE 0
     PANLAWFLAGS 3
-    VOLPAN 0.38 0 -1 -1 1
+    VOLPAN 0.5 0 -1 -1 1
     MUTESOLO 0 0 0
     IPHASE 0
     PLAYOFFS 0 1
@@ -612,19 +232,362 @@
     INQ 0 0 0 0.5 100 0 0 100
     NCHAN 2
     FX 0
-    TRACKID {95E66A40-E692-4805-B621-90321051046E}
+    TRACKID {8C4FD748-82AB-4759-BE6F-DF40C738F9FE}
     PERF 0
     MIDIOUT -1
     MAINSEND 1 0
   >
-  <TRACK {F2DCC3AF-0718-4C32-BAC5-5080B3CB7233}
-    NAME video
+  <TRACK {148790A2-7E3B-44FD-965D-65040278E5C3}
+    NAME 3_environment
+    PEAKCOL 16576
+    BEAT -1
+    AUTOMODE 0
+    PANLAWFLAGS 3
+    VOLPAN 0.26 0 -1 -1 1
+    MUTESOLO 0 0 0
+    IPHASE 0
+    PLAYOFFS 0 1
+    ISBUS 0 0
+    BUSCOMP 0 0 0 0 0
+    SHOWINMIX 1 0.6667 0.5 1 0.5 0 0 0 0
+    FIXEDLANES 9 0 0 0 0
+    LANEREC -1 -1 -1 0
+    SEL 0
+    REC 0 0 1 0 0 0 0 0
+    VU 64
+    TRACKHEIGHT 0 0 0 0 0 0 0
+    INQ 0 0 0 0.5 100 0 0 100
+    NCHAN 2
+    FX 0
+    TRACKID {148790A2-7E3B-44FD-965D-65040278E5C3}
+    PERF 0
+    MIDIOUT -1
+    MAINSEND 1 0
+  >
+  <TRACK {78FCCB6D-37ED-4742-8621-447D3BC6F750}
+    NAME 4_water
+    PEAKCOL 16576
+    BEAT -1
+    AUTOMODE 0
+    PANLAWFLAGS 3
+    VOLPAN 0.18 0 -1 -1 1
+    MUTESOLO 0 0 0
+    IPHASE 0
+    PLAYOFFS 0 1
+    ISBUS 0 0
+    BUSCOMP 0 0 0 0 0
+    SHOWINMIX 1 0.6667 0.5 1 0.5 0 0 0 0
+    FIXEDLANES 9 0 0 0 0
+    LANEREC -1 -1 -1 0
+    SEL 0
+    REC 0 0 1 0 0 0 0 0
+    VU 64
+    TRACKHEIGHT 0 0 0 0 0 0 0
+    INQ 0 0 0 0.5 100 0 0 100
+    NCHAN 2
+    FX 0
+    TRACKID {78FCCB6D-37ED-4742-8621-447D3BC6F750}
+    PERF 0
+    MIDIOUT -1
+    MAINSEND 1 0
+  >
+  <TRACK {AF1089CF-88A6-4C25-B06A-987C262C48D5}
+    NAME 5_wildlife
+    PEAKCOL 16576
+    BEAT -1
+    AUTOMODE 0
+    PANLAWFLAGS 3
+    VOLPAN 0.26173613096428 0 -1 -1 1
+    MUTESOLO 0 0 0
+    IPHASE 0
+    PLAYOFFS 0 1
+    ISBUS 0 0
+    BUSCOMP 0 0 0 0 0
+    SHOWINMIX 1 0.6667 0.5 1 0.5 0 0 0 0
+    FIXEDLANES 9 0 0 0 0
+    LANEREC -1 -1 -1 0
+    SEL 0
+    REC 0 0 1 0 0 0 0 0
+    VU 64
+    TRACKHEIGHT 0 0 0 0 0 0 0
+    INQ 0 0 0 0.5 100 0 0 100
+    NCHAN 2
+    FX 1
+    TRACKID {AF1089CF-88A6-4C25-B06A-987C262C48D5}
+    PERF 0
+    MIDIOUT -1
+    MAINSEND 1 0
+    <FXCHAIN
+      WNDRECT 2013 129 655 408
+      SHOW 0
+      LASTSEL 0
+      DOCKED 0
+      BYPASS 0 0 0
+      <VST "VST: ReaVerbate (Cockos)" reaverbate.dll 0 "" 1920361016<56535472766238726561766572626174> ""
+        OGJ2cu9e7f4CAAAAAQAAAAAAAAACAAAAAAAAAAIAAAABAAAAAAAAAAIAAAAAAAAAKAAAAAAAAAAAABAA
+        776t3g3wrd5DAgA/AACAP9oEPD817P8+AACAPwAAAAAAAIA/AAAAAA==
+        AAAQAAAA
+      >
+      FLOATPOS 0 0 0 0
+      FXID {CFB74BD1-29A4-4380-90E2-CC4A7F9CD49E}
+      WAK 0 0
+    >
+    <ITEM
+      POSITION 1048.9209176315319
+      SNAPOFFS 0
+      LENGTH 8
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {AA19A161-1B42-4828-938A-96EDEFE42332}
+      IID 51
+      NAME 9CU6AY5_American_Robin_Chirping-glued.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {C037E994-95EA-4F0B-BB37-0729501F4D5A}
+      <SOURCE WAVE
+        FILE "Audio Files\9CU6AY5_American_Robin_Chirping-glued.wav"
+      >
+    >
+    <ITEM
+      POSITION 1959.9674192101318
+      SNAPOFFS 0
+      LENGTH 8
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {AA19A161-1B42-4828-938A-96EDEFE42332}
+      IID 51
+      NAME 9CU6AY5_American_Robin_Chirping-glued.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {C037E994-95EA-4F0B-BB37-0729501F4D5A}
+      <SOURCE WAVE
+        FILE "Audio Files\9CU6AY5_American_Robin_Chirping-glued.wav"
+      >
+    >
+    <ITEM
+      POSITION 3208.6064726444511
+      SNAPOFFS 0
+      LENGTH 8
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {AA19A161-1B42-4828-938A-96EDEFE42332}
+      IID 51
+      NAME 9CU6AY5_American_Robin_Chirping-glued.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {C037E994-95EA-4F0B-BB37-0729501F4D5A}
+      <SOURCE WAVE
+        FILE "Audio Files\9CU6AY5_American_Robin_Chirping-glued.wav"
+      >
+    >
+    <ITEM
+      POSITION 4127.4007421013484
+      SNAPOFFS 0
+      LENGTH 8
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {AA19A161-1B42-4828-938A-96EDEFE42332}
+      IID 51
+      NAME 9CU6AY5_American_Robin_Chirping-glued.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {C037E994-95EA-4F0B-BB37-0729501F4D5A}
+      <SOURCE WAVE
+        FILE "Audio Files\9CU6AY5_American_Robin_Chirping-glued.wav"
+      >
+    >
+    <ITEM
+      POSITION 4909.6819644242942
+      SNAPOFFS 0
+      LENGTH 8
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {AA19A161-1B42-4828-938A-96EDEFE42332}
+      IID 51
+      NAME 9CU6AY5_American_Robin_Chirping-glued.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {C037E994-95EA-4F0B-BB37-0729501F4D5A}
+      <SOURCE WAVE
+        FILE "Audio Files\9CU6AY5_American_Robin_Chirping-glued.wav"
+      >
+    >
+    <ITEM
+      POSITION 5817.3690689905798
+      SNAPOFFS 0
+      LENGTH 8
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {AA19A161-1B42-4828-938A-96EDEFE42332}
+      IID 51
+      NAME 9CU6AY5_American_Robin_Chirping-glued.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {C037E994-95EA-4F0B-BB37-0729501F4D5A}
+      <SOURCE WAVE
+        FILE "Audio Files\9CU6AY5_American_Robin_Chirping-glued.wav"
+      >
+    >
+    <ITEM
+      POSITION 7077.2202950163983
+      SNAPOFFS 0
+      LENGTH 8
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {AA19A161-1B42-4828-938A-96EDEFE42332}
+      IID 51
+      NAME 9CU6AY5_American_Robin_Chirping-glued.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {C037E994-95EA-4F0B-BB37-0729501F4D5A}
+      <SOURCE WAVE
+        FILE "Audio Files\9CU6AY5_American_Robin_Chirping-glued.wav"
+      >
+    >
+    <ITEM
+      POSITION 7782.8888319493981
+      SNAPOFFS 0
+      LENGTH 8
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {AA19A161-1B42-4828-938A-96EDEFE42332}
+      IID 51
+      NAME 9CU6AY5_American_Robin_Chirping-glued.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {C037E994-95EA-4F0B-BB37-0729501F4D5A}
+      <SOURCE WAVE
+        FILE "Audio Files\9CU6AY5_American_Robin_Chirping-glued.wav"
+      >
+    >
+    <ITEM
+      POSITION 9092.4869090322554
+      SNAPOFFS 0
+      LENGTH 8
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {AA19A161-1B42-4828-938A-96EDEFE42332}
+      IID 51
+      NAME 9CU6AY5_American_Robin_Chirping-glued.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {C037E994-95EA-4F0B-BB37-0729501F4D5A}
+      <SOURCE WAVE
+        FILE "Audio Files\9CU6AY5_American_Robin_Chirping-glued.wav"
+      >
+    >
+    <ITEM
+      POSITION 9967.7887711590356
+      SNAPOFFS 0
+      LENGTH 8
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {AA19A161-1B42-4828-938A-96EDEFE42332}
+      IID 51
+      NAME 9CU6AY5_American_Robin_Chirping-glued.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {C037E994-95EA-4F0B-BB37-0729501F4D5A}
+      <SOURCE WAVE
+        FILE "Audio Files\9CU6AY5_American_Robin_Chirping-glued.wav"
+      >
+    >
+  >
+  <TRACK {3E04DFB3-F95C-4B4A-9E5E-0677A2BB994F}
+    NAME 6_human
     PEAKCOL 16576
     BEAT -1
     AUTOMODE 0
     PANLAWFLAGS 3
     VOLPAN 0 0 -1 -1 1
     MUTESOLO 0 0 0
+    IPHASE 0
+    PLAYOFFS 0 1
+    ISBUS 0 0
+    BUSCOMP 0 0 0 0 0
+    SHOWINMIX 1 0.6667 0.5 1 0.5 0 0 0 0
+    FIXEDLANES 9 0 0 0 0
+    LANEREC -1 -1 -1 0
+    SEL 0
+    REC 0 0 1 0 0 0 0 0
+    VU 64
+    TRACKHEIGHT 0 0 0 0 0 0 0
+    INQ 0 0 0 0.5 100 0 0 100
+    NCHAN 2
+    FX 0
+    TRACKID {3E04DFB3-F95C-4B4A-9E5E-0677A2BB994F}
+    PERF 0
+    MIDIOUT -1
+    MAINSEND 1 0
+  >
+  <TRACK {B574BC2E-189C-4B11-A4E5-005430892A84}
+    NAME video
+    PEAKCOL 16576
+    BEAT -1
+    AUTOMODE 0
+    PANLAWFLAGS 3
+    VOLPAN 0 0 -1 -1 1
+    MUTESOLO 1 0 0
     IPHASE 0
     PLAYOFFS 0 1
     ISBUS 2 -1
@@ -639,30 +602,30 @@
     INQ 0 0 0 0.5 100 0 0 100
     NCHAN 2
     FX 0
-    TRACKID {F2DCC3AF-0718-4C32-BAC5-5080B3CB7233}
+    TRACKID {B574BC2E-189C-4B11-A4E5-005430892A84}
     PERF 0
     MIDIOUT -1
     MAINSEND 1 0
     <ITEM
       POSITION 0
       SNAPOFFS 0
-      LENGTH 220
+      LENGTH 10800
       LOOP 1
       ALLTAKES 0
       FADEIN 1 0 0 1 0 0 0
       FADEOUT 1 0 0 1 0 0 0
       MUTE 0 0
       SEL 0
-      IGUID {37C3829F-CD40-48E6-B94D-776E2D0EDCE4}
+      IGUID {82E5D05B-216F-4690-BDFD-C96961A49EAE}
       IID 1
-      NAME MVI_6952_loop_0.94_dur_6_fade_0.5.mp4
+      NAME MVI_6953_loop_0.95_dur_8_fade_0.5.mp4
       VOLPAN 0 0 1 -1
       SOFFS 0
       PLAYRATE 1 1 0 -1 0 0.0025
       CHANMODE 0
-      GUID {06587489-3B17-4461-8968-D449B938D6B9}
+      GUID {2F2FAF2D-28B6-46CE-AF0A-FEBC0EC057CE}
       <SOURCE VIDEO
-        FILE "/Users/angel/Documents/workspace/relaxASMR/assets/loop_video/rain_video/MVI_6952_loop_0.94_dur_6_fade_0.5.mp4"
+        FILE "\\wsl.localhost\Ubuntu\home\leo\workspace\relaxASMR\assets\loop_video\rain_video\MVI_6953\MVI_6953_loop_0.95_dur_8_fade_0.5.mp4"
       >
     >
   >

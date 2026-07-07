@@ -923,6 +923,7 @@ def generate_material(
     thumb_subtitle_place_only: bool = False,
     show_4k_badge: bool | None = None,
     layout: str = "",
+    duration_override_s: float | None = None,
     on_progress: Callable[[str], None] | None = None,
 ) -> Path:
     """生成 YouTube 物料（缩略图 + youtube.md）。返回输出目录。"""
@@ -947,6 +948,17 @@ def generate_material(
         preset = {"auto_from_scene": True, "layout": "bottom-left", "thumb_time": 120}
 
     meta = ffprobe_video(video)
+    if duration_override_s is not None:
+        dur_s = float(duration_override_s)
+        h = int(dur_s // 3600)
+        m = int((dur_s % 3600) // 60)
+        if h:
+            meta["duration_human"] = f"{h}小时{m}分" if m else f"{h}小时"
+            meta["duration_en"] = f"{h}h {m}m" if m else f"{h} hour{'s' if h > 1 else ''}"
+        else:
+            meta["duration_human"] = f"{m}分钟"
+            meta["duration_en"] = f"{m} min"
+
     out_dir = output_dir or (video.parent / "material" / stem)
     out_dir.mkdir(parents=True, exist_ok=True)
 

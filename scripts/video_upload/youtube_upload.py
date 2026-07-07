@@ -328,6 +328,7 @@ def upload_from_material(
     account: str | None = None,
     credentials_path: Path | None = None,
     token_path: Path | None = None,
+    override_video_path: Path | None = None,
     on_log: Callable[[str], None] | None = None,
     on_progress: Callable[[int], None] | None = None,
 ) -> dict:
@@ -351,7 +352,7 @@ def upload_from_material(
     if not title:
         raise ValueError("youtube.md 中缺少标题")
 
-    video_path = resolve_video_for_material(material_dir)
+    video_path = override_video_path or resolve_video_for_material(material_dir)
     thumb_path = material_dir / "thumbnail.jpg"
 
     creds_path, tok_path, account_name = resolve_account_paths(

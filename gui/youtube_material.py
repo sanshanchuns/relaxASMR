@@ -66,11 +66,11 @@ def find_subproject_mp4(scene_id: str, repo_root: Path, *, preferred: Path | Non
 
 def loop_material_dir(subproject_dir: Path, loop_video: Path) -> Path:
     """子工程内、基于 loop 视频文件名的物料目录。"""
-    return subproject_dir / "output" / "material" / loop_video.stem
+    return subproject_dir / "output" / "material"
 
 
 def material_output_dir(mp4: Path) -> Path:
-    return mp4.parent / "material" / mp4.stem
+    return mp4.parent / "material"
 
 
 def material_root_dir(scene_id: str, repo_root: Path) -> Path:
@@ -78,20 +78,8 @@ def material_root_dir(scene_id: str, repo_root: Path) -> Path:
 
 
 def find_material_dir(scene_id: str, repo_root: Path) -> Path | None:
-    """定位物料目录：优先当前 MP4 对应子目录，否则 output/material 下最新子目录。"""
-    mp4 = find_subproject_mp4(scene_id, repo_root)
-    if mp4:
-        specific = material_output_dir(mp4)
-        if specific.is_dir():
-            return specific
+    """定位物料目录。"""
     root = material_root_dir(scene_id, repo_root)
-    if not root.is_dir():
-        return None
-    subdirs = sorted(
-        [p for p in root.iterdir() if p.is_dir()],
-        key=lambda p: p.stat().st_mtime,
-        reverse=True,
-    )
-    if subdirs:
-        return subdirs[0]
-    return root
+    if root.is_dir():
+        return root
+    return None

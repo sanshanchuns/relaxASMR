@@ -13,7 +13,7 @@ MAXRATE="38M"
 BUFSIZE="60M"
 AUDIO_BITRATE="192k"
 PRESET="medium"
-ENCODER="cpu"   # cpu = libx264 (multi-thread) | nvenc = h264_nvenc (GPU)
+ENCODER="auto"  # auto (detect gpu) | cpu = libx264 (multi-thread) | nvenc = h264_nvenc (GPU)
 THREADS="0"     # 0 = libx264 auto (use all cores)
 
 format_elapsed() {
@@ -213,14 +213,6 @@ if [[ -z "$OUTPUT" ]]; then
   OUTPUT=$(default_output_path "$AUDIO" "$VIDEO")
 fi
 
-case "$ENCODER" in
-  cpu|nvenc) ;;
-  *)
-    echo "Error: --encoder must be cpu or nvenc (got: $ENCODER)" >&2
-    exit 1
-    ;;
-esac
-
 mkdir -p "$(dirname "$OUTPUT")"
 
 TARGET_SEC=""
@@ -230,59 +222,10 @@ else
   TARGET_SEC=$(probe_duration_sec "$AUDIO" || echo "0")
 fi
 
-ffmpeg_args=(
-  -y
-  -stream_loop -1 -i "$VIDEO"
-  -i "$AUDIO"
-)
-
-if [[ -n "$DURATION" ]]; then
-  ffmpeg_args+=(-t "$DURATION")
-else
-  ffmpeg_args+=(-shortest)
+ENCODER_LIST=("$ENCODER")
+if [[ "$ENCODER" == "auto" || "$ENCODER" == "nvenc" ]]; then
+  ENCODER_LIST=("nvenc" "cpu")
 fi
-
-ffmpeg_args+=(-map 0:v:0 -map 1:a:0)
-
-case "$ENCODER" in
-  cpu)
-    ffmpeg_args+=(
-      -c:v libx264 -preset "$PRESET"
-      -threads "$THREADS"
-      -b:v "$VIDEO_BITRATE" -maxrate "$MAXRATE" -bufsize "$BUFSIZE"
-      -pix_fmt yuv420p
-    )
-    if [[ "$THREADS" == "0" ]]; then
-      ENCODE_DESC="libx264 preset=${PRESET} threads=auto ($(nproc) cores)"
-    else
-      ENCODE_DESC="libx264 preset=${PRESET} threads=${THREADS}"
-    fi
-    ;;
-  nvenc)
-    # Map x264-style preset names to NVENC p-level if user didn't pass pN
-    nvenc_preset="$PRESET"
-    case "$PRESET" in
-      ultrafast|superfast|veryfast|fast) nvenc_preset="p3" ;;
-      medium) nvenc_preset="p5" ;;
-      slow) nvenc_preset="p6" ;;
-      slower|veryslow) nvenc_preset="p7" ;;
-      p[1-7]) nvenc_preset="$PRESET" ;;
-    esac
-    ffmpeg_args+=(
-      -c:v h264_nvenc
-      -preset "$nvenc_preset"
-      -rc:v vbr
-      -b:v "$VIDEO_BITRATE" -maxrate "$MAXRATE" -bufsize "$BUFSIZE"
-      -pix_fmt yuv420p
-    )
-    ENCODE_DESC="h264_nvenc preset=${nvenc_preset} (GPU VBR)"
-    ;;
-esac
-
-ffmpeg_args+=(
-  -c:a aac -b:a "$AUDIO_BITRATE" -ar 48000
-  -movflags +faststart
-)
 
 echo "==> Video:  $VIDEO (looped)"
 if video_w=$(probe_video_width "$VIDEO" 2>/dev/null); then
@@ -290,7 +233,6 @@ if video_w=$(probe_video_width "$VIDEO" 2>/dev/null); then
 fi
 echo "==> Audio:  $AUDIO"
 echo "==> Output: $OUTPUT"
-echo "==> Video encode: ${ENCODE_DESC} ${VIDEO_BITRATE} max ${MAXRATE} (60fps source)"
 echo "==> Audio encode: aac ${AUDIO_BITRATE}"
 if [[ -n "$TARGET_SEC" && "$TARGET_SEC" != "0" ]]; then
   echo "==> Target duration: $(format_elapsed "${TARGET_SEC%.*}") (${TARGET_SEC}s)"
@@ -301,8 +243,75 @@ START_TS=$(date +%s)
 echo "==> Started:  $(date '+%Y-%m-%d %H:%M:%S')"
 echo
 
-if ! run_ffmpeg_with_progress "$TARGET_SEC" "${ffmpeg_args[@]}" "$OUTPUT"; then
-  echo "Error: ffmpeg failed" >&2
+success=false
+for current_enc in "${ENCODER_LIST[@]}"; do
+  ffmpeg_args=(
+    -y
+    -stream_loop -1 -i "$VIDEO"
+    -i "$AUDIO"
+  )
+
+  if [[ -n "$DURATION" ]]; then
+    ffmpeg_args+=(-t "$DURATION")
+  else
+    ffmpeg_args+=(-shortest)
+  fi
+
+  ffmpeg_args+=(-map 0:v:0 -map 1:a:0)
+
+  case "$current_enc" in
+    cpu)
+      ffmpeg_args+=(
+        -c:v libx264 -preset "$PRESET"
+        -threads "$THREADS"
+        -b:v "$VIDEO_BITRATE" -maxrate "$MAXRATE" -bufsize "$BUFSIZE"
+        -pix_fmt yuv420p
+      )
+      if [[ "$THREADS" == "0" ]]; then
+        ENCODE_DESC="libx264 preset=${PRESET} threads=auto ($(nproc) cores)"
+      else
+        ENCODE_DESC="libx264 preset=${PRESET} threads=${THREADS}"
+      fi
+      ;;
+    nvenc)
+      nvenc_preset="$PRESET"
+      case "$PRESET" in
+        ultrafast|superfast|veryfast|fast) nvenc_preset="p3" ;;
+        medium) nvenc_preset="p5" ;;
+        slow) nvenc_preset="p6" ;;
+        slower|veryslow) nvenc_preset="p7" ;;
+        p[1-7]) nvenc_preset="$PRESET" ;;
+      esac
+      ffmpeg_args+=(
+        -c:v h264_nvenc
+        -preset "$nvenc_preset"
+        -rc:v vbr
+        -b:v "$VIDEO_BITRATE" -maxrate "$MAXRATE" -bufsize "$BUFSIZE"
+        -pix_fmt yuv420p
+      )
+      ENCODE_DESC="h264_nvenc preset=${nvenc_preset} (GPU VBR)"
+      ;;
+  esac
+
+  ffmpeg_args+=(
+    -c:a aac -b:a "$AUDIO_BITRATE" -ar 48000
+    -movflags +faststart
+  )
+
+  echo "==> Attempting Video encode: ${ENCODE_DESC} ${VIDEO_BITRATE} max ${MAXRATE} (60fps source)"
+  
+  if run_ffmpeg_with_progress "$TARGET_SEC" "${ffmpeg_args[@]}" "$OUTPUT"; then
+    success=true
+    break
+  else
+    echo "Warning: ffmpeg failed with encoder ${current_enc}." >&2
+    echo "Falling back to next encoder if available..." >&2
+    echo
+  fi
+done
+
+if [[ "$success" == "false" ]]; then
+  echo "Error: All encoders failed" >&2
   exit 1
 fi
 
@@ -316,21 +325,5 @@ ffprobe -v error -show_entries format=duration,size,bit_rate \
   -show_entries stream=codec_type,width,height,bit_rate \
   -of default=nw=1 "$OUTPUT"
 
-REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../" && pwd)"
-MATERIAL_SCRIPT="$(dirname "${BASH_SOURCE[0]}")/generate_youtube_material.sh"
-MATERIAL_OK=0
-
-if [[ -x "$MATERIAL_SCRIPT" ]]; then
-  echo
-  echo "==> Generating YouTube material ..."
-  if "$MATERIAL_SCRIPT" "$OUTPUT"; then
-    MATERIAL_OK=1
-  else
-    echo "Warning: material generation failed (non-fatal)" >&2
-  fi
-fi
-
-if [[ "$MATERIAL_OK" -eq 1 ]]; then
-  TOTAL_ELAPSED=$(( $(date +%s) - START_TS ))
-  echo "==> All done. Finished in $(format_elapsed "$TOTAL_ELAPSED")"
-fi
+TOTAL_ELAPSED=$(( $(date +%s) - START_TS ))
+echo "==> All done. Finished in $(format_elapsed "$TOTAL_ELAPSED")"

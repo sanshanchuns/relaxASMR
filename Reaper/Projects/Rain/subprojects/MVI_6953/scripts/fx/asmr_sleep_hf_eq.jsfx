@@ -1,0 +1,91 @@
+desc:ASMR Sleep HF EQ
+author:relaxASMR
+version:1.0
+tags: EQ filter sleep rain
+
+slider1:120<20,500,1>HP freq (Hz)
+slider2:-3<-12,0,0.1>Band1 gain dB
+slider3:3500<500,12000,1>Band1 freq (Hz)
+slider4:1.2<0.3,5,0.1>Band1 Q
+slider5:-5<-12,0,0.1>Band2 gain dB
+slider6:6000<500,12000,1>Band2 freq (Hz)
+slider7:0.8<0.3,5,0.1>Band2 Q
+slider8:-4<-12,0,0.1>Shelf gain dB
+slider9:8000<2000,16000,1>Shelf freq (Hz)
+
+@init
+hp_x1=hp_x2=hp_y1=hp_y2=0;
+b1_x1=b1_x2=b1_y1=b1_y2=0;
+b2_x1=b2_x2=b2_y1=b2_y2=0;
+sh_x1=sh_x2=sh_y1=sh_y2=0;
+
+function calc_hp(freq)
+  local(w0, cosw, sinw, alpha, a0)
+  (
+    w0 = 2 * $pi * freq / srate;
+    cosw = cos(w0);
+    sinw = sin(w0);
+    alpha = sinw / (2 * 0.707);
+    a0 = 1 + alpha;
+    hp_b0 = (1 + cosw) / 2 / a0;
+    hp_b1 = -(1 + cosw) / a0;
+    hp_b2 = hp_b0;
+    hp_a1 = -2 * cosw / a0;
+    hp_a2 = (1 - alpha) / a0;
+  );
+
+function calc_peak(freq, q, gain_db)
+  local(w0, cosw, sinw, alpha, A, a0)
+  (
+    w0 = 2 * $pi * freq / srate;
+    cosw = cos(w0);
+    sinw = sin(w0);
+    alpha = sinw / (2 * q);
+    A = 10 ^ (gain_db / 40);
+    a0 = 1 + alpha / A;
+    pk_b0 = (1 + alpha * A) / a0;
+    pk_b1 = -2 * cosw / a0;
+    pk_b2 = (1 - alpha * A) / a0;
+    pk_a1 = pk_b1;
+    pk_a2 = (1 - alpha / A) / a0;
+  );
+
+function calc_hs(freq, q, gain_db)
+  local(w0, cosw, sinw, alpha, A, a0)
+  (
+    w0 = 2 * $pi * freq / srate;
+    cosw = cos(w0);
+    sinw = sin(w0);
+    alpha = sinw / (2 * q);
+    A = 10 ^ (gain_db / 40);
+    a0 = (A + 1) - (A - 1) * cosw + 2 * sqrt(A) * alpha;
+    hs_b0 = A * ((A + 1) + (A - 1) * cosw + 2 * sqrt(A) * alpha) / a0;
+    hs_b1 = -2 * A * ((A - 1) + (A + 1) * cosw) / a0;
+    hs_b2 = A * ((A + 1) + (A - 1) * cosw - 2 * sqrt(A) * alpha) / a0;
+    hs_a1 = 2 * ((A - 1) - (A + 1) * cosw) / a0;
+    hs_a2 = ((A + 1) - (A - 1) * cosw - 2 * sqrt(A) * alpha) / a0;
+  );
+
+function biquad(x, x1, x2, y1, y2, b0, b1, b2, a1, a2)
+  local(y)
+  (
+    y = b0 * x + b1 * x1 + b2 * x2 - a1 * y1 - a2 * y2;
+    x2 = x1; x1 = x;
+    y2 = y1; y1 = y;
+    y;
+  );
+
+@slider
+calc_hp(slider1);
+calc_peak(slider3, slider4, slider2);
+b1_b0=pk_b0; b1_b1=pk_b1; b1_b2=pk_b2; b1_a1=pk_a1; b1_a2=pk_a2;
+calc_peak(slider6, slider7, slider5);
+b2_b0=pk_b0; b2_b1=pk_b1; b2_b2=pk_b2; b2_a1=pk_a1; b2_a2=pk_a2;
+calc_hs(slider9, 0.707, slider8);
+
+@sample
+spl0 = biquad(spl0, hp_x1, hp_x2, hp_y1, hp_y2, hp_b0, hp_b1, hp_b2, hp_a1, hp_a2);
+spl0 = biquad(spl0, b1_x1, b1_x2, b1_y1, b1_y2, b1_b0, b1_b1, b1_b2, b1_a1, b1_a2);
+spl0 = biquad(spl0, b2_x1, b2_x2, b2_y1, b2_y2, b2_b0, b2_b1, b2_b2, b2_a1, b2_a2);
+spl0 = biquad(spl0, sh_x1, sh_x2, sh_y1, sh_y2, hs_b0, hs_b1, hs_b2, hs_a1, hs_a2);
+spl1 = spl0;

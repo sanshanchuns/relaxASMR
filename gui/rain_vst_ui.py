@@ -14,7 +14,6 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
 
-OUTPUT_DIR = REPO_ROOT / "assets" / "sound_effect" / "rain_sound" / "1_rain" / "vst_params"
 
 # Pattern to extract the base video ID (e.g. "MVI_6952") from filenames like
 # "MVI_6952_loop_0.94_dur_6_fade_0.5_01.mp4".
@@ -161,20 +160,27 @@ class RainVstSection(ttk.LabelFrame):
             root = self.winfo_toplevel()
 
             try:
-                # Lazy import — the analyzer may have heavy dependencies.
-                from scripts.rain_vst_analyze import analyze_video  # noqa: E402
+                from scripts.rain_vst_analyze import analyze_video
             except ImportError as exc:
                 def show_err(err: BaseException = exc) -> None:
                     self._log(f"错误：无法导入 rain_vst_analyze — {err}")
                     messagebox.showerror(
                         "导入失败",
-                        f"无法导入 scripts.rain_vst_analyze：\n{err}\n\n"
-                        "请确认依赖已安装。",
+                        f"无法导入 scripts.rain_vst_analyze：\n{err}\n\n请确认依赖已安装。",
                     )
                 root.after(0, show_err)
                 return
 
-            OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+            if not self._selected_path:
+                return
+
+            if self._selected_path.is_file():
+                input_dir = self._selected_path.parent
+            else:
+                input_dir = self._selected_path
+                
+            out_dir = input_dir.parent / "output_audio"
+            out_dir.mkdir(parents=True, exist_ok=True)
 
             for idx, video in enumerate(videos, 1):
                 vid = extract_video_id(video.name)
@@ -186,7 +192,7 @@ class RainVstSection(ttk.LabelFrame):
                 self._log(status)
 
                 try:
-                    analyze_video(video, OUTPUT_DIR, on_progress=self._progress)
+                    analyze_video(video, out_dir, on_progress=self._progress)
                     succeeded.append(vid)
                 except Exception as exc:
                     self._log(f"错误：{vid} — {exc}")
@@ -201,7 +207,7 @@ class RainVstSection(ttk.LabelFrame):
                 parts.append(f"失败：{len(failed)}")
                 for name, err in failed:
                     parts.append(f"  · {name}: {err}")
-            parts.append(f"\n输出目录：\n{OUTPUT_DIR}")
+            parts.append(f"\n输出目录：\n{out_dir}")
             summary = "\n".join(parts)
 
             def done_ok() -> None:
@@ -213,9 +219,8 @@ class RainVstSection(ttk.LabelFrame):
                 # Try to open the output directory
                 try:
                     from gui.folder_open import open_folder
-
-                    if OUTPUT_DIR.is_dir():
-                        open_folder(OUTPUT_DIR)
+                    if out_dir.is_dir():
+                        open_folder(out_dir)
                 except Exception:
                     pass
 

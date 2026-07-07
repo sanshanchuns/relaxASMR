@@ -3,6 +3,9 @@
 from __future__ import annotations
 
 import json
+import os
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"  # Suppress TensorFlow warnings
+
 import sys
 import threading
 import tkinter as tk
@@ -45,7 +48,7 @@ class RelaxAsmrApp(tk.Tk):
     def __init__(self) -> None:
         super().__init__()
         self.title("relaxASMR · Rain 子工程")
-        self.geometry("820x720")
+        self.geometry("1600x900")
         self.minsize(720, 520)
 
         self.video_path: Path | None = None
@@ -54,6 +57,7 @@ class RelaxAsmrApp(tk.Tk):
         self.subproject_dir: Path | None = None
         self.rpp_path: Path | None = None
         self.material_dir: Path | None = None
+        self.custom_video_path: Path | None = None
         self._busy = False
 
         self._load_config()
@@ -78,8 +82,29 @@ class RelaxAsmrApp(tk.Tk):
 
     def _build_ui(self) -> None:
         pad = {"padx": 10, "pady": 6}
-        root = ttk.Frame(self, padding=10)
+        
+        self.main_pane = ttk.PanedWindow(self, orient=tk.HORIZONTAL)
+        self.main_pane.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+
+        self.left_frame = ttk.Frame(self.main_pane)
+        self.right_frame = ttk.Frame(self.main_pane)
+        self.main_pane.add(self.left_frame, weight=3)
+        self.main_pane.add(self.right_frame, weight=2)
+        
+        self.notebook = ttk.Notebook(self.left_frame)
+        self.notebook.pack(fill=tk.BOTH, expand=True)
+
+        tab_workflow = ttk.Frame(self.notebook)
+        self.notebook.add(tab_workflow, text="自动化工作流")
+
+        tab_vst = ttk.Frame(self.notebook, padding=10)
+        self.notebook.add(tab_vst, text="Rain VST 独立分析")
+
+        root = ttk.Frame(tab_workflow, padding=10)
         root.pack(fill=tk.BOTH, expand=True)
+        
+        self.rain_vst = RainVstSection(tab_vst, log_fn=self._log, busy_guard=self)
+        self.rain_vst.pack(fill=tk.X)
 
         # --- 1. 导入视频 ---
         sec1 = ttk.LabelFrame(root, text="1. 导入 Loop 视频", padding=10)
@@ -94,12 +119,8 @@ class RelaxAsmrApp(tk.Tk):
         self.lbl_scene = ttk.Label(sec1, text="场景 ID：—")
         self.lbl_scene.pack(anchor=tk.W, pady=(6, 0))
 
-        # --- 1.5 RAIN VST 参数分析 ---
-        self.rain_vst = RainVstSection(root, log_fn=self._log, busy_guard=self)
-        self.rain_vst.pack(fill=tk.X, **pad)
-
-        # --- 2. 新建 Reaper 子工程 + YouTube 物料 ---
-        sec2 = ttk.LabelFrame(root, text="2. 新建 Reaper 子工程 + YouTube 物料", padding=10)
+        # --- 2. 新建 Reaper 工程 (自动分析+物料+建轨) ---
+        sec2 = ttk.LabelFrame(root, text="2. 新建 Reaper 工程 (自动分析+物料+建轨)", padding=10)
         sec2.pack(fill=tk.X, **pad)
 
         row2 = ttk.Frame(sec2)
@@ -148,8 +169,21 @@ class RelaxAsmrApp(tk.Tk):
         self.lbl_rpp = ttk.Label(sec3, text="工程：—", wraplength=760)
         self.lbl_rpp.pack(anchor=tk.W, pady=(8, 0))
 
-        # --- 4. 上传到 YouTube ---
-        sec4 = ttk.LabelFrame(root, text="4. 上传到 YouTube", padding=10)
+        # --- 4. 合成视频 (导出 MP4) ---
+        sec_export = ttk.LabelFrame(root, text="4. 合成视频 (导出 MP4)", padding=10)
+        sec_export.pack(fill=tk.X, **pad)
+
+        row_export = ttk.Frame(sec_export)
+        row_export.pack(fill=tk.X)
+        self.btn_export = ttk.Button(row_export, text="开始合成 (export_mp4)", command=self._export_mp4)
+        self.btn_export.pack(side=tk.LEFT)
+        self.btn_open_output = ttk.Button(row_export, text="打开 output 目录", command=self._open_output)
+        self.btn_open_output.pack(side=tk.LEFT, padx=(8, 0))
+        self.lbl_export = ttk.Label(sec_export, text="合成进度：待开始", wraplength=760)
+        self.lbl_export.pack(anchor=tk.W, pady=(8, 0))
+
+        # --- 5. 一键上传 YouTube ---
+        sec4 = ttk.LabelFrame(root, text="5. 一键上传 YouTube", padding=10)
         sec4.pack(fill=tk.X, **pad)
 
         row4 = ttk.Frame(sec4)
@@ -180,13 +214,20 @@ class RelaxAsmrApp(tk.Tk):
         )
         self.btn_upload = ttk.Button(row4, text="上传到 YouTube", command=self._upload_youtube)
         self.btn_upload.pack(side=tk.LEFT)
+        
+        row5 = ttk.Frame(sec4)
+        row5.pack(fill=tk.X, pady=(8, 0))
+        self.btn_custom_video = ttk.Button(row5, text="选择自定义视频", command=self._select_custom_video)
+        self.btn_custom_video.pack(side=tk.LEFT)
+        self.lbl_custom_video = ttk.Label(row5, text="使用默认视频 (output 目录下的最新 mp4)", wraplength=600)
+        self.lbl_custom_video.pack(side=tk.LEFT, padx=(8, 0))
 
         self.lbl_upload = ttk.Label(sec4, text="上传：—", wraplength=760)
         self.lbl_upload.pack(anchor=tk.W, pady=(8, 0))
 
-        # --- 日志 ---
-        sec_log = ttk.LabelFrame(root, text="日志", padding=8)
-        sec_log.pack(fill=tk.BOTH, expand=True, **pad)
+        # --- 日志 (全局可见) ---
+        sec_log = ttk.LabelFrame(self.right_frame, text="日志", padding=8)
+        sec_log.pack(fill=tk.BOTH, expand=True)
         self.log_text = tk.Text(sec_log, height=14, wrap=tk.WORD, state=tk.DISABLED)
         scroll = ttk.Scrollbar(sec_log, command=self.log_text.yview)
         self.log_text.configure(yscrollcommand=scroll.set)
@@ -229,6 +270,8 @@ class RelaxAsmrApp(tk.Tk):
         state = tk.DISABLED if busy else tk.NORMAL
         self.btn_create.configure(state=state)
         self.btn_upload.configure(state=state)
+        if hasattr(self, 'btn_export'):
+            self.btn_export.configure(state=state)
 
     def _refresh_material_label(self) -> None:
         if self.material_dir and self.material_dir.is_dir():
@@ -250,12 +293,12 @@ class RelaxAsmrApp(tk.Tk):
                 return
         self.lbl_material.configure(text="物料：—")
 
-    def _generate_loop_material(self, loop_video: Path, sub_dir: Path, scene: str) -> Path:
+    def _generate_loop_material(self, loop_video: Path, sub_dir: Path, scene: str, duration_hours: float) -> Path:
         """根据 loop 视频生成 YouTube 物料（缩略图 + youtube.md）。"""
         yt_mod = load_module(YT_MATERIAL_SCRIPT, "relaxasmr_generate_youtube_material")
         out_dir = loop_material_dir(sub_dir, loop_video)
         out_dir.parent.mkdir(parents=True, exist_ok=True)
-        self._log("—— 生成 YouTube 物料（loop 视频）——")
+        self._log("—— 生成 YouTube 物料（基于 loop 视频）——")
         return yt_mod.generate_material(
             loop_video,
             output_dir=out_dir,
@@ -263,7 +306,7 @@ class RelaxAsmrApp(tk.Tk):
             copy_style="forest_rain",
             thumb_title=RAIN_THUMB_TITLE,
             thumb_subtitle_place_only=True,
-            show_4k_badge=False,
+            duration_override_s=duration_hours * 3600,
             on_progress=self._log,
         )
 
@@ -337,15 +380,31 @@ class RelaxAsmrApp(tk.Tk):
         def worker() -> None:
             material_out: Path | None = None
             try:
+                # 1. 自动分析视频画面，生成 rain vst 配置
+                import sys
+                rain_vst_script = LIB_REPO_ROOT / "scripts" / "rain_vst_analyze.py"
+                vst_mod = load_module(rain_vst_script, "relaxasmr_rain_vst_analyze")
+                
+                scene_id = self.scene_id or derive_scene_id(loop_video)
+                vst_output_dir = LIB_REPO_ROOT / "assets" / "sound_effect" / "rain_sound" / "1_rain" / "vst_params"
+                
+                self._log("—— 1. 自动分析画面 ——")
+                out_dir, scene_cn = vst_mod.analyze_video(loop_video, vst_output_dir, on_progress=self._log)
+                
+                # 2. 生成 YouTube 物料
+                self._log("—— 2. 预生成 YouTube 物料 ——")
+                sub = LIB_REPO_ROOT / "Reaper" / "Projects" / "Rain" / "subprojects" / scene_id
+                material_out = self._generate_loop_material(loop_video, sub, scene_cn, duration)
+
+                # 3. 自动生成 Reaper 工程 (全部留白)
+                self._log("—— 3. 新建 Reaper 工程 ——")
                 sub = create_from_video(
                     loop_video,
-                    scene_id=self.scene_id,
+                    scene_id=scene_id,
                     duration_hours=duration,
                     on_progress=self._log,
                 )
-                scene = self.scene_id or derive_scene_id(loop_video)
-                rpp = sub / f"{scene}.rpp"
-                material_out = self._generate_loop_material(loop_video, sub, scene)
+                rpp = sub / f"{scene_id}.rpp"
 
                 def done_ok() -> None:
                     self.subproject_dir = sub
@@ -447,6 +506,106 @@ class RelaxAsmrApp(tk.Tk):
         except Exception as exc:
             messagebox.showerror("打开失败", str(exc))
 
+
+
+    def _open_output(self) -> None:
+        if not self.scene_id:
+            messagebox.showwarning("提示", "请先选择场景并生成子工程。")
+            return
+        sub = LIB_REPO_ROOT / "Reaper" / "Projects" / "Rain" / "subprojects" / self.scene_id
+        out_dir = sub / "output"
+        if not out_dir.is_dir():
+            messagebox.showwarning("提示", f"输出目录不存在：{out_dir}")
+            return
+        try:
+            open_folder(out_dir)
+            self._log(f"已打开 output 目录：{out_dir}")
+        except Exception as exc:
+            messagebox.showerror("打开失败", str(exc))
+
+    def _select_custom_video(self) -> None:
+        path = filedialog.askopenfilename(
+            title="选择要上传的自定义 MP4",
+            filetypes=[("MP4 视频", "*.mp4"), ("所有文件", "*.*")],
+        )
+        if path:
+            self.custom_video_path = Path(path)
+            self.lbl_custom_video.configure(text=f"自定义视频：{self.custom_video_path.name}")
+        else:
+            self.custom_video_path = None
+            self.lbl_custom_video.configure(text="使用默认视频 (output 目录下的最新 mp4)")
+
+    def _export_mp4(self) -> None:
+        if self._busy:
+            return
+        if not self.scene_id:
+            messagebox.showwarning("提示", "请先选择场景并生成子工程。")
+            return
+            
+        sub = LIB_REPO_ROOT / "Reaper" / "Projects" / "Rain" / "subprojects" / self.scene_id
+        out_dir = sub / "output"
+        if not out_dir.is_dir():
+            messagebox.showwarning("提示", f"输出目录不存在：{out_dir}")
+            return
+            
+        # Find wav
+        wavs = list(out_dir.glob("*.wav"))
+        if not wavs:
+            messagebox.showwarning("提示", f"未在 {out_dir} 找到导出的 wav 文件。\n请先在 Reaper 中渲染！")
+            return
+        audio_file = wavs[0]
+        
+        if not self.video_path or not self.video_path.is_file():
+            messagebox.showwarning("提示", "未找到原始 loop 视频！")
+            return
+            
+        script = LIB_REPO_ROOT / "scripts" / "video_export" / "export_mp4.sh"
+        # Use bash to run the script
+        cmd = ["bash", str(script), "-v", str(self.video_path), "-a", str(audio_file)]
+
+        self._set_busy(True)
+        self._log("—— 开始合成视频 (export_mp4) ——")
+        self._log(f"音频：{audio_file.name}")
+        self._log(f"视频：{self.video_path.name}")
+        self.lbl_export.configure(text="合成进度：正在运行...")
+        
+        def worker() -> None:
+            import subprocess
+            try:
+                proc = subprocess.Popen(
+                    cmd,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.STDOUT,
+                    text=True,
+                    bufsize=1,
+                )
+                for line in iter(proc.stdout.readline, ''):
+                    if line:
+                        line = line.strip()
+                        if line:
+                            self._log(line)
+                proc.wait()
+                if proc.returncode == 0:
+                    def done_ok() -> None:
+                        self.lbl_export.configure(text="合成进度：已完成")
+                        messagebox.showinfo("合成成功", "长视频导出完成，已保存在 output 目录下！")
+                    self.after(0, done_ok)
+                else:
+                    def done_err() -> None:
+                        self.lbl_export.configure(text="合成进度：失败")
+                        messagebox.showerror("合成失败", f"export_mp4.sh 返回错误码 {proc.returncode}")
+                    self.after(0, done_err)
+            except Exception as exc:
+                def done_err2(e=exc) -> None:
+                    self.lbl_export.configure(text="合成进度：失败")
+                    messagebox.showerror("运行失败", str(e))
+                self.after(0, done_err2)
+            finally:
+                self.after(0, lambda: self._set_busy(False))
+                
+        import threading
+        threading.Thread(target=worker, daemon=True).start()
+
     def _upload_youtube(self) -> None:
         if self._busy:
             return
@@ -495,6 +654,7 @@ class RelaxAsmrApp(tk.Tk):
                     language=language,
                     privacy_status=privacy,
                     account=account,
+                    override_video_path=self.custom_video_path,
                     on_log=self._log,
                 )
 

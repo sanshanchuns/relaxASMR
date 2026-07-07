@@ -495,7 +495,10 @@ def build_rpp(cfg: dict, repo_root: Path, rpp_dir: Path, media_mode: str = "auto
         t = layer["track"]
         track_names[t] = layer.get("id", layer.get("name", f"track{t}"))
         track_vols[t] = float(layer.get("vol", 1.0))
-        rel = layer["paths"][0]
+        paths = [p for p in layer.get("paths", []) if p]
+        if not paths:
+            continue
+        rel = paths[0]
         ap = repo_root / rel
         file_ref, src_type, file_suffix = stage_media(ap, rpp_dir, media_mode, repo_root)
         tracks_by_num[t].append(
