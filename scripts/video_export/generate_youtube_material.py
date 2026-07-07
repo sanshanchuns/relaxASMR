@@ -425,13 +425,10 @@ def analyze_frame_scene(frame_path: Path) -> dict:
 
 # scripts/video_export/material_ref/forest_rain.md — 爆款标题/描述/Tags/封面叠字模版
 FOREST_RAIN_REF = Path(__file__).resolve().parent / "material_ref" / "forest_rain.md"
+FOREST_RAIN_VIDEO_TITLE_EN = "Rain Sounds for Sleep"
+FOREST_RAIN_THUMB_TITLE = "Rain Sounds"
+FOREST_RAIN_TITLE_ZH = "助眠雨声"
 
-FOREST_RAIN_THUMB_HEAVY_SCENES = frozenset({
-    "grove_path",
-    "grove_pond_path",
-    "park_path",
-    "park_pond_path",
-})
 FOREST_RAIN_CORE_TAGS = [
     "rain sounds",
     "rain",
@@ -497,23 +494,16 @@ def viral_format_zh(meta: dict, *, show_4k: bool) -> str:
     return f"{dur}{k4}雨景循环 ASMR"
 
 
-def forest_rain_benefit_en(scene_key: str, scene_rain: str) -> str:
-    if scene_key in FOREST_RAIN_THUMB_HEAVY_SCENES or scene_rain.startswith("Heavy"):
-        return "Overcome Stress to Sleep Instantly"
-    return "Deep Sleep Instantly"
-
-
 def build_forest_rain_youtube_copy(scene: dict, meta: dict, *, show_4k: bool = False) -> dict:
-    """按 material_ref/forest_rain.md T1：利益 | 场景 | 格式（雨景循环，非黑屏）。"""
+    """按 material_ref/forest_rain.md T1：固定标题 | 场景 | 格式（雨景循环，非黑屏）。"""
     scene_key = scene.get("scene_key", "nature")
     scene_rain = VIRAL_SCENE_RAIN.get(scene_key, f"Calming Rain on {scene['place_en_short']}")
     hear = scene.get("thumb_place", scene["place_en_long"])
-    benefit = forest_rain_benefit_en(scene_key, scene_rain)
     fmt_en = viral_format_en(meta, show_4k=show_4k)
     fmt_zh = viral_format_zh(meta, show_4k=show_4k)
 
-    title_en = f"{benefit} | {scene_rain} | {fmt_en}"
-    title_zh = f"深度入眠 | {scene['place_zh_short']}雨声 | {fmt_zh}"
+    title_en = f"{FOREST_RAIN_VIDEO_TITLE_EN} | {scene_rain} | {fmt_en}"
+    title_zh = f"{FOREST_RAIN_TITLE_ZH} | {scene['place_zh_short']}雨声 | {fmt_zh}"
 
     desc_en = (
         f"Fall asleep fast with gentle rain sounds on {hear}.\n\n"
@@ -550,13 +540,12 @@ def build_forest_rain_youtube_copy(scene: dict, meta: dict, *, show_4k: bool = F
 
 
 def build_forest_rain_thumb_text(scene: dict, meta: dict, *, show_4k: bool = False) -> tuple[str, str]:
-    """封面叠字：T1 利益 | 场景 | 格式（雨景循环，非黑屏）。"""
+    """封面叠字：固定主标题 + 场景 | 格式 副标题。"""
     scene_key = scene.get("scene_key", "nature")
     scene_rain = VIRAL_SCENE_RAIN.get(scene_key, f"Calming Rain on {scene['place_en_short']}")
-    benefit = forest_rain_benefit_en(scene_key, scene_rain)
     fmt_en = viral_format_en(meta, show_4k=show_4k)
 
-    thumb_title = "Overcome Stress to Sleep" if benefit.startswith("Overcome") else "Deep Sleep Instantly"
+    thumb_title = FOREST_RAIN_THUMB_TITLE
     thumb_subtitle = limit_words(f"{scene_rain} | {fmt_en}", max_words=14)
     return thumb_title, thumb_subtitle
 

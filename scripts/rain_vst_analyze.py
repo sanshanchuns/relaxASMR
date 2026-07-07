@@ -4,8 +4,8 @@
 工作流:
   1. ffmpeg 提取首帧 → MVI_xxxx.png
   2. OpenCV 分析亮度、色彩分布、纹理、区域特征、水面检测
-  3. 规则匹配场景类型 → 映射到 RAIN VST 三层预设 + 五组参数
-  4. 输出 MVI_xxxx.md 报告
+  3. 规则匹配场景类型 → 映射到 RAIN VST 三层预设 + 完整参数
+  4. 输出 MVI_xxxx.md 报告 + MVI_xxxx.rain 配置文件
 
 用法:
   python3 scripts/rain_vst_analyze.py <video_path> [--output-dir <dir>]
@@ -22,146 +22,246 @@ from pathlib import Path
 from typing import Callable
 
 # ---------------------------------------------------------------------------
-# Preset dictionaries
+# Layer name lookups — real RAIN VST internal IDs
 # ---------------------------------------------------------------------------
+# Mapping: l_value → (english_name, chinese_name)
+# Values derived from reverse-engineering 25 official presets.
 
-DISTANT_PRESETS: dict[int, tuple[str, str]] = {
-    1: ("Harmonic Mist", "和谐细雾"),
-    2: ("Ethereal Currents", "空灵气流"),
-    3: ("Aura of Drizzle", "微雨灵韵"),
-    4: ("Cloud Dance", "云之舞"),
-    5: ("Mellow Shower", "柔和阵雨"),
-    6: ("Zephyr Rainfall", "和风细雨"),
-    7: ("Chilly Pouring", "寒流雨声"),
-    8: ("Heavy Cascade", "倾盆大雨"),
-    9: ("Distant Veil", "远方雨幕"),
-    10: ("Reverberant Torrent", "回荡急流"),
-    11: ("Windswept Showers", "风雨交加"),
-    12: ("Turbulent Downpour", "湍急暴雨"),
-    13: ("Forest Whisper", "森林低语"),
-    14: ("Raindrop Canopy", "雨落树冠"),
-    15: ("Immersive Curtain", "沉浸雨幕"),
-    16: ("Cascade Whisper", "缓瀑雨声"),
-    17: ("Drenching Storm", "浸透风暴"),
-    18: ("Torrential Fury", "暴怒骤雨"),
-    19: ("Urban Resonance", "都市回响"),
+DISTANT_NAMES: dict[int, tuple[str, str]] = {
+    100: ("Airy Breeze", "空灵微风"),
+    110: ("Gentle Swish", "轻柔沙响"),
+    120: ("Airy Flow", "空灵气流"),
+    140: ("Balanced Sizzle", "均衡沙沙"),
+    150: ("Echo River", "河谷回声"),
+    160: ("Slow Waterfall", "缓瀑雨声"),
+    170: ("Spooky Whisper", "幽暗低语"),
+    190: ("Thick Shower", "浓密阵雨"),
+    200: ("Strong Hiss", "强烈嘶响"),
+    230: ("Distant Veil", "远方雨幕"),
+    240: ("Expansive Shower", "辽阔阵雨"),
+    260: ("Broadband Shower", "宽频阵雨"),
+    270: ("Cold Stream", "寒流雨声"),
+    290: ("Balanced Flow", "均衡气流"),
 }
 
-SPACE_PRESETS: dict[int, tuple[str, str]] = {
-    1: ("Metal Shelter", "金属遮蔽"),
-    2: ("Concrete Archway", "混凝土拱道"),
-    3: ("Plastic Roofing", "塑料棚顶"),
-    4: ("Car Interior", "车内空间"),
-    5: ("Tree Canopy", "树冠"),
-    6: ("Foliage Dense", "茂密树林"),
-    7: ("Zen Garden", "禅意庭院"),
-    8: ("Metal Roof", "金属屋顶"),
-    9: ("Urban Canyon", "城市峡谷"),
-    10: ("Open Parking", "露天停车场"),
-    11: ("Country Road", "乡间小路"),
-    12: ("Narrow Alley", "窄巷"),
-    13: ("Concrete Wall", "混凝土墙"),
-    14: ("Wooden Veranda", "木质长廊"),
+SPACE_NAMES: dict[int, tuple[str, str]] = {
+    500: ("Building Canopy", "楼宇雨棚"),
+    520: ("Building Overflow", "建筑溢水"),
+    530: ("Foliage Dense", "茂密树林"),
+    540: ("Inner Yard", "庭院"),
+    550: ("Metal Tanks", "金属储罐"),
+    580: ("Street Dense", "密集街区"),
+    590: ("Foliage Canopy", "树冠"),
 }
 
-CLOSE_PRESETS: dict[int, tuple[str, str]] = {
-    1: ("Metal Surface", "金属表面"),
-    2: ("Concrete", "混凝土"),
-    3: ("Concrete Diffuse", "混凝土漫射"),
-    4: ("Dense Foliage", "茂密植被"),
-    5: ("Sparse Foliage", "稀疏植被"),
-    6: ("Glass", "玻璃"),
-    7: ("Car Body", "车身"),
-    8: ("Fabric/Tent", "布料/帐篷"),
-    9: ("Stone", "石头"),
-    10: ("Gravel", "砾石"),
-    11: ("Metal Resonant", "金属共鸣"),
-    12: ("Tile", "瓷砖"),
-    13: ("Metal Sheet", "金属薄板"),
-    14: ("Plastic", "塑料"),
-    15: ("Canvas", "帆布"),
-    16: ("Mud", "泥地"),
-    17: ("Water", "水面"),
-    18: ("Wooden Roof", "木屋顶"),
-    19: ("Bark", "树皮"),
+CLOSE_NAMES: dict[int, tuple[str, str]] = {
+    800: ("Brick Diffuse", "砖墙"),
+    810: ("Foliage Lush", "茂密植被"),
+    820: ("Glass Roof", "玻璃屋顶"),
+    840: ("Glass Tonal", "共振玻璃"),
+    850: ("Water", "水面"),
+    860: ("Concrete", "混凝土"),
+    870: ("Foliage Yielding", "稀疏植被"),
+    900: ("Stone Echoing", "回声石墙"),
+    910: ("Metal Thin", "薄金属板"),
+    920: ("Wood Thin", "薄木板"),
+    930: ("Metal Tonal", "共振金属"),
+    950: ("Wood Tonal", "共振木材"),
 }
 
+
+def _layer_label(l_val: int, names: dict[int, tuple[str, str]]) -> str:
+    """Format a layer as ``中文名 English(l_value)``."""
+    if l_val in names:
+        en, cn = names[l_val]
+        return f"{cn} {en}"
+    return f"Unknown({l_val})"
+
+
 # ---------------------------------------------------------------------------
-# Scene presets: (distant, space, close, density/intensity, wetness/distance,
-#                 mass/intensity, strength/intensity, presence/intensity)
+# Scene presets — complete .rain parameter sets
 # ---------------------------------------------------------------------------
+# All parameter values are 0.0–1.0 (matching .rain XML format).
+# Derived from analysis of 25 official presets' parameter patterns.
 
 @dataclass
 class ScenePreset:
-    """A named scene with default RAIN VST parameters."""
+    """A named scene with complete RAIN VST parameters."""
 
     name_cn: str
     name_en: str
-    distant: int
-    space: int
-    close: int
-    density: int
-    intensity_d: int
-    wetness: int
-    distance: int
-    mass: int
-    intensity_m: int
-    strength: int
-    intensity_s: int
-    presence: int
-    intensity_p: int
+    # Layer selection (real internal IDs)
+    l1: int       # Distant layer
+    l2: int       # Space layer
+    l3: int       # Close layer
+    adv: int      # Advanced mode (0 or 1)
+    # --- Distant layer (bg prefix) ---
+    bgwi: float   # Width
+    bgpn: float   # Pan (0.5 = center)
+    bgeq1x: float  # Mass
+    bgeq1y: float  # Strength
+    bgeq2x: float  # EQ Band 2
+    bgeq2y: float  # Presence
+    bgeq3x: float  # EQ Band 3
+    bgeq3y: float  # EQ Band 3
+    # --- Space layer (sp prefix) ---
+    spbl: float   # Blend
+    spwi: float   # Width
+    sppn: float   # Pan
+    # --- Close layer (su prefix) ---
+    sucd: float   # Drops
+    suwi: float   # Width
+    supn: float   # Pan
+    # --- Rainfall core (rf prefix) ---
+    rfdn: float   # Density
+    rfin: float   # Intensity
+    rffc: float   # Wetness
+    rfch: float   # Distance (higher = closer)
+    # --- Rainfall tonality (eq prefix) ---
+    eq1x: float   # Mass
+    eq1y: float   # Strength
+    eq2x: float   # EQ Band 2
+    eq2y: float   # Presence
+    eq3x: float   # EQ Band 3
+    eq3y: float   # EQ Band 3
+    # --- Global (gl prefix) ---
+    glgn: float   # Volume
+    glhp: float   # High Pass
+    gllp: float   # Low Pass
+    glon: float   # Smart
+    gldr: float   # Enable
 
 
 SCENE_PRESETS: dict[str, ScenePreset] = {
     "forest": ScenePreset(
         "森林细雨", "Deep Forest Drizzle",
-        13, 6, 4,
-        40, 15, 30, 70, 75, 55, 50, 30, 60, 55,
+        l1=100, l2=530, l3=810, adv=0,
+        bgwi=0.80, bgpn=0.5,
+        bgeq1x=0.52, bgeq1y=0.42, bgeq2x=0.52, bgeq2y=0.55,
+        bgeq3x=0.62, bgeq3y=0.55,
+        spbl=0.48, spwi=0.75, sppn=0.5,
+        sucd=0.15, suwi=0.50, supn=0.5,
+        rfdn=0.42, rfin=0.18, rffc=0.68, rfch=0.15,
+        eq1x=0.60, eq1y=0.50, eq2x=0.52, eq2y=0.50,
+        eq3x=0.52, eq3y=0.62,
+        glgn=0.251, glhp=0.0, gllp=0.04, glon=1.0, gldr=1.0,
     ),
     "lake": ScenePreset(
-        "湖畔轻雨", "Lake Light Rain",
-        7, 6, 17,
-        45, 25, 35, 70, 78, 55, 65, 45, 55, 55,
+        "湖畔轻雨", "Lakeside Light Rain",
+        l1=230, l2=590, l3=850, adv=0,
+        bgwi=0.72, bgpn=0.48,
+        bgeq1x=0.58, bgeq1y=0.49, bgeq2x=0.42, bgeq2y=0.62,
+        bgeq3x=0.52, bgeq3y=0.38,
+        spbl=0.55, spwi=0.65, sppn=0.52,
+        sucd=0.18, suwi=0.35, supn=0.52,
+        rfdn=0.46, rfin=0.25, rffc=0.65, rfch=0.20,
+        eq1x=0.78, eq1y=0.58, eq2x=0.65, eq2y=0.52,
+        eq3x=0.55, eq3y=0.62,
+        glgn=0.251, glhp=0.05, gllp=0.04, glon=1.0, gldr=1.0,
     ),
     "garden": ScenePreset(
-        "花园雨景", "English Garden Rain",
-        14, 6, 4,
-        50, 40, 35, 65, 70, 55, 52, 38, 68, 60,
+        "花园雨景", "Garden Rain",
+        l1=110, l2=590, l3=870, adv=0,
+        bgwi=0.75, bgpn=0.5,
+        bgeq1x=0.52, bgeq1y=0.42, bgeq2x=0.55, bgeq2y=0.50,
+        bgeq3x=0.65, bgeq3y=0.52,
+        spbl=0.58, spwi=0.55, sppn=0.5,
+        sucd=0.20, suwi=0.45, supn=0.5,
+        rfdn=0.50, rfin=0.40, rffc=0.62, rfch=0.25,
+        eq1x=0.68, eq1y=0.55, eq2x=0.55, eq2y=0.52,
+        eq3x=0.58, eq3y=0.58,
+        glgn=0.251, glhp=0.0, gllp=0.05, glon=1.0, gldr=1.0,
     ),
     "bamboo": ScenePreset(
         "竹林雨声", "Bamboo Grove Rain",
-        2, 6, 5,
-        45, 35, 25, 65, 65, 50, 45, 35, 70, 65,
+        l1=110, l2=590, l3=920, adv=1,
+        bgwi=0.65, bgpn=0.5,
+        bgeq1x=0.55, bgeq1y=0.35, bgeq2x=0.48, bgeq2y=0.45,
+        bgeq3x=0.72, bgeq3y=0.52,
+        spbl=0.55, spwi=0.58, sppn=0.5,
+        sucd=0.32, suwi=0.42, supn=0.5,
+        rfdn=0.48, rfin=0.18, rffc=0.62, rfch=0.38,
+        eq1x=0.68, eq1y=0.55, eq2x=0.52, eq2y=0.48,
+        eq3x=0.58, eq3y=0.62,
+        glgn=0.251, glhp=0.0, gllp=0.05, glon=1.0, gldr=1.0,
     ),
     "night": ScenePreset(
-        "夜间雨林", "Conifer Night Rain",
-        15, 5, 4,
-        55, 35, 50, 60, 85, 55, 70, 50, 55, 45,
+        "夜间雨林", "Night Forest Rain",
+        l1=170, l2=530, l3=810, adv=0,
+        bgwi=0.85, bgpn=0.5,
+        bgeq1x=0.72, bgeq1y=0.62, bgeq2x=0.55, bgeq2y=0.68,
+        bgeq3x=0.48, bgeq3y=0.55,
+        spbl=0.50, spwi=0.72, sppn=0.5,
+        sucd=0.10, suwi=0.45, supn=0.5,
+        rfdn=0.55, rfin=0.35, rffc=0.72, rfch=0.12,
+        eq1x=0.65, eq1y=0.58, eq2x=0.62, eq2y=0.55,
+        eq3x=0.55, eq3y=0.62,
+        glgn=0.251, glhp=0.0, gllp=0.08, glon=1.0, gldr=1.0,
     ),
     "stream": ScenePreset(
         "溪流雨声", "Forest Stream Rain",
-        9, 6, 17,
-        40, 20, 40, 65, 70, 50, 55, 35, 60, 55,
+        l1=150, l2=590, l3=850, adv=0,
+        bgwi=0.78, bgpn=0.5,
+        bgeq1x=0.62, bgeq1y=0.52, bgeq2x=0.48, bgeq2y=0.58,
+        bgeq3x=0.55, bgeq3y=0.45,
+        spbl=0.52, spwi=0.68, sppn=0.5,
+        sucd=0.22, suwi=0.48, supn=0.5,
+        rfdn=0.45, rfin=0.22, rffc=0.65, rfch=0.35,
+        eq1x=0.72, eq1y=0.55, eq2x=0.58, eq2y=0.52,
+        eq3x=0.52, eq3y=0.58,
+        glgn=0.251, glhp=0.0, gllp=0.04, glon=1.0, gldr=1.0,
     ),
     "path": ScenePreset(
         "林间小径", "Woodland Path Rain",
-        6, 11, 10,
-        45, 30, 35, 60, 72, 50, 48, 35, 65, 55,
+        l1=140, l2=530, l3=870, adv=0,
+        bgwi=0.72, bgpn=0.5,
+        bgeq1x=0.55, bgeq1y=0.45, bgeq2x=0.55, bgeq2y=0.48,
+        bgeq3x=0.58, bgeq3y=0.52,
+        spbl=0.52, spwi=0.62, sppn=0.5,
+        sucd=0.18, suwi=0.52, supn=0.5,
+        rfdn=0.48, rfin=0.30, rffc=0.58, rfch=0.28,
+        eq1x=0.65, eq1y=0.52, eq2x=0.55, eq2y=0.50,
+        eq3x=0.55, eq3y=0.55,
+        glgn=0.251, glhp=0.0, gllp=0.04, glon=1.0, gldr=1.0,
     ),
     "canopy": ScenePreset(
         "密林树冠", "Dense Canopy Rain",
-        14, 5, 19,
-        50, 30, 40, 75, 80, 60, 55, 40, 50, 45,
+        l1=100, l2=530, l3=900, adv=1,
+        bgwi=0.85, bgpn=0.52,
+        bgeq1x=0.65, bgeq1y=0.55, bgeq2x=0.55, bgeq2y=0.48,
+        bgeq3x=0.72, bgeq3y=0.58,
+        spbl=0.78, spwi=0.82, sppn=0.48,
+        sucd=0.08, suwi=0.35, supn=0.5,
+        rfdn=0.52, rfin=0.32, rffc=0.78, rfch=0.10,
+        eq1x=0.75, eq1y=0.58, eq2x=0.62, eq2y=0.55,
+        eq3x=0.45, eq3y=0.48,
+        glgn=0.251, glhp=0.05, gllp=0.05, glon=1.0, gldr=1.0,
     ),
     "open": ScenePreset(
         "开阔雨景", "Open Field Rain",
-        5, 10, 16,
-        55, 45, 30, 50, 65, 50, 60, 45, 70, 60,
+        l1=240, l2=590, l3=870, adv=0,
+        bgwi=0.92, bgpn=0.5,
+        bgeq1x=0.55, bgeq1y=0.50, bgeq2x=0.58, bgeq2y=0.52,
+        bgeq3x=0.55, bgeq3y=0.48,
+        spbl=0.65, spwi=0.78, sppn=0.5,
+        sucd=0.12, suwi=0.55, supn=0.5,
+        rfdn=0.55, rfin=0.45, rffc=0.52, rfch=0.15,
+        eq1x=0.72, eq1y=0.58, eq2x=0.55, eq2y=0.55,
+        eq3x=0.62, eq3y=0.55,
+        glgn=0.251, glhp=0.0, gllp=0.0, glon=1.0, gldr=1.0,
     ),
     "default": ScenePreset(
         "自然雨景", "Natural Rain",
-        13, 6, 4,
-        45, 25, 35, 65, 72, 52, 50, 35, 60, 55,
+        l1=100, l2=590, l3=810, adv=0,
+        bgwi=0.75, bgpn=0.5,
+        bgeq1x=0.52, bgeq1y=0.45, bgeq2x=0.52, bgeq2y=0.52,
+        bgeq3x=0.58, bgeq3y=0.52,
+        spbl=0.55, spwi=0.65, sppn=0.5,
+        sucd=0.15, suwi=0.48, supn=0.5,
+        rfdn=0.48, rfin=0.28, rffc=0.65, rfch=0.20,
+        eq1x=0.65, eq1y=0.52, eq2x=0.55, eq2y=0.52,
+        eq3x=0.55, eq3y=0.55,
+        glgn=0.251, glhp=0.0, gllp=0.04, glon=1.0, gldr=1.0,
     ),
 }
 
@@ -550,12 +650,13 @@ def _classify_scene(analysis: FrameAnalysis) -> None:
 
     Priority order (highest → lowest):
       1. Water/lake/stream  (water_detected — most distinctive signal)
-      2. Forest / canopy    (green + dark)
-      3. Garden             (green + bright)
-      4. Night              (very dark overall)
-      5. Path               (brown + green)
-      6. Open               (sky dominant)
-      7. Default
+      2. Bamboo             (vertical lines + green + brown)
+      3. Forest / canopy    (green + dark)
+      4. Garden             (green + bright)
+      5. Night              (very dark overall)
+      6. Path               (brown + green)
+      7. Open               (sky dominant)
+      8. Default
     """
     a = analysis
 
@@ -579,7 +680,24 @@ def _classify_scene(analysis: FrameAnalysis) -> None:
         a.tonality_desc = "柔和清透"
         a.tonality_reason = "水面反射声能，高频略增"
 
-    # --- 2. Forest / canopy (green dominant + not too bright) ---
+    # --- 2. Bamboo (vertical lines + green + some brown) ---
+    elif (a.vertical_lines > 35 and a.green_pct > 15
+          and a.brown_pct > 5 and a.brightness < 120):
+        a.scene_type = "bamboo"
+        a.scene_description = (
+            "竹林场景，检测到大量垂直线条（竹竿）"
+            f"，绿色 {a.green_pct:.0f}%，棕色 {a.brown_pct:.0f}%"
+        )
+        a.rain_level = "light"
+        a.rain_level_reason = "竹叶遮挡部分雨水，形成滴落"
+        a.distance_level = "medium"
+        a.distance_reason = "竹林密度中等，具有空间纵深"
+        a.wetness_desc = "清新适中"
+        a.wetness_reason = "竹叶导流雨水，湿度适中"
+        a.tonality_desc = "清脆通透"
+        a.tonality_reason = "竹竿硬质表面产生清脆敲击声"
+
+    # --- 3. Forest / canopy (green dominant + not too bright) ---
     elif a.green_pct > 25 and a.brightness < 100:
         if a.sky_pct < 10 and a.foliage_density > 35:
             a.scene_type = "canopy"
@@ -596,7 +714,7 @@ def _classify_scene(analysis: FrameAnalysis) -> None:
         a.tonality_desc = "低沉绵密"
         a.tonality_reason = "大量树叶吸收高频，低频占主导"
 
-    # --- 3. Garden (green + bright) ---
+    # --- 4. Garden (green + bright) ---
     elif a.green_pct > 15 and a.brightness >= 100:
         a.scene_type = "garden"
         a.scene_description = "花园/花草场景，绿色适中，整体明亮"
@@ -609,7 +727,7 @@ def _classify_scene(analysis: FrameAnalysis) -> None:
         a.tonality_desc = "明亮活泼"
         a.tonality_reason = "光线充足场景，高频细节丰富"
 
-    # --- 4. Night scene (very dark) ---
+    # --- 5. Night scene (very dark) ---
     elif a.brightness < 60:
         a.scene_type = "night"
         a.scene_description = "夜间场景，整体亮度很低"
@@ -622,7 +740,7 @@ def _classify_scene(analysis: FrameAnalysis) -> None:
         a.tonality_desc = "低沉温暖"
         a.tonality_reason = "夜景缺少高频视觉信息，声场偏暖"
 
-    # --- 5. Path (brown + green) ---
+    # --- 6. Path (brown + green) ---
     elif a.brown_pct > 10 and a.green_pct > 10:
         a.scene_type = "path"
         a.scene_description = "林间小径，棕色（泥土/落叶）与绿色共存"
@@ -635,7 +753,7 @@ def _classify_scene(analysis: FrameAnalysis) -> None:
         a.tonality_desc = "中频温暖"
         a.tonality_reason = "泥土和落叶衰减高频"
 
-    # --- 6. Open / bright scene ---
+    # --- 7. Open / bright scene ---
     elif a.sky_pct > 40:
         a.scene_type = "open"
         a.scene_description = "开阔场景，天空占比大"
@@ -648,7 +766,7 @@ def _classify_scene(analysis: FrameAnalysis) -> None:
         a.tonality_desc = "清亮直接"
         a.tonality_reason = "无障碍物衰减声音"
 
-    # --- 7. Default ---
+    # --- 8. Default ---
     else:
         a.scene_description = "自然场景，未匹配特定类型"
         a.rain_level = "medium"
@@ -661,220 +779,341 @@ def _classify_scene(analysis: FrameAnalysis) -> None:
         a.tonality_reason = "无突出特征，均衡音色"
 
 
-def _clamp(value: float, lo: float = 0.0, hi: float = 100.0) -> int:
-    """Clamp *value* to [lo, hi] and round to int."""
-    return int(round(max(lo, min(hi, value))))
+# ---------------------------------------------------------------------------
+# VSTParams & parameter mapping
+# ---------------------------------------------------------------------------
+
+def _clampf(value: float, lo: float = 0.0, hi: float = 1.0) -> float:
+    """Clamp *value* to [lo, hi]."""
+    return max(lo, min(hi, value))
 
 
 @dataclass
 class VSTParams:
-    """Final RAIN VST parameter set."""
+    """Complete RAIN VST parameter set — all 29 XML params + layer IDs."""
 
     scene_cn: str
     scene_en: str
-    distant: int
-    distant_name: str
-    space: int
-    space_name: str
-    close: int
-    close_name: str
-    density: int
-    intensity_d: int
-    wetness: int
-    distance: int
-    mass: int
-    intensity_m: int
-    strength: int
-    intensity_s: int
-    presence: int
-    intensity_p: int
-
-    # Reasoning for each parameter
+    # Layer selection
+    l1: int
+    l2: int
+    l3: int
+    l1_name: str
+    l2_name: str
+    l3_name: str
+    adv: int
+    # --- All 29 PARAM values (0.0-1.0) ---
+    gldr: float
+    bgeq1x: float
+    bgeq1y: float
+    bgeq2x: float
+    bgeq2y: float
+    bgeq3x: float
+    bgeq3y: float
+    bgpn: float
+    bgwi: float
+    eq1x: float
+    eq1y: float
+    eq2x: float
+    eq2y: float
+    eq3x: float
+    eq3y: float
+    glgn: float
+    glhp: float
+    gllp: float
+    glon: float
+    rfch: float
+    rfdn: float
+    rffc: float
+    rfin: float
+    spbl: float
+    sppn: float
+    spwi: float
+    sucd: float
+    supn: float
+    suwi: float
+    # Reasoning
     reasons: dict[str, str] = field(default_factory=dict)
+
+    # --- Convenience: 0-100 integer representations for display ---
+    @property
+    def density_pct(self) -> int:
+        return int(round(self.rfdn * 100))
+
+    @property
+    def intensity_pct(self) -> int:
+        return int(round(self.rfin * 100))
+
+    @property
+    def wetness_pct(self) -> int:
+        return int(round(self.rffc * 100))
+
+    @property
+    def distance_pct(self) -> int:
+        return int(round(self.rfch * 100))
 
 
 def map_to_vst_params(analysis: FrameAnalysis) -> VSTParams:
-    """Map frame analysis to RAIN VST parameters with fine-tuning."""
+    """Map frame analysis to complete RAIN VST parameters with fine-tuning."""
     a = analysis
     scene = SCENE_PRESETS.get(a.scene_type, SCENE_PRESETS["default"])
 
-    # Start with base preset values
-    density = float(scene.density)
-    intensity_d = float(scene.intensity_d)
-    wetness = float(scene.wetness)
-    distance = float(scene.distance)
-    mass = float(scene.mass)
-    intensity_m = float(scene.intensity_m)
-    strength = float(scene.strength)
-    intensity_s = float(scene.intensity_s)
-    presence = float(scene.presence)
-    intensity_p = float(scene.intensity_p)
+    # Start with base preset values (copy as mutable floats)
+    rfdn = scene.rfdn
+    rfin = scene.rfin
+    rffc = scene.rffc
+    rfch = scene.rfch
+    bgwi = scene.bgwi
+    bgpn = scene.bgpn
+    bgeq1x = scene.bgeq1x
+    bgeq1y = scene.bgeq1y
+    bgeq2x = scene.bgeq2x
+    bgeq2y = scene.bgeq2y
+    bgeq3x = scene.bgeq3x
+    bgeq3y = scene.bgeq3y
+    spbl = scene.spbl
+    spwi = scene.spwi
+    sppn = scene.sppn
+    sucd = scene.sucd
+    suwi = scene.suwi
+    supn = scene.supn
+    eq1x = scene.eq1x
+    eq1y = scene.eq1y
+    eq2x = scene.eq2x
+    eq2y = scene.eq2y
+    eq3x = scene.eq3x
+    eq3y = scene.eq3y
+    glhp = scene.glhp
+    gllp = scene.gllp
 
     reasons: dict[str, str] = {}
 
     # --- Fine-tune based on actual frame analysis ---
 
-    # Water ripples → higher Density, lower Distance
+    # Water ripples → higher Density, higher Drops, lower Distance(rfch)
     if a.water_detected:
-        ripple_boost = min(a.water_score * 0.3, 15)
-        density += ripple_boost
-        distance -= ripple_boost * 0.5
-        reasons["Density"] = (
-            f"水面波纹检测 (score={a.water_score:.1f})，"
-            f"提升密度 +{ripple_boost:.0f}"
+        ripple = min(a.water_score * 0.003, 0.15)
+        rfdn += ripple
+        rfch -= ripple * 0.5
+        sucd += ripple * 0.5
+        reasons["rfdn"] = (
+            f"水面波纹 (score={a.water_score:.1f})，密度 +{ripple:.2f}"
         )
-        reasons["Distance(wetness)"] = (
-            f"水面近景感强，距离降低 -{ripple_boost * 0.5:.0f}"
-        )
+        reasons["rfch"] = f"水面近景感强，距离 -{ripple * 0.5:.2f}"
 
-    # Denser canopy (no sky visible) → higher Distance (rain filtered)
+    # Dense canopy (no sky) → higher Distance(rfch stays low = far),
+    # higher Blend(spbl), wider Space
     if a.sky_pct < 10:
-        canopy_boost = (10 - a.sky_pct) * 1.0
-        distance += canopy_boost
-        reasons["Distance(canopy)"] = (
-            f"天空可见度极低 ({a.sky_pct:.1f}%)，"
-            f"树冠过滤雨声，距离感增加 +{canopy_boost:.0f}"
+        canopy_boost = (10 - a.sky_pct) * 0.01
+        spbl += canopy_boost
+        bgwi += canopy_boost * 0.5
+        reasons["spbl"] = (
+            f"天空不可见 ({a.sky_pct:.1f}%)，Blend +{canopy_boost:.2f}"
         )
     elif a.sky_pct > 40:
-        sky_reduce = (a.sky_pct - 40) * 0.3
-        distance -= sky_reduce
-        reasons["Distance(sky)"] = (
-            f"开阔天空 ({a.sky_pct:.1f}%)，距离感降低 -{sky_reduce:.0f}"
-        )
+        sky_reduce = (a.sky_pct - 40) * 0.003
+        rfch += sky_reduce
+        bgwi += sky_reduce
+        reasons["bgwi"] = f"开阔天空 ({a.sky_pct:.1f}%)，声场加宽 +{sky_reduce:.2f}"
 
-    # More tree trunks (brown %) → higher Mass
+    # Brown (tree trunks / soil) → higher Mass (bgeq1x, eq1x)
     if a.brown_pct > 10:
-        mass_boost = (a.brown_pct - 10) * 0.8
-        mass += mass_boost
-        reasons["Mass(trunk)"] = (
-            f"棕色占比高 ({a.brown_pct:.1f}%)，"
-            f"树干增加厚重感 +{mass_boost:.0f}"
+        mass_boost = (a.brown_pct - 10) * 0.008
+        bgeq1x += mass_boost
+        eq1x += mass_boost
+        reasons["bgeq1x"] = (
+            f"棕色占比高 ({a.brown_pct:.1f}%)，质感 +{mass_boost:.2f}"
         )
 
-    # Darker overall → warmer tonality (higher Mass, lower Presence)
+    # Darker → warmer tonality (higher Mass, lower Presence)
     if a.brightness < 80:
         dark_factor = (80 - a.brightness) / 80
-        mass += dark_factor * 10
-        presence -= dark_factor * 10
-        reasons["Mass(dark)"] = (
-            f"整体偏暗 (brightness={a.brightness:.1f})，"
-            f"增加质感 +{dark_factor * 10:.0f}"
-        )
-        reasons["Presence(dark)"] = (
-            f"暗部场景降低存在感/高频 -{dark_factor * 10:.0f}"
+        bgeq1x += dark_factor * 0.10
+        eq1x += dark_factor * 0.10
+        bgeq2y -= dark_factor * 0.08
+        eq2y -= dark_factor * 0.08
+        gllp += dark_factor * 0.05
+        reasons["eq1x"] = (
+            f"偏暗 (brightness={a.brightness:.1f})，质感 +{dark_factor * 0.10:.2f}"
         )
 
-    # Foliage density adjustments
+    # Foliage density → adjust rainfall intensity and space width
     if a.foliage_density > 35:
-        foliage_factor = (a.foliage_density - 35) * 0.2
-        intensity_d -= foliage_factor
-        strength += foliage_factor * 0.5
-        reasons["Intensity(foliage)"] = (
-            f"植被密度高 ({a.foliage_density:.1f}%)，"
-            f"降低直接雨声强度 -{foliage_factor:.0f}"
+        foliage_f = (a.foliage_density - 35) * 0.002
+        rfin -= foliage_f
+        spwi += foliage_f * 0.5
+        bgeq1y += foliage_f * 0.3
+        reasons["rfin"] = (
+            f"植被密度高 ({a.foliage_density:.1f}%)，强度 -{foliage_f:.2f}"
         )
 
-    # Brightness → Presence fine-tune
+    # High brightness → more presence/clarity
     if a.brightness > 130:
-        bright_boost = (a.brightness - 130) * 0.1
-        presence += bright_boost
-        intensity_p += bright_boost * 0.5
-        reasons["Presence(bright)"] = (
-            f"高亮度场景 ({a.brightness:.1f})，"
-            f"提升存在感/清晰度 +{bright_boost:.0f}"
+        bright_f = (a.brightness - 130) * 0.001
+        bgeq2y += bright_f
+        eq2y += bright_f
+        eq1y += bright_f * 0.5
+        reasons["bgeq2y"] = (
+            f"高亮度 ({a.brightness:.1f})，存在感 +{bright_f:.2f}"
         )
 
-    # Vertical lines (bamboo) → adjust Strength
+    # Vertical lines (bamboo/trunks) → adjust strength and Close Drops
     if a.vertical_lines > 30:
-        vert_boost = (a.vertical_lines - 30) * 0.2
-        strength += vert_boost
-        reasons["Strength(vert)"] = (
-            f"垂直结构明显 ({a.vertical_lines:.1f})，"
-            f"增加敲击力度 +{vert_boost:.0f}"
+        vert_f = (a.vertical_lines - 30) * 0.002
+        bgeq1y += vert_f
+        eq1y += vert_f
+        sucd += vert_f * 0.5
+        reasons["bgeq1y"] = (
+            f"垂直结构 ({a.vertical_lines:.1f})，力度 +{vert_f:.2f}"
         )
 
-    # Build preset names
-    d_num = scene.distant
-    s_num = scene.space
-    c_num = scene.close
-    d_en, d_cn = DISTANT_PRESETS[d_num]
-    s_en, s_cn = SPACE_PRESETS[s_num]
-    c_en, c_cn = CLOSE_PRESETS[c_num]
+    # Smooth areas (water/sky) → lower Close Drops
+    if a.smooth_areas > 40:
+        smooth_f = (a.smooth_areas - 40) * 0.002
+        sucd -= smooth_f
+        reasons["sucd"] = f"平滑区域多 ({a.smooth_areas:.1f})，Drops -{smooth_f:.2f}"
+
+    # Build layer names
+    l1_name = _layer_label(scene.l1, DISTANT_NAMES)
+    l2_name = _layer_label(scene.l2, SPACE_NAMES)
+    l3_name = _layer_label(scene.l3, CLOSE_NAMES)
 
     # Base reasons for params that didn't get fine-tuned
-    reasons.setdefault(
-        "Density",
-        f"场景基准密度 {scene.density}，{a.scene_type} 类型默认值",
-    )
-    reasons.setdefault(
-        "Intensity(density)",
-        f"雨声强度基准 {scene.intensity_d}",
-    )
-    reasons.setdefault(
-        "Wetness",
-        f"湿润度基准 {scene.wetness}，{a.wetness_desc}",
-    )
-    reasons.setdefault(
-        "Distance(wetness)",
-        f"距离感基准 {scene.distance}，{a.distance_reason}",
-    )
-    reasons.setdefault(
-        "Mass",
-        f"质感基准 {scene.mass}，{a.scene_type} 类型默认值",
-    )
-    reasons.setdefault(
-        "Intensity(mass)",
-        f"质感强度基准 {scene.intensity_m}",
-    )
-    reasons.setdefault(
-        "Strength",
-        f"力度基准 {scene.strength}",
-    )
-    reasons.setdefault(
-        "Intensity(strength)",
-        f"力度强度基准 {scene.intensity_s}",
-    )
-    reasons.setdefault(
-        "Presence",
-        f"存在感基准 {scene.presence}，{a.tonality_desc}",
-    )
-    reasons.setdefault(
-        "Intensity(presence)",
-        f"存在感强度基准 {scene.intensity_p}",
-    )
+    reasons.setdefault("rfdn", f"场景基准密度 {scene.rfdn:.2f}")
+    reasons.setdefault("rfin", f"场景基准强度 {scene.rfin:.2f}")
+    reasons.setdefault("rffc", f"场景基准湿润 {scene.rffc:.2f}，{a.wetness_desc}")
+    reasons.setdefault("rfch", f"场景基准距离 {scene.rfch:.2f}，{a.distance_reason}")
+    reasons.setdefault("bgeq1x", f"远景质感基准 {scene.bgeq1x:.2f}")
+    reasons.setdefault("bgeq1y", f"远景力度基准 {scene.bgeq1y:.2f}")
+    reasons.setdefault("bgeq2y", f"远景存在感基准 {scene.bgeq2y:.2f}")
+    reasons.setdefault("bgwi", f"远景宽度基准 {scene.bgwi:.2f}")
+    reasons.setdefault("spbl", f"空间混合基准 {scene.spbl:.2f}")
+    reasons.setdefault("sucd", f"近景 Drops 基准 {scene.sucd:.2f}")
+    reasons.setdefault("eq1x", f"降雨质感基准 {scene.eq1x:.2f}")
+    reasons.setdefault("eq2y", f"降雨存在感基准 {scene.eq2y:.2f}")
 
     return VSTParams(
         scene_cn=scene.name_cn,
         scene_en=scene.name_en,
-        distant=d_num,
-        distant_name=f"{d_cn} {d_en}",
-        space=s_num,
-        space_name=f"{s_cn} {s_en}",
-        close=c_num,
-        close_name=f"{c_cn} {c_en}",
-        density=_clamp(density),
-        intensity_d=_clamp(intensity_d),
-        wetness=_clamp(wetness),
-        distance=_clamp(distance),
-        mass=_clamp(mass),
-        intensity_m=_clamp(intensity_m),
-        strength=_clamp(strength),
-        intensity_s=_clamp(intensity_s),
-        presence=_clamp(presence),
-        intensity_p=_clamp(intensity_p),
+        l1=scene.l1,
+        l2=scene.l2,
+        l3=scene.l3,
+        l1_name=l1_name,
+        l2_name=l2_name,
+        l3_name=l3_name,
+        adv=scene.adv,
+        gldr=scene.gldr,
+        bgeq1x=_clampf(bgeq1x),
+        bgeq1y=_clampf(bgeq1y),
+        bgeq2x=_clampf(bgeq2x),
+        bgeq2y=_clampf(bgeq2y),
+        bgeq3x=_clampf(bgeq3x),
+        bgeq3y=_clampf(bgeq3y),
+        bgpn=_clampf(bgpn),
+        bgwi=_clampf(bgwi),
+        eq1x=_clampf(eq1x),
+        eq1y=_clampf(eq1y),
+        eq2x=_clampf(eq2x),
+        eq2y=_clampf(eq2y),
+        eq3x=_clampf(eq3x),
+        eq3y=_clampf(eq3y),
+        glgn=scene.glgn,
+        glhp=_clampf(glhp),
+        gllp=_clampf(gllp),
+        glon=scene.glon,
+        rfch=_clampf(rfch),
+        rfdn=_clampf(rfdn),
+        rffc=_clampf(rffc),
+        rfin=_clampf(rfin),
+        spbl=_clampf(spbl),
+        sppn=_clampf(sppn),
+        spwi=_clampf(spwi),
+        sucd=_clampf(sucd),
+        supn=_clampf(supn),
+        suwi=_clampf(suwi),
         reasons=reasons,
     )
 
 
 # ---------------------------------------------------------------------------
-# Step 4: Generate markdown report
+# Step 4: Generate .rain XML file
 # ---------------------------------------------------------------------------
 
-def _preset_label(num: int, presets: dict[int, tuple[str, str]]) -> str:
-    """Format a preset as ``name_en(number)``."""
-    en, _cn = presets[num]
-    return f"{en}({num:02d})"
+def generate_rain_file(
+    video_id: str,
+    params: VSTParams,
+    output_dir: Path,
+) -> Path:
+    """Write a complete .rain XML configuration file.
 
+    The output file is directly loadable by the BOOM Library RAIN VST3 plugin
+    via Scene → Right-click → Load from file.
+    """
+    scene_name = f"{video_id} {params.scene_cn}"
+    lines = [
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        '',
+        f'<Rain version="1" lts="0"'
+        f' l1="{params.l1}" l2="{params.l2}" l3="{params.l3}"'
+        f' adv="{params.adv}" scn="{scene_name}">',
+    ]
+
+    # Emit all 29 PARAM elements in the same order as official presets
+    param_order = [
+        ("gldr", params.gldr),
+        ("bgeq1x", params.bgeq1x),
+        ("bgeq1y", params.bgeq1y),
+        ("bgeq2x", params.bgeq2x),
+        ("bgeq2y", params.bgeq2y),
+        ("bgeq3x", params.bgeq3x),
+        ("bgeq3y", params.bgeq3y),
+        ("bgpn", params.bgpn),
+        ("bgwi", params.bgwi),
+        ("eq1x", params.eq1x),
+        ("eq1y", params.eq1y),
+        ("eq2x", params.eq2x),
+        ("eq2y", params.eq2y),
+        ("eq3x", params.eq3x),
+        ("eq3y", params.eq3y),
+        ("glgn", params.glgn),
+        ("glhp", params.glhp),
+        ("gllp", params.gllp),
+        ("glon", params.glon),
+        ("rfch", params.rfch),
+        ("rfdn", params.rfdn),
+        ("rffc", params.rffc),
+        ("rfin", params.rfin),
+        ("spbl", params.spbl),
+        ("sppn", params.sppn),
+        ("spwi", params.spwi),
+        ("sucd", params.sucd),
+        ("supn", params.supn),
+        ("suwi", params.suwi),
+    ]
+
+    for pid, val in param_order:
+        # Clean decimal formatting — round to avoid floating-point artefacts
+        if val == 0.0:
+            val_str = "0.0"
+        elif val == 1.0:
+            val_str = "1.0"
+        else:
+            # Round to 6 significant digits, strip trailing zeros
+            val_str = f"{val:.6f}".rstrip("0").rstrip(".")
+        lines.append(f'  <PARAM id="{pid}" value="{val_str}"/>')
+
+    lines.append("</Rain>")
+    lines.append("")  # trailing newline
+
+    rain_path = output_dir / f"{video_id}.rain"
+    # Write with \r\n line endings to match official preset format
+    rain_path.write_text("\r\n".join(lines), encoding="utf-8")
+    return rain_path
+
+
+# ---------------------------------------------------------------------------
+# Step 5: Generate markdown report
+# ---------------------------------------------------------------------------
 
 def generate_report(
     video_id: str,
@@ -885,11 +1124,6 @@ def generate_report(
     a = analysis
     p = params
 
-    # Distant / Space / Close reasoning
-    d_label = _preset_label(p.distant, DISTANT_PRESETS)
-    s_label = _preset_label(p.space, SPACE_PRESETS)
-    c_label = _preset_label(p.close, CLOSE_PRESETS)
-
     d_reason = _distant_reason(a)
     s_reason = _space_reason(a)
     c_reason = _close_reason(a)
@@ -898,6 +1132,29 @@ def generate_report(
         f"检测到水面 (score={a.water_score:.1f})" if a.water_detected
         else f"未检测到明显水面 (score={a.water_score:.1f})"
     )
+
+    # Format key reasons
+    reason_rows: list[str] = []
+    key_params = [
+        ("Density (rfdn)", f"{p.rfdn:.2f} ({p.density_pct}%)", p.reasons.get("rfdn", "")),
+        ("Intensity (rfin)", f"{p.rfin:.2f} ({p.intensity_pct}%)", p.reasons.get("rfin", "")),
+        ("Wetness (rffc)", f"{p.rffc:.2f} ({p.wetness_pct}%)", p.reasons.get("rffc", "")),
+        ("Distance (rfch)", f"{p.rfch:.2f} ({p.distance_pct}%)", p.reasons.get("rfch", "")),
+        ("Distant Mass (bgeq1x)", f"{p.bgeq1x:.2f}", p.reasons.get("bgeq1x", "")),
+        ("Distant Strength (bgeq1y)", f"{p.bgeq1y:.2f}", p.reasons.get("bgeq1y", "")),
+        ("Distant Presence (bgeq2y)", f"{p.bgeq2y:.2f}", p.reasons.get("bgeq2y", "")),
+        ("Distant Width (bgwi)", f"{p.bgwi:.2f}", p.reasons.get("bgwi", "")),
+        ("Space Blend (spbl)", f"{p.spbl:.2f}", p.reasons.get("spbl", "")),
+        ("Close Drops (sucd)", f"{p.sucd:.2f}", p.reasons.get("sucd", "")),
+        ("Rainfall Mass (eq1x)", f"{p.eq1x:.2f}", p.reasons.get("eq1x", "")),
+        ("Rainfall Presence (eq2y)", f"{p.eq2y:.2f}", p.reasons.get("eq2y", "")),
+        ("High Pass (glhp)", f"{p.glhp:.2f}", ""),
+        ("Low Pass (gllp)", f"{p.gllp:.2f}", ""),
+    ]
+    for name, val, reason in key_params:
+        reason_rows.append(f"| **{name}** | {val} | {reason} |")
+
+    reasons_table = "\n".join(reason_rows)
 
     md = f"""# {video_id} RAIN VST 参数分析
 
@@ -915,15 +1172,16 @@ def generate_report(
 | **绿色占比** | {a.green_pct:.1f}% |
 | **棕色占比** | {a.brown_pct:.1f}% |
 | **暗部占比** | {a.dark_pct:.1f}% |
+| **垂直纹理** | {a.vertical_lines:.1f} |
 | **水面检测** | {water_desc} |
 
 ## 声场推理
 
 | 维度 | 判断 | 依据 |
 |------|------|------|
-| **远景** | {d_label} | {d_reason} |
-| **空间** | {s_label} | {s_reason} |
-| **近景** | {c_label} | {c_reason} |
+| **远景** | {p.l1_name} (l1={p.l1}) | {d_reason} |
+| **空间** | {p.l2_name} (l2={p.l2}) | {s_reason} |
+| **近景** | {p.l3_name} (l3={p.l3}) | {c_reason} |
 | **雨势** | {a.rain_level} | {a.rain_level_reason} |
 | **距离** | {a.distance_level} | {a.distance_reason} |
 | **湿度** | {a.wetness_desc} | {a.wetness_reason} |
@@ -934,31 +1192,26 @@ def generate_report(
 ```
 场景名：{p.scene_cn}   {p.scene_en}
 
-远景 Distant:  {p.distant:02d} ({p.distant_name})
-空间 Space:    {p.space:02d} ({p.space_name})
-近景 Close:    {p.close:02d} ({p.close_name})
+远景 Distant:  {p.l1_name} (l1={p.l1})
+空间 Space:    {p.l2_name} (l2={p.l2})
+近景 Close:    {p.l3_name} (l3={p.l3})
 
-Density/Intensity:    {p.density}/{p.intensity_d}
-Wetness/Distance:     {p.wetness}/{p.distance}
-MASS/Intensity:       {p.mass}/{p.intensity_m}
-STRENGTH/Intensity:   {p.strength}/{p.intensity_s}
-PRESENCE/Intensity:   {p.presence}/{p.intensity_p}
+Density/Intensity:    {p.rfdn:.2f} / {p.rfin:.2f}
+Wetness/Distance:     {p.rffc:.2f} / {p.rfch:.2f}
+Distant Width:        {p.bgwi:.2f}
+Space Blend/Width:    {p.spbl:.2f} / {p.spwi:.2f}
+Close Drops/Width:    {p.sucd:.2f} / {p.suwi:.2f}
+High Pass / Low Pass: {p.glhp:.2f} / {p.gllp:.2f}
 ```
+
+> ✅ 已导出完整配置文件: **{video_id}.rain**
+> 可在 RAIN 插件中 右键 Scene → Load from file 直接加载
 
 ## 参数设计理由
 
 | 参数 | 值 | 理由 |
 |------|-----|------|
-| **Density** | {p.density} | {p.reasons.get('Density', '')} |
-| **Intensity (Density)** | {p.intensity_d} | {p.reasons.get('Intensity(density)', '')} |
-| **Wetness** | {p.wetness} | {p.reasons.get('Wetness', '')} |
-| **Distance** | {p.distance} | {p.reasons.get('Distance(wetness)', '')} |
-| **MASS** | {p.mass} | {p.reasons.get('Mass', p.reasons.get('Mass(trunk)', p.reasons.get('Mass(dark)', '')))} |
-| **Intensity (MASS)** | {p.intensity_m} | {p.reasons.get('Intensity(mass)', '')} |
-| **STRENGTH** | {p.strength} | {p.reasons.get('Strength', p.reasons.get('Strength(vert)', ''))} |
-| **Intensity (STRENGTH)** | {p.intensity_s} | {p.reasons.get('Intensity(strength)', '')} |
-| **PRESENCE** | {p.presence} | {p.reasons.get('Presence', p.reasons.get('Presence(dark)', p.reasons.get('Presence(bright)', '')))} |
-| **Intensity (PRESENCE)** | {p.intensity_p} | {p.reasons.get('Intensity(presence)', '')} |
+{reasons_table}
 """
     return md
 
@@ -1046,7 +1299,7 @@ def analyze_video(
 
     Args:
         video_path: Path to the input video file.
-        output_dir: Directory to write the output PNG and MD files.
+        output_dir: Directory to write the output PNG, MD, and .rain files.
         on_progress: Optional callback receiving status message strings.
 
     Returns:
@@ -1073,7 +1326,12 @@ def analyze_video(
     _notify(on_progress, "正在映射 VST 参数")
     params = map_to_vst_params(analysis)
 
-    # Step 4: Generate markdown report
+    # Step 4: Generate .rain config file
+    _notify(on_progress, "正在生成 .rain 配置文件")
+    rain_path = generate_rain_file(video_id, params, output_dir)
+    _notify(on_progress, f"配置文件已保存: {rain_path.name}")
+
+    # Step 5: Generate markdown report
     _notify(on_progress, "正在生成报告")
     report = generate_report(video_id, analysis, params)
     report_path = output_dir / f"{video_id}.md"
@@ -1090,7 +1348,7 @@ def analyze_video(
 def main() -> None:
     """CLI entry point for standalone execution."""
     parser = argparse.ArgumentParser(
-        description="分析循环视频首帧，输出 RAIN VST 参数建议",
+        description="分析循环视频首帧，输出 RAIN VST 参数建议 + .rain 配置文件",
     )
     parser.add_argument(
         "video",
@@ -1121,6 +1379,7 @@ def main() -> None:
         video_id = extract_video_id(video_path)
         print(f"\n完成! 输出目录: {result_dir}")
         print(f"  报告: {result_dir / f'{video_id}.md'}")
+        print(f"  配置: {result_dir / f'{video_id}.rain'}")
         print(f"  首帧: {result_dir / f'{video_id}.png'}")
     except RuntimeError as exc:
         print(f"错误: {exc}", file=sys.stderr)

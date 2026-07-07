@@ -10,9 +10,11 @@ T1 最通用（推荐）
 
 Overcome Stress to Sleep Instantly | Heavy Rain on Forest Path | Black Screen 10 Hours
 
+**本系列封面主标题固定：** `Rain Sounds`（油管标题 T1 首段为 `Rain Sounds for Sleep`）
+
 **本系列格式示例：**
 
-Deep Sleep Instantly | Calming Rain on Forest Leaves | 10 Hours 4K Rain Loop ASMR
+Rain Sounds for Sleep | Calming Rain on Forest Leaves | 10 Hours 4K Rain Loop ASMR
 
 T2 百分比钩子
 
@@ -68,6 +70,7 @@ thunderstorm sounds, relaxing rain, asmr
 生成时可直接套用的例子
 森林雨助眠（本系列 · 雨景循环）
 
-标题：Deep Sleep Instantly | Calming Rain on Forest Leaves | 10 Hours 4K Rain Loop ASMR
+标题：Rain Sounds for Sleep | Calming Rain on Forest Leaves | 10 Hours 4K Rain Loop ASMR
+封面：主标题 `Rain Sounds` · 副标题 `{Scene Rain} | {Duration} 4K Rain Loop ASMR`
 Tags：核心包 + forest rain, nature sounds, relaxing rain
 描述：Hook + insomnia/anxiety relief + forest leaves rain 场景 + Subscribe + hashtags

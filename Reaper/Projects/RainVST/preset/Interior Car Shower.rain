@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Rain version="1" lts="0" l1="160" l2="580" l3="860" adv="0" scn="Interior Car Shower">
+  <PARAM id="gldr" value="1.0"/>
+  <PARAM id="bgeq1x" value="0.5"/>
+  <PARAM id="bgeq1y" value="0.5"/>
+  <PARAM id="bgeq2x" value="0.5"/>
+  <PARAM id="bgeq2y" value="0.5"/>
+  <PARAM id="bgeq3x" value="0.5"/>
+  <PARAM id="bgeq3y" value="0.5"/>
+  <PARAM id="bgpn" value="0.5"/>
+  <PARAM id="bgwi" value="1.0"/>
+  <PARAM id="eq1x" value="0.6812999844551086"/>
+  <PARAM id="eq1y" value="0.6592999696731567"/>
+  <PARAM id="eq2x" value="0.120899997651577"/>
+  <PARAM id="eq2y" value="1.0"/>
+  <PARAM id="eq3x" value="0.4944999814033508"/>
+  <PARAM id="eq3y" value="0.307699978351593"/>
+  <PARAM id="glgn" value="0.2511999905109406"/>
+  <PARAM id="glhp" value="0.0"/>
+  <PARAM id="gllp" value="0.2911999821662903"/>
+  <PARAM id="glon" value="1.0"/>
+  <PARAM id="rfch" value="0.04259999841451645"/>
+  <PARAM id="rfdn" value="0.5034999847412109"/>
+  <PARAM id="rffc" value="0.4667999744415283"/>
+  <PARAM id="rfin" value="0.0"/>
+  <PARAM id="spbl" value="0.4858999848365784"/>
+  <PARAM id="sppn" value="0.5"/>
+  <PARAM id="spwi" value="0.5180999636650085"/>
+  <PARAM id="sucd" value="0.0"/>
+  <PARAM id="supn" value="0.5"/>
+  <PARAM id="suwi" value="0.6195999979972839"/>
+</Rain>

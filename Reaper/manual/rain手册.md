@@ -898,171 +898,33 @@ Heavy Rain
 
 
 【场景】
-Init                    初始化              远景+空间+近景        Density/Intensity  Wetness/Distance  MASS/Intensity  STRENGTH/Intensity   PRESENCE/Intensity
+Init                    初始化              
 
-01.Big Leafy Symphony      大树叶雨声        13 + 06 + 05             50/20              50/50         81/59              66/33                82/63    
+01.Big Leafy Symphony      大树叶雨声          
 02.Deluge On Metal Shelter 金属雨棚暴雨      
 03.Downpour At Downspout   落水管暴雨
 04.Downpour On Car Port    车棚暴雨
-05.Dreamy Flora            梦幻花园          13 + 06 + 05             56/63              18/78         69/68              52/64                52/50
-06.Drenched Lakeside Jetty 湖畔码头          07 + 06 + 18             46/25              20/65         85/69              79/60                58/64
+05.Dreamy Flora            梦幻花园         
+06.Drenched Lakeside Jetty 湖畔码头         
 07.Drips And Puddles       滴水水洼
 08.Drop Ballet On The Porch 门廊滴雨
 09.Drops On Plastic Shield 塑料雨棚
-10.Gentle Avenue Drizzle   林荫细雨          09 + 06 + 02             50/53              83/82         85/20              55/30                75/60
-11.Gentle Drops Of Autumn  秋日细雨          15 + 06 + 02             55/0               40/56         50/50              50/50                51/74
+10.Gentle Avenue Drizzle   林荫细雨         
+11.Gentle Drops Of Autumn  秋日细雨        
 12.Glassy Shelter          玻璃雨棚
 13.Humming Busstation      雨中公交站
 14.Interior Car Shower     车内听雨
-15.Leafy Rhythm Forest     森林叶雨          13 + 06 + 04             50/50              0/57          50/50              50/50                50/62
-16.Metallic Canopy Madness 金属棚暴雨
+15.Leafy Rhythm Forest     森林叶雨         
 17.Mild Urban Drizzle      城市小雨
 18.Narrow Alleyway Dripping 小巷滴雨
-19.Softest Urban Drizzle   极轻细雨          16 + 13 + 03              
-20.Soothing Flora Tickles  花草轻雨          02 + 06 + 04             46/48              18/72         77/65              55/38                63/70
-21.Stirring Water Whirls   水面涟漪          15 + 06 + 17             100/70             100/63        50/50              100/91               49/100
+19.Softest Urban Drizzle   极轻细雨        
+20.Soothing Flora Tickles  花草轻雨       
+21.Stirring Water Whirls   水面涟漪       
 22.Storming Balcony Patter 阳台暴雨
 23.Urban Midnight Rain     午夜都市雨
-24.Vibrant Wetland Flora   湿地雨林          13 + 06 + 04             50/50              52/70         79/57              55/58                69/68
-25.Whispering Jungle Shower 雨林低语         07 + 05 + 04             52/32              50/78         100/51             86/74                21/21
+24.Vibrant Wetland Flora   湿地雨林      
+25.Whispering Jungle Shower 雨林低语     
 
-
-----
-
-
-【已有场景规律分析】
-
-远景 Distant 偏好：
-  13(森林低语) = 5次 ★ 最万能自然远景（森林/花园/湿地）
-  15(沉浸雨幕) = 2次   厚重感场景（秋日/水面）
-  07(寒流雨声) = 2次   水域场景（湖畔/雨林）
-  09(远方雨幕) = 1次   城市/半开阔
-  02(空灵气流) = 1次   轻柔花园
-  16(缓瀑雨声) = 1次   城市细雨
-
-空间 Space 偏好：
-  06(茂密树林) = 10次 ★★★ 几乎所有自然/户外场景的默认选择
-  05(树冠)     = 1次   丛林/热带
-  13(混凝土墙) = 1次   城市
-
-近景 Close 分布：
-  04(茂密植被) = 4次 ★★ 森林/花园/湿地/雨林
-  05(稀疏植被) = 2次   花园/宽阔自然
-  02(混凝土)   = 2次   城市/街道
-  17(水面)     = 1次   湖/河
-  18(木屋顶)   = 1次   码头/木建筑
-  03(混凝土漫射)= 1次   城市
-
-Rainfall 参数模式：
-  安静/冥想     Density 45-55   Intensity 0-30    Wetness 15-50   Distance 55-80
-  自然/中等     Density 50-56   Intensity 30-60   Wetness 50-70   Distance 50-70
-  活泼/有力     Density 55-100  Intensity 60-70   Wetness 80-100  Distance 60-80
-  暴烈/戏剧     Density 100     Intensity 70+     Wetness 100     Distance 63+
-
-Tonality 三种风格：
-  厚重温暖  Mass 80-100/50-70  Strength 65-100/60-75  Presence 50-82/50-65  → 森林/丛林/湿地
-  中性平衡  Mass 50/50         Strength 50/50         Presence 50/62        → 默认模板
-  清澈纤细  Mass 69-85/20-65   Strength 52-55/30-40   Presence 63-75/60-70  → 花园/细雨/林荫
-
-
-----
-
-
-【缺参场景补全建议】（基于规律推断，建议试听后微调）
-
-                                                                                 Density/Intensity  Wetness/Distance  MASS/Intensity  STRENGTH/Intensity   PRESENCE/Intensity
-
-02.Deluge On Metal Shelter 金属雨棚暴雨    08 + 08 + 11             80/70              75/40         80/65              78/68                70/65
-03.Downpour At Downspout   落水管暴雨      12 + 02 + 02             75/65              80/35         78/62              72/60                68/58
-04.Downpour On Car Port    车棚暴雨        08 + 01 + 11             78/68              70/38         82/64              76/65                72/62
-07.Drips And Puddles       滴水水洼        13 + 06 + 17             35/15              70/70         65/45              45/28                58/50
-08.Drop Ballet On The Porch 门廊滴雨       09 + 14 + 18             40/20              35/55         68/50              50/32                60/52
-09.Drops On Plastic Shield 塑料雨棚        06 + 01 + 14             55/45              50/45         72/55              58/42                65/55
-12.Glassy Shelter          玻璃雨棚        06 + 01 + 06             55/45              45/48         70/55              58/42                68/58
-13.Humming Busstation      雨中公交站      09 + 13 + 02             50/35              50/50         72/52              55/38                65/55
-14.Interior Car Shower     车内听雨        19 + 13 + 07             50/40              40/45         75/55              55/40                60/50
-16.Metallic Canopy Madness 金属棚暴雨      18 + 08 + 13             85/75              70/35         85/68              82/72                72/68
-17.Mild Urban Drizzle      城市小雨        09 + 09 + 03             42/25              55/65         68/45              50/30                65/55
-18.Narrow Alleyway Dripping 小巷滴雨       07 + 12 + 03             40/20              35/55         75/50              58/35                55/48
-19.Softest Urban Drizzle   极轻细雨        16 + 13 + 03             38/12              45/72         62/42              45/28                58/50
-22.Storming Balcony Patter 阳台暴雨        08 + 04 + 02             78/65              72/40         80/62              75/62                70/60
-23.Urban Midnight Rain     午夜都市雨      17 + 09 + 03             48/30              45/60         72/50              55/35                52/45
-
-
-----
-
-
-【新增自然场景 · 30个】面向 Rain ASMR 3h+ 睡眠/专注视频（安全感 + 包裹感 + 可预测性）
-
-                                                                                 Density/Intensity  Wetness/Distance  MASS/Intensity  STRENGTH/Intensity   PRESENCE/Intensity
-
-—— A. 森林系列 (8个) ——
-
-N01.深林细雨    Deep Forest Drizzle        13 + 06 + 04             40/15              30/70         75/55              50/30                60/55
-N02.松林中雨    Pine Forest Rain           13 + 05 + 05             55/45              55/55         80/60              65/45                75/60
-N03.竹林轻雨    Bamboo Grove Light Rain    02 + 06 + 05             45/35              25/65         65/50              45/35                70/65
-
-N04.老林暴雨    Old Growth Downpour        15 + 06 + 04             75/70              70/45         90/65              80/70                75/70
-N05.雨后森林    Post-Rain Forest           13 + 06 + 04             30/10              60/75         70/50              45/25                55/50
-N06.桦树林晨雨  Birch Forest Morning       14 + 06 + 05             48/30              40/60         60/45              50/35                65/55
-N07.枫林秋雨    Maple Autumn Rain          09 + 06 + 04             50/40              45/65         72/58              55/40                68/62
-N08.针叶林夜雨  Conifer Night Rain         15 + 05 + 04             55/35              50/60         85/55              70/50                55/45
-
-—— B. 湖/水域系列 (6个) ——
-
-N09.湖面轻雨    Lake Surface Light Rain    07 + 06 + 17             45/25              35/70         78/55              65/45                55/55
-N10.山湖暴雨    Mountain Lake Downpour     08 + 06 + 17             80/65              85/50         80/65              75/65                65/70
-N11.池塘雨滴    Pond Raindrops             13 + 06 + 17             38/20              25/65         70/50              50/30                60/50
-N12.溪边细雨    Creekside Drizzle          14 + 06 + 05             42/28              50/60         65/48              48/32                62/55
-N13.河岸中雨    Riverbank Rain             12 + 06 + 17             55/45              60/55         75/60              60/50                65/60
-N14.湿地黄昏    Wetland Dusk               07 + 06 + 04             48/30              45/70         82/58              68/48                50/48
-
-—— C. 花园/田园系列 (5个) ——
-
-N15.日式庭院    Japanese Garden            02 + 07 + 04             35/20              20/75         65/50              45/30                55/50
-N16.英式花园    English Garden             14 + 06 + 04             50/40              35/65         70/55              52/38                68/60
-N17.乡间小路    Country Lane               09 + 11 + 02             48/35              55/60         72/48              50/35                70/55
-N18.茶园细雨    Tea Garden Drizzle         13 + 06 + 05             40/25              30/70         68/52              48/32                62/55
-N19.稻田夏雨    Rice Paddy Summer Rain     06 + 06 + 05             60/50              55/55         75/58              60/48                72/62
-
-—— D. 山/谷/高处系列 (5个) ——
-
-N20.山谷回雨    Valley Echo Rain           10 + 06 + 04             50/40              40/70         80/55              65/50                60/55
-N21.山顶云雨    Summit Cloud Rain          11 + 05 + 05             65/55              65/45         70/60              70/55                80/70
-N22.悬崖雨雾    Cliff Rain Mist            18 + 06 + 09             55/45              45/65         75/55              68/52                60/58
-N23.瀑布旁雨    Waterfall Rain             16 + 06 + 17             55/40              70/50         78/58              65/48                62/55
-N24.高原草甸    Highland Meadow            01 + 06 + 05             48/30              35/65         60/45              50/35                72/60
-
-—— E. 建筑/遮蔽系列 (6个) ——
-
-N25.木屋窗边    Cabin Window               13 + 14 + 06             50/35              40/50         72/55              55/40                65/55
-N26.帐篷森林    Forest Tent                13 + 06 + 15             55/45              50/45         75/58              60/45                70/60
-N27.石桥避雨    Stone Bridge Shelter       07 + 13 + 09             55/40              45/55         80/58              65/48                58/52
-N28.凉亭听雨    Pavilion Rain              09 + 14 + 18             48/30              35/60         70/52              52/35                62/55
-N29.寺庙雨檐    Temple Eaves               07 + 07 + 09             45/25              30/70         82/55              68/42                52/48
-N30.树屋夜雨    Treehouse Night Rain       15 + 05 + 19             50/35              50/55         80/58              65/48                55/48
-
-
-----
-
-
-【视频→场景匹配映射表】用于从 loop video 画面自动选择 1_rain 轨 wav
-
-视频场景关键词         首选场景                     备选场景                              匹配逻辑
-森林/树林(绿+暗)      N01(深林细雨)                01(大树叶), N04(老林暴雨), 15(森林叶雨)    green_dominant + brightness<100
-森林+雨势明显          N04(老林暴雨)                24(湿地雨林), N02(松林中雨)                 绿色+画面偏暗
-湖泊/水面              N09(湖面轻雨)                06(湖畔码头), N11(池塘雨滴)                 water_dominant(下半区偏蓝)
-荷花/莲池              N11(池塘雨滴)                N09(湖面轻雨)                              水面+花卉元素
-溪流/小河              N12(溪边细雨)                N13(河岸中雨)                              流水纹理
-花园/花草              N16(英式花园)                05(梦幻花园), 20(花草轻雨)                  绿色+花卉色
-竹林                   N03(竹林轻雨)                N18(茶园细雨)                              绿色+竖直纹理
-山/山谷                N20(山谷回雨)                N21(山顶云雨), N22(悬崖雨雾)                画面上部有山
-木屋/小屋              N25(木屋窗边)                N28(凉亭听雨), N30(树屋夜雨)                木质结构可见
-夜景(brightness<60)    N08(针叶林夜雨)              N30(树屋夜雨), 11(秋日细雨)                 亮度极低
-田园/农田              N19(稻田夏雨)                N17(乡间小路), N24(高原草甸)                开阔+绿色+棕
-瀑布/飞流              N23(瀑布旁雨)                21(水面涟漪)                               白色水流纹
-日式/禅                N15(日式庭院)                N29(寺庙雨檐)                              规则景观
-秋叶/红黄              N07(枫林秋雨)                11(秋日细雨)                               红/橙/黄主导
 
 ----
 
@@ -1129,3 +991,273 @@ N30.树屋夜雨    Treehouse Night Rain       15 + 05 + 19             50/35   
 18.Wood Roof          木屋顶
 19.Wood Thin          薄木板
 20.Wood Tonal         共振木材
+
+
+----
+
+
+# 第五章 预设参数逆向分析
+
+通过分析 25 个官方预设 `.rain` XML 文件，总结出以下参数 ID 与手册功能的对应关系及组合规律。
+
+## 5.1 XML 文件结构
+
+每个 `.rain` 文件为标准 XML 格式，包含一个 `<Rain>` 根节点和多个 `<PARAM>` 子节点。
+
+### 根节点属性
+
+| 属性 | 含义 | 说明 |
+|------|------|------|
+| `l1` | Distant 层选择 | 范围约 100-290，对应 20 种远景模型的内部编号 |
+| `l2` | Space 层选择 | 范围约 500-590，对应 15 种空间环境的内部编号 |
+| `l3` | Close 层选择 | 范围约 800-950，对应 20 种近景材质的内部编号 |
+| `adv` | 高级模式 | 0=普通模式, 1=高级模式 |
+| `lts` | 内部时间戳 | 大部分预设为 0 |
+| `scn` | 场景名称 | 显示在插件界面中的名称 |
+
+### 层编号参考对照
+
+**Distant (l1)**：
+```
+100 → Airy Breeze 区域
+110 → Gentle Swish 区域
+120 → Airy Flow 区域
+140 → Airy Breeze 区域
+150 → Echo River 区域
+160 → Slow Waterfall 区域
+170 → Spooky Whisper 区域
+190 → Thick Shower 区域
+200 → Strong Hiss / Thick Shower 区域
+230 → Distant Veil 区域
+240 → Expansive Shower 区域
+250 → Expansive Shower 区域
+260 → Broadband Shower 区域
+270 → Cold Stream 区域
+290 → Balanced Flow / Balanced Sizzle 区域
+```
+
+**Space (l2)**：
+```
+500 → Building Canopy 区域
+520 → Building Overflow / Building Rooftops 区域
+530 → Foliage Dense 区域
+540 → Inner Yard 区域
+550 → Metal Tanks 区域
+580 → Street Dense / Street Drain 区域
+590 → Foliage Canopy / Street Tarmac 区域
+```
+
+**Close (l3)**：
+```
+800 → Brick Diffuse 区域
+810 → Foliage Lush 区域
+820 → Glass Roof 区域
+840 → Glass Tonal 区域
+850 → Water 区域
+860 → Concrete / Metal Diffuse 区域
+870 → Foliage Yielding 区域
+900 → Stone Echoing / Wood Roof 区域
+910 → Metal Thin 区域
+920 → Wood Thin 区域
+930 → Metal Tonal 区域
+950 → Plastic Tonal 区域
+```
+
+## 5.2 参数 ID 完整映射表
+
+| 参数 ID | 模块 | 功能 | 取值范围 |
+|---------|------|------|----------|
+| **Distant 远景层 (bg 前缀)** | | | |
+| `bgeq1x` | Distant Tonality | Mass（质量感）| 0.0 - 1.0 |
+| `bgeq1y` | Distant Tonality | Strength（力度）| 0.0 - 1.0 |
+| `bgeq2x` | Distant Tonality | EQ Band 2 频率 | 0.0 - 1.0 |
+| `bgeq2y` | Distant Tonality | Presence（存在感）| 0.0 - 1.0 |
+| `bgeq3x` | Distant Tonality | EQ Band 3 频率 | 0.0 - 1.0 |
+| `bgeq3y` | Distant Tonality | EQ Band 3 增益 | 0.0 - 1.0 |
+| `bgpn` | Distant | Pan（声像）| 0.0-1.0，0.5=居中 |
+| `bgwi` | Distant | Width（宽度）| 0.0 - 1.0 |
+| **Rainfall 音色 (eq 前缀)** | | | |
+| `eq1x` | Rainfall Tonality | Mass（质量感）| 0.0 - 1.0 |
+| `eq1y` | Rainfall Tonality | Strength（力度）| 0.0 - 1.0 |
+| `eq2x` | Rainfall Tonality | EQ Band 2 频率 | 0.0 - 1.0 |
+| `eq2y` | Rainfall Tonality | Presence（存在感）| 0.0 - 1.0 |
+| `eq3x` | Rainfall Tonality | EQ Band 3 频率 | 0.0 - 1.0 |
+| `eq3y` | Rainfall Tonality | EQ Band 3 增益 | 0.0 - 1.0 |
+| **Rainfall 核心 (rf 前缀)** | | | |
+| `rfdn` | Rainfall | Density（密度）| 0.0 - 1.0 |
+| `rfin` | Rainfall | Intensity（强度）| 0.0 - 1.0 |
+| `rffc` | Rainfall | Wetness（湿润度）| 0.0 - 1.0 |
+| `rfch` | Rainfall | Distance（距离）| 0.0 - 1.0，值越高越近 |
+| **Space 空间层 (sp 前缀)** | | | |
+| `spbl` | Space | Blend（混合比）| 0.0 - 1.0 |
+| `sppn` | Space | Pan（声像）| 0.0-1.0，0.5=居中 |
+| `spwi` | Space | Width（宽度）| 0.0 - 1.0 |
+| **Close 近景层 (su 前缀)** | | | |
+| `sucd` | Close | Drops（雨滴数量）| 0.0 - 1.0 |
+| `supn` | Close | Pan（声像）| 0.0-1.0，0.5=居中 |
+| `suwi` | Close | Width（宽度）| 0.0 - 1.0 |
+| **Global 全局 (gl 前缀)** | | | |
+| `gldr` | Global | 插件启用 | 1.0=开启 |
+| `glgn` | Global | Volume（输出音量）| 0.0 - 1.0 |
+| `glhp` | Global | High Pass（高通滤波）| 0.0 - 1.0 |
+| `gllp` | Global | Low Pass（低通滤波）| 0.0 - 1.0 |
+| `glon` | Global | Smart（智能动态）| 1.0=开启 |
+
+
+## 5.3 官方预设参数规律分析
+
+### 🌿 自然植被类（森林 / 丛林 / 花园）
+
+**典型预设**：Big Leafy Symphony、Dreamy Flora、Leafy Rhythm Forest、Vibrant Wetland Flora、Whispering Jungle Shower
+
+| 参数 | 典型范围 | 说明 |
+|------|---------|------|
+| `l1` | 100-110 | 偏向 Forest Whisper / Gentle Swish |
+| `l2` | 530-590 | 偏向 Foliage Dense / Foliage Canopy |
+| `l3` | 810-900 | 偏向 Foliage Lush / Foliage Yielding |
+| `bgwi` | 0.5-1.0 | 宽阔的远景声场 |
+| `rfdn` | 0.46-0.56 | 中等密度 |
+| `rfin` | 0.0-0.63 | 低至中等强度 |
+| `rffc` | 0.57-0.78 | 较高湿润度 |
+| `glhp` | 0.0 | 不切低频，保留自然厚度 |
+| `gllp` | 0.0-0.05 | 几乎不切高频 |
+
+**规律**：远景选择自然类型 + 高湿润 + 低强度 = 沉浸的自然雨林氛围
+
+---
+
+### 🏙️ 城市 / 街道类
+
+**典型预设**：Gentle Avenue Drizzle、Mild Urban Drizzle、Softest Urban Drizzle、Urban Midnight Rain
+
+| 参数 | 典型范围 | 说明 |
+|------|---------|------|
+| `l1` | 170-290 | 偏向中高编号远景 |
+| `l2` | 520-590 | 偏向 Street 类空间 |
+| `l3` | 820-950 | 偏向人工材质（Glass / Concrete） |
+| `bgwi` | 0.5-0.8 | 中等宽度 |
+| `rfdn` | 0.50 | 中等密度 |
+| `rfin` | 0.0-0.65 | 低至中等强度 |
+| `rffc` | 0.52-0.82 | 中等湿润度 |
+| `glhp` | 0.24-0.59 | 较高高通，去除低频闷感 |
+| `gllp` | 0.0-0.05 | 低通较少 |
+
+**规律**：较高高通滤波 + 中等参数 = 清晰通透的城市雨声
+
+---
+
+### ⛈️ 暴雨 / 强降雨类
+
+**典型预设**：Deluge On Metal Shelter、Downpour At Downspout、Storming Balcony Patter、Metallic Canopy Madness
+
+| 参数 | 典型范围 | 说明 |
+|------|---------|------|
+| `l1` | 170-240 | 中等编号远景 |
+| `bgwi` | 0.68-1.0 | 宽声场 |
+| `rfdn` | 0.79-1.0 | 高密度 |
+| `rfin` | 0.8-1.0 | 高强度 |
+| `rffc` | 0.54-0.68 | 中等湿润 |
+| `spbl` | 0.31-0.47 | Blend 偏低，强调 Space 反射 |
+| `sucd` | 0.0-0.31 | 近景 Drops 较低 |
+| `glhp` | 0.0 | 保留低频轰鸣感 |
+
+**规律**：高密度 + 高强度 + 宽声场 + 低 Blend = 暴雨的冲击力和包裹感
+
+---
+
+### 💧 滴水 / 细雨类
+
+**典型预设**：Drips And Puddles、Drop Ballet On The Porch、Gentle Drops Of Autumn
+
+| 参数 | 典型范围 | 说明 |
+|------|---------|------|
+| `bgwi` | 1.0 | 最大宽度 |
+| `rfdn` | 0.55-1.0 | 中至高密度 |
+| `rfin` | 0.0-0.06 | 极低强度 |
+| `rfch` | 0.23-0.60 | 中等距离 |
+| `sucd` | 0.44-0.90 | 高近景 Drops |
+| `suwi` | 0.55-0.80 | 宽近景 |
+
+**规律**：高密度 + 极低强度 = 大量轻柔雨滴。高 Drops 突出近景细节。
+
+---
+
+### 🏠 遮蔽物类（车棚 / 雨棚 / 玻璃 / 车内）
+
+**典型预设**：Downpour On Car Port、Glassy Shelter、Interior Car Shower、Humming Busstation
+
+| 参数 | 典型范围 | 说明 |
+|------|---------|------|
+| `spbl` | 0.31-0.50 | 低 Blend，强调遮蔽物反射 |
+| `sucd` | 0.0-0.50 | 低至中 Drops |
+| `suwi` | 0.24-0.50 | 窄近景，集中在遮蔽物 |
+| `rffc` | 0.30-0.62 | 中等湿润 |
+| `gllp` | 0.10-0.29 | 较高低通滤波，模拟室内隔音 |
+
+**规律**：低 Blend + 高低通 + 窄近景 = 隔着遮蔽物听雨的闷厚质感
+
+
+## 5.4 参数组合速查公式
+
+根据场景类型快速设定核心参数：
+
+| 目标效果 | rfdn (密度) | rfin (强度) | rffc (湿润) | rfch (距离) | bgwi (远景宽度) | sucd (Drops) | gllp (低通) |
+|---------|-------------|-------------|-------------|-------------|-----------------|--------------|-------------|
+| 毛毛雨 | < 0.35 | 0.0 | > 0.75 | < 0.2 | > 0.7 | < 0.1 | 0.05-0.08 |
+| 小雨 | 0.35-0.50 | 0.05-0.20 | 0.60-0.75 | 0.15-0.35 | 0.6-0.8 | 0.1-0.3 | 0.03-0.06 |
+| 中雨 | 0.50-0.65 | 0.30-0.55 | 0.55-0.70 | 0.25-0.45 | 0.6-0.85 | 0.15-0.35 | 0.0-0.04 |
+| 大雨 | 0.65-0.85 | 0.55-0.80 | 0.50-0.65 | 0.15-0.35 | 0.8-1.0 | 0.1-0.25 | 0.0 |
+| 暴雨 | 0.85-1.0 | 0.80-1.0 | 0.60-0.85 | 0.08-0.25 | 0.9-1.0 | 0.05-0.3 | 0.0 |
+| 滴雨 | 0.30-1.0 | 0.0-0.06 | 0.50-0.60 | 0.30-0.60 | 0.8-1.0 | 0.4-1.0 | 0.0-0.05 |
+| 室内听雨 | 任意 | 任意 | 0.40-0.60 | 0.0-0.15 | 0.5-0.7 | 0.0-0.2 | 0.10-0.30 |
+| 远景氛围 | 0.35-0.55 | 0.10-0.30 | 0.70-0.85 | 0.0-0.15 | 0.7-0.9 | 0.0-0.08 | 0.05-0.10 |
+
+
+## 5.5 新增自然环境预设（20个）
+
+以下预设已输出到 `RainVST/output/` 目录，可通过 RAIN 插件的 Scene 右键菜单加载。
+
+### 🏔️ 山地高原
+
+| # | 文件名 | 中文名 | 雨量 | 核心设计 |
+|---|--------|--------|------|---------|
+| 01 | Mountain Mist Drizzle | 山间薄雾细雨 | 细雨 | 远景开阔 + 高湿润 + 低强度 |
+| 07 | Rocky Creek Rainfall | 山涧溪石雨 | 中雨 | 石面回声 + 中Drops + 山间溪涧 |
+| 10 | Misty Valley Rain | 雾谷绵雨 | 小雨 | 远景主导 + 高湿润 + 极低近景 |
+| 12 | Highland Wind Rain | 高原风雨 | 大雨 | 远景强 + 高强度 + 中密度 |
+| 17 | Snowy Peak Sleet | 雪山冰雨 | 中雨 | 高通滤波切低频 + 冷色调 |
+
+### 🌲 森林丛林
+
+| # | 文件名 | 中文名 | 雨量 | 核心设计 |
+|---|--------|--------|------|---------|
+| 02 | Deep Forest Downpour | 深林暴雨 | 暴雨 | 密植被全层 + 最高密度强度 |
+| 03 | Bamboo Grove Whisper | 竹林低语 | 小雨 | 木质近景(竹) + 低强度 + 中Drops |
+| 09 | Pine Forest Drip | 松林滴雨 | 滴雨 | 植被近景 + 高Drops + 极低强度 |
+| 13 | Autumn Woodland Patter | 秋日林地 | 小雨 | 落叶材质 + 中密度 + 低强度 |
+| 19 | Jungle Canopy Cascade | 丛林冠层瀑雨 | 大雨 | 高Drops + 高Blend + 瀑布感 |
+
+### 💧 水体湿地
+
+| # | 文件名 | 中文名 | 雨量 | 核心设计 |
+|---|--------|--------|------|---------|
+| 04 | Lakeside Gentle Rain | 湖畔轻雨 | 小雨 | 水面近景 + 中湿润 + 宁静 |
+| 11 | Swamp Steady Pour | 沼泽连绵雨 | 中雨 | 水面 + 高湿润 + 宽 + 持续 |
+| 14 | Riverside Gentle Drizzle | 河畔细雨 | 细雨 | 水面 + 低密度 + 极轻柔 |
+| 16 | Mangrove Wetland Shower | 红树林湿地雨 | 中雨 | 密植被 + 高湿润 + 中强度 |
+
+### 🌿 草地田野
+
+| # | 文件名 | 中文名 | 雨量 | 核心设计 |
+|---|--------|--------|------|---------|
+| 05 | Meadow Spring Shower | 草甸春雨 | 中雨 | 宽声场 + 高湿润 + 植被 |
+| 18 | Grassland Thunder Rain | 草原雷雨 | 暴雨 | 最宽声场 + 高密度强度 + 远景强 |
+| 20 | Moss Garden Mizzle | 苔藓花园细雨 | 毛毛雨 | 极轻柔 + 零强度 + 高湿润 |
+
+### 🌴 特殊生态
+
+| # | 文件名 | 中文名 | 雨量 | 核心设计 |
+|---|--------|--------|------|---------|
+| 06 | Tropical Monsoon Burst | 热带季风暴雨 | 暴雨 | 最高密度 + 最高强度 + 全开 |
+| 08 | Coastal Cliff Storm | 海岸悬崖雷暴 | 暴雨 | 岩壁反射 + 远景强 + 猛烈 |
+| 15 | Desert Oasis Rain | 沙漠绿洲雨 | 中雨 | 低湿润 + 干燥感 + 偏窄 |

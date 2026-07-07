@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Rain version="1" lts="0" l1="120" l2="500" l3="910" adv="0" scn="Narrow Alleyway Dripping">
+  <PARAM id="gldr" value="1.0"/>
+  <PARAM id="bgeq1x" value="0.5"/>
+  <PARAM id="bgeq1y" value="0.5"/>
+  <PARAM id="bgeq2x" value="0.5"/>
+  <PARAM id="bgeq2y" value="0.5"/>
+  <PARAM id="bgeq3x" value="0.5"/>
+  <PARAM id="bgeq3y" value="0.5"/>
+  <PARAM id="bgpn" value="0.5"/>
+  <PARAM id="bgwi" value="1.0"/>
+  <PARAM id="eq1x" value="0.5"/>
+  <PARAM id="eq1y" value="0.5"/>
+  <PARAM id="eq2x" value="0.5"/>
+  <PARAM id="eq2y" value="0.5"/>
+  <PARAM id="eq3x" value="0.5"/>
+  <PARAM id="eq3y" value="0.5"/>
+  <PARAM id="glgn" value="0.2511999905109406"/>
+  <PARAM id="glhp" value="0.0"/>
+  <PARAM id="gllp" value="0.0"/>
+  <PARAM id="glon" value="1.0"/>
+  <PARAM id="rfch" value="0.1899999976158142"/>
+  <PARAM id="rfdn" value="1.0"/>
+  <PARAM id="rffc" value="0.6054999828338623"/>
+  <PARAM id="rfin" value="0.199999988079071"/>
+  <PARAM id="spbl" value="0.4009999930858612"/>
+  <PARAM id="sppn" value="0.5"/>
+  <PARAM id="spwi" value="0.2069000005722046"/>
+  <PARAM id="sucd" value="1.0"/>
+  <PARAM id="supn" value="0.5"/>
+  <PARAM id="suwi" value="0.2129999995231628"/>
+</Rain>
