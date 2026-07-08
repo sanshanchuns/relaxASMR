@@ -23,11 +23,6 @@ return {
       paths = {
         "assets/sound_effect/rain_sound/1_rain/intensity/drizzle/173647_Rain,_Vegetation,_Rain,_Daytime,_Mid_To_Hard_Rainfall,_Havelock_Island,_Second_02_Crest_F50.mp3",
       },
-      vol_envelope = {
-        shape = "single_wave",
-        depth = 0.08,
-        peak_at = "center",
-      },
     },
     {
       track = 3,

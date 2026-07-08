@@ -33,6 +33,16 @@ def windows_cmd_exe() -> Path:
     raise FileNotFoundError("找不到 Windows cmd.exe（WSL 互操作未启用？）")
 
 
+def windows_explorer_exe() -> Path:
+    for candidate in (
+        Path("/mnt/c/Windows/explorer.exe"),
+        Path(shutil.which("explorer.exe") or ""),
+    ):
+        if candidate.is_file():
+            return candidate
+    raise FileNotFoundError("找不到 Windows explorer.exe")
+
+
 # WSL 下常见 Windows Reaper 安装位置（/mnt/<盘符>/...）
 WSL_REAPER_MOUNT_CANDIDATES = (
     "/mnt/d/Program Files/REAPER (x64)/reaper.exe",
@@ -134,16 +144,12 @@ def open_reaper_project(rpp: Path, *, reaper_exe: str | None = None) -> None:
 
 def _open_reaper_from_wsl(rpp: Path, reaper_exe: str | None) -> None:
     win_rpp = wsl_to_windows_path(rpp)
-    win_exe = resolve_reaper_exe(reaper_exe)
-    if not win_exe:
-        raise FileNotFoundError(
-            "WSL 下需指定 Windows 侧 Reaper 可执行文件，例如：\n"
-            "D:\\Program Files\\REAPER (x64)\\reaper.exe"
-        )
-    exe = str(win_exe)
-    cmd = windows_cmd_exe()
+    # Use explorer.exe to open the file. This ensures the process is launched
+    # by the Windows Shell at Medium Integrity, preventing Reaper from running
+    # as Administrator even if WSL is elevated. This allows drag-and-drop to work.
+    explorer = windows_explorer_exe()
     subprocess.Popen(
-        [str(cmd), "/c", "start", "", exe, win_rpp],
+        [str(explorer), win_rpp],
         start_new_session=True,
         cwd="/mnt/c",
     )

@@ -87,7 +87,7 @@
 
 生成：`python3 Reaper/scripts/generate_subproject.py --scene <场景 ID>`
 
-打开工程后运行 **`asmr_apply_recipe.lua`**（铺循环/稀疏 + **`1_rain` 长时音量包络**）。
+打开工程后：`asmr_loop_track.lua` → `asmr_vol_envelope.lua`（**`1_rain` 长时音量包络**）→ 逐轨 `asmr_scatter_track.lua`。
 
 ---
 

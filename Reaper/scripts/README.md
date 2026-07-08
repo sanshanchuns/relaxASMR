@@ -6,32 +6,29 @@ Rain / Lake 等工程共用。媒体路径指向仓库 `assets/`。
 
 | 脚本 | 何时用 |
 |------|--------|
-| **`asmr_apply_recipe.lua`** | **首选** · 铺循环 + **`1_rain` 音量包络（Dynamic）** |
+| **`asmr_loop_track.lua`** | **循环层** · 把一条轨 loop 至工程时长 |
+| **`asmr_vol_envelope.lua`** | **`1_rain` 长时音量包络** · 时长 / 点数 / ±dB / 正弦·余弦 |
 | **`asmr_scatter_track.lua`** | **稀疏层散布**（手动填间隔/随机度，逐轨运行） |
-| **`asmr_loop_track.lua`** | **只循环一条轨**（试验素材长度时） |
 
 ### 在 Reaper 里怎么运行
 
 脚本在 **`Reaper/scripts/`**；创建子工程时也会复制到 **`<场景>/scripts/`**（与 `asmr_config.lua` 同目录）。
 
 1. 打开子工程 `.rpp`（例如 `.../MVI_6923/MVI_6923.rpp`），**Ctrl+S 保存一次**
-2. 菜单 **Actions → ReaScript: Load**（或 **New/Load ReaScript**）
-3. 选 **`asmr_apply_recipe.lua`**：
-   - 子工程内：`Reaper/Projects/Rain/subprojects/<场景>/scripts/asmr_apply_recipe.lua`
-   - 或共享目录：`Reaper/scripts/asmr_apply_recipe.lua`
-4. 弹窗选 **确定**（循环 + 音量包络）→ 完成后对 `2_impact`、`5_wildlife` 等逐轨运行 **`asmr_scatter_track.lua`** → **Ctrl+S**
-5. 日志：**View → Show console**（Mac 上 **`~`** 键）
-
-> 子工程 `scripts/` 里的 `rain_setup_project.lua` 是旧版入口，**请用 `asmr_apply_recipe.lua`**（含 **`1_rain` 长时音量包络**）。
+2. 菜单 **Actions → ReaScript: Load**
+3. 循环层逐轨运行 **`asmr_loop_track.lua`**（或只 loop 需要的轨）
+4. 对 **`1_rain`** 运行 **`asmr_vol_envelope.lua`**（弹窗填：时长、点数、最大/最小 dB、正弦或余弦）
+5. 对 `2_impact`、`5_wildlife` 等逐轨运行 **`asmr_scatter_track.lua`** → **Ctrl+S**
+6. 日志：**View → Show console**（Mac 上 **`~`** 键）
 
 ## 稀疏散布：`asmr_scatter_track.lua`
 
 | 场景 | 操作 |
 |------|------|
 | **Impact / Wildlife 等稀疏轨** | 输入层 id：`2_impact`、`5_wildlife`（或 `0` 选中当前轨）→ **弹窗填参数**（时长、间隔、随机度） |
-| **整片循环层** | 先用 **`asmr_apply_recipe`**，再逐轨 scatter |
+| **循环层** | 先用 **`asmr_loop_track`**，再按需写包络 |
 
-不再从 `asmr_config.lua` 读取间隔/随机度；配方里 `scatter_layers` 仅保留轨号、素材路径与音量。
+不再从 `asmr_config.lua` 读取间隔/随机度；`scatter_layers` 仅保留轨号、素材路径与音量。
 
 Group 父轨存在时，脚本按 **轨名（如 `3_impact`）** 匹配，不依赖 TCP 轨号。
 
@@ -40,7 +37,7 @@ Group 父轨存在时，脚本按 **轨名（如 `3_impact`）** 匹配，不依
 | 脚本 | 用途 |
 |------|------|
 | `generate_subproject.py --scene <id>` | 从 `asmr_config.lua` 生成 `.rpp`（含 Group 总线） |
-| **`create_rain_subproject.py --video <mp4>`** | **一键**：loop 视频 → 分析 + 配方 + 脚手架 + `.rpp` |
+| **`create_rain_subproject.py --video <mp4>`** | **一键**：loop 视频 → 分析 + 配置 + 脚手架 + `.rpp` |
 | `analyze_video_audio.py --scene <id> --update-doc` | 视频原声 → `video_analysis.md` §二 |
 | `repair_rpp_paths.py` | 修复 rpp 内媒体路径 |
 | [`scripts/video_export/export_mp4.sh`](../../scripts/video_export/export_mp4.sh) | 循环视频 + 音频 → MP4（含 YouTube 物料） |
@@ -50,9 +47,8 @@ Group 父轨存在时，脚本按 **轨名（如 `3_impact`）** 匹配，不依
 | 文件 | 说明 |
 |------|------|
 | `asmr_paths.lua` | 仓库根、`asmr_config`、按层 id 找轨 |
-| `asmr_vol_envelope.lua` | 长时音量包络（由 apply_recipe 调用） |
-| `asmr_config_parser.py` | Python 读配方 |
-| `dump_asmr_config.lua` | 配方 → JSON（generate 用） |
+| `asmr_config_parser.py` | Python 读 `asmr_config.lua` |
+| `dump_asmr_config.lua` | 配置 → JSON（generate 用） |
 
 ## Rain 子工程流程
 
@@ -65,7 +61,7 @@ python3 Reaper/scripts/create_rain_subproject.py \
 
 自动：探测视频 ·（若有）内嵌音轨六层分析 · 首帧启发式 · `video_analysis.md` + `asmr_config.lua` + `.rpp`（Group **ReaEQ + ReaComp** · 轨 `5_wildlife` **ReaVerbate** · 轨 7 视频）。
 
-**仅重新生成 `.rpp`（配方已写好）：**
+**仅重新生成 `.rpp`（配置已写好）：**
 
 ```bash
 python3 Reaper/scripts/generate_subproject.py --scene MVI_6918
@@ -82,7 +78,7 @@ python3 Reaper/scripts/generate_subproject.py --scene MVI_6918
 
 强制覆盖：`RELAXASMR_MEDIA_MODE=absolute` 或 `--media-mode wsl_unc`。
 
-打开 `.rpp` → **`asmr_apply_recipe.lua`**（铺循环/稀疏 + **`1_rain` 长时音量包络**）→ 手调 Group / Master 限幅 → 渲染 wav → [`scripts/video_export/export_mp4.sh`](../../../scripts/video_export/export_mp4.sh) 合成 mp4（自动 YouTube 物料）。
+打开 `.rpp` → **`asmr_loop_track`** → **`asmr_vol_envelope`**（`1_rain`）→ **`asmr_scatter_track`** → 手调 Group / Master 限幅 → 渲染 wav → [`scripts/video_export/export_mp4.sh`](../../../scripts/video_export/export_mp4.sh) 合成 mp4。
 
 混音质量：人工对照 [`design/rain_series/scoring_rubric.md`](../../design/rain_series/scoring_rubric.md)；后续 **爆款声纹** 见 [`benchmark/README.md`](../../benchmark/README.md)。
 
@@ -91,4 +87,4 @@ python3 Reaper/scripts/generate_subproject.py --scene MVI_6918
 ## 系列
 
 - **Rain**：睡眠 · 默认 3 h
-- **Lake**：专注 + 钢琴 · 勿与 Rain 配方混用
+- **Lake**：专注 + 钢琴 · 勿与 Rain 配置混用

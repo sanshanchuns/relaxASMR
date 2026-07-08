@@ -21,7 +21,6 @@ TEMPLATE_DOC = SUBPROJECTS / "_template" / "video_analysis.md"
 SCAFFOLD_SRC = RAIN_ROOT / "scripts"  # lua + fx 模板
 REAPER_SCRIPTS = Path(__file__).resolve().parent  # Reaper/scripts（共享 ReaScript）
 SHARED_REAPER_LUA = (
-    "asmr_apply_recipe.lua",
     "asmr_paths.lua",
     "asmr_vol_envelope.lua",
     "asmr_scatter_track.lua",
@@ -286,7 +285,7 @@ def recipe_section_md(cfg: dict, rationales: dict[str, str] | None = None) -> st
         "# 三、六层配方 + Dynamic（自动初版）",
         "",
         "> 架构：[rain_sound_design.md](../../../../design/rain_series/rain_sound_design.md)",
-        "> 轨 1–6 = 素材层 · 轨 7 = 视频 · **Dynamic** = `1_rain` 音量包络（无独立轨）",
+        "> 轨 1–6 = 素材层 · 轨 7 = 视频 · `1_rain` 长时包络请手动运行 `asmr_vol_envelope.lua`",
         "",
         "## 3.1 配方总览",
         "",
@@ -294,11 +293,8 @@ def recipe_section_md(cfg: dict, rationales: dict[str, str] | None = None) -> st
         "|----|----------|------|------|------|",
     ]
     for layer in cfg.get("loop_layers", []):
-        mode = "loop"
-        if layer.get("vol_envelope"):
-            mode = "loop + **Dynamic**"
         lines.append(
-            f"| {layer['track']} | `{layer['id']}` | {layer.get('name', '')} | {mode} | {layer.get('vol', 1)} |"
+            f"| {layer['track']} | `{layer['id']}` | {layer.get('name', '')} | loop | {layer.get('vol', 1)} |"
         )
     for layer in cfg.get("scatter_layers", []):
         lines.append(
@@ -336,7 +332,7 @@ def recipe_section_md(cfg: dict, rationales: dict[str, str] | None = None) -> st
             lines.append(f"| `{lid}` | {short} | {reason} |")
         lines.append("")
     lines.extend([
-        "打开工程后运行 **`asmr_apply_recipe.lua`**（铺循环 + **`1_rain` 音量包络**），再逐轨运行 **`asmr_scatter_track.lua`** 散布稀疏层。",
+        "打开工程后：`asmr_loop_track.lua` 铺循环 → `asmr_vol_envelope.lua` 写 **`1_rain` 包络** → 逐轨 **`asmr_scatter_track.lua`** 散布稀疏层。",
         "",
     ])
     return "\n".join(lines)
@@ -377,13 +373,6 @@ def config_to_lua(cfg: dict) -> str:
             if p:
                 lines.append(f"        {lua_quote(p)},")
         lines.append("      },")
-        if layer.get("vol_envelope"):
-            ve = layer["vol_envelope"]
-            lines.append("      vol_envelope = {")
-            lines.append(f"        shape = {lua_quote(ve['shape'])},")
-            lines.append(f"        depth = {ve['depth']},")
-            lines.append(f"        peak_at = {lua_quote(ve['peak_at'])},")
-            lines.append("      },")
         lines.append("    },")
     lines.append("  },")
     lines.append("")

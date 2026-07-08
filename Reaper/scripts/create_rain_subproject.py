@@ -9,7 +9,7 @@
   python3 Reaper/scripts/create_rain_subproject.py \\
     --video assets/loop_video/rain_video/MVI_6888/MVI_6888_loop_8_fade_0.5.mp4
 
-打开 .rpp 后运行 asmr_apply_recipe.lua（铺 3h 循环/稀疏 + 轨 2 音量包络）。
+打开 .rpp 后：asmr_loop_track → asmr_vol_envelope（1_rain）→ asmr_scatter_track。
 
 媒体路径默认 `--media-mode auto`：按运行环境自动选择 absolute / wsl_unc（见 README）。
 """
@@ -86,16 +86,13 @@ def main() -> None:
     if not args.skip_generate:
         print(f"==> 工程:   {sub / f'{scene}.rpp'}")
     print()
-    apply_lua = sub / "scripts" / "asmr_apply_recipe.lua"
-    shared_lua = SCRIPT_DIR / "asmr_apply_recipe.lua"
+    scripts = sub / "scripts"
     print("下一步（Reaper）：")
     print(f"  1. 打开 {sub / f'{scene}.rpp'}")
-    print("  2. Actions → ReaScript: Load → 选 asmr_apply_recipe.lua")
-    if apply_lua.is_file():
-        print(f"     {apply_lua}")
-    else:
-        print(f"     {shared_lua}")
-    print("  3. 弹窗选「确定」= 循环 + 稀疏 + 1_rain 音量包络（Dynamic）")
+    print("  2. asmr_loop_track.lua — 循环层")
+    print("  3. asmr_vol_envelope.lua — 1_rain 长时包络")
+    print("  4. asmr_scatter_track.lua — 稀疏层逐轨散布")
+    print(f"     脚本目录: {scripts}")
 
 
 if __name__ == "__main__":

@@ -29,7 +29,7 @@ def parse_tags(block: str) -> list[str]:
 
 
 def parse_youtube_md(path: Path) -> dict:
-    text = path.read_text(encoding="utf-8")
+    text = path.read_text(encoding="utf-8").replace("\r\n", "\n")
     title_zh = _first_line(_section(text, "中文标题"))
     title_en = _first_line(_section(text, "English Title"))
     desc_zh = _section(text, "中文说明")

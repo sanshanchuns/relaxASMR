@@ -11,6 +11,7 @@ import threading
 import tkinter as tk
 from pathlib import Path
 from tkinter import filedialog, messagebox, ttk
+from PIL import Image, ImageTk
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
@@ -130,6 +131,10 @@ class RelaxAsmrApp(tk.Tk):
         ttk.Spinbox(row2, from_=1, to=12, increment=0.5, width=6, textvariable=self.duration_var).pack(
             side=tk.LEFT, padx=(8, 16)
         )
+        self.overwrite_rpp_var = tk.BooleanVar(value=False)
+        ttk.Checkbutton(row2, text="覆盖 RPP", variable=self.overwrite_rpp_var).pack(side=tk.LEFT, padx=(0, 8))
+        self.overwrite_mat_var = tk.BooleanVar(value=False)
+        ttk.Checkbutton(row2, text="覆盖物料", variable=self.overwrite_mat_var).pack(side=tk.LEFT, padx=(0, 16))
         self.btn_create = ttk.Button(row2, text="一键分析并生成", command=self._create_project)
         self.btn_create.pack(side=tk.LEFT)
         self.btn_open_material = ttk.Button(row2, text="打开物料目录", command=self._open_material)
@@ -148,6 +153,8 @@ class RelaxAsmrApp(tk.Tk):
         row3.pack(fill=tk.X)
         self.btn_open = ttk.Button(row3, text="在 Reaper 中打开", command=self._open_reaper)
         self.btn_open.pack(side=tk.LEFT)
+        self.btn_open_rpp_dir = ttk.Button(row3, text="打开工程目录", command=self._open_rpp_dir)
+        self.btn_open_rpp_dir.pack(side=tk.LEFT, padx=(8, 0))
 
         row3b = ttk.Frame(sec3)
         row3b.pack(fill=tk.X, pady=(8, 0))
@@ -177,7 +184,7 @@ class RelaxAsmrApp(tk.Tk):
         row_export.pack(fill=tk.X)
         self.btn_export = ttk.Button(row_export, text="开始合成 (export_mp4)", command=self._export_mp4)
         self.btn_export.pack(side=tk.LEFT)
-        self.btn_open_output = ttk.Button(row_export, text="打开 output 目录", command=self._open_output)
+        self.btn_open_output = ttk.Button(row_export, text="打开输出目录", command=self._open_output)
         self.btn_open_output.pack(side=tk.LEFT, padx=(8, 0))
         self.lbl_export = ttk.Label(sec_export, text="合成进度：待开始", wraplength=760)
         self.lbl_export.pack(anchor=tk.W, pady=(8, 0))
@@ -189,11 +196,11 @@ class RelaxAsmrApp(tk.Tk):
         row4 = ttk.Frame(sec4)
         row4.pack(fill=tk.X)
         ttk.Label(row4, text="可见性").pack(side=tk.LEFT)
-        self.privacy_var = tk.StringVar(value=self._cfg.get("youtube_privacy", "unlisted"))
+        self.privacy_var = tk.StringVar(value=self._cfg.get("youtube_privacy", "public"))
         ttk.Combobox(
             row4,
             textvariable=self.privacy_var,
-            values=("unlisted", "private", "public"),
+            values=("public", "unlisted", "private"),
             width=10,
             state="readonly",
         ).pack(side=tk.LEFT, padx=(8, 16))
@@ -215,15 +222,16 @@ class RelaxAsmrApp(tk.Tk):
         self.btn_upload = ttk.Button(row4, text="上传到 YouTube", command=self._upload_youtube)
         self.btn_upload.pack(side=tk.LEFT)
         
-        row5 = ttk.Frame(sec4)
-        row5.pack(fill=tk.X, pady=(8, 0))
-        self.btn_custom_video = ttk.Button(row5, text="选择自定义视频", command=self._select_custom_video)
-        self.btn_custom_video.pack(side=tk.LEFT)
-        self.lbl_custom_video = ttk.Label(row5, text="使用默认视频 (output 目录下的最新 mp4)", wraplength=600)
-        self.lbl_custom_video.pack(side=tk.LEFT, padx=(8, 0))
 
-        self.lbl_upload = ttk.Label(sec4, text="上传：—", wraplength=760)
+
+        self.lbl_upload = ttk.Label(sec4, text="待上传：—", wraplength=760)
         self.lbl_upload.pack(anchor=tk.W, pady=(8, 0))
+
+        # --- 预览区 ---
+        self.preview_frame = ttk.LabelFrame(root, text="画面快照预览", padding=10)
+        self.preview_frame.pack(fill=tk.BOTH, expand=True, **pad)
+        self.lbl_preview = ttk.Label(self.preview_frame, text="无预览")
+        self.lbl_preview.pack(anchor=tk.CENTER)
 
         # --- 日志 (全局可见) ---
         sec_log = ttk.LabelFrame(self.right_frame, text="日志", padding=8)
@@ -247,9 +255,6 @@ class RelaxAsmrApp(tk.Tk):
                 self.material_dir = p
         self._refresh_material_label()
 
-        last_upload = self._cfg.get("last_upload_url")
-        if last_upload:
-            self.lbl_upload.configure(text=f"上传：{last_upload}")
 
         if is_wsl():
             self._log("WSL 环境：打开工程将调用 Windows 版 Reaper（勿用 Linux xdg-open）")
@@ -313,32 +318,111 @@ class RelaxAsmrApp(tk.Tk):
     def _set_video(self, video: Path, *, from_import: bool) -> None:
         try:
             scene = derive_scene_id(video)
-            dest, rel = ensure_video_in_assets(video, scene)
         except ValueError as exc:
             messagebox.showerror("导入失败", str(exc))
             return
-        except OSError as exc:
-            messagebox.showerror("导入失败", f"复制视频失败：{exc}")
-            return
 
-        self.video_path = dest
-        self.video_rel = rel
+        self.video_path = video
+        self.video_rel = str(video)
         self.scene_id = scene
-        self.lbl_video.configure(text=str(dest))
-        self.lbl_scene.configure(text=f"场景 ID：{scene} · 已复制到 assets/loop_video/rain_video/{scene}/")
-        self._cfg["last_video"] = str(dest)
+        self.lbl_video.configure(text=str(video))
+        self.lbl_scene.configure(text=f"场景 ID：{scene}")
+        self._cfg["last_video"] = str(video)
         self._cfg["last_video_dir"] = str(video.parent)
         self._save_config()
         if from_import:
-            self._log(f"已导入：{rel}")
+            self._log(f"已选定视频：{video}")
 
-        sub = LIB_REPO_ROOT / "Reaper" / "Projects" / "Rain" / "subprojects" / scene
-        rpp = sub / f"{scene}.rpp"
+        import re
+        stem = video.stem
+        match = re.search(r'\d+', stem)
+        num = match.group() if match else stem
+
+        # 1. 自动关联 Reaper 工程
+        rpp = LIB_REPO_ROOT / "Reaper" / "Projects" / "Rain" / f"{scene}.rpp"
         if rpp.is_file():
-            self.subproject_dir = sub
             self._set_rpp(rpp)
-            self.lbl_sub.configure(text=f"子工程：{sub.relative_to(LIB_REPO_ROOT)}")
+            self.lbl_sub.configure(text=f"工程：{rpp.relative_to(LIB_REPO_ROOT)}")
+        else:
+            self.lbl_sub.configure(text="工程：—")
+            self.rpp_path = None
+            
+        # 2. 自动关联物料
+        out_dir = None
+        output_dirs = list(video.parent.glob("output*"))
+        if output_dirs and output_dirs[0].is_dir():
+            out_dir = output_dirs[0]
+            
+        if out_dir:
+            material_md = out_dir / f"MVI_{num}_material.md"
+            if material_md.is_file():
+                self.material_dir = out_dir
+            else:
+                self.material_dir = None
+        else:
+            self.material_dir = None
         self._refresh_material_label()
+        
+        # 3. 自动关联导出的 MP4
+        exported_mp4 = None
+        mp4_candidates = []
+        if out_dir:
+            mp4_candidates.extend(out_dir.glob(f"*{num}*.mp4"))
+            
+        rpp_dir = LIB_REPO_ROOT / "Reaper" / "Projects" / "Rain"
+        mp4_candidates.extend(rpp_dir.glob(f"*{num}*.mp4"))
+        
+        mp4_candidates = [p for p in mp4_candidates if p.name != video.name]
+        if mp4_candidates:
+            # 根据修改时间倒序，取最新生成的 MP4
+            mp4_candidates.sort(key=lambda p: p.stat().st_mtime, reverse=True)
+            exported_mp4 = mp4_candidates[0]
+                
+        if exported_mp4:
+            self.lbl_export.configure(text=f"合成进度：已完成 ({exported_mp4.name})")
+            self.lbl_upload.configure(text=f"待上传：{exported_mp4}")
+            self._cfg["last_export_mp4"] = str(exported_mp4)
+        else:
+            self.lbl_export.configure(text="合成进度：待开始")
+            self.lbl_upload.configure(text="待上传：—")
+            self._cfg["last_export_mp4"] = ""
+
+        self._save_config()
+        self._update_preview(self.video_path)
+
+    def _update_preview(self, video_path: Path | None) -> None:
+        if not hasattr(self, "lbl_preview"):
+            return
+        if not video_path or not video_path.is_file():
+            self.lbl_preview.configure(image="", text="无预览")
+            self._preview_img = None
+            return
+            
+        import re
+        stem = video_path.stem
+        match = re.search(r'\d+', stem)
+        num = match.group() if match else stem
+        
+        snapshot_jpg = None
+        output_dirs = list(video_path.parent.glob("output*"))
+        if output_dirs and output_dirs[0].is_dir():
+            jpgs = list(output_dirs[0].glob(f"*{num}*.jpg"))
+            if jpgs:
+                snapshot_jpg = jpgs[0]
+                
+        if not snapshot_jpg or not snapshot_jpg.is_file():
+            self.lbl_preview.configure(image="", text="未找到该视频的分析快照")
+            self._preview_img = None
+            return
+            
+        try:
+            img = Image.open(snapshot_jpg)
+            img.thumbnail((480, 270), Image.Resampling.LANCZOS)
+            self._preview_img = ImageTk.PhotoImage(img)
+            self.lbl_preview.configure(image=self._preview_img, text="")
+        except Exception as e:
+            self.lbl_preview.configure(image="", text=f"预览加载失败: {e}")
+            self._preview_img = None
 
     def _video_dialog_initialdir(self) -> str:
         saved = self._cfg.get("last_video_dir")
@@ -380,52 +464,106 @@ class RelaxAsmrApp(tk.Tk):
         def worker() -> None:
             material_out: Path | None = None
             try:
-                # 1. 自动分析视频画面，生成 rain vst 配置
-                import sys
-                rain_vst_script = LIB_REPO_ROOT / "scripts" / "rain_vst_analyze.py"
+                import shutil
+                import tempfile
+                
+                rain_vst_script = LIB_REPO_ROOT / "scripts" / "rain_vst" / "analyze.py"
                 vst_mod = load_module(rain_vst_script, "relaxasmr_rain_vst_analyze")
                 
+                gen_sub_script = LIB_REPO_ROOT / "Reaper" / "scripts" / "generate_subproject.py"
+                gen_sub = load_module(gen_sub_script, "generate_subproject")
+                
                 scene_id = self.scene_id or derive_scene_id(loop_video)
-                vst_output_dir = LIB_REPO_ROOT / "assets" / "sound_effect" / "rain_sound" / "1_rain" / "vst_params"
                 
                 self._log("—— 1. 自动分析画面 ——")
-                out_dir, scene_cn = vst_mod.analyze_video(loop_video, vst_output_dir, on_progress=self._log)
+                vst_output_dir = LIB_REPO_ROOT / "assets" / "sound_effect" / "rain_sound" / "1_rain" / "vst_params"
+                out_dir, scene_cn, _, _ = vst_mod.analyze_video(loop_video, vst_output_dir, on_progress=self._log)
                 
-                # 2. 生成 YouTube 物料
-                self._log("—— 2. 预生成 YouTube 物料 ——")
-                sub = LIB_REPO_ROOT / "Reaper" / "Projects" / "Rain" / "subprojects" / scene_id
-                material_out = self._generate_loop_material(loop_video, sub, scene_cn, duration)
+                import re
+                match = re.search(r'\d+', scene_id)
+                num = match.group() if match else scene_id
 
-                # 3. 自动生成 Reaper 工程 (全部留白)
+                self._log("—— 2. 预生成 YouTube 物料 ——")
+                output_dirs = list(loop_video.parent.glob("output*"))
+                out_dir = output_dirs[0] if output_dirs and output_dirs[0].is_dir() else loop_video.parent / "output"
+                out_dir.mkdir(parents=True, exist_ok=True)
+                
+                target_md_path = out_dir / f"MVI_{num}_material.md"
+                if target_md_path.is_file() and not self.overwrite_mat_var.get():
+                    self._log(f"物料已存在且未勾选覆盖，跳过生成。")
+                else:
+                    yt_mod = load_module(YT_MATERIAL_SCRIPT, "relaxasmr_generate_youtube_material")
+                    yt_mod.generate_material(
+                        loop_video,
+                        output_dir=out_dir,
+                        preset_key=scene_cn,
+                        copy_style="forest_rain",
+                        thumb_title=RAIN_THUMB_TITLE,
+                        thumb_subtitle_place_only=True,
+                        duration_override_s=duration * 3600,
+                        on_progress=self._log,
+                    )
+                    # generate_material 默认生成 youtube.md，重命名为目标格式
+                    if (out_dir / "youtube.md").is_file():
+                        (out_dir / "youtube.md").rename(target_md_path)
+                        
+                material_out = target_md_path
+
                 self._log("—— 3. 新建 Reaper 工程 ——")
-                sub = create_from_video(
-                    loop_video,
-                    scene_id=scene_id,
-                    duration_hours=duration,
-                    on_progress=self._log,
-                )
-                rpp = sub / f"{scene_id}.rpp"
+                cfg = {
+                    "scene_id": scene_id,
+                    "project_name": f"Rain · {scene_id}",
+                    "series": "rain_sleep",
+                    "duration_hours": duration,
+                    "loop_layers": [
+                        {"track": 1, "id": "1_rain", "name": "小雨主雨势", "vol": 1.0, "paths": []},
+                        {"track": 3, "id": "3_environment", "name": "环境空间", "vol": 0.26, "paths": []},
+                        {"track": 4, "id": "4_water", "name": "水体/滴水", "vol": 0.18, "paths": []},
+                        {"track": 6, "id": "6_human", "name": "留白（待选）", "vol": 0.0, "paths": []},
+                    ],
+                    "scatter_layers": [
+                        {"track": 2, "id": "2_impact", "name": "近景滴答打叶", "vol": 1.0, "paths": []},
+                        {"track": 5, "id": "5_wildlife", "name": "远景鸟鸣", "vol": 1.0, "paths": []},
+                    ]
+                }
+                target_audio = None
+                if out_dir.is_dir():
+                    wavs = [w for w in out_dir.glob(f"*{num}*clip*.wav") if w.is_file()]
+                    if wavs:
+                        target_audio = wavs[0]
+                
+                if target_audio:
+                    self._log(f"找到默认音频：{target_audio}")
+                    try:
+                        cfg["loop_layers"][0]["paths"].append(str(target_audio.relative_to(LIB_REPO_ROOT)))
+                    except ValueError:
+                        cfg["loop_layers"][0]["paths"].append(str(target_audio))
+                else:
+                    self._log(f"未在 {out_dir.name} 找到包含 {num} 和 clip 的 wav 音频，轨道将留空")
+                
+                rpp = LIB_REPO_ROOT / "Reaper" / "Projects" / "Rain" / f"{scene_id}.rpp"
+                if rpp.is_file() and not self.overwrite_rpp_var.get():
+                    self._log(f"工程文件 {rpp.name} 已存在且未勾选覆盖，跳过生成。")
+                else:
+                    rpp.write_text(gen_sub.build_rpp(cfg, LIB_REPO_ROOT, rpp.parent, "auto"), encoding="utf-8")
 
                 def done_ok() -> None:
-                    self.subproject_dir = sub
                     self._set_rpp(rpp)
-                    rel_sub = sub.relative_to(LIB_REPO_ROOT)
-                    self.lbl_sub.configure(text=f"子工程：{rel_sub}")
-                    if material_out:
-                        self.material_dir = material_out
-                        self._cfg["last_material_dir"] = str(material_out)
+                    self.lbl_sub.configure(text=f"工程：{rpp.relative_to(LIB_REPO_ROOT)}")
+                    self.material_dir = out_dir
+                    self._cfg["last_material_dir"] = str(out_dir)
                     self._refresh_material_label()
                     self._cfg["duration_hours"] = duration
                     self._save_config()
-                    mat_rel = material_out.relative_to(LIB_REPO_ROOT) if material_out else "—"
+                    self._update_preview(self.video_path)
+                    try:
+                        mat_show = material_out.relative_to(LIB_REPO_ROOT)
+                    except ValueError:
+                        mat_show = material_out
                     messagebox.showinfo(
                         "完成",
-                        f"子工程已生成：\n{rel_sub}\n\n"
-                        f"YouTube 物料：\n{mat_rel}/\n"
-                        "· thumbnail.jpg\n"
-                        "· youtube.md\n\n"
-                        f"封面：{RAIN_THUMB_TITLE} · 地点副标题 · 无 4K 角标\n\n"
-                        "打开 Reaper 后运行 scripts/asmr_apply_recipe.lua 铺轨。",
+                        f"工程已生成：\n{rpp.relative_to(LIB_REPO_ROOT)}\n\n"
+                        f"物料：\n{mat_show}\n",
                     )
 
                 self.after(0, done_ok)
@@ -451,20 +589,16 @@ class RelaxAsmrApp(tk.Tk):
         self._save_config()
 
     def _open_reaper(self) -> None:
-        if self.scene_id:
-            auto_rpp = (
-                LIB_REPO_ROOT
-                / "Reaper"
-                / "Projects"
-                / "Rain"
-                / "subprojects"
-                / self.scene_id
-                / f"{self.scene_id}.rpp"
-            )
-            if auto_rpp.is_file():
-                self._set_rpp(auto_rpp)
+        if not self.scene_id:
+            messagebox.showwarning("提示", "请先选择场景。")
+            return
+            
+        auto_rpp = LIB_REPO_ROOT / "Reaper" / "Projects" / "Rain" / f"{self.scene_id}.rpp"
+        if auto_rpp.is_file():
+            self._set_rpp(auto_rpp)
+            
         if not self.rpp_path or not self.rpp_path.is_file():
-            messagebox.showwarning("提示", "请先生成 Reaper 子工程。")
+            messagebox.showwarning("提示", "请先生成 Reaper 工程。")
             return
         exe = self.reaper_exe_var.get().strip() or None
         self._cfg["reaper_exe"] = exe or ""
@@ -508,65 +642,69 @@ class RelaxAsmrApp(tk.Tk):
 
 
 
-    def _open_output(self) -> None:
-        if not self.scene_id:
-            messagebox.showwarning("提示", "请先选择场景并生成子工程。")
-            return
-        sub = LIB_REPO_ROOT / "Reaper" / "Projects" / "Rain" / "subprojects" / self.scene_id
-        out_dir = sub / "output"
-        if not out_dir.is_dir():
-            messagebox.showwarning("提示", f"输出目录不存在：{out_dir}")
-            return
+    def _open_rpp_dir(self) -> None:
+        target = LIB_REPO_ROOT / "Reaper" / "Projects" / "Rain"
         try:
-            open_folder(out_dir)
-            self._log(f"已打开 output 目录：{out_dir}")
+            open_folder(target)
+            self._log(f"已打开工程目录：{target}")
         except Exception as exc:
             messagebox.showerror("打开失败", str(exc))
 
-    def _select_custom_video(self) -> None:
-        path = filedialog.askopenfilename(
-            title="选择要上传的自定义 MP4",
-            filetypes=[("MP4 视频", "*.mp4"), ("所有文件", "*.*")],
-        )
-        if path:
-            self.custom_video_path = Path(path)
-            self.lbl_custom_video.configure(text=f"自定义视频：{self.custom_video_path.name}")
-        else:
-            self.custom_video_path = None
-            self.lbl_custom_video.configure(text="使用默认视频 (output 目录下的最新 mp4)")
+    def _open_output(self) -> None:
+        target = LIB_REPO_ROOT / "Reaper" / "Projects" / "Rain"
+        try:
+            open_folder(target)
+            self._log(f"已打开输出目录：{target}")
+        except Exception as exc:
+            messagebox.showerror("打开失败", str(exc))
 
     def _export_mp4(self) -> None:
         if self._busy:
             return
+            
         if not self.scene_id:
-            messagebox.showwarning("提示", "请先选择场景并生成子工程。")
+            messagebox.showwarning("提示", "请先选择场景并生成工程。")
             return
             
-        sub = LIB_REPO_ROOT / "Reaper" / "Projects" / "Rain" / "subprojects" / self.scene_id
-        out_dir = sub / "output"
-        if not out_dir.is_dir():
-            messagebox.showwarning("提示", f"输出目录不存在：{out_dir}")
-            return
-            
-        # Find wav
-        wavs = list(out_dir.glob("*.wav"))
-        if not wavs:
-            messagebox.showwarning("提示", f"未在 {out_dir} 找到导出的 wav 文件。\n请先在 Reaper 中渲染！")
-            return
-        audio_file = wavs[0]
-        
         if not self.video_path or not self.video_path.is_file():
-            messagebox.showwarning("提示", "未找到原始 loop 视频！")
+            messagebox.showwarning("提示", "未找到原始 loop 视频，请重新选择视频！")
+            return
+        import re
+        match = re.search(r'\d+', self.scene_id)
+        num = match.group() if match else self.scene_id
+        
+        target_dir = LIB_REPO_ROOT / "Reaper" / "Projects" / "Rain"
+        wavs = list(target_dir.glob(f"*{num}*.wav"))
+        if not wavs:
+            messagebox.showwarning("提示", f"未找到包含 {num} 的音频文件。\n请先在 Reaper 中手动导出！")
             return
             
-        script = LIB_REPO_ROOT / "scripts" / "video_export" / "export_mp4.sh"
-        # Use bash to run the script
-        cmd = ["bash", str(script), "-v", str(self.video_path), "-a", str(audio_file)]
+        audio_file = wavs[0]
+        vid_file = self.video_path
+            
+        def to_wsl(p):
+            s = str(p).replace("\\", "/")
+            if s.startswith("//wsl.localhost/Ubuntu"): return s.replace("//wsl.localhost/Ubuntu", "")
+            if s.startswith("//wsl$/Ubuntu"): return s.replace("//wsl$/Ubuntu", "")
+            if ":" in s:
+                d, r = s.split(":", 1)
+                return f"/mnt/{d.lower()}{r}"
+            return s
+            
+        script_wsl = to_wsl(LIB_REPO_ROOT / "scripts" / "video_export" / "export_mp4.sh")
+        vid_wsl = to_wsl(vid_file)
+        aud_wsl = to_wsl(audio_file)
+        
+        import sys
+        if sys.platform == "win32":
+            cmd = ["wsl", "bash", script_wsl, "-v", vid_wsl, "-a", aud_wsl, "--encoder", "nvenc"]
+        else:
+            cmd = ["bash", script_wsl, "-v", vid_wsl, "-a", aud_wsl, "--encoder", "nvenc"]
 
         self._set_busy(True)
         self._log("—— 开始合成视频 (export_mp4) ——")
         self._log(f"音频：{audio_file.name}")
-        self._log(f"视频：{self.video_path.name}")
+        self._log(f"视频：{vid_file.name}")
         self.lbl_export.configure(text="合成进度：正在运行...")
         
         def worker() -> None:
@@ -587,7 +725,7 @@ class RelaxAsmrApp(tk.Tk):
                 proc.wait()
                 if proc.returncode == 0:
                     def done_ok() -> None:
-                        self.lbl_export.configure(text="合成进度：已完成")
+                        self._set_video(self.video_path, from_import=False)
                         messagebox.showinfo("合成成功", "长视频导出完成，已保存在 output 目录下！")
                     self.after(0, done_ok)
                 else:
@@ -612,12 +750,44 @@ class RelaxAsmrApp(tk.Tk):
         if not self.scene_id:
             messagebox.showwarning("提示", "请先选择场景。")
             return
-        material = self.material_dir
-        if not material or not material.is_dir():
-            material = find_material_dir(self.scene_id, LIB_REPO_ROOT)
-        if not material or not (material / "youtube.md").is_file():
-            messagebox.showwarning("提示", "请先生成子工程（含 YouTube 物料：youtube.md + thumbnail.jpg）。")
+            
+        import re
+        match = re.search(r'\d+', self.scene_id)
+        num = match.group() if match else self.scene_id
+        rpp_dir = LIB_REPO_ROOT / "Reaper" / "Projects" / "Rain"
+
+        md_candidates = []
+        def gather_mds(d: Path):
+            if not d or not d.is_dir(): return
+            for pattern in [f"*{num}*_material.md", f"*{num}*youtube.md", "youtube.md", f"MVI_{num}.md", f"{num}.md"]:
+                for p in d.glob(pattern):
+                    if p not in md_candidates:
+                        md_candidates.append(p)
+                        
+        gather_mds(self.material_dir)
+        gather_mds(rpp_dir)
+        
+        if not md_candidates:
+            messagebox.showwarning("提示", f"未找到包含 {num} 的物料 md 文件。")
             return
+        md_path = md_candidates[0]
+            
+        # Find the _3h_*k.mp4 file
+        mp4_candidates = []
+        if self.material_dir and self.material_dir.is_dir():
+            mp4_candidates.extend(self.material_dir.glob(f"*{num}*.mp4"))
+        mp4_candidates.extend(rpp_dir.glob(f"*{num}*.mp4"))
+        
+        if self.video_path:
+            mp4_candidates = [p for p in mp4_candidates if p.name != self.video_path.name]
+            
+        if not mp4_candidates:
+            messagebox.showwarning("提示", f"未找到包含 {num} 的 mp4 视频，请先进行视频合成！")
+            return
+            
+        # Sort to get the most recent export
+        mp4_candidates.sort(key=lambda p: p.stat().st_mtime, reverse=True)
+        video_path = mp4_candidates[0]
 
         account = "leo_usa" if self.use_leo_usa_var.get() else "leo"
         privacy = self.privacy_var.get()
@@ -644,17 +814,19 @@ class RelaxAsmrApp(tk.Tk):
         self._set_busy(True)
         self._log("—— 开始上传到 YouTube ——")
         self._log(f"账号：{account}")
+        self._log(f"物料：{md_path.name}")
+        self._log(f"视频：{video_path.name}")
         self._log("首次上传需在浏览器完成 OAuth 授权")
 
         def worker() -> None:
             try:
                 up_mod = load_scripts_module("video_upload.youtube_upload")
                 record = up_mod.upload_from_material(
-                    material,
+                    md_path,
                     language=language,
                     privacy_status=privacy,
                     account=account,
-                    override_video_path=self.custom_video_path,
+                    override_video_path=video_path,
                     on_log=self._log,
                 )
 

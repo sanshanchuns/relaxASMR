@@ -151,7 +151,7 @@ def open_browser_url(url: str) -> None:
         explorer = Path("/mnt/c/Windows/explorer.exe")
         if explorer.is_file():
             subprocess.Popen(
-                [str(explorer), url],
+                ["/init", str(explorer), url],
                 start_new_session=True,
                 cwd="/mnt/c",
             )
@@ -159,7 +159,7 @@ def open_browser_url(url: str) -> None:
         ps = Path("/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe")
         if ps.is_file():
             subprocess.Popen(
-                [str(ps), "-NoProfile", "-Command", f"Start-Process '{url}'"],
+                ["/init", str(ps), "-NoProfile", "-Command", f"Start-Process '{url}'"],
                 start_new_session=True,
                 cwd="/mnt/c",
             )
@@ -340,10 +340,15 @@ def upload_from_material(
         else:
             print(msg)
 
-    material_dir = material_dir.resolve()
-    md_path = material_dir / "youtube.md"
+    material_dir = Path(material_dir).resolve()
+    if material_dir.is_file() and material_dir.suffix == ".md":
+        md_path = material_dir
+        material_dir = md_path.parent
+    else:
+        md_path = material_dir / "youtube.md"
+        
     if not md_path.is_file():
-        raise FileNotFoundError(f"找不到 youtube.md：{md_path}")
+        raise FileNotFoundError(f"找不到物料 md：{md_path}")
 
     meta = parse_youtube_md(md_path)
     title = pick_title(meta, language)
@@ -368,11 +373,13 @@ def upload_from_material(
 
     log(f"上传视频：{video_path.name}（{privacy_status}）…")
     log(f"  分类：Travel & Events · 语言：English")
+    last_pct = [-1]
     def prog(pct: int) -> None:
         if on_progress:
             on_progress(pct)
-        if pct % 10 == 0:
+        if pct % 10 == 0 and pct != last_pct[0]:
             log(f"  上传进度 {pct}%")
+            last_pct[0] = pct
 
     video_id = upload_video(
         service,
@@ -386,12 +393,28 @@ def upload_from_material(
     url = f"https://www.youtube.com/watch?v={video_id}"
     log(f"视频已上传：{url}")
 
+    if not thumb_path.is_file():
+        log("未找到 thumbnail.jpg，将尝试自动从视频截取画面...")
+        fallback_thumb = material_dir / "auto_thumbnail.jpg"
+        try:
+            import subprocess
+            # Extract at 12 seconds to avoid fade-in black screen
+            cmd = [
+                "ffmpeg", "-y", "-ss", "12", "-i", str(video_path),
+                "-vframes", "1", "-q:v", "2", str(fallback_thumb)
+            ]
+            subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
+            if fallback_thumb.is_file():
+                thumb_path = fallback_thumb
+        except Exception as e:
+            log(f"自动截帧失败：{e}")
+            
     if thumb_path.is_file():
         log("设置缩略图…")
         set_thumbnail(service, video_id, thumb_path)
         log("缩略图已设置")
     else:
-        log("未找到 thumbnail.jpg，跳过缩略图")
+        log("无法提供缩略图，将使用 YouTube 自动生成（可能为黑屏）")
 
     record = {
         "video_id": video_id,

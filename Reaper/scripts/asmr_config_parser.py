@@ -62,20 +62,6 @@ def _parse_layer_block(block: str) -> dict:
     pm = re.search(r"paths\s*=\s*\{([^}]*)\}", block, re.DOTALL)
     if pm:
         layer["paths"] = _parse_paths(pm.group(1))
-    vem = re.search(r"vol_envelope\s*=\s*\{([^}]*)\}", block, re.DOTALL)
-    if vem:
-        ve_body = vem.group(1)
-        ve: dict = {}
-        sm = re.search(r'shape\s*=\s*"([^"]+)"', ve_body)
-        if sm:
-            ve["shape"] = sm.group(1)
-        dm = re.search(r"depth\s*=\s*([\d.]+)", ve_body)
-        if dm:
-            ve["depth"] = float(dm.group(1))
-        pam = re.search(r'peak_at\s*=\s*"([^"]+)"', ve_body)
-        if pam:
-            ve["peak_at"] = pam.group(1)
-        layer["vol_envelope"] = ve
     return layer
 
 

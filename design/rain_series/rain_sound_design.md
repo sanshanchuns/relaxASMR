@@ -59,19 +59,16 @@ Rain Sound Design
 
 | 手段 | 载体 |
 |------|------|
-| Rain Volume 慢变 ±6–10% | **`1_rain` `vol_envelope`**（主载） |
+| Rain Volume 慢变 ±6–10% | 手动运行 **`asmr_vol_envelope.lua`**（`1_rain`） |
 | 稀疏间隔随机 | Wildlife / Impact scatter |
 | Wind / 密度微调 | Environment（可选） |
 
 ```lua
-vol_envelope = {
-  shape = "single_wave",
-  depth = 0.08,
-  peak_at = "center",
-},
+-- 在 Reaper 中手动运行 asmr_vol_envelope.lua
+-- 参数：时长、点数、最大/最小 dB、正弦或余弦
 ```
 
-由 `asmr_apply_recipe.lua` 写入轨 1 音量包络。
+对 **`1_rain`** 轨运行 `asmr_vol_envelope.lua` 写入长时 Volume 包络。
 
 ---
 

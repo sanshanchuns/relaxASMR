@@ -86,12 +86,35 @@ default_output_path() {
   dir=$(dirname "$audio")
   base=$(basename "$audio")
   stem=$(strip_resolution_suffix "${base%.*}")
+  
+  # Ensure MVI_ prefix if stem is just numbers
+  if [[ "$stem" =~ ^[0-9]+$ ]]; then
+    stem="MVI_${stem}"
+  fi
+  
+  local dur_suffix=""
+  if [[ ! "$stem" =~ _[0-9]+(h|hr|min|m)$ ]]; then
+    local d
+    if d=$(probe_duration_sec "$audio" 2>/dev/null); then
+      local d_int=${d%.*}
+      if [[ -n "$d_int" && "$d_int" -gt 0 ]]; then
+        local h=$(( (d_int + 1800) / 3600 ))
+        if [[ "$h" -gt 0 ]]; then
+          dur_suffix="_${h}h"
+        else
+          local m=$(( (d_int + 30) / 60 ))
+          dur_suffix="_${m}min"
+        fi
+      fi
+    fi
+  fi
+
   if width=$(probe_video_width "$video"); then
     suffix=$(resolution_suffix_from_width "$width")
-    printf '%s/%s%s.mp4' "$dir" "$stem" "$suffix"
+    printf '%s/%s%s%s.mp4' "$dir" "$stem" "$dur_suffix" "$suffix"
   else
     echo "Warning: could not probe video width; output name has no resolution suffix" >&2
-    printf '%s/%s.mp4' "$dir" "$stem"
+    printf '%s/%s%s.mp4' "$dir" "$stem" "$dur_suffix"
   fi
 }
 

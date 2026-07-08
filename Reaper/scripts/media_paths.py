@@ -44,6 +44,14 @@ def resolve_media_mode(media_mode: str, repo_root: Path | None = None) -> str:
 def wsl_unc_path(path: Path) -> str:
     distro = os.environ.get("WSL_DISTRO_NAME", "Ubuntu")
     posix = path.resolve().as_posix()
+    
+    import re
+    m = re.match(r"^/mnt/([a-zA-Z])/(.*)", posix)
+    if m:
+        drive = m.group(1).upper()
+        rest = m.group(2).replace("/", "\\")
+        return f"{drive}:\\{rest}"
+        
     if posix.startswith("/"):
         rest = posix[1:].replace("/", "\\")
         return f"\\\\wsl.localhost\\{distro}\\{rest}"

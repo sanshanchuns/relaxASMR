@@ -200,11 +200,11 @@ def resize_badge(badge_path: Path) -> Image.Image:
     return badge
 
 
-def extract_frame(video: Path, out_png: Path, t: float) -> None:
+def extract_frame(video: Path, out_path: Path, t: float) -> None:
     proc = subprocess.run(
         [
             "ffmpeg", "-y", "-ss", str(t), "-i", str(video),
-            "-vframes", "1", "-q:v", "2", str(out_png),
+            "-vframes", "1", "-vf", "scale=1280:720", "-q:v", "2", str(out_path),
         ],
         capture_output=True,
         text=True,
@@ -212,7 +212,7 @@ def extract_frame(video: Path, out_png: Path, t: float) -> None:
     if proc.returncode != 0:
         err = (proc.stderr or proc.stdout or "ffmpeg failed").strip()
         raise RuntimeError(f"ffmpeg 截帧失败 @ {t}s：{err}")
-    if not out_png.is_file() or out_png.stat().st_size == 0:
+    if not out_path.is_file() or out_path.stat().st_size == 0:
         raise RuntimeError(f"ffmpeg 截帧失败 @ {t}s：输出为空（视频可能短于 {t}s）")
 
 
@@ -425,7 +425,7 @@ def analyze_frame_scene(frame_path: Path) -> dict:
 
 # scripts/video_export/material_ref/forest_rain.md — 爆款标题/描述/Tags/封面叠字模版
 FOREST_RAIN_REF = Path(__file__).resolve().parent / "material_ref" / "forest_rain.md"
-FOREST_RAIN_VIDEO_TITLE_EN = "Rain Sounds for Sleep"
+FOREST_RAIN_VIDEO_TITLE_EN = "Relaxing Rain Sounds for Sleeping"
 FOREST_RAIN_THUMB_TITLE = "Rain Sounds"
 FOREST_RAIN_TITLE_ZH = "助眠雨声"
 
@@ -433,26 +433,24 @@ FOREST_RAIN_CORE_TAGS = [
     "rain sounds",
     "rain",
     "rain sounds for sleeping",
-    "rain and thunder",
-    "rain and thunder sounds",
-    "heavy rain",
     "sleep",
-    "insomnia",
-    "white noise",
+    "black screen rain",
+    "rain and thunder sounds",
+    "rain and thunder",
+    "rain black screen",
+    "black screen rain sounds",
+    "rain sounds black screen",
+    "heavy rain",
     "sleep sounds",
-    "4k rain loop",
-    "rain at night",
 ]
 
 FOREST_RAIN_SCENE_TAGS = [
     "nature sounds",
-    "thunder sounds",
-    "thunder",
-    "thunderstorm",
-    "thunderstorm sounds",
-    "relaxing rain",
-    "asmr",
-    "forest rain",
+    "black screen",
+    "dark screen",
+    "insomnia",
+    "meditation music",
+    "relaxing music",
 ]
 
 VIRAL_SCENE_RAIN: dict[str, str] = {
@@ -948,8 +946,11 @@ def generate_material(
         preset = {"auto_from_scene": True, "layout": "bottom-left", "thumb_time": 120}
 
     meta = ffprobe_video(video)
+    actual_video_dur = float(meta["duration_s"])
+
     if duration_override_s is not None:
         dur_s = float(duration_override_s)
+        meta["duration_s"] = dur_s
         h = int(dur_s // 3600)
         m = int((dur_s % 3600) // 60)
         if h:
@@ -964,24 +965,35 @@ def generate_material(
 
     use_layout = layout or preset.get("layout", "center")
     use_thumb_time = thumb_time if thumb_time is not None else preset.get("thumb_time", 8.0)
-    dur = float(meta["duration_s"])
-    if use_thumb_time >= dur:
-        use_thumb_time = max(0.5, dur * 0.35)
-        log(f"视频时长 {dur:.1f}s，截帧时间调整为 {use_thumb_time:.1f}s")
+    
+    if use_thumb_time >= actual_video_dur:
+        use_thumb_time = 0.0
+        log(f"视频仅长 {actual_video_dur:.1f}s，截帧时间自动调整为 0.0s（第一帧）")
+        
     badge_path = resolve_badge_path(preset)
     if show_4k_badge is None:
         show_4k = "4k" in stem.lower() or meta["width"] >= 3840
     else:
         show_4k = show_4k_badge
 
-    frame_png = out_dir / "_frame.png"
-    thumb_jpg = out_dir / "thumbnail.jpg"
     md_path = out_dir / "youtube.md"
 
-    log(f"截取缩略图帧 @ {use_thumb_time}s …")
-    extract_frame(video, frame_png, float(use_thumb_time))
+    import re
+    match = re.search(r'\d+', stem)
+    num = match.group() if match else stem
+    
+    # 优先查找已经存在的包含序号的 JPG
+    snapshot_jpg = None
+    existing_jpgs = list(out_dir.glob(f"*{num}*.jpg"))
+    if existing_jpgs:
+        snapshot_jpg = existing_jpgs[0]
+        log(f"找到现有分析快照：{snapshot_jpg.name}，跳过截帧")
+    else:
+        snapshot_jpg = out_dir / f"MVI_{num}_snapshot.jpg"
+        log(f"截取分析快照 @ {use_thumb_time}s … (1280x720 JPG)")
+        extract_frame(video, snapshot_jpg, float(use_thumb_time))
 
-    scene = analyze_frame_scene(frame_png)
+    scene = analyze_frame_scene(snapshot_jpg)
     log(f"画面场景：{scene['scene_key']} · {scene['place_en_short']}")
 
     if copy_style == "forest_rain" and scene:
@@ -1008,27 +1020,13 @@ def generate_material(
             thumb_subtitle_resolved = scene["place_en_short"]
     log(f"缩略图文案：{thumb_title_resolved!r} / {thumb_subtitle_resolved!r}")
 
-    log(f"合成缩略图（{use_layout}）…")
-    if use_layout == "bottom-left":
-        make_thumbnail_bottom_left(
-            frame_png,
-            thumb_jpg,
-            thumb_title_resolved,
-            thumb_subtitle_resolved,
-            show_4k=show_4k,
-            badge_path=badge_path,
-        )
-    else:
-        make_thumbnail(frame_png, thumb_jpg, thumb_title_resolved, show_4k=show_4k, badge_path=badge_path)
-    frame_png.unlink(missing_ok=True)
-
     md_path.write_text(
         render_markdown(
             video,
             meta,
             parsed,
             preset,
-            "thumbnail.jpg",
+            "",
             thumb_title_resolved,
             thumb_subtitle_resolved,
             youtube_copy,
@@ -1037,7 +1035,6 @@ def generate_material(
         encoding="utf-8",
     )
     log(f"已写入：{out_dir / 'youtube.md'}")
-    log(f"已写入：{out_dir / 'thumbnail.jpg'}")
     return out_dir
 
 

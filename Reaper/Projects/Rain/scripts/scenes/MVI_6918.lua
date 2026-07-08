@@ -23,11 +23,6 @@ return {
       paths = {
         "assets/sound_effect/rain_sound/1_rain/intensity/light/197192_Rain,_Vegetation,_Light_Rain_In_A_Field_Of_Bananas_Trees_03.mp3",
       },
-      vol_envelope = {
-        shape = "single_wave",
-        depth = 0.08,
-        peak_at = "center",
-      },
     },
     {
       track = 3,

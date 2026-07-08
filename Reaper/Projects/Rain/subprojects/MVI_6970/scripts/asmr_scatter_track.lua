@@ -4,7 +4,7 @@
 -- @about
 --   输入：0=当前选中轨 · 或层 id（3_impact）· 或配方 track 号（3）
 --   弹窗填写：时长、次数、间隔、随机度、fade
---   整片铺循环仍用 asmr_apply_recipe.lua；稀疏层请逐轨运行本脚本
+--   循环层用 asmr_loop_track.lua；稀疏层请逐轨运行本脚本
 
 local r = reaper
 

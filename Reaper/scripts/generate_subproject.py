@@ -516,6 +516,7 @@ def build_rpp(cfg: dict, repo_root: Path, rpp_dir: Path, media_mode: str = "auto
         )
         iid += 1
 
+    cfg_dur_s = float(cfg.get("duration_hours", 0)) * 3600
     for layer in cfg.get("loop_layers", []):
         t = layer["track"]
         track_names[t] = layer.get("id", layer.get("name", f"track{t}"))
@@ -527,11 +528,12 @@ def build_rpp(cfg: dict, repo_root: Path, rpp_dir: Path, media_mode: str = "auto
         ap = repo_root / rel
         file_ref, src_type, file_suffix = stage_media(ap, rpp_dir, media_mode, repo_root)
         ap_len = media_duration(ap)
+        final_len = cfg_dur_s if cfg_dur_s > 0 else ap_len
         tracks_by_num[t].append(
             make_item(
                 ap.name,
                 0,
-                ap_len,
+                final_len,
                 True,
                 file_ref,
                 src_type,

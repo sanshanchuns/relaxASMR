@@ -18,13 +18,9 @@ def open_folder(path: Path) -> None:
 
     if is_wsl():
         win_path = wsl_to_windows_path(path)
-        explorer = Path("/mnt/c/Windows/explorer.exe")
-        if explorer.is_file():
-            subprocess.Popen([str(explorer), win_path], start_new_session=True, cwd="/mnt/c")
-            return
         cmd = windows_cmd_exe()
         subprocess.Popen(
-            [str(cmd), "/c", "start", "", "explorer", win_path],
+            ["/init", str(cmd), "/c", "start", "", win_path],
             start_new_session=True,
             cwd="/mnt/c",
         )

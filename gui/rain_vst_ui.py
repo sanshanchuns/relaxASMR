@@ -45,6 +45,8 @@ class RainVstSection(ttk.LabelFrame):
         self._guard = busy_guard  # expects ._busy and ._set_busy()
         self._selected_path: Path | None = None
         self._video_list: list[Path] = []
+        self._audio_proc = None
+        self._matched_wav: Path | None = None
         self._build_ui()
 
     # ------------------------------------------------------------------
@@ -72,6 +74,65 @@ class RainVstSection(ttk.LabelFrame):
         self.lbl_progress = ttk.Label(row2, text="")
         self.lbl_progress.pack(side=tk.LEFT, padx=(12, 0), fill=tk.X, expand=True)
 
+        # Row 3 - Matching and Playback
+        row3 = ttk.Frame(self)
+        row3.pack(fill=tk.X, pady=(8, 0))
+        self.lbl_match = ttk.Label(row3, text="匹配结果：—", wraplength=480)
+        self.lbl_match.pack(side=tk.LEFT)
+        self.btn_play = ttk.Button(row3, text="▶ 试听", state=tk.DISABLED, command=self._play_audio)
+        self.btn_play.pack(side=tk.LEFT, padx=(12, 0))
+        self.btn_stop = ttk.Button(row3, text="⏹ 停止", state=tk.DISABLED, command=self._stop_audio)
+        self.btn_stop.pack(side=tk.LEFT, padx=(4, 0))
+
+        # Row 4 - Preview Image
+        self.lbl_preview = ttk.Label(self, text="[画面预览]")
+        self.lbl_preview.pack(pady=(10, 0))
+
+        # Restore last selection if available
+        cfg = getattr(self._guard, "_cfg", {})
+        saved = cfg.get("last_vst_dir")
+        if saved:
+            p = Path(saved)
+            if p.is_dir():
+                self._selected_path = p
+                videos = sorted(p.rglob("*.mp4"))
+                self._video_list = videos
+                self.lbl_selection.configure(text=f"{p.name}/（{len(videos)} 个视频）")
+            elif p.is_file():
+                self._selected_path = p
+                self._video_list = [p]
+                vid = extract_video_id(p.name)
+                self.lbl_selection.configure(text=f"{p.name}（{vid}）")
+
+        # Restore last match if available
+        last_rain = cfg.get("last_vst_match_rain")
+        last_score = cfg.get("last_vst_match_score")
+        last_wav = cfg.get("last_vst_match_wav")
+        last_frame = cfg.get("last_vst_frame")
+        
+        if last_rain and last_score is not None:
+            self.lbl_match.configure(text=f"最佳匹配：{last_rain}\n(相似度: {last_score:.3f})")
+            
+        if last_wav:
+            wav_p = Path(last_wav)
+            if wav_p.is_file():
+                self._matched_wav = wav_p
+                self.btn_play.configure(state=tk.NORMAL)
+                self.btn_stop.configure(state=tk.NORMAL)
+                
+        if last_frame:
+            frame_p = Path(last_frame)
+            if frame_p.is_file():
+                try:
+                    from PIL import Image, ImageTk
+                    img = Image.open(frame_p)
+                    img.thumbnail((480, 270))
+                    photo = ImageTk.PhotoImage(img)
+                    self.lbl_preview.configure(image=photo, text="")
+                    self.lbl_preview.image = photo  # keep ref
+                except Exception:
+                    pass
+
     # ------------------------------------------------------------------
     # File / folder dialogs
     # ------------------------------------------------------------------
@@ -88,7 +149,7 @@ class RainVstSection(ttk.LabelFrame):
         return str(REPO_ROOT)
 
     def _remember_dir(self, directory: Path) -> None:
-        """Persist the selected directory in the parent config."""
+        """Persist the selected directory or file in the parent config."""
         cfg = getattr(self._guard, "_cfg", None)
         if cfg is not None:
             cfg["last_vst_dir"] = str(directory)
@@ -105,7 +166,7 @@ class RainVstSection(ttk.LabelFrame):
         if not path:
             return
         p = Path(path)
-        self._remember_dir(p.parent)
+        self._remember_dir(p)
         self._selected_path = p
         self._video_list = [p]
         vid = extract_video_id(p.name)
@@ -160,13 +221,13 @@ class RainVstSection(ttk.LabelFrame):
             root = self.winfo_toplevel()
 
             try:
-                from scripts.rain_vst_analyze import analyze_video
+                from scripts.rain_vst.analyze import analyze_video
             except ImportError as exc:
                 def show_err(err: BaseException = exc) -> None:
-                    self._log(f"错误：无法导入 rain_vst_analyze — {err}")
+                    self._log(f"错误：无法导入 scripts.rain_vst.analyze — {err}")
                     messagebox.showerror(
                         "导入失败",
-                        f"无法导入 scripts.rain_vst_analyze：\n{err}\n\n请确认依赖已安装。",
+                        f"无法导入 scripts.rain_vst.analyze：\n{err}\n\n请确认依赖已安装。",
                     )
                 root.after(0, show_err)
                 return
@@ -179,8 +240,15 @@ class RainVstSection(ttk.LabelFrame):
             else:
                 input_dir = self._selected_path
                 
-            out_dir = input_dir.parent / "output_audio"
+            if input_dir.name.startswith("output"):
+                out_dir = input_dir.parent / "output_audio"
+            else:
+                out_dir = input_dir / "output_audio"
+                
             out_dir.mkdir(parents=True, exist_ok=True)
+
+            last_rain = None
+            last_frame = None
 
             for idx, video in enumerate(videos, 1):
                 vid = extract_video_id(video.name)
@@ -192,8 +260,10 @@ class RainVstSection(ttk.LabelFrame):
                 self._log(status)
 
                 try:
-                    analyze_video(video, out_dir, on_progress=self._progress)
+                    _, _, rain_p, frame_p = analyze_video(video, out_dir, on_progress=self._progress)
                     succeeded.append(vid)
+                    last_rain = rain_p
+                    last_frame = frame_p
                 except Exception as exc:
                     self._log(f"错误：{vid} — {exc}")
                     failed.append((vid, str(exc)))
@@ -215,6 +285,55 @@ class RainVstSection(ttk.LabelFrame):
                     text=f"完成 — 成功 {len(succeeded)}, 失败 {len(failed)}"
                 )
                 self._log("—— VST 参数分析完成 ——")
+                
+                if last_rain and last_frame:
+                    vst_dirs = list(input_dir.glob("*vst*"))
+                    if vst_dirs:
+                        try:
+                            from scripts.rain_vst.matcher import find_best_match
+                            match_res = find_best_match(last_rain, vst_dirs[0])
+                            if match_res:
+                                matched_path, score = match_res
+                                prefix = matched_path.name.split('.')[0] + '.'
+                                wav_cands = list(matched_path.parent.glob(f"{prefix}*.wav"))
+                                if wav_cands:
+                                    self._matched_wav = wav_cands[0]
+                                else:
+                                    self._matched_wav = matched_path.with_suffix(".wav")
+                                
+                                # display full path with line wrapping or just full path
+                                self.lbl_match.configure(text=f"最佳匹配：{matched_path.resolve()}\n(相似度: {score:.3f})")
+                                
+                                if self._matched_wav and self._matched_wav.is_file():
+                                    self.btn_play.configure(state=tk.NORMAL)
+                                    self.btn_stop.configure(state=tk.NORMAL)
+                                    self._guard._cfg["last_vst_match_wav"] = str(self._matched_wav.resolve())
+                                else:
+                                    self._log("警告：未找到对应的 .wav 文件供试听。")
+                                    self._guard._cfg["last_vst_match_wav"] = ""
+                                
+                                self._guard._cfg["last_vst_match_rain"] = str(matched_path.resolve())
+                                self._guard._cfg["last_vst_match_score"] = score
+                                self._log(f"最佳匹配：{matched_path.resolve()} (得分: {score:.3f})")
+                        except Exception as e:
+                            self._log(f"匹配预设失败: {e}")
+                    
+                    try:
+                        from PIL import Image, ImageTk
+                        img = Image.open(last_frame)
+                        img.thumbnail((480, 270))
+                        photo = ImageTk.PhotoImage(img)
+                        self.lbl_preview.configure(image=photo, text="")
+                        self.lbl_preview.image = photo  # keep ref
+                    except Exception as e:
+                        self._log(f"加载预览图失败: {e}")
+                        
+                    self._guard._cfg["last_vst_frame"] = str(last_frame.resolve())
+                    
+                    save = getattr(self._guard, "_save_config", None)
+                    if callable(save):
+                        save()
+
                 messagebox.showinfo("分析完成", summary)
                 # Try to open the output directory
                 try:
@@ -237,3 +356,49 @@ class RainVstSection(ttk.LabelFrame):
                 self.winfo_toplevel().after(0, cleanup)
 
         threading.Thread(target=run, daemon=True).start()
+
+    # ------------------------------------------------------------------
+    # Audio Playback
+    # ------------------------------------------------------------------
+
+    def _play_audio(self) -> None:
+        if not self._matched_wav or not self._matched_wav.is_file():
+            return
+            
+        self._stop_audio()
+        
+        try:
+            import subprocess
+            from gui.reaper_launch import is_wsl, wsl_to_windows_path
+            
+            if is_wsl():
+                win_path = wsl_to_windows_path(self._matched_wav)
+                cmd = [
+                    "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe",
+                    "-NoProfile",
+                    "-Command",
+                    f"(New-Object System.Media.SoundPlayer '{win_path}').PlaySync()"
+                ]
+                self._audio_proc = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                self._log(f"正在播放 (WSL -> Windows)：{self._matched_wav.name}")
+            else:
+                import winsound
+                winsound.PlaySound(str(self._matched_wav), winsound.SND_FILENAME | winsound.SND_ASYNC)
+                self._log(f"正在播放：{self._matched_wav.name}")
+                
+        except Exception as e:
+            self._log(f"播放失败: {e}")
+
+    def _stop_audio(self) -> None:
+        try:
+            from gui.reaper_launch import is_wsl
+            if is_wsl() and self._audio_proc:
+                self._audio_proc.terminate()
+                self._audio_proc = None
+                self._log("已停止播放")
+            elif not is_wsl():
+                import winsound
+                winsound.PlaySound(None, winsound.SND_PURGE)
+                self._log("已停止播放")
+        except Exception:
+            pass

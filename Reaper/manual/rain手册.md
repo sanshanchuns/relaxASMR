@@ -1008,59 +1008,81 @@ Init                    初始化
 
 | 属性 | 含义 | 说明 |
 |------|------|------|
-| `l1` | Distant 层选择 | 范围约 100-290，对应 20 种远景模型的内部编号 |
-| `l2` | Space 层选择 | 范围约 500-590，对应 15 种空间环境的内部编号 |
-| `l3` | Close 层选择 | 范围约 800-950，对应 20 种近景材质的内部编号 |
+| `l1` | Close 层选择 | 范围约 100-290，对应 20 种近景材质的内部编号 |
+| `l2` | Space 层选择 | 范围约 500-640，对应 15 种空间环境的内部编号 |
+| `l3` | Distant 层选择 | 范围约 800-990，对应 20 种远景模型的内部编号 |
 | `adv` | 高级模式 | 0=普通模式, 1=高级模式 |
 | `lts` | 内部时间戳 | 大部分预设为 0 |
 | `scn` | 场景名称 | 显示在插件界面中的名称 |
 
 ### 层编号参考对照
 
-**Distant (l1)**：
+
+**Close 近景 (l1)**：
 ```
-100 → Airy Breeze 区域
-110 → Gentle Swish 区域
-120 → Airy Flow 区域
-140 → Airy Breeze 区域
-150 → Echo River 区域
-160 → Slow Waterfall 区域
-170 → Spooky Whisper 区域
-190 → Thick Shower 区域
-200 → Strong Hiss / Thick Shower 区域
-230 → Distant Veil 区域
-240 → Expansive Shower 区域
-250 → Expansive Shower 区域
-260 → Broadband Shower 区域
-270 → Cold Stream 区域
-290 → Balanced Flow / Balanced Sizzle 区域
+100 → Foliage Lush         (茂密植被)
+110 → Foliage Yielding     (稀疏植被)
+120 → Brick Diffuse        (砖墙（漫反射）)
+130 → Metal Diffuse        (金属（漫反射）)
+140 → Plastic Tonal        (共振塑料)
+150 → Water                (水面)
+160 → Plastic Thin         (薄塑料板)
+170 → Concrete Diffuse     (混凝土（漫反射）)
+180 → Wood Tonal           (共振木材)
+190 → Wood Thin            (薄木板)
+200 → Metal Roof           (金属屋顶)
+210 → Stone Echoing        (回声石墙)
+220 → Metal Tonal          (共振金属)
+230 → Wood Roof            (木屋顶)
+240 → Plastic Roof         (塑料屋顶)
+250 → Metal Thin           (薄金属板)
+260 → Glass Tonal          (共振玻璃)
+270 → Glass Thin           (薄玻璃)
+280 → Glass Roof           (玻璃屋顶)
+290 → Concrete             (混凝土)
 ```
 
-**Space (l2)**：
+**Space 空间 (l2)**：
 ```
-500 → Building Canopy 区域
-520 → Building Overflow / Building Rooftops 区域
-530 → Foliage Dense 区域
-540 → Inner Yard 区域
-550 → Metal Tanks 区域
-580 → Street Dense / Street Drain 区域
-590 → Foliage Canopy / Street Tarmac 区域
+500 → Building Overflow    (建筑溢水)
+510 → Building Rooftops    (楼顶雨声)
+520 → Walls Concrete       (混凝土墙)
+530 → Foliage Canopy       (树冠)
+540 → Street Tarmac        (柏油路面)
+550 → Workshop Yard        (工坊院落)
+560 → Inner Yard           (庭院)
+570 → Metal Tanks          (金属储罐)
+580 → Building Canopy      (楼宇雨棚)
+590 → Foliage Dense        (茂密树林)
+600 → Building Gutter      (建筑排水槽)
+610 → Street Dense         (密集街区)
+620 → Street Drain         (街道排水沟)
+630 → Urban Alley          (城市小巷)
+640 → Wood Deck            (木平台)
 ```
 
-**Close (l3)**：
+**Distant 远景 (l3)**：
 ```
-800 → Brick Diffuse 区域
-810 → Foliage Lush 区域
-820 → Glass Roof 区域
-840 → Glass Tonal 区域
-850 → Water 区域
-860 → Concrete / Metal Diffuse 区域
-870 → Foliage Yielding 区域
-900 → Stone Echoing / Wood Roof 区域
-910 → Metal Thin 区域
-920 → Wood Thin 区域
-930 → Metal Tonal 区域
-950 → Plastic Tonal 区域
+800 → Airy Breeze          (空灵微风)
+810 → Airy Flow            (空灵气流)
+820 → Balanced Sizzle      (均衡沙沙)
+830 → Breezy Hiss          (微风嘶响)
+840 → Broadband Shower     (宽频阵雨)
+850 → Cold Stream          (寒流雨声)
+860 → Dense Stream         (密集雨流)
+870 → Distant Veil         (远方雨幕)
+880 → Echo River           (河谷回声)
+890 → Expansive Shower     (辽阔阵雨)
+900 → Forest Whisper       (森林低语)
+910 → Gentle Swish         (轻柔沙响)
+920 → Immersive Fuzz       (沉浸雨幕)
+930 → Balanced Flow        (均衡气流)
+940 → Flowing Rumble       (流动轰鸣)
+950 → Slow Waterfall       (缓瀑雨声)
+960 → Spooky Whisper       (幽暗低语)
+970 → Strong Hiss          (强烈嘶响)
+980 → Thick Shower         (浓密阵雨)
+990 → Warm Buzz            (温暖嗡鸣)
 ```
 
 ## 5.2 参数 ID 完整映射表
@@ -1112,9 +1134,9 @@ Init                    初始化
 
 | 参数 | 典型范围 | 说明 |
 |------|---------|------|
-| `l1` | 100-110 | 偏向 Forest Whisper / Gentle Swish |
+| `l3` | 900-910 | 偏向 Forest Whisper / Gentle Swish |
 | `l2` | 530-590 | 偏向 Foliage Dense / Foliage Canopy |
-| `l3` | 810-900 | 偏向 Foliage Lush / Foliage Yielding |
+| `l1` | 100-110 | 偏向 Foliage Lush / Foliage Yielding |
 | `bgwi` | 0.5-1.0 | 宽阔的远景声场 |
 | `rfdn` | 0.46-0.56 | 中等密度 |
 | `rfin` | 0.0-0.63 | 低至中等强度 |
@@ -1132,9 +1154,9 @@ Init                    初始化
 
 | 参数 | 典型范围 | 说明 |
 |------|---------|------|
-| `l1` | 170-290 | 偏向中高编号远景 |
+| `l3` | 820-950 | 偏向中高编号远景 |
 | `l2` | 520-590 | 偏向 Street 类空间 |
-| `l3` | 820-950 | 偏向人工材质（Glass / Concrete） |
+| `l1` | 170-290 | 偏向人工材质（Glass / Concrete） |
 | `bgwi` | 0.5-0.8 | 中等宽度 |
 | `rfdn` | 0.50 | 中等密度 |
 | `rfin` | 0.0-0.65 | 低至中等强度 |
@@ -1152,7 +1174,7 @@ Init                    初始化
 
 | 参数 | 典型范围 | 说明 |
 |------|---------|------|
-| `l1` | 170-240 | 中等编号远景 |
+| `l1` | 170-240 | 偏向中等编号近景（硬质顶棚等） |
 | `bgwi` | 0.68-1.0 | 宽声场 |
 | `rfdn` | 0.79-1.0 | 高密度 |
 | `rfin` | 0.8-1.0 | 高强度 |
