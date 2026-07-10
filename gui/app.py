@@ -343,7 +343,7 @@ class RelaxAsmrApp(tk.Tk):
         except tk.TclError:
             return
         if tab is self.video_library_tab:
-            self.video_library_tab.refresh()
+            self.video_library_tab.on_tab_selected()
 
     def _subproject_rpp_path(self, scene_id: str | None = None) -> Path | None:
         sid = scene_id or self.scene_id

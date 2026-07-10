@@ -88,6 +88,10 @@ def styled_thumb(img: Image.Image, *, uploaded: bool) -> Image.Image:
     return target
 
 
+def file_list_signature(videos: list[Path]) -> str:
+    return "|".join(f"{p.name}:{p.stat().st_mtime_ns}" for p in videos)
+
+
 class VideoLibraryTab(ttk.Frame):
     """平铺 baseURL 根目录所有 loop MP4 首帧，支持上传标记。"""
 
@@ -105,14 +109,16 @@ class VideoLibraryTab(ttk.Frame):
         self._log = log_fn or (lambda _msg: None)
         self._cells: dict[str, dict] = {}
         self._photo_refs: list[ImageTk.PhotoImage] = []
+        self._thumb_cache: dict[str, Image.Image] = {}
         self._loading = False
+        self._loaded_once = False
+        self._list_signature: str | None = None
         self._build_ui()
-        self.after(200, self.refresh)
 
     def _build_ui(self) -> None:
         toolbar = ttk.Frame(self)
         toolbar.pack(fill=tk.X, pady=(0, 8))
-        ttk.Button(toolbar, text="刷新", command=self.refresh).pack(side=tk.LEFT)
+        ttk.Button(toolbar, text="刷新", command=lambda: self.refresh(force=True)).pack(side=tk.LEFT)
         self.lbl_stats = ttk.Label(toolbar, text="")
         self.lbl_stats.pack(side=tk.LEFT, padx=(12, 0))
         ttk.Label(
@@ -158,11 +164,30 @@ class VideoLibraryTab(ttk.Frame):
     def _on_grid_configure(self, _event=None) -> None:
         self._canvas.configure(scrollregion=self._canvas.bbox("all"))
 
-    def refresh(self) -> None:
+    def refresh(self, *, force: bool = False) -> None:
         if self._loading:
             return
+        videos = list_root_mp4s()
+        sig = file_list_signature(videos)
+        if not force and self._loaded_once and sig == self._list_signature:
+            self._sync_all_cell_styles()
+            return
+        self._list_signature = sig
         self._loading = True
-        threading.Thread(target=self._load_and_render, daemon=True).start()
+        threading.Thread(target=self._load_and_render, args=(videos,), daemon=True).start()
+
+    def on_tab_selected(self) -> None:
+        """切到素材库 Tab 时调用：仅在首次或文件变化时重建宫格。"""
+        self.refresh(force=False)
+
+    def _sync_all_cell_styles(self) -> None:
+        changed = False
+        for cell in self._cells.values():
+            if cell.get("uploaded") != self._is_uploaded(cell["num"]):
+                self._apply_cell_style(cell)
+                changed = True
+        if changed or not self.lbl_stats.cget("text"):
+            self._update_stats()
 
     def refresh_cell(self, scene_num: str) -> None:
         cell = self._cells.get(scene_num)
@@ -177,17 +202,22 @@ class VideoLibraryTab(ttk.Frame):
         self.refresh_cell(scene_num)
         self._update_stats()
 
-    def _load_and_render(self) -> None:
-        videos = list_root_mp4s()
+    def _load_and_render(self, videos: list[Path]) -> None:
         items: list[tuple[Path, str, Image.Image | None]] = []
         for video in videos:
             num = scene_num_from_video(video)
-            thumb = load_thumb_image(video)
+            cache_key = f"{video}:{video.stat().st_mtime_ns}"
+            thumb = self._thumb_cache.get(cache_key)
+            if thumb is None:
+                thumb = load_thumb_image(video)
+                if thumb is not None:
+                    self._thumb_cache[cache_key] = thumb
             items.append((video, num, thumb))
         self.after(0, lambda: self._render_grid(items))
 
     def _render_grid(self, items: list[tuple[Path, str, Image.Image | None]]) -> None:
         self._loading = False
+        self._loaded_once = True
         self._photo_refs.clear()
         self._cells.clear()
 
