@@ -139,9 +139,8 @@ class RelaxAsmrApp(tk.Tk):
         )
         self.left_notebook.add(self.video_library_tab, text="素材库")
 
-        # === 左侧工作流：步骤 1–5 自上而下 ===
-        self.left_content = ttk.Frame(self.workflow_tab, padding=10)
-        self.left_content.pack(fill=tk.BOTH, expand=True, anchor=tk.N)
+        # === 左侧工作流：步骤 1–5（小屏溢出时可垂直滚动）===
+        self._setup_workflow_scroll(self.workflow_tab)
 
         # 1. 导入与分析
         sec1 = ttk.LabelFrame(self.left_content, text="1. 导入与分析", padding=10)
@@ -290,6 +289,8 @@ class RelaxAsmrApp(tk.Tk):
 
         self.left_notebook.bind("<<NotebookTabChanged>>", self._on_left_tab_changed)
 
+        self.after_idle(self._update_left_scrollbar_visibility)
+
         last_video = self._cfg.get("last_video")
         if last_video:
             p = Path(last_video)
@@ -309,6 +310,92 @@ class RelaxAsmrApp(tk.Tk):
             self._log("macOS 环境：使用本机 Reaper；素材默认挂载于 /Volumes/192.168.3.128/…")
         self._log(f"仓库根目录：{LIB_REPO_ROOT}")
         self._log(f"素材 baseURL：{base_url()}")
+
+    def _setup_workflow_scroll(self, parent: ttk.Frame) -> None:
+        """工作流左侧：内容不足时不显示滚动条；小屏溢出时显示。"""
+        container = ttk.Frame(parent)
+        container.pack(fill=tk.BOTH, expand=True)
+        container.grid_rowconfigure(0, weight=1)
+        container.grid_columnconfigure(0, weight=1)
+
+        self._left_scroll_canvas = tk.Canvas(container, highlightthickness=0, borderwidth=0)
+        self._left_scroll_vbar = ttk.Scrollbar(
+            container, orient=tk.VERTICAL, command=self._left_scroll_canvas.yview
+        )
+        self._left_scroll_canvas.configure(yscrollcommand=self._on_left_scroll_yview)
+        self._left_scroll_canvas.grid(row=0, column=0, sticky="nsew")
+        self._left_scroll_vbar.grid(row=0, column=1, sticky="ns")
+        self._left_scroll_vbar.grid_remove()
+
+        self.left_content = ttk.Frame(self._left_scroll_canvas, padding=10)
+        self._left_scroll_window = self._left_scroll_canvas.create_window(
+            (0, 0), window=self.left_content, anchor=tk.NW
+        )
+
+        self.left_content.bind("<Configure>", self._on_left_content_configure)
+        self._left_scroll_canvas.bind("<Configure>", self._on_left_scroll_canvas_configure)
+        self._left_scroll_canvas.bind("<Enter>", self._bind_left_scroll_wheel)
+        self._left_scroll_canvas.bind("<Leave>", self._unbind_left_scroll_wheel)
+        self.left_content.bind("<Enter>", self._bind_left_scroll_wheel)
+        self.left_content.bind("<Leave>", self._unbind_left_scroll_wheel)
+
+    def _on_left_scroll_yview(self, first: str, last: str) -> None:
+        self._left_scroll_vbar.set(first, last)
+        self._update_left_scrollbar_visibility()
+
+    def _on_left_content_configure(self, _event=None) -> None:
+        self._left_scroll_canvas.configure(scrollregion=self._left_scroll_canvas.bbox("all"))
+        self._update_left_scrollbar_visibility()
+
+    def _on_left_scroll_canvas_configure(self, event=None) -> None:
+        if event is not None:
+            self._left_scroll_canvas.itemconfigure(
+                self._left_scroll_window, width=event.width
+            )
+        self._update_left_scrollbar_visibility()
+
+    def _update_left_scrollbar_visibility(self) -> None:
+        if not hasattr(self, "_left_scroll_canvas"):
+            return
+        canvas = self._left_scroll_canvas
+        vbar = self._left_scroll_vbar
+        canvas.update_idletasks()
+        bbox = canvas.bbox("all")
+        if not bbox:
+            vbar.grid_remove()
+            return
+        content_h = bbox[3] - bbox[1]
+        view_h = canvas.winfo_height()
+        # 内容能完整放下时不显示滚动条（大屏 / 窗口较高时通常如此）
+        if content_h > view_h + 2:
+            vbar.grid()
+        else:
+            vbar.grid_remove()
+            canvas.yview_moveto(0)
+
+    def _bind_left_scroll_wheel(self, _event=None) -> None:
+        if not self._left_scroll_vbar.winfo_ismapped():
+            return
+        self._left_scroll_canvas.bind_all("<MouseWheel>", self._on_left_scroll_wheel)
+        self._left_scroll_canvas.bind_all("<Button-4>", self._on_left_scroll_wheel)
+        self._left_scroll_canvas.bind_all("<Button-5>", self._on_left_scroll_wheel)
+
+    def _unbind_left_scroll_wheel(self, _event=None) -> None:
+        self._left_scroll_canvas.unbind_all("<MouseWheel>")
+        self._left_scroll_canvas.unbind_all("<Button-4>")
+        self._left_scroll_canvas.unbind_all("<Button-5>")
+
+    def _on_left_scroll_wheel(self, event) -> None:
+        if not self._left_scroll_vbar.winfo_ismapped():
+            return
+        if event.num == 4:
+            delta = -1
+        elif event.num == 5:
+            delta = 1
+        else:
+            delta = -1 * (event.delta // 120) if event.delta else 0
+        if delta:
+            self._left_scroll_canvas.yview_scroll(delta, "units")
 
     def _uploaded_ids_cfg(self) -> dict:
         ids = self._cfg.get("uploaded_ids")
@@ -339,12 +426,15 @@ class RelaxAsmrApp(tk.Tk):
             self.video_library_tab.mark_uploaded(num, True)
 
     def _on_left_tab_changed(self, _event=None) -> None:
+        self._unbind_left_scroll_wheel()
         try:
             tab = self.left_notebook.nametowidget(self.left_notebook.select())
         except tk.TclError:
             return
         if tab is self.video_library_tab:
             self.video_library_tab.on_tab_selected()
+        elif tab is self.workflow_tab:
+            self.after_idle(self._update_left_scrollbar_visibility)
 
     def _subproject_rpp_path(self, scene_id: str | None = None) -> Path | None:
         sid = scene_id or self.scene_id

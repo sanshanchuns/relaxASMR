@@ -135,37 +135,50 @@ class VideoLibraryTab(ttk.Frame):
 
         container = ttk.Frame(self)
         container.pack(fill=tk.BOTH, expand=True)
+        self._scroll_container = container
         self._canvas = tk.Canvas(container, highlightthickness=0)
-        vscroll = ttk.Scrollbar(container, orient=tk.VERTICAL, command=self._canvas.yview)
-        self._canvas.configure(yscrollcommand=vscroll.set)
-        vscroll.pack(side=tk.RIGHT, fill=tk.Y)
+        self._vscroll = ttk.Scrollbar(container, orient=tk.VERTICAL, command=self._canvas.yview)
+        self._canvas.configure(yscrollcommand=self._vscroll.set)
+        self._vscroll.pack(side=tk.RIGHT, fill=tk.Y)
         self._canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
         self._grid_host = ttk.Frame(self._canvas)
         self._canvas_window = self._canvas.create_window((0, 0), window=self._grid_host, anchor=tk.NW)
         self._grid_host.bind("<Configure>", self._on_grid_configure)
         self._canvas.bind("<Configure>", self._on_canvas_configure)
-        self._canvas.bind("<Enter>", self._bind_wheel)
-        self._canvas.bind("<Leave>", self._unbind_wheel)
+        for w in (container, self._canvas, self._grid_host):
+            self._bind_mousewheel(w)
 
-    def _bind_wheel(self, _event=None) -> None:
-        self._canvas.bind_all("<MouseWheel>", self._on_mousewheel)
-
-    def _unbind_wheel(self, _event=None) -> None:
-        self._canvas.unbind_all("<MouseWheel>")
+    def _bind_mousewheel(self, widget: tk.Widget) -> None:
+        widget.bind("<MouseWheel>", self._on_mousewheel)
+        widget.bind("<Button-4>", self._on_mousewheel)
+        widget.bind("<Button-5>", self._on_mousewheel)
 
     def _on_mousewheel(self, event) -> None:
         if not self.winfo_ismapped():
             return
-        delta = -1 * (event.delta // 120) if event.delta else 0
+        if event.num == 4:
+            delta = -1
+        elif event.num == 5:
+            delta = 1
+        else:
+            delta = -1 * (event.delta // 120) if event.delta else 0
         if delta:
             self._canvas.yview_scroll(delta, "units")
 
-    def _on_canvas_configure(self, _event=None) -> None:
-        self._canvas.itemconfigure(self._canvas_window, width=self._canvas.winfo_width())
+    def _on_canvas_configure(self, event=None) -> None:
+        if event is not None:
+            self._canvas.itemconfigure(self._canvas_window, width=event.width)
+        self._sync_scroll_region()
 
     def _on_grid_configure(self, _event=None) -> None:
-        self._canvas.configure(scrollregion=self._canvas.bbox("all"))
+        self._sync_scroll_region()
+
+    def _sync_scroll_region(self) -> None:
+        self.update_idletasks()
+        w = max(self._grid_host.winfo_reqwidth(), self._canvas.winfo_width(), 1)
+        h = max(self._grid_host.winfo_reqheight(), 1)
+        self._canvas.configure(scrollregion=(0, 0, w, h))
 
     def refresh(self, *, force: bool = False) -> None:
         if self._loading:
@@ -182,6 +195,7 @@ class VideoLibraryTab(ttk.Frame):
     def on_tab_selected(self) -> None:
         """切到素材库 Tab 时调用：仅在首次或文件变化时重建宫格。"""
         self.refresh(force=False)
+        self.after_idle(self._sync_scroll_region)
 
     def _sync_all_cell_styles(self) -> None:
         changed = False
@@ -233,6 +247,7 @@ class VideoLibraryTab(ttk.Frame):
         if not items:
             ttk.Label(self._grid_host, text="未找到 MP4 文件").grid(row=0, column=0, padx=8, pady=8)
             self._update_stats()
+            self.after_idle(self._sync_scroll_region)
             return
 
         cols = max(2, self._canvas.winfo_width() // (CELL_W + CELL_PAD * 2)) if self._canvas.winfo_width() > 1 else 3
@@ -287,7 +302,7 @@ class VideoLibraryTab(ttk.Frame):
             self._bind_cell_events(cell)
 
         self._update_stats()
-        self._on_grid_configure()
+        self.after_idle(self._sync_scroll_region)
 
     def _apply_cell_style(self, cell: dict) -> None:
         num = cell["num"]
@@ -334,6 +349,7 @@ class VideoLibraryTab(ttk.Frame):
         for w in (cell["outer"], cell["border"], cell["img_lbl"], cell["name_lbl"]):
             w.bind("<Button-1>", on_single)
             w.bind("<Double-Button-1>", on_double)
+            self._bind_mousewheel(w)
 
     def _on_cell_double_click(self, scene_num: str) -> None:
         cell = self._cells.get(scene_num)
