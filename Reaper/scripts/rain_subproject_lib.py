@@ -11,13 +11,29 @@ from collections.abc import Callable
 from datetime import date
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
-RAIN_ROOT = REPO_ROOT / "Reaper" / "Projects" / "Rain"
-SUBPROJECTS = RAIN_ROOT / "subprojects"
-SCENES = RAIN_ROOT / "scripts" / "scenes"
-SOUND_ROOT = REPO_ROOT / "assets" / "sound_effect" / "rain_sound"
-VIDEO_ROOT = REPO_ROOT / "assets" / "loop_video" / "rain_video"
-TEMPLATE_DOC = SUBPROJECTS / "_template" / "video_analysis.md"
+_REPO = Path(__file__).resolve().parents[2]
+import sys
+
+if str(_REPO) not in sys.path:
+    sys.path.insert(0, str(_REPO))
+
+from scripts.paths import (
+    AUDIO_LAYER_IDS,
+    RAIN_PROJECT_DIR,
+    RAIN_SCENES_DIR,
+    REPO_ROOT,
+    audio_layer_dir,
+    base_url,
+    material_dir,
+    normalize_video,
+    path_for_config,
+    resolve_media_asset,
+)
+
+RAIN_ROOT = RAIN_PROJECT_DIR
+SCENES = RAIN_SCENES_DIR
+VIDEO_ROOT = base_url()
+TEMPLATE_DOC = RAIN_ROOT / "scripts" / "scenes" / "_template_video_analysis.md"
 SCAFFOLD_SRC = RAIN_ROOT / "scripts"  # lua + fx 模板
 REAPER_SCRIPTS = Path(__file__).resolve().parent  # Reaper/scripts（共享 ReaScript）
 SHARED_REAPER_LUA = (
@@ -29,19 +45,23 @@ SHARED_REAPER_LUA = (
 
 SCENE_ID_RE = re.compile(r"(MVI_\d+)", re.I)
 
-# 默认素材目录（相对 sound_effect/rain_sound · 见 design/rain_series/rain_sound_design.md）
-DEFAULT_ASSET_DIRS = {
-    "1_rain": "1_rain/intensity/light",
-    "2_impact": "2_impact/vegetation/leaves",
-    "3_environment": "3_environment/ambience/forest",
-    "4_water": "4_water/dripping",
-    "5_wildlife": "5_wildlife/birds",
-    # 6_human 不自动选素材 — Rain 场景默认轨 6 留白，按画面在 Reaper 中手动选配
+DEFAULT_MAPPINGS = {
+    "1_rain": "1_rain",
+    "2_impact": "2_impact",
+    "3_random": "3_random",
+    "4_wildlife": "4_wildlife",
 }
 
-BIRD_FALLBACK = "assets/sound_effect/elevenlabs_sound/bird/api_mvi6918_bird_distant.mp3"
-WATER_LAKE_DIR = "4_water/standing_water"
-ENV_LAKE_DIR = "3_environment/ambience/lake"
+
+def pick_first_audio(layer_id: str) -> tuple[str | None, str]:
+    """从 baseURL/audio/<layer_id>/ 选取首个 wav 或 mp3。"""
+    base = audio_layer_dir(layer_id)
+    if not base.is_dir():
+        return None, f"目录不存在：audio/{layer_id}"
+    for pattern in ("*.wav", "*.mp3"):
+        for p in sorted(base.rglob(pattern)):
+            return path_for_config(p), f"从 audio/{layer_id} 选取 `{p.name}`"
+    return None, f"audio/{layer_id} 下未找到 wav/mp3"
 
 
 def derive_scene_id(video: Path, explicit: str | None = None) -> str:
@@ -88,38 +108,9 @@ def probe_video(video: Path) -> dict:
 
 
 def ensure_video_in_assets(video: Path, scene_id: str) -> tuple[Path, str]:
-    """若视频不在 assets 下，复制到标准目录。返回 (绝对路径, repo 相对路径)。"""
-    video = video.resolve()
-    try:
-        rel = video.relative_to(REPO_ROOT)
-        if str(rel).startswith("assets/loop_video/rain_video/"):
-            return video, rel.as_posix()
-    except ValueError:
-        pass
-    dest_dir = VIDEO_ROOT / scene_id
-    dest_dir.mkdir(parents=True, exist_ok=True)
-    dest = dest_dir / video.name
-    if not dest.exists() or dest.stat().st_size != video.stat().st_size:
-        shutil.copy2(video, dest)
-    rel = dest.relative_to(REPO_ROOT).as_posix()
-    return dest, rel
+    """规范化 loop 视频到 baseURL，返回 (绝对路径, 配置用绝对路径字符串)。"""
+    return normalize_video(video, scene_id)
 
-
-def analyze_embedded_audio(video: Path) -> dict | None:
-    if not probe_video(video)["has_audio"]:
-        return None
-    from analyze_video_audio import analyze_wav, extract_audio, layer_scores, load_samples
-
-    with tempfile.TemporaryDirectory() as tmp:
-        wav = Path(tmp) / "audio.wav"
-        try:
-            extract_audio(video, wav)
-        except subprocess.CalledProcessError:
-            return None
-        samples, sr = load_samples(wav)
-        stats = analyze_wav(samples, sr)
-        layers = layer_scores(stats)
-    return {"stats": stats, "layers": layers}
 
 
 def analyze_visual_heuristic(video: Path) -> dict:
@@ -180,31 +171,12 @@ def analyze_visual_heuristic(video: Path) -> dict:
     return hints
 
 
-def pick_first_mp3(rel_dir: str) -> tuple[str | None, str]:
-    """从声源目录选取首个 mp3，返回 (仓库相对路径, 选取理由)。"""
-    if rel_dir.startswith("../"):
-        base = (REPO_ROOT / "assets" / "sound_effect" / rel_dir.replace("../", "")).resolve()
-        base_desc = rel_dir
-    else:
-        base = (SOUND_ROOT / rel_dir).resolve()
-        base_desc = f"rain_sound/{rel_dir}"
-    if not base.is_dir():
-        return None, f"目录不存在：`{base_desc}`"
-    for p in sorted(base.rglob("*.mp3")):
-        try:
-            rel = p.relative_to(REPO_ROOT).as_posix()
-            return rel, f"从 `{base_desc}` 按字母序选取 `{p.name}`"
-        except ValueError:
-            continue
-    return None, f"`{base_desc}` 下未找到 mp3"
-
 
 def build_asmr_config(
     scene_id: str,
     video_rel: str,
     *,
     duration_hours: float = 3,
-    audio_layers: dict | None = None,
     visual: dict | None = None,
 ) -> tuple[dict, dict[str, str]]:
     cfg = {
@@ -213,7 +185,7 @@ def build_asmr_config(
         "series": "rain_sleep",
         "duration_hours": duration_hours,
         "video": {
-            "track": 7,
+            "track": 5,
             "name": f"Video · {scene_id} loop",
             "path": video_rel,
             "render_only": True,
@@ -222,29 +194,8 @@ def build_asmr_config(
             {
                 "track": 1,
                 "id": "1_rain",
-                "name": "小雨主雨势",
+                "name": "主雨势",
                 "vol": 1.0,
-                "paths": [],
-            },
-            {
-                "track": 3,
-                "id": "3_environment",
-                "name": "环境空间",
-                "vol": 0.26,
-                "paths": [],
-            },
-            {
-                "track": 4,
-                "id": "4_water",
-                "name": "水体/滴水",
-                "vol": 0.18,
-                "paths": [],
-            },
-            {
-                "track": 6,
-                "id": "6_human",
-                "name": "留白（待选）",
-                "vol": 0.0,
                 "paths": [],
             },
         ],
@@ -255,13 +206,32 @@ def build_asmr_config(
                 "name": "雨打树叶",
                 "vol": 0.5,
                 "paths": [],
+                "min_gap_min": 3,
+                "max_gap_min": 8,
+                "randomness": 0.6,
+                "clear_existing": True,
             },
             {
-                "track": 5,
-                "id": "5_wildlife",
-                "name": "远处鸟鸣",
+                "track": 3,
+                "id": "3_random",
+                "name": "随机散音",
+                "vol": 0.35,
+                "paths": [],
+                "min_gap_min": 5,
+                "max_gap_min": 15,
+                "randomness": 0.6,
+                "clear_existing": True,
+            },
+            {
+                "track": 4,
+                "id": "4_wildlife",
+                "name": "野生生态",
                 "vol": 0.28,
                 "paths": [],
+                "min_gap_min": 12,
+                "max_gap_min": 28,
+                "randomness": 0.55,
+                "clear_existing": True,
             },
         ],
         "fade_sec": 0.08,
@@ -280,12 +250,11 @@ def _layer_paths_from_cfg(cfg: dict) -> dict[str, str]:
 
 
 def recipe_section_md(cfg: dict, rationales: dict[str, str] | None = None) -> str:
-    """§三 配方总览（Rain Sound Design 六层 + Dynamic + video）。"""
+    """§三 配方总览（Rain Sound Design 四层 + video）。"""
     lines = [
-        "# 三、六层配方 + Dynamic（自动初版）",
-        "",
+        "# 三、四层配方（自动初版）",
         "> 架构：[rain_sound_design.md](../../../../design/rain_series/rain_sound_design.md)",
-        "> 轨 1–6 = 素材层 · 轨 7 = 视频 · `1_rain` 长时包络请手动运行 `asmr_vol_envelope.lua`",
+        "> 轨 1 = 循环素材层 · 轨 2–4 = 散布层 · 轨 5 = 视频 · `1_rain` 长时包络请手动运行 `asmr_vol_envelope.lua`",
         "",
         "## 3.1 配方总览",
         "",
@@ -303,11 +272,11 @@ def recipe_section_md(cfg: dict, rationales: dict[str, str] | None = None) -> st
     video = cfg.get("video", {})
     if video:
         lines.append(
-            f"| {video.get('track', 7)} | video | {video.get('name', 'loop')} | render_only | mute |"
+            f"| {video.get('track', 5)} | video | {video.get('name', 'loop')} | render_only | mute |"
         )
     lines.extend([
         "",
-        "详细路径见 `scripts/asmr_config.lua` · 生成：`create_rain_subproject.py` / GUI",
+        "详细路径见 `scripts/scenes/<scene_id>.lua` · 生成：`create_rain_subproject.py` / GUI",
         "",
     ])
     if rationales:
@@ -318,14 +287,7 @@ def recipe_section_md(cfg: dict, rationales: dict[str, str] | None = None) -> st
             "| layer_id | 素材 | 选取理由 |",
             "|----------|------|----------|",
         ])
-        for lid in (
-            "1_rain",
-            "2_impact",
-            "3_environment",
-            "4_water",
-            "5_wildlife",
-            "6_human",
-        ):
+        for lid in AUDIO_LAYER_IDS:
             path = layer_paths.get(lid, "—")
             reason = rationales.get(lid, "—")
             short = f"`{Path(path).name}`" if path and path != "—" else "—"
@@ -344,7 +306,7 @@ def lua_quote(s: str) -> str:
 
 def config_to_lua(cfg: dict) -> str:
     lines = [
-        f"-- 场景配方 · 见 subprojects/{cfg['scene_id']}/video_analysis.md §三",
+        f"-- 场景配方 · 见 baseURL/material/{cfg['scene_id']}_video_analysis.md §三",
         f"-- 由 create_rain_subproject.py 自动生成",
         "",
         "return {",
@@ -402,12 +364,9 @@ def write_video_analysis(
     video_rel: str,
     probe: dict,
     visual: dict,
-    audio: dict | None,
     cfg: dict,
     rationales: dict[str, str] | None = None,
 ) -> None:
-    from analyze_video_audio import LAYER_ROWS, build_markdown
-
     res = f"{probe['width']}×{probe['height']}" if probe["width"] else "—"
     today = date.today().isoformat()
     green_note = ""
@@ -417,12 +376,12 @@ def write_video_analysis(
     header = [
         f"# 视频分析 · {scene_id}",
         "",
-        f"> 子工程：`subprojects/{scene_id}`",
+        f"> 工程：`Reaper/Projects/Rain/{scene_id}.rpp`",
         f"> 视频：`{video_rel}`",
         f"> 分析日期：{today}",
         "> 状态：**Looper 首帧代表全片**（`create_rain_subproject.py` 自动生成，§一 请人工核对）",
         "> 系列：**Rain 睡眠**",
-        f"> 成片时长：**{3} h**",
+        f"> 成片时长：**{cfg.get('duration_hours', 3)} h**",
         "",
         "---",
         "",
@@ -434,7 +393,6 @@ def write_video_analysis(
         "|----|-----|",
         f"| 分辨率 | {res}（{probe.get('codec', '')}） |",
         f"| 时长 | {probe['duration']:.2f} s |",
-        f"| 内嵌音轨 | {'有' if probe['has_audio'] else '**无**'} |",
         f"| 文件名线索 | loop={visual.get('loop_segments', '?')} fade={visual.get('fade_sec', '?')} |",
         "",
         "## 1.2 画面描述",
@@ -446,31 +404,23 @@ def write_video_analysis(
         "",
         "---",
         "",
+        "# 二、音频配方",
+        "",
+        "> 主雨轨（1_rain）由 GUI 首帧 CLIP/VLM 分析匹配，不再拆解视频内嵌音轨。",
+        "",
+        "---",
+        "",
     ]
-
-    if audio:
-        video_abs = REPO_ROOT / video_rel
-        section = build_markdown(video_abs, audio["stats"], audio["layers"])
-        body = "\n".join(header) + section + "\n---\n\n" + recipe_section_md(cfg, rationales)
-    else:
-        no_audio = [
-            "# 二、视频原声拆解",
-            "",
-            "> 本文件 **无内嵌音轨**，配方依据画面启发 + 睡眠系列默认模板。",
-            "",
-            "---",
-            "",
-        ]
-        body = "\n".join(header) + "\n".join(no_audio) + recipe_section_md(cfg, rationales)
-
+    body = "\n".join(header) + recipe_section_md(cfg, rationales)
     path.write_text(body, encoding="utf-8")
 
 
-def scaffold_subproject(scene_id: str) -> Path:
-    dest = SUBPROJECTS / scene_id
-    scripts = dest / "scripts"
+def ensure_shared_scripts() -> Path:
+    """确保 Rain/scripts 含全部共用 lua + fx（各场景不再复制一份）。"""
+    scripts = RAIN_ROOT / "scripts"
     scripts.mkdir(parents=True, exist_ok=True)
-    for name in ("rain_bootstrap.lua", "rain_paths.lua", "rain_setup_project.lua"):
+    SCENES.mkdir(parents=True, exist_ok=True)
+    for name in ("rain_bootstrap.lua", "rain_paths.lua", "rain_setup_project.lua", "layer_template.lua"):
         src = SCAFFOLD_SRC / name
         dst = scripts / name
         if src.is_file() and src.resolve() != dst.resolve():
@@ -485,8 +435,19 @@ def scaffold_subproject(scene_id: str) -> Path:
     if fx_src.is_dir():
         fx_dest.mkdir(parents=True, exist_ok=True)
         for f in fx_src.glob("*"):
-            shutil.copy2(f, fx_dest / f.name)
-    return dest
+            if not (fx_dest / f.name).exists():
+                shutil.copy2(f, fx_dest / f.name)
+    return scripts
+
+
+def scaffold_subproject(scene_id: str) -> Path:
+    """兼容旧名：仅确保共用 scripts，返回 Rain 根目录。"""
+    ensure_shared_scripts()
+    return RAIN_ROOT
+
+
+def scene_video_analysis_path(scene_id: str) -> Path:
+    return material_dir() / f"{scene_id}_video_analysis.md"
 
 
 def create_from_video(
@@ -513,36 +474,27 @@ def create_from_video(
     probe = probe_video(video_abs)
     log("分析首帧画面启发…")
     visual = analyze_visual_heuristic(video_abs)
-    if probe["has_audio"]:
-        log("分析内嵌音轨（七层听感）…")
-        audio = analyze_embedded_audio(video_abs)
-    else:
-        log("无内嵌音轨，使用画面启发 + 默认模板")
-        audio = None
-    audio_layers = audio["layers"] if audio else None
 
-    log("生成空白 7 轨道配方…")
+    log("生成空白 4 轨音频 + 视频配方…")
     cfg, rationales = build_asmr_config(
         scene_id,
         video_rel,
         duration_hours=duration_hours,
-        audio_layers=audio_layers,
         visual=visual,
     )
 
     log("写入 Reaper 轨道结构…")
-    sub_dir = scaffold_subproject(scene_id)
+    rain_dir = scaffold_subproject(scene_id)
     lua = config_to_lua(cfg)
-    (sub_dir / "scripts" / "asmr_config.lua").write_text(lua, encoding="utf-8")
     SCENES.mkdir(parents=True, exist_ok=True)
-    (SCENES / f"{scene_id}.lua").write_text(lua, encoding="utf-8")
+    scene_lua = SCENES / f"{scene_id}.lua"
+    scene_lua.write_text(lua, encoding="utf-8")
     write_video_analysis(
-        sub_dir / "video_analysis.md",
+        scene_video_analysis_path(scene_id),
         scene_id,
         video_rel,
         probe,
         visual,
-        audio,
         cfg,
         rationales,
     )
@@ -552,16 +504,14 @@ def create_from_video(
         from media_paths import describe_media_mode
 
         log("生成 Reaper 工程 (.rpp)…")
-        config_path = sub_dir / "scripts" / "asmr_config.lua"
-        loaded = load_config(config_path)
-        stage_rain_fx_assets(sub_dir)
-        rpp_path = sub_dir / f"{scene_id}.rpp"
+        stage_rain_fx_assets(rain_dir)
+        rpp_path = rain_dir / f"{scene_id}.rpp"
         log(f"媒体路径: {describe_media_mode(media_mode, REPO_ROOT)}")
         rpp_path.write_text(
-            build_rpp(loaded, REPO_ROOT, sub_dir, media_mode),
+            build_rpp(load_config(scene_lua), REPO_ROOT, rain_dir, media_mode),
             encoding="utf-8",
         )
         log(f"工程: {rpp_path.relative_to(REPO_ROOT)}")
 
     log("完成")
-    return sub_dir
+    return rain_dir

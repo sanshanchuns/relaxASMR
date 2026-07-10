@@ -102,6 +102,9 @@ def load_asmr_config(path: Path) -> dict:
     m = re.search(r'project_name\s*=\s*"([^"]+)"', text)
     if m:
         cfg["project_name"] = m.group(1)
+    m = re.search(r'series\s*=\s*"([^"]+)"', text)
+    if m:
+        cfg["series"] = m.group(1)
     m = re.search(r"duration_hours\s*=\s*([\d.]+)", text)
     if m:
         cfg["duration_hours"] = float(m.group(1))

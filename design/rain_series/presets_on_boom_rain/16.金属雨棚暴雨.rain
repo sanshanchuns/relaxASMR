@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Rain version="1" lts="0" l1="200" l2="580" l3="930" adv="0" scn="Metallic Canopy Madness">
+  <PARAM id="gldr" value="1.0"/>
+  <PARAM id="bgeq1x" value="0.8935999870300293"/>
+  <PARAM id="bgeq1y" value="0.5009999871253967"/>
+  <PARAM id="bgeq2x" value="0.7233999967575073"/>
+  <PARAM id="bgeq2y" value="0.680899977684021"/>
+  <PARAM id="bgeq3x" value="0.255299985408783"/>
+  <PARAM id="bgeq3y" value="0.5956999659538269"/>
+  <PARAM id="bgpn" value="0.5"/>
+  <PARAM id="bgwi" value="0.5"/>
+  <PARAM id="eq1x" value="0.9230999946594238"/>
+  <PARAM id="eq1y" value="0.7032999992370605"/>
+  <PARAM id="eq2x" value="0.5385000109672546"/>
+  <PARAM id="eq2y" value="0.6703000068664551"/>
+  <PARAM id="eq3x" value="0.2014999985694885"/>
+  <PARAM id="eq3y" value="0.7691999673843384"/>
+  <PARAM id="glgn" value="0.3646999895572662"/>
+  <PARAM id="glhp" value="0.1959999948740005"/>
+  <PARAM id="gllp" value="0.0"/>
+  <PARAM id="glon" value="1.0"/>
+  <PARAM id="rfch" value="0.5034999847412109"/>
+  <PARAM id="rfdn" value="0.7871999740600586"/>
+  <PARAM id="rffc" value="0.6383000016212463"/>
+  <PARAM id="rfin" value="1.0"/>
+  <PARAM id="spbl" value="0.4733999967575073"/>
+  <PARAM id="sppn" value="0.5959999561309814"/>
+  <PARAM id="spwi" value="0.1679999977350235"/>
+  <PARAM id="sucd" value="0.0"/>
+  <PARAM id="supn" value="0.6240000128746033"/>
+  <PARAM id="suwi" value="0.1279999911785126"/>
+</Rain>

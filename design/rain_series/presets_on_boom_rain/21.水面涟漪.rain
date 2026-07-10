@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Rain version="1" lts="0" l1="150" l2="590" l3="920" adv="1" scn="Stirring Water Whirls">
+  <PARAM id="gldr" value="1.0"/>
+  <PARAM id="bgeq1x" value="0.8288999795913696"/>
+  <PARAM id="bgeq1y" value="0.7295999526977539"/>
+  <PARAM id="bgeq2x" value="0.5"/>
+  <PARAM id="bgeq2y" value="0.6071000099182129"/>
+  <PARAM id="bgeq3x" value="0.5"/>
+  <PARAM id="bgeq3y" value="0.5"/>
+  <PARAM id="bgpn" value="0.5"/>
+  <PARAM id="bgwi" value="1.0"/>
+  <PARAM id="eq1x" value="0.5"/>
+  <PARAM id="eq1y" value="0.5"/>
+  <PARAM id="eq2x" value="1.0"/>
+  <PARAM id="eq2y" value="0.9120999574661255"/>
+  <PARAM id="eq3x" value="0.4944999814033508"/>
+  <PARAM id="eq3y" value="1.0"/>
+  <PARAM id="glgn" value="0.3646999895572662"/>
+  <PARAM id="glhp" value="0.0"/>
+  <PARAM id="gllp" value="0.03969999775290489"/>
+  <PARAM id="glon" value="1.0"/>
+  <PARAM id="rfch" value="1.0"/>
+  <PARAM id="rfdn" value="1.0"/>
+  <PARAM id="rffc" value="0.6311999559402466"/>
+  <PARAM id="rfin" value="0.6949999928474426"/>
+  <PARAM id="spbl" value="0.483599990606308"/>
+  <PARAM id="sppn" value="0.5"/>
+  <PARAM id="spwi" value="0.6541000008583069"/>
+  <PARAM id="sucd" value="0.3585000038146973"/>
+  <PARAM id="supn" value="0.5"/>
+  <PARAM id="suwi" value="0.5845000147819519"/>
+</Rain>

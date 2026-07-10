@@ -155,10 +155,17 @@ run_ffmpeg_with_progress() {
       fi
     fi
 
-    printf "\r  Elapsed: %s  Remaining: ~%s  (%d%%)  " \
-      "$(format_elapsed "$elapsed")" \
-      "$(format_remaining "$remain_sec")" \
-      "$pct"
+    if [[ -t 1 ]]; then
+      printf "\r  Elapsed: %s  Remaining: ~%s  (%d%%)  " \
+        "$(format_elapsed "$elapsed")" \
+        "$(format_remaining "$remain_sec")" \
+        "$pct"
+    else
+      printf "PROGRESS Elapsed: %s  Remaining: ~%s  (%d%%)\n" \
+        "$(format_elapsed "$elapsed")" \
+        "$(format_remaining "$remain_sec")" \
+        "$pct"
+    fi
     sleep 1
   done
 

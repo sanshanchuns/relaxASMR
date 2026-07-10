@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Rain version="1" lts="0" l1="260" l2="550" l3="820" adv="0" scn="Humming Busstation">
+  <PARAM id="gldr" value="1.0"/>
+  <PARAM id="bgeq1x" value="0.3789999783039093"/>
+  <PARAM id="bgeq1y" value="0.397599995136261"/>
+  <PARAM id="bgeq2x" value="0.4606999754905701"/>
+  <PARAM id="bgeq2y" value="0.359499990940094"/>
+  <PARAM id="bgeq3x" value="0.3089999854564667"/>
+  <PARAM id="bgeq3y" value="0.2536999881267548"/>
+  <PARAM id="bgpn" value="0.5"/>
+  <PARAM id="bgwi" value="0.7319999933242798"/>
+  <PARAM id="eq1x" value="0.7536999583244324"/>
+  <PARAM id="eq1y" value="0.4869000017642975"/>
+  <PARAM id="eq2x" value="0.6969000101089478"/>
+  <PARAM id="eq2y" value="0.2829999923706055"/>
+  <PARAM id="eq3x" value="0.4616999924182892"/>
+  <PARAM id="eq3y" value="0.4149999916553497"/>
+  <PARAM id="glgn" value="0.3646999895572662"/>
+  <PARAM id="glhp" value="0.0"/>
+  <PARAM id="gllp" value="0.1319999992847443"/>
+  <PARAM id="glon" value="1.0"/>
+  <PARAM id="rfch" value="0.0949999988079071"/>
+  <PARAM id="rfdn" value="0.4268999993801117"/>
+  <PARAM id="rffc" value="0.609499990940094"/>
+  <PARAM id="rfin" value="0.5191999673843384"/>
+  <PARAM id="spbl" value="0.5"/>
+  <PARAM id="sppn" value="0.5"/>
+  <PARAM id="spwi" value="0.671999990940094"/>
+  <PARAM id="sucd" value="0.1759999990463257"/>
+  <PARAM id="supn" value="0.5"/>
+  <PARAM id="suwi" value="0.3599999845027924"/>
+</Rain>

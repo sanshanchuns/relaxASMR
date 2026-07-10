@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """从 loop 视频一键创建 Rain 子工程。
 
-流程：探测视频 →（可选）内嵌音轨七层分析 → 首帧启发式 → 生成配方
-→ 脚手架 → generate_subproject（Group ReaEQ+ReaComp · 5_wildlife ReaVerbate）
+流程：探测视频 →（可选）内嵌音轨四层分析 → 首帧启发式 → 生成配方
+→ 脚手架 → generate_subproject（Group ReaEQ+ReaComp · 轨 5 视频）
 
 用法（仓库根目录）：
 
@@ -80,9 +80,9 @@ def main() -> None:
     )
 
     print(f"==> 场景 ID: {scene}")
-    print(f"==> 子工程: {sub}")
-    print(f"==> 配方:   {sub / 'scripts' / 'asmr_config.lua'}")
-    print(f"==> 分析:   {sub / 'video_analysis.md'}")
+    print(f"==> Rain 工程目录: {sub}")
+    print(f"==> 配方:   {sub / 'scripts' / 'scenes' / f'{scene}.lua'}")
+    print(f"==> 分析:   baseURL/material/{scene}_video_analysis.md")
     if not args.skip_generate:
         print(f"==> 工程:   {sub / f'{scene}.rpp'}")
     print()

@@ -11,7 +11,7 @@ _MIN_MP4_BYTES = 1_000_000  # 跳过空文件/未完成导出
 
 
 def subproject_output_dir(scene_id: str, repo_root: Path) -> Path:
-    return repo_root / "Reaper" / "Projects" / "Rain" / "subprojects" / scene_id / "output"
+    return repo_root / "Reaper" / "Projects" / "Rain" / "subprojects" / scene_id / "material"
 
 
 def _is_valid_mp4(path: Path) -> bool:
@@ -45,7 +45,7 @@ def _export_score(path: Path, scene_id: str) -> int:
 
 
 def find_subproject_mp4(scene_id: str, repo_root: Path, *, preferred: Path | None = None) -> Path | None:
-    """在子工程 output/ 下找成片 MP4；排除 loop 预览与空文件。"""
+    """在子工程 material/ 下找成片 MP4；排除 loop 预览与空文件。"""
     if preferred and _is_valid_mp4(preferred.resolve()):
         return preferred.resolve()
 
@@ -66,7 +66,7 @@ def find_subproject_mp4(scene_id: str, repo_root: Path, *, preferred: Path | Non
 
 def loop_material_dir(subproject_dir: Path, loop_video: Path) -> Path:
     """子工程内、基于 loop 视频文件名的物料目录。"""
-    return subproject_dir / "output" / "material"
+    return subproject_dir / "material" / "material"
 
 
 def material_output_dir(mp4: Path) -> Path:

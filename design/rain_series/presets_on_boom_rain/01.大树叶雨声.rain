@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Rain version="1" lts="0" l1="110" l2="590" l3="900" adv="1" scn="Big Leafy Symphony">
+  <PARAM id="gldr" value="1.0"/>
+  <PARAM id="bgeq1x" value="0.6383000016212463"/>
+  <PARAM id="bgeq1y" value="0.4043000042438507"/>
+  <PARAM id="bgeq2x" value="0.4043000042438507"/>
+  <PARAM id="bgeq2y" value="0.6595999598503113"/>
+  <PARAM id="bgeq3x" value="0.765999972820282"/>
+  <PARAM id="bgeq3y" value="0.5956999659538269"/>
+  <PARAM id="bgpn" value="0.5"/>
+  <PARAM id="bgwi" value="0.515999972820282"/>
+  <PARAM id="eq1x" value="0.8131999969482422"/>
+  <PARAM id="eq1y" value="0.5934000015258789"/>
+  <PARAM id="eq2x" value="0.6592999696731567"/>
+  <PARAM id="eq2y" value="0.3296999931335449"/>
+  <PARAM id="eq3x" value="0.8241999745368958"/>
+  <PARAM id="eq3y" value="0.6263999938964844"/>
+  <PARAM id="glgn" value="0.3646999895572662"/>
+  <PARAM id="glhp" value="0.0"/>
+  <PARAM id="gllp" value="0.1840000003576279"/>
+  <PARAM id="glon" value="1.0"/>
+  <PARAM id="rfch" value="0.5034999847412109"/>
+  <PARAM id="rfdn" value="0.4989999830722809"/>
+  <PARAM id="rffc" value="0.4967999756336212"/>
+  <PARAM id="rfin" value="0.1962999999523163"/>
+  <PARAM id="spbl" value="1.0"/>
+  <PARAM id="sppn" value="0.5"/>
+  <PARAM id="spwi" value="0.6639999747276306"/>
+  <PARAM id="sucd" value="0.2999999821186066"/>
+  <PARAM id="supn" value="0.5"/>
+  <PARAM id="suwi" value="0.5040000081062317"/>
+</Rain>

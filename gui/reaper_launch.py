@@ -6,7 +6,58 @@ import os
 import shutil
 import subprocess
 import sys
+import threading
+import time
+from collections.abc import Callable
 from pathlib import Path
+
+
+def format_hms(seconds: float) -> str:
+    s = max(0, int(seconds))
+    return f"{s // 3600:02d}:{s % 3600 // 60:02d}:{s % 60:02d}"
+
+
+def _estimate_wav_data_bytes(duration_sec: float) -> int:
+    """48 kHz · stereo · 24-bit PCM 粗估。"""
+    return int(duration_sec * 48000 * 2 * 3)
+
+
+def _poll_render_progress(
+    proc: subprocess.Popen,
+    *,
+    output_wav: Path | None,
+    duration_hours: float | None,
+    on_progress: Callable[[str], None] | None,
+) -> None:
+    start = time.monotonic()
+    total_sec = float(duration_hours or 0) * 3600
+    expected_data = _estimate_wav_data_bytes(total_sec) if total_sec > 0 else 0
+
+    while proc.poll() is None:
+        elapsed = time.monotonic() - start
+        pct = 0
+        remain = total_sec if total_sec > 0 else 0
+
+        if output_wav and output_wav.is_file() and expected_data > 0:
+            size = max(0, output_wav.stat().st_size - 44)
+            pct = min(99, int(size * 100 / expected_data))
+            if pct > 0:
+                remain = elapsed * (100 - pct) / pct
+            elif total_sec > 0:
+                remain = total_sec
+
+        if on_progress:
+            if pct > 0 or (output_wav and output_wav.is_file()):
+                on_progress(
+                    f"Elapsed: {format_hms(elapsed)}  "
+                    f"Remaining: ~{format_hms(remain)}  ({pct}%)"
+                )
+            else:
+                on_progress(
+                    f"Elapsed: {format_hms(elapsed)}  "
+                    f"Remaining: ~{format_hms(remain)}  (…)"
+                )
+        time.sleep(1)
 
 
 def is_wsl() -> bool:
@@ -117,6 +168,79 @@ def resolve_reaper_exe(explicit: str | None = None) -> Path | str | None:
         return default_windows_reaper_from_wsl()
     found = default_reaper_candidates()
     return found[0] if found else None
+
+
+def render_reaper_project(
+    rpp: Path,
+    *,
+    reaper_exe: str | None = None,
+    output_wav: Path | None = None,
+    duration_hours: float | None = None,
+    on_progress: Callable[[str], None] | None = None,
+) -> None:
+    """Headless 渲染 .rpp（WSL 下调用 Windows Reaper）。"""
+    rpp = rpp.resolve()
+    if not rpp.is_file():
+        raise FileNotFoundError(f"找不到工程文件：{rpp}")
+
+    proc: subprocess.Popen | None = None
+
+    if is_wsl():
+        exe = resolve_reaper_exe(reaper_exe)
+        if not exe:
+            raise FileNotFoundError(
+                "找不到 Windows Reaper。请在 GUI 设置中填写 reaper_exe，"
+                "或安装到默认路径（如 D:\\Program Files\\REAPER (x64)）。"
+            )
+        linux_exe: Path | None = None
+        if isinstance(exe, Path):
+            linux_exe = exe
+        else:
+            for mount in WSL_REAPER_MOUNT_CANDIDATES:
+                p = Path(mount)
+                if p.is_file() and wsl_to_windows_path(p).lower() == str(exe).lower():
+                    linux_exe = p
+                    break
+            if linux_exe is None:
+                for mount in WSL_REAPER_MOUNT_CANDIDATES:
+                    p = Path(mount)
+                    if p.is_file():
+                        linux_exe = p
+                        break
+        win_rpp = wsl_to_windows_path(rpp)
+        if linux_exe is None:
+            win_exe = exe if isinstance(exe, str) else wsl_to_windows_path(exe)
+            proc = subprocess.Popen(
+                [str(windows_cmd_exe()), "/c", f'"{win_exe}" -renderproject "{win_rpp}"'],
+            )
+        else:
+            proc = subprocess.Popen([str(linux_exe), "-renderproject", win_rpp])
+    else:
+        exe = resolve_reaper_exe(reaper_exe)
+        if isinstance(exe, Path):
+            proc = subprocess.Popen([str(exe), "-renderproject", str(rpp)])
+        else:
+            candidates = default_reaper_candidates()
+            if not candidates:
+                raise FileNotFoundError("找不到 Reaper 可执行文件")
+            proc = subprocess.Popen([str(candidates[0]), "-renderproject", str(rpp)])
+
+    assert proc is not None
+    if on_progress:
+        threading.Thread(
+            target=_poll_render_progress,
+            args=(proc,),
+            kwargs={
+                "output_wav": output_wav,
+                "duration_hours": duration_hours,
+                "on_progress": on_progress,
+            },
+            daemon=True,
+        ).start()
+
+    rc = proc.wait()
+    if rc != 0:
+        raise subprocess.CalledProcessError(rc, proc.args)
 
 
 def open_reaper_project(rpp: Path, *, reaper_exe: str | None = None) -> None:

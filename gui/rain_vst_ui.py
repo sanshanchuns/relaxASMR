@@ -221,13 +221,13 @@ class RainVstSection(ttk.LabelFrame):
             root = self.winfo_toplevel()
 
             try:
-                from scripts.rain_vst.analyze import analyze_video
+                from scripts.video_analysis.analyze import analyze_video
             except ImportError as exc:
                 def show_err(err: BaseException = exc) -> None:
-                    self._log(f"错误：无法导入 scripts.rain_vst.analyze — {err}")
+                    self._log(f"错误：无法导入 scripts.video_analysis.analyze — {err}")
                     messagebox.showerror(
                         "导入失败",
-                        f"无法导入 scripts.rain_vst.analyze：\n{err}\n\n请确认依赖已安装。",
+                        f"无法导入 scripts.video_analysis.analyze：\n{err}\n\n请确认依赖已安装。",
                     )
                 root.after(0, show_err)
                 return
@@ -290,7 +290,7 @@ class RainVstSection(ttk.LabelFrame):
                     vst_dirs = list(input_dir.glob("*vst*"))
                     if vst_dirs:
                         try:
-                            from scripts.rain_vst.matcher import find_best_match
+                            from scripts.video_analysis.matcher import find_best_match
                             match_res = find_best_match(last_rain, vst_dirs[0])
                             if match_res:
                                 matched_path, score = match_res

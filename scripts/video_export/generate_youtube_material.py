@@ -982,18 +982,21 @@ def generate_material(
     match = re.search(r'\d+', stem)
     num = match.group() if match else stem
     
-    # 优先查找已经存在的包含序号的 JPG
-    snapshot_jpg = None
-    existing_jpgs = list(out_dir.glob(f"*{num}*.jpg"))
-    if existing_jpgs:
-        snapshot_jpg = existing_jpgs[0]
-        log(f"找到现有分析快照：{snapshot_jpg.name}，跳过截帧")
-    else:
-        snapshot_jpg = out_dir / f"MVI_{num}_snapshot.jpg"
-        log(f"截取分析快照 @ {use_thumb_time}s … (1280x720 JPG)")
-        extract_frame(video, snapshot_jpg, float(use_thumb_time))
+    thumb_jpg = out_dir / f"MVI_{num}_thumbnail.jpg"
+    raw_jpg = out_dir / f"MVI_{num}_snapshot_raw.jpg"
 
-    scene = analyze_frame_scene(snapshot_jpg)
+    if thumb_jpg.is_file():
+        frame_jpg = thumb_jpg
+        log(f"找到封面图：{thumb_jpg.name}，跳过截帧")
+    elif raw_jpg.is_file():
+        frame_jpg = raw_jpg
+        log(f"找到原始首帧：{raw_jpg.name}，跳过截帧")
+    else:
+        frame_jpg = raw_jpg
+        log(f"截取分析快照 @ {use_thumb_time}s … (1280x720 JPG)")
+        extract_frame(video, frame_jpg, float(use_thumb_time))
+
+    scene = analyze_frame_scene(frame_jpg)
     log(f"画面场景：{scene['scene_key']} · {scene['place_en_short']}")
 
     if copy_style == "forest_rain" and scene:

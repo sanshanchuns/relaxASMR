@@ -4,9 +4,12 @@
 from __future__ import annotations
 
 import argparse
+import math
+import random
 import re
 import json
 import os
+import sys
 import shutil
 import subprocess
 import uuid
@@ -21,6 +24,9 @@ from media_paths import (
 )
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+from scripts.paths import export_dir, duration_render_suffix, resolve_media_asset
 SCRIPTS_DIR = Path(__file__).resolve().parent
 LAYER_TEMPLATE_PATH = REPO_ROOT / "Reaper" / "Projects" / "Rain" / "scripts" / "layer_template.lua"
 RAIN_FX_SRC = REPO_ROOT / "Reaper" / "Projects" / "Rain" / "scripts" / "fx" / "asmr_sleep_hf_eq.jsfx"
@@ -58,11 +64,33 @@ REAVERBATe_VST = [
 
 # 轨级 FX：layer id → preset lines（不含 FXCHAIN 外壳）
 TRACK_FX_PRESETS: dict[str, list[str]] = {
-    "5_wildlife": REAVERBATe_VST,
+    "1_rain": REAEQ_VST,
+    "4_wildlife": REAVERBATe_VST,
 }
 
 # 视频轨混音时静音（-inf dB），仅最终渲染用
 VIDEO_TRACK_VOL = 0.0
+
+
+# 默认渲染：前 10s time selection → baseURL/export/$project.wav
+DEFAULT_RENDER_SELECTION_SEC = 10.0
+
+
+def render_output_dir_for_rpp(repo_root: Path, media_mode: str) -> str:
+    """Reaper Render 输出目录（baseURL/export），Windows Reaper 用盘符路径。"""
+    out = export_dir()
+    out.mkdir(parents=True, exist_ok=True)
+    mode = resolve_media_mode(media_mode, repo_root)
+    if mode == "wsl_unc":
+        return wsl_unc_path(out)
+    return str(out.resolve())
+
+
+def rpp_render_file_line(render_dir: str) -> str:
+    """RENDER_FILE 行：含空格时加引号。"""
+    if " " in render_dir:
+        return f'  RENDER_FILE "{rpp_quote_path(render_dir)}"'
+    return f"  RENDER_FILE {render_dir}"
 
 
 def load_config(config_path: Path) -> dict:
@@ -136,6 +164,36 @@ def stage_media(
     return media_path_for_rpp(asset, rpp_dir, mode, repo_root), source_type, file_suffix
 
 
+
+def build_vol_envelope(duration_hours: float) -> str:
+    """生成长时音量包络 (1_rain)"""
+    total_sec = duration_hours * 3600
+    points_count = 33
+    max_db = 1.0
+    min_db = -1.0
+    mid = (max_db + min_db) / 2
+    amp = (max_db - min_db) / 2
+    
+    lines = [
+        "  <VOLENV2",
+        "    ACT 1 -1",
+        "    VIS 1 1 1",
+        "    LANEHEIGHT 0 0",
+        "    ARM 1",
+        "    DEFSHAPE 0 -1 -1"
+    ]
+    
+    n = points_count - 1
+    for i in range(points_count):
+        phase = 2 * math.pi * (i / n)
+        db = mid + amp * math.sin(phase)
+        linear = 10 ** (db / 20)
+        t = (i / n) * total_sec
+        lines.append(f"    PT {t:.6f} {linear:.6f} 0")
+    
+    lines.append("  >")
+    return "\n".join(lines)
+
 def make_track(
     name: str,
     vol: float = 1.0,
@@ -180,7 +238,7 @@ def make_track(
         lines.append("      SHOW 0")
         lines.append("      LASTSEL 0")
         lines.append("      DOCKED 0")
-        lines.append("      BYPASS 0 0 0")
+        lines.append("      BYPASS 1 0 0")
         lines.extend(fx_preset)
         lines.append(f"      FLOATPOS 0 0 0 0")
         lines.append(f"      FXID {{{guid()}}}")
@@ -202,7 +260,7 @@ def make_group_fxchain_reaeq() -> list[str]:
         "      SHOW 0",
         "      LASTSEL 0",
         "      DOCKED 0",
-        "      BYPASS 0 0 0",
+        "      BYPASS 1 0 0",
     ]
     lines.extend(REAEQ_VST)
     lines.append(f"      FLOATPOS 0 0 0 0")
@@ -288,23 +346,27 @@ def make_group_track(js_ref: str, params: list[float]) -> str:
     return "\n".join(lines)
 
 
-def stage_rain_fx_assets(out_dir: Path) -> None:
-    """复制 JS EQ 到子工程 scripts/fx/（模板可选）。"""
+def stage_rain_fx_assets(rain_dir: Path) -> None:
+    """确保共用 JS EQ 存在于 Rain/scripts/fx/。"""
     if not RAIN_FX_SRC.is_file():
         return
-    dest_dir = out_dir / "scripts" / "fx"
+    dest_dir = rain_dir / "scripts" / "fx"
     dest_dir.mkdir(parents=True, exist_ok=True)
-    shutil.copy2(RAIN_FX_SRC, dest_dir / "asmr_sleep_hf_eq.jsfx")
+    dest = dest_dir / "asmr_sleep_hf_eq.jsfx"
+    if not dest.is_file():
+        shutil.copy2(RAIN_FX_SRC, dest)
 
 
-def group_js_ref(out_dir: Path, repo_root: Path, media_mode: str) -> str:
+def group_js_ref(rain_dir: Path, repo_root: Path, media_mode: str) -> str:
     """RPP 内 JS 引用：优先 Effects 名，备用工程内路径。"""
-    staged = out_dir / "scripts" / "fx" / "asmr_sleep_hf_eq.jsfx"
-    if staged.is_file():
+    jsfx = rain_dir / "scripts" / "fx" / "asmr_sleep_hf_eq.jsfx"
+    if not jsfx.is_file() and RAIN_FX_SRC.is_file():
+        jsfx = RAIN_FX_SRC
+    if jsfx.is_file():
         mode = resolve_media_mode(media_mode, repo_root)
         if mode in ("wsl_unc", "assets"):
-            return wsl_unc_path(staged)
-        return media_path_for_rpp(staged, out_dir, mode, repo_root)
+            return wsl_unc_path(jsfx)
+        return media_path_for_rpp(jsfx, rain_dir, mode, repo_root)
     return GROUP_JS_EQ_NAME
 
 
@@ -354,6 +416,9 @@ def build_rpp(cfg: dict, repo_root: Path, rpp_dir: Path, media_mode: str = "auto
     hours = float(cfg.get("duration_hours", 3))
     total_sec = hours * 3600
     maxprojlen = int(total_sec)
+    render_dir = render_output_dir_for_rpp(repo_root, media_mode)
+    sel_end = DEFAULT_RENDER_SELECTION_SEC
+    sel_str = str(int(sel_end)) if sel_end == int(sel_end) else str(sel_end)
 
     header = [
         '<REAPER_PROJECT 0.1 "7.73/win64" 0 0',
@@ -386,14 +451,14 @@ def build_rpp(cfg: dict, repo_root: Path, rpp_dir: Path, media_mode: str = "auto
         "  SMPTESYNC 0 30 100 40 1000 300 0 0 1 0 0",
         "  LOOP 0",
         "  LOOPGRAN 0 4",
-        "  RECORD_PATH \"Audio Files\" \"\"",
+        '  RECORD_PATH "Audio Files" ""',
         "  <RECORD_CFG",
         "    ZXZhdxgAAQ==",
         "  >",
         "  <APPLYFX_CFG",
         "  >",
-        "  RENDER_FILE \"\"",
-        "  RENDER_PATTERN \"\"",
+        rpp_render_file_line(render_dir),
+        f"  RENDER_PATTERN $project_{duration_render_suffix(hours)}",
         "  RENDER_FMT 0 2 0",
         "  RENDER_1X 0",
         "  RENDER_RANGE 1 0 0 0 1000",
@@ -416,10 +481,10 @@ def build_rpp(cfg: dict, repo_root: Path, rpp_dir: Path, media_mode: str = "auto
         "    VOL 0.25 0.125",
         "    BEATLEN 4",
         "    FREQ 1760 880 1",
-        "    SAMPLES \"\" \"\" \"\" \"\"",
+        '    SAMPLES "" "" "" ""',
         "    SPLIGNORE 0 0",
-        "    SPLDEF 2 660 \"\" 0 \"\"",
-        "    SPLDEF 3 440 \"\" 0 \"\"",
+        '    SPLDEF 2 660 "" 0 ""',
+        '    SPLDEF 3 440 "" 0 ""',
         "    PATTERN 0 169",
         "    PATTERNSTR ABBB",
         "    MULT 1",
@@ -427,8 +492,8 @@ def build_rpp(cfg: dict, repo_root: Path, rpp_dir: Path, media_mode: str = "auto
         "  GLOBAL_AUTO -1",
         "  TEMPO 60 4 4 1",
         "  PLAYRATE 1 0 0.25 4",
-        "  SELECTION 0 0",
-        "  SELECTION2 0 0",
+        f"  SELECTION {sel_str} 0",
+        f"  SELECTION2 {sel_str} 0",
         "  MASTERAUTOMODE 0",
         "  MASTERTRACKHEIGHT 0 0",
         "  MASTERPEAKCOL 16576",
@@ -464,7 +529,7 @@ def build_rpp(cfg: dict, repo_root: Path, rpp_dir: Path, media_mode: str = "auto
         "  >",
     ]
 
-    tracks_by_num: dict[int, list[str]] = {i: [] for i in range(1, 8)}
+    tracks_by_num: dict[int, list[str]] = {i: [] for i in range(1, 6)}
     track_names: dict[int, str] = {}
     track_vols: dict[int, float] = {}
     iid = 1
@@ -473,7 +538,7 @@ def build_rpp(cfg: dict, repo_root: Path, rpp_dir: Path, media_mode: str = "auto
     if video:
         track_names[video["track"]] = video.get("id", "video")
         track_vols[video["track"]] = VIDEO_TRACK_VOL
-        vp = repo_root / video["path"]
+        vp = resolve_media_asset(video["path"])
         file_ref, src_type, file_suffix = stage_media(vp, rpp_dir, media_mode, repo_root)
         vp_len = media_duration(vp)
         tracks_by_num[video["track"]].append(
@@ -491,6 +556,8 @@ def build_rpp(cfg: dict, repo_root: Path, rpp_dir: Path, media_mode: str = "auto
         )
         iid += 1
 
+    cfg_dur_s = float(cfg.get("duration_hours", 0)) * 3600
+    
     for layer in cfg.get("scatter_layers", []):
         t = layer["track"]
         track_names[t] = layer.get("id", layer.get("name", f"track{t}"))
@@ -499,24 +566,59 @@ def build_rpp(cfg: dict, repo_root: Path, rpp_dir: Path, media_mode: str = "auto
         if not paths:
             continue
         rel = paths[0]
-        ap = repo_root / rel
+        ap = resolve_media_asset(rel)
         file_ref, src_type, file_suffix = stage_media(ap, rpp_dir, media_mode, repo_root)
-        tracks_by_num[t].append(
-            make_item(
-                ap.name,
-                0,
-                media_duration(ap),
-                False,
-                file_ref,
-                src_type,
-                float(layer.get("vol", 1.0)),
-                iid,
-                file_suffix,
+        
+        ap_len = media_duration(ap)
+        
+        min_gap = float(layer.get("min_gap_min", 0)) * 60
+        max_gap = float(layer.get("max_gap_min", 0)) * 60
+        randomness = float(layer.get("randomness", 0))
+        
+        if min_gap > 0 and max_gap > 0 and cfg_dur_s > 0:
+            span = cfg_dur_s - ap_len
+            count = math.floor(span / ((min_gap + max_gap) / 2))
+            
+            random.seed(t + 42)
+            
+            for i in range(1, count + 1):
+                progress = i / (count + 1)
+                ideal_pos = progress * span
+                max_jitter = min(ideal_pos - min_gap, span - ideal_pos - min_gap) / 2
+                max_jitter = max(0, max_jitter)
+                jitter = (random.random() * 2 - 1) * randomness * max_jitter
+                pos = ideal_pos + jitter
+                
+                tracks_by_num[t].append(
+                    make_item(
+                        ap.name,
+                        pos,
+                        ap_len,
+                        False,
+                        file_ref,
+                        src_type,
+                        float(layer.get("vol", 1.0)),
+                        iid,
+                        file_suffix,
+                    )
+                )
+                iid += 1
+        else:
+            tracks_by_num[t].append(
+                make_item(
+                    ap.name,
+                    0,
+                    ap_len,
+                    False,
+                    file_ref,
+                    src_type,
+                    float(layer.get("vol", 1.0)),
+                    iid,
+                    file_suffix,
+                )
             )
-        )
-        iid += 1
+            iid += 1
 
-    cfg_dur_s = float(cfg.get("duration_hours", 0)) * 3600
     for layer in cfg.get("loop_layers", []):
         t = layer["track"]
         track_names[t] = layer.get("id", layer.get("name", f"track{t}"))
@@ -525,7 +627,7 @@ def build_rpp(cfg: dict, repo_root: Path, rpp_dir: Path, media_mode: str = "auto
         if not paths:
             continue
         rel = paths[0]
-        ap = repo_root / rel
+        ap = resolve_media_asset(rel)
         file_ref, src_type, file_suffix = stage_media(ap, rpp_dir, media_mode, repo_root)
         ap_len = media_duration(ap)
         final_len = cfg_dur_s if cfg_dur_s > 0 else ap_len
@@ -537,7 +639,7 @@ def build_rpp(cfg: dict, repo_root: Path, rpp_dir: Path, media_mode: str = "auto
                 True,
                 file_ref,
                 src_type,
-                float(layer.get("vol", 1.0)),
+                1.0,
                 iid,
                 file_suffix,
             )
@@ -576,6 +678,9 @@ def build_rpp(cfg: dict, repo_root: Path, rpp_dir: Path, media_mode: str = "auto
                 fx_preset=track_fx_by_name.get(name),
             )
         )
+        if name == "1_rain" and cfg_dur_s > 0:
+            body.append(build_vol_envelope(cfg_dur_s / 3600))
+            
         for item in tracks_by_num[t]:
             body.append(item)
         body.append("  >")
@@ -595,17 +700,46 @@ def load_layer_template() -> list[dict]:
     return layers
 
 
+RAIN_ROOT = REPO_ROOT / "Reaper" / "Projects" / "Rain"
+RAIN_SCENES = RAIN_ROOT / "scripts" / "scenes"
+
+
+def resolve_generation_paths(
+    repo: Path,
+    *,
+    config: Path | None = None,
+    scene: str | None = None,
+) -> tuple[Path, Path, str]:
+    """返回 (rain_dir, config_path, scene_id)。"""
+    rain_dir = repo / "Reaper" / "Projects" / "Rain"
+    if config:
+        config_path = config.resolve()
+        if config_path.parent.name == "scenes":
+            return rain_dir, config_path, config_path.stem
+        # 旧布局 subprojects/<scene>/scripts/asmr_config.lua
+        if config_path.name == "asmr_config.lua":
+            scene_id = config_path.parent.parent.name
+            return config_path.parent.parent, config_path, scene_id
+        parser = argparse.ArgumentParser()
+        parser.error(f"无法解析配置路径: {config_path}")
+    if scene:
+        config_path = rain_dir / "scripts" / "scenes" / f"{scene}.lua"
+        return rain_dir, config_path, scene
+    parser = argparse.ArgumentParser()
+    parser.error("need --config or --scene")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Generate Rain subproject RPP")
     parser.add_argument(
         "--config",
         type=Path,
-        help="path to asmr_config.lua",
+        help="path to scripts/scenes/<scene>.lua",
     )
     parser.add_argument(
         "--scene",
         type=str,
-        help="scene id under Rain/subprojects/<scene>/scripts/asmr_config.lua",
+        help="scene id (reads Rain/scripts/scenes/<scene>.lua)",
     )
     parser.add_argument("--repo", type=Path, default=REPO_ROOT)
     parser.add_argument(
@@ -616,33 +750,23 @@ def main() -> None:
     )
     args = parser.parse_args()
 
-    if args.config:
-        config_path = args.config
-        out_dir = config_path.parent.parent
-    elif args.scene:
-        out_dir = (
-            args.repo
-            / "Reaper"
-            / "Projects"
-            / "Rain"
-            / "subprojects"
-            / args.scene
-        )
-        config_path = out_dir / "scripts" / "asmr_config.lua"
-    else:
-        parser.error("need --config or --scene")
+    rain_dir, config_path, scene_id = resolve_generation_paths(
+        args.repo, config=args.config, scene=args.scene
+    )
+    if not config_path.is_file():
+        parser.error(f"配方不存在: {config_path}")
 
     cfg = load_config(config_path)
-    scene_id = cfg.get("scene_id", args.scene or "subproject")
-    rpp_path = out_dir / f"{scene_id}.rpp"
+    scene_id = cfg.get("scene_id", scene_id)
+    rpp_path = rain_dir / f"{scene_id}.rpp"
 
-    stage_rain_fx_assets(out_dir)
+    stage_rain_fx_assets(rain_dir)
 
     mode_label = describe_media_mode(args.media_mode, args.repo)
     print(f"媒体路径: {mode_label}")
 
     rpp_path.write_text(
-        build_rpp(cfg, args.repo, out_dir, args.media_mode),
+        build_rpp(cfg, args.repo, rain_dir, args.media_mode),
         encoding="utf-8",
     )
     print(f"Wrote {rpp_path}")

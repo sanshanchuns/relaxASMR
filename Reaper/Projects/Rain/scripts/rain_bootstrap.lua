@@ -25,13 +25,30 @@ local function load_paths()
   return f()
 end
 
+local function scene_id_from_project()
+  local _, name = r.GetProjectName(0, "")
+  if name and name ~= "" then
+    return name:gsub("%.rpp$", "")
+  end
+  return nil
+end
+
 local function load_config()
   local scripts_dir = get_scripts_dir()
   if not scripts_dir then return nil, "无法定位 scripts 目录" end
   local sep = package.config:sub(1, 1)
-  local cfg_path = scripts_dir .. sep .. "asmr_config.lua"
+  local sid = scene_id_from_project()
+  local cfg_path
+  if sid and sid ~= "" then
+    cfg_path = scripts_dir .. sep .. "scenes" .. sep .. sid .. ".lua"
+    local f = loadfile(cfg_path)
+    if f then return f(), cfg_path end
+  end
+  cfg_path = scripts_dir .. sep .. "asmr_config.lua"
   local f = loadfile(cfg_path)
-  if not f then return nil, "找不到 asmr_config.lua：" .. cfg_path end
+  if not f then
+    return nil, "找不到场景配方：" .. (cfg_path or "")
+  end
   return f(), cfg_path
 end
 

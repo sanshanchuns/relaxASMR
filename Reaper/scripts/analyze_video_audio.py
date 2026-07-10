@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""分析视频嵌入式音轨，按 rain 七层输出 Markdown（写入 video_analysis.md）。"""
+"""分析视频嵌入式音轨，按 rain 四层输出 Markdown（写入 video_analysis.md）。"""
 
 from __future__ import annotations
 
@@ -17,10 +17,8 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 LAYER_ROWS = [
     ("1_rain", "雨层", "500 Hz–6 kHz 连续能量 · 雨势主体"),
     ("2_impact", "击打", "2–8 kHz 瞬态峰 · 雨滴撞击"),
-    ("3_environment", "环境", "空气/风/地点包络 · 空间感"),
-    ("4_water", "水体", "200 Hz–2 kHz 流动 · 滴水/溪流"),
-    ("5_wildlife", "生物", "1–6 kHz 稀疏瞬态 · 鸟鸣等"),
-    ("6_human", "人类", "80Hz–2kHz 近场 · 安全感锚点"),
+    ("3_random", "随机", "稀疏变化 · 风/远处声响"),
+    ("4_wildlife", "生物", "1–6 kHz 稀疏瞬态 · 鸟鸣等"),
 ]
 
 
@@ -112,10 +110,8 @@ def layer_scores(stats: dict) -> dict[str, dict]:
     scores = {
         "1_rain": 0.55 * b["mid"] / 100 + 0.35 * b["high_mid"] / 100 + 0.1 * b["high"] / 100,
         "2_impact": min(1.0, tr / max(dur * 2, 0.5)) * 0.5 + 0.3 * b["high_mid"] / 100,
-        "3_environment": min(1.0, (b["sub_low"] + b["low_mid"] + b["mid"]) / 100) * 0.7 + 0.15 * b["sub_low"] / 100,
-        "4_water": 0.4 * b["low_mid"] / 100 + 0.35 * b["mid"] / 100,
-        "5_wildlife": min(1.0, tr / max(dur * 4, 1)) * 0.4,
-        "6_human": 0.35 * b["low_mid"] / 100 + 0.25 * b["sub_low"] / 100 + 0.15 * b["mid"] / 100,
+        "3_random": min(1.0, (b["sub_low"] + b["low_mid"] + b["mid"]) / 100) * 0.5 + 0.2 * b["high"] / 100,
+        "4_wildlife": min(1.0, tr / max(dur * 4, 1)) * 0.4 + 0.15 * b["high_mid"] / 100,
     }
 
     out = {}
@@ -152,7 +148,7 @@ def build_markdown(video: Path, stats: dict, layers: dict[str, dict]) -> str:
         f"| high_mid | 2–6 kHz | {b['high_mid']}% | 雨丝 / 击打 |",
         f"| high | 6 kHz+ | {b['high']}% | 细小雨滴 / 空气 |",
         "",
-        "## 2.3 七层听感（原声客观拆解）",
+        "## 2.3 四层听感（原声客观拆解）",
         "",
         "| 层 | 原声强弱 | 听感线索 |",
         "|----|----------|----------|",
@@ -194,16 +190,23 @@ def main() -> None:
     parser.add_argument("--video", type=Path, help="path to mp4")
     parser.add_argument("--scene", type=str, help="Rain subproject id (reads asmr_config video path)")
     parser.add_argument("--repo", type=Path, default=REPO_ROOT)
-    parser.add_argument("--update-doc", action="store_true", help="merge into subprojects/<scene>/video_analysis.md")
+    parser.add_argument("--update-doc", action="store_true", help="merge into baseURL/material/<scene>_video_analysis.md")
     args = parser.parse_args()
 
     if args.scene:
-        sub = args.repo / "Reaper" / "Projects" / "Rain" / "subprojects" / args.scene
         from asmr_config_parser import load_asmr_config
 
-        cfg = load_asmr_config(sub / "scripts" / "asmr_config.lua")
-        video = args.repo / cfg["video"]["path"]
-        doc_path = sub / "video_analysis.md"
+        import sys
+        if str(args.repo) not in sys.path:
+            sys.path.insert(0, str(args.repo))
+        from scripts.paths import get_scene_config_path, material_dir, resolve_scene_config_path
+
+        cfg_path = resolve_scene_config_path(args.scene) or get_scene_config_path(args.scene)
+        cfg = load_asmr_config(cfg_path)
+        video = Path(cfg["video"]["path"])
+        if not video.is_file():
+            video = args.repo / cfg["video"]["path"]
+        doc_path = material_dir() / f"{args.scene}_video_analysis.md"
     elif args.video:
         video = args.video
         doc_path = None

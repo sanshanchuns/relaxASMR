@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# Upload YouTube material from a subproject output/material/ folder.
+# Upload YouTube material from a subproject material/material/ folder.
 #
 # Usage:
-#   ./scripts/video_upload/upload.sh Reaper/Projects/Rain/subprojects/MVI_6991/output/material/MVI_6991_3h_4k
+#   ./scripts/video_upload/upload.sh Reaper/Projects/Rain/subprojects/MVI_6991/material/material/MVI_6991_3h_4k
 
 set -euo pipefail
 

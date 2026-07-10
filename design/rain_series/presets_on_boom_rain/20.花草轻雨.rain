@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Rain version="1" lts="0" l1="100" l2="590" l3="810" adv="0" scn="Soothing Flora Tickles">
+  <PARAM id="gldr" value="1.0"/>
+  <PARAM id="bgeq1x" value="0.5"/>
+  <PARAM id="bgeq1y" value="0.5"/>
+  <PARAM id="bgeq2x" value="0.5532000064849854"/>
+  <PARAM id="bgeq2y" value="0.3190999925136566"/>
+  <PARAM id="bgeq3x" value="0.7446999549865723"/>
+  <PARAM id="bgeq3y" value="0.5956999659538269"/>
+  <PARAM id="bgpn" value="0.5"/>
+  <PARAM id="bgwi" value="0.5"/>
+  <PARAM id="eq1x" value="0.7691999673843384"/>
+  <PARAM id="eq1y" value="0.6484000086784363"/>
+  <PARAM id="eq2x" value="0.5494999885559082"/>
+  <PARAM id="eq2y" value="0.3845999836921692"/>
+  <PARAM id="eq3x" value="0.6319999694824219"/>
+  <PARAM id="eq3y" value="0.6973999738693237"/>
+  <PARAM id="glgn" value="0.3646999895572662"/>
+  <PARAM id="glhp" value="0.0"/>
+  <PARAM id="gllp" value="0.05199999734759331"/>
+  <PARAM id="glon" value="1.0"/>
+  <PARAM id="rfch" value="0.1782999932765961"/>
+  <PARAM id="rfdn" value="0.4589999914169312"/>
+  <PARAM id="rffc" value="0.7209999561309814"/>
+  <PARAM id="rfin" value="0.4836999773979187"/>
+  <PARAM id="spbl" value="0.6383000016212463"/>
+  <PARAM id="sppn" value="0.5"/>
+  <PARAM id="spwi" value="0.2999999821186066"/>
+  <PARAM id="sucd" value="0.0"/>
+  <PARAM id="supn" value="0.5"/>
+  <PARAM id="suwi" value="0.199999988079071"/>
+</Rain>
