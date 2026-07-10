@@ -134,6 +134,7 @@ class RelaxAsmrApp(tk.Tk):
             self.left_notebook,
             is_uploaded=self._is_video_uploaded,
             toggle_uploaded=self._set_video_uploaded,
+            on_video_select=self._select_video_from_library,
             log_fn=self._log,
         )
         self.left_notebook.add(self.video_library_tab, text="素材库")
@@ -844,6 +845,16 @@ class RelaxAsmrApp(tk.Tk):
             self._cfg["last_video_dir"] = str(picked.parent)
             self._save_config()
             self._set_video(picked, from_import=True)
+
+    def _select_video_from_library(self, video: Path) -> None:
+        """素材库双击：等同步骤 1「选择 MP4」。"""
+        if not video.is_file():
+            messagebox.showerror("导入失败", f"视频不存在：{video}")
+            return
+        self._cfg["last_video_dir"] = str(video.parent)
+        self._save_config()
+        self._set_video(video, from_import=True)
+        self.left_notebook.select(self.workflow_tab)
 
     def _start_analysis(self) -> None:
         if self._busy:

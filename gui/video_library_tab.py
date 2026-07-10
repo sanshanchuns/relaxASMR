@@ -18,6 +18,7 @@ CELL_W = 168
 CELL_H = 96
 CELL_PAD = 6
 LABEL_H = 18
+_CLICK_DELAY_MS = 280
 
 
 def scene_num_from_video(path: Path) -> str:
@@ -101,11 +102,13 @@ class VideoLibraryTab(ttk.Frame):
         *,
         is_uploaded: Callable[[str], bool],
         toggle_uploaded: Callable[[str, bool], None],
+        on_video_select: Callable[[Path], None] | None = None,
         log_fn: Callable[[str], None] | None = None,
     ) -> None:
         super().__init__(parent, padding=8)
         self._is_uploaded = is_uploaded
         self._toggle_uploaded = toggle_uploaded
+        self._on_video_select = on_video_select
         self._log = log_fn or (lambda _msg: None)
         self._cells: dict[str, dict] = {}
         self._photo_refs: list[ImageTk.PhotoImage] = []
@@ -123,7 +126,7 @@ class VideoLibraryTab(ttk.Frame):
         self.lbl_stats.pack(side=tk.LEFT, padx=(12, 0))
         ttk.Label(
             toolbar,
-            text="点击宫格切换「已上传」标记",
+            text="单击切换「已上传」· 双击选定视频",
             foreground="gray",
         ).pack(side=tk.RIGHT)
 
@@ -281,12 +284,7 @@ class VideoLibraryTab(ttk.Frame):
             }
             self._cells[num] = cell
             self._apply_cell_style(cell)
-
-            def on_click(_e, n=num) -> None:
-                self._on_cell_click(n)
-
-            for w in (outer, border, img_lbl, name_lbl):
-                w.bind("<Button-1>", on_click)
+            self._bind_cell_events(cell)
 
         self._update_stats()
         self._on_grid_configure()
@@ -313,6 +311,37 @@ class VideoLibraryTab(ttk.Frame):
             img_lbl.configure(image=photo, text="")
         else:
             img_lbl.configure(image="", text="无预览", fg="#999999")
+
+    def _bind_cell_events(self, cell: dict) -> None:
+        """单击标记上传状态；双击选定视频（避免双击连带触发单击）。"""
+        scene_num = cell["num"]
+        pending: dict[str, str | None] = {"id": None}
+
+        def on_single(_e) -> None:
+            if pending["id"]:
+                cell["outer"].after_cancel(pending["id"])
+            pending["id"] = cell["outer"].after(
+                _CLICK_DELAY_MS,
+                lambda: self._on_cell_click(scene_num),
+            )
+
+        def on_double(_e) -> None:
+            if pending["id"]:
+                cell["outer"].after_cancel(pending["id"])
+                pending["id"] = None
+            self._on_cell_double_click(scene_num)
+
+        for w in (cell["outer"], cell["border"], cell["img_lbl"], cell["name_lbl"]):
+            w.bind("<Button-1>", on_single)
+            w.bind("<Double-Button-1>", on_double)
+
+    def _on_cell_double_click(self, scene_num: str) -> None:
+        cell = self._cells.get(scene_num)
+        if not cell or not self._on_video_select:
+            return
+        video: Path = cell["video"]
+        self._on_video_select(video)
+        self._log(f"素材库：双击选定 {video.name}")
 
     def _on_cell_click(self, scene_num: str) -> None:
         uploaded = self._is_uploaded(scene_num)
