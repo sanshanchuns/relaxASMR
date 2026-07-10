@@ -38,6 +38,7 @@ from gui.reaper_launch import (  # noqa: E402
 from gui.folder_open import open_folder  # noqa: E402
 from gui.import_reload import load_module, load_scripts_module  # noqa: E402
 from gui.rain_vst_ui import RainVstSection  # noqa: E402
+from gui.video_library_tab import VideoLibraryTab  # noqa: E402
 from gui.youtube_material import (  # noqa: E402
     RAIN_THUMB_TITLE,
     find_material_dir,
@@ -55,6 +56,7 @@ from scripts.paths import (  # noqa: E402
     get_subproject_dir,
     resolve_scene_config_path,
     get_thumbnail_path,
+    get_scene_number,
     material_dir as base_material_dir,
 )
 
@@ -124,8 +126,22 @@ class RelaxAsmrApp(tk.Tk):
         self.main_pane.add(self.left_frame, weight=3)
         self.main_pane.add(self.right_frame, weight=2)
 
-        # === 左侧：步骤 1–5 自上而下 ===
-        self.left_content = ttk.Frame(self.left_frame, padding=10)
+        self.left_notebook = ttk.Notebook(self.left_frame)
+        self.left_notebook.pack(fill=tk.BOTH, expand=True)
+
+        self.workflow_tab = ttk.Frame(self.left_notebook)
+        self.left_notebook.add(self.workflow_tab, text="工作流")
+
+        self.video_library_tab = VideoLibraryTab(
+            self.left_notebook,
+            is_uploaded=self._is_video_uploaded,
+            toggle_uploaded=self._set_video_uploaded,
+            log_fn=self._log,
+        )
+        self.left_notebook.add(self.video_library_tab, text="素材库")
+
+        # === 左侧工作流：步骤 1–5 自上而下 ===
+        self.left_content = ttk.Frame(self.workflow_tab, padding=10)
         self.left_content.pack(fill=tk.BOTH, expand=True, anchor=tk.N)
 
         # 1. 导入与分析
@@ -273,6 +289,8 @@ class RelaxAsmrApp(tk.Tk):
         self._right_pane_equalize_pending = False
         self.after_idle(self._equalize_right_pane)
 
+        self.left_notebook.bind("<<NotebookTabChanged>>", self._on_left_tab_changed)
+
         last_video = self._cfg.get("last_video")
         if last_video:
             p = Path(last_video)
@@ -290,6 +308,42 @@ class RelaxAsmrApp(tk.Tk):
             self._log("WSL 环境：打开工程将调用 Windows 版 Reaper（勿用 Linux xdg-open）")
         self._log(f"仓库根目录：{LIB_REPO_ROOT}")
         self._log(f"素材 baseURL：{base_url()}")
+
+    def _uploaded_ids_cfg(self) -> dict:
+        ids = self._cfg.get("uploaded_ids")
+        if not isinstance(ids, dict):
+            ids = {}
+            self._cfg["uploaded_ids"] = ids
+        return ids
+
+    def _is_video_uploaded(self, scene_num: str) -> bool:
+        return bool(self._uploaded_ids_cfg().get(str(scene_num)))
+
+    def _set_video_uploaded(self, scene_num: str, uploaded: bool) -> None:
+        ids = self._uploaded_ids_cfg()
+        key = str(scene_num)
+        if uploaded:
+            ids[key] = True
+        else:
+            ids.pop(key, None)
+        self._save_config()
+
+    def _mark_scene_uploaded(self, scene_id: str | None = None) -> None:
+        sid = scene_id or self.scene_id
+        if not sid:
+            return
+        num = get_scene_number(sid)
+        self._set_video_uploaded(num, True)
+        if hasattr(self, "video_library_tab"):
+            self.video_library_tab.mark_uploaded(num, True)
+
+    def _on_left_tab_changed(self, _event=None) -> None:
+        try:
+            tab = self.left_notebook.nametowidget(self.left_notebook.select())
+        except tk.TclError:
+            return
+        if tab is self.video_library_tab:
+            self.video_library_tab.refresh()
 
     def _subproject_rpp_path(self, scene_id: str | None = None) -> Path | None:
         sid = scene_id or self.scene_id
@@ -1322,6 +1376,7 @@ class RelaxAsmrApp(tk.Tk):
                     url = record["url"]
                     self._cfg["last_upload_url"] = url
                     self._save_config()
+                    self._mark_scene_uploaded(self.scene_id)
                     self.lbl_upload.configure(text=f"上传：{url}")
                     messagebox.showinfo("上传完成", f"视频已上传：\n{url}\n\n可见性：{privacy}")
 
