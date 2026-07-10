@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""从 asmr_config.lua 生成 Rain 子工程 .rpp"""
+"""从场景配置 JSON 生成 Rain 子工程 .rpp（兼容旧 .lua）。"""
 
 from __future__ import annotations
 
@@ -15,7 +15,7 @@ import subprocess
 import uuid
 from pathlib import Path
 
-from asmr_config_parser import load_asmr_config
+from scene_config import load_scene_config, resolve_scene_config_path, scene_config_path
 from media_paths import (
     describe_media_mode,
     media_path_for_rpp,
@@ -26,11 +26,10 @@ from media_paths import (
 REPO_ROOT = Path(__file__).resolve().parents[2]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
-from scripts.paths import export_dir, duration_render_suffix, resolve_media_asset
+from scripts.config.paths import export_dir, duration_render_suffix, resolve_media_asset
 SCRIPTS_DIR = Path(__file__).resolve().parent
 LAYER_TEMPLATE_PATH = REPO_ROOT / "Reaper" / "Projects" / "Rain" / "scripts" / "layer_template.lua"
 RAIN_FX_SRC = REPO_ROOT / "Reaper" / "Projects" / "Rain" / "scripts" / "fx" / "asmr_sleep_hf_eq.jsfx"
-DUMP_LUA = SCRIPTS_DIR / "dump_asmr_config.lua"
 
 # Group 总线 JS EQ 默认参数（slider1..9）
 GROUP_JS_EQ_PARAMS = [120, -3, 3500, 1.2, -5, 6000, 0.8, -4, 8000]
@@ -83,7 +82,7 @@ def render_output_dir_for_rpp(repo_root: Path, media_mode: str) -> str:
     mode = resolve_media_mode(media_mode, repo_root)
     if mode == "wsl_unc":
         return wsl_unc_path(out)
-    return str(out.resolve())
+    return out.resolve().as_posix()
 
 
 def rpp_render_file_line(render_dir: str) -> str:
@@ -94,18 +93,8 @@ def rpp_render_file_line(render_dir: str) -> str:
 
 
 def load_config(config_path: Path) -> dict:
-    try:
-        result = subprocess.run(
-            ["lua", str(DUMP_LUA), str(config_path)],
-            capture_output=True,
-            text=True,
-            check=False,
-        )
-        if result.returncode == 0 and result.stdout.strip():
-            return json.loads(result.stdout.strip())
-    except FileNotFoundError:
-        pass
-    return load_asmr_config(config_path)
+    """加载场景配置（JSON 或旧 lua）。"""
+    return load_scene_config(config_path)
 
 
 def media_duration(path: Path) -> float:
@@ -714,16 +703,17 @@ def resolve_generation_paths(
     rain_dir = repo / "Reaper" / "Projects" / "Rain"
     if config:
         config_path = config.resolve()
-        if config_path.parent.name == "scenes":
+        if config_path.suffix.lower() in (".json", ".lua"):
+            if config_path.parent.name == "scenes":
+                return rain_dir, config_path, config_path.stem
+            if config_path.name == "asmr_config.lua":
+                scene_id = config_path.parent.parent.name
+                return config_path.parent.parent, config_path, scene_id
             return rain_dir, config_path, config_path.stem
-        # 旧布局 subprojects/<scene>/scripts/asmr_config.lua
-        if config_path.name == "asmr_config.lua":
-            scene_id = config_path.parent.parent.name
-            return config_path.parent.parent, config_path, scene_id
         parser = argparse.ArgumentParser()
         parser.error(f"无法解析配置路径: {config_path}")
     if scene:
-        config_path = rain_dir / "scripts" / "scenes" / f"{scene}.lua"
+        config_path = resolve_scene_config_path(scene) or scene_config_path(scene)
         return rain_dir, config_path, scene
     parser = argparse.ArgumentParser()
     parser.error("need --config or --scene")
@@ -734,12 +724,12 @@ def main() -> None:
     parser.add_argument(
         "--config",
         type=Path,
-        help="path to scripts/scenes/<scene>.lua",
+        help="path to scripts/scenes/<scene>.json（或旧 .lua）",
     )
     parser.add_argument(
         "--scene",
         type=str,
-        help="scene id (reads Rain/scripts/scenes/<scene>.lua)",
+        help="scene id（读取 Rain/scripts/scenes/<scene>.json，回退 .lua）",
     )
     parser.add_argument("--repo", type=Path, default=REPO_ROOT)
     parser.add_argument(
@@ -754,7 +744,7 @@ def main() -> None:
         args.repo, config=args.config, scene=args.scene
     )
     if not config_path.is_file():
-        parser.error(f"配方不存在: {config_path}")
+        parser.error(f"配置不存在: {config_path}")
 
     cfg = load_config(config_path)
     scene_id = cfg.get("scene_id", scene_id)

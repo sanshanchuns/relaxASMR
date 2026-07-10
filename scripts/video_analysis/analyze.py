@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
-"""分析循环视频首帧，输出 BOOM Library RAIN VST 插件参数建议。
+"""分析循环视频首帧，匹配 baseURL/audio 声音库素材维度。
 
 工作流:
-  1. ffmpeg 提取首帧 → MVI_xxxx.png
-  2. OpenCV 分析亮度、色彩分布、纹理、区域特征、水面检测
-  3. 规则匹配场景类型 → 映射到 RAIN VST 三层预设 + 完整参数
-  4. 输出 MVI_xxxx.md 报告 + MVI_xxxx.rain 配置文件
+  1. ffmpeg 提取首帧
+  2. CLIP / VLM 分析画面特征
+  3. 映射到声音库维度标签，匹配 audio/1_rain/sounds/*.wav
+  4. 输出分析报告与候选列表
 
 用法:
-  python3 scripts.video_analysis_analyze.py <video_path> [--output-dir <dir>]
+  python3 -m scripts.video_analysis.analyze <video_path>
 """
 
 from __future__ import annotations
@@ -21,7 +21,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Callable
 
-from scripts.common_constants import DISTANT_NAMES, SPACE_NAMES, CLOSE_NAMES
+from scripts.config.common_constants import DISTANT_NAMES, SPACE_NAMES, CLOSE_NAMES
 
 
 def _layer_label(l_val: int, names: dict[int, tuple[str, str]]) -> str:
@@ -1325,7 +1325,7 @@ def analyze_vlm_frame(frame_jpg: Path, on_progress: Callable[[str], None] | None
     _notify(on_progress, "Gemini VLM 分析首帧（远景 + 空间 + 近景）…")
     try:
         vlm_results = analyze_with_vlm(frame_jpg, on_progress)
-        from scripts.common_constants import DISTANT_NAMES, SPACE_NAMES, CLOSE_NAMES
+        from scripts.config.common_constants import DISTANT_NAMES, SPACE_NAMES, CLOSE_NAMES
         l3_en, l3_cn = DISTANT_NAMES.get(vlm_results.get("l3_key"), ("Unknown", "未知"))
         l2_en, l2_cn = SPACE_NAMES.get(vlm_results.get("l2_key"), ("Unknown", "未知"))
         l1_en, l1_cn = CLOSE_NAMES.get(vlm_results.get("l1_key"), ("Unknown", "未知"))

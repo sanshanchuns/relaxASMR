@@ -8,7 +8,7 @@ import subprocess
 from pathlib import Path
 from typing import Callable
 
-from scripts.paths import REPO_ROOT
+from scripts.config.paths import REPO_ROOT
 
 # YouTube 睡眠系列默认目标区间（可在 gui/user_config.json 覆盖）
 DEFAULT_LUFS_TARGET_MIN = -26.0

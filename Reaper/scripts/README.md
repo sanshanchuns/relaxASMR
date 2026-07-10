@@ -12,7 +12,7 @@ Rain / Lake 等工程共用。媒体路径指向仓库 `assets/`。
 
 ### 在 Reaper 里怎么运行
 
-脚本在 **`Reaper/scripts/`**；创建子工程时也会复制到 **`<场景>/scripts/`**（与 `asmr_config.lua` 同目录）。
+脚本在 **`Reaper/scripts/`**；也会同步到 **`Reaper/Projects/Rain/scripts/`**。
 
 1. 打开子工程 `.rpp`（例如 `.../MVI_6923/MVI_6923.rpp`），**Ctrl+S 保存一次**
 2. 菜单 **Actions → ReaScript: Load**
@@ -36,8 +36,8 @@ Group 父轨存在时，脚本按 **轨名（如 `3_impact`）** 匹配，不依
 
 | 脚本 | 用途 |
 |------|------|
-| `generate_subproject.py --scene <id>` | 从 `asmr_config.lua` 生成 `.rpp`（含 Group 总线） |
-| **`create_rain_subproject.py --video <mp4>`** | **一键**：loop 视频 → 分析 + 配置 + 脚手架 + `.rpp` |
+| `generate_subproject.py --scene <id>` | 从 `scripts/scenes/<id>.json` 生成 `.rpp`（兼容旧 `.lua`） |
+| **`create_rain_subproject.py --video <mp4>`** | **一键**：loop 视频 → 分析 + JSON 配置 + `.rpp` |
 | `analyze_video_audio.py --scene <id> --update-doc` | 视频原声 → `video_analysis.md` §二 |
 | `repair_rpp_paths.py` | 修复 rpp 内媒体路径 |
 | [`scripts/video_export/export_mp4.sh`](../../scripts/video_export/export_mp4.sh) | 循环视频 + 音频 → MP4（含 YouTube 物料） |
@@ -46,9 +46,9 @@ Group 父轨存在时，脚本按 **轨名（如 `3_impact`）** 匹配，不依
 
 | 文件 | 说明 |
 |------|------|
-| `asmr_paths.lua` | 仓库根、`asmr_config`、按层 id 找轨 |
-| `asmr_config_parser.py` | Python 读 `asmr_config.lua` |
-| `dump_asmr_config.lua` | 配置 → JSON（generate 用） |
+| `asmr_paths.lua` | 仓库根、场景配置路径解析 |
+| `scene_config.py` | 场景配置 JSON 读写（`save_scene_config` / `load_scene_config`） |
+| `asmr_config_parser.py` | 仅用于读取旧 `.lua` 配方 |
 
 ## Rain 子工程流程
 
@@ -59,7 +59,7 @@ python3 Reaper/scripts/create_rain_subproject.py \
   --video assets/loop_video/rain_video/MVI_6918/MVI_6918_loop_3_fade_0.5.mp4
 ```
 
-自动：探测视频 ·（若有）内嵌音轨六层分析 · 首帧启发式 · `video_analysis.md` + `asmr_config.lua` + `.rpp`（Group **ReaEQ + ReaComp** · 轨 `5_wildlife` **ReaVerbate** · 轨 7 视频）。
+自动：探测视频 · 首帧启发式 · `baseURL/material/<id>_video_analysis.md` + `scripts/scenes/<id>.json` + `.rpp`。
 
 **仅重新生成 `.rpp`（配置已写好）：**
 
@@ -82,7 +82,7 @@ python3 Reaper/scripts/generate_subproject.py --scene MVI_6918
 
 混音质量：人工对照 [`design/rain_series/scoring_rubric.md`](../../design/rain_series/scoring_rubric.md)；后续 **爆款声纹** 见 [`benchmark/README.md`](../../benchmark/README.md)。
 
-`asmr_config.lua` 在子工程 `scripts/` 下（非 `Audio Files/`）。
+场景配置在 `Rain/scripts/scenes/<id>.json`（旧 `.lua` 仍可读取）。
 
 ## 系列
 

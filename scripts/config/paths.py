@@ -1,7 +1,7 @@
 """统一路径管理器（Path Manager）。
 
 代码仓库（REPO_ROOT）仅含脚本与 Reaper 工程模板；
-所有媒体素材位于 baseURL（默认 /mnt/e/自然之声/to_youtube）。
+所有媒体素材位于 baseURL（WSL 默认 /mnt/e/...，Mac 默认 /Volumes/192.168.3.128/...）。
 """
 
 from __future__ import annotations
@@ -10,30 +10,91 @@ import json
 import os
 import re
 import shutil
+import sys
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-DEFAULT_BASE_URL = Path("/mnt/e/自然之声/to_youtube")
+REPO_ROOT = Path(__file__).resolve().parents[2]
+
+# 各平台默认 baseURL（局域网 NAS 同一共享目录）
+DEFAULT_BASE_URL_WSL = Path("/mnt/e/自然之声/to_youtube")
+DEFAULT_BASE_URL_MAC = Path("/Volumes/192.168.3.128/自然之声/to_youtube")
+
+# WSL ↔ Mac 路径互转（相对 baseURL 的同一素材树）
+_CROSS_BASE_PREFIXES: tuple[tuple[str, str], ...] = (
+    ("/mnt/e/自然之声/to_youtube", "/Volumes/192.168.3.128/自然之声/to_youtube"),
+)
 
 RAIN_FX_FILENAME = "footagecrate-real-medium-rain-1.mp4"
 RAIN_FX_PNG = "rain_fx.png"
 
 
+def is_mac() -> bool:
+    return sys.platform == "darwin"
+
+
+def default_base_url_for_platform() -> Path:
+    if is_mac():
+        return DEFAULT_BASE_URL_MAC
+    return DEFAULT_BASE_URL_WSL
+
+
+def alternate_base_url() -> Path:
+    if is_mac():
+        return DEFAULT_BASE_URL_WSL
+    return DEFAULT_BASE_URL_MAC
+
+
+def remap_storage_path(path: Path | str) -> Path:
+    """将另一台机器上的 baseURL 绝对路径映射到本机可用路径。"""
+    p = Path(path)
+    if not p.is_absolute():
+        return p
+    raw = p.as_posix()
+    for src_prefix, dst_prefix in _CROSS_BASE_PREFIXES:
+        if raw.startswith(src_prefix):
+            alt = Path(dst_prefix + raw[len(src_prefix) :])
+            if alt.exists():
+                return alt.resolve()
+        if raw.startswith(dst_prefix):
+            alt = Path(src_prefix + raw[len(dst_prefix) :])
+            if alt.exists():
+                return alt.resolve()
+    return p
+
+
 def base_url() -> Path:
-    """素材根目录 baseURL，优先级：环境变量 > gui/user_config.json > 默认值。"""
+    """素材根目录 baseURL，优先级：环境变量 > user_config > 本机默认 > 对端默认。"""
+    candidates: list[Path] = []
+    seen: set[str] = set()
+
+    def add(p: Path | str) -> None:
+        key = str(p)
+        if key not in seen:
+            seen.add(key)
+            candidates.append(Path(p))
+
     env = os.environ.get("RELAXASMR_BASE_URL", "").strip()
     if env:
-        return Path(env)
+        add(env)
     cfg_path = REPO_ROOT / "gui" / "user_config.json"
     if cfg_path.is_file():
         try:
             data = json.loads(cfg_path.read_text(encoding="utf-8"))
             bu = (data.get("base_url") or "").strip()
             if bu:
-                return Path(bu)
+                add(bu)
         except (json.JSONDecodeError, OSError):
             pass
-    return DEFAULT_BASE_URL
+    add(default_base_url_for_platform())
+    add(alternate_base_url())
+
+    for c in candidates:
+        try:
+            if c.is_dir():
+                return c.resolve()
+        except OSError:
+            continue
+    return default_base_url_for_platform()
 
 
 def material_dir() -> Path:
@@ -128,8 +189,12 @@ def is_under_base(path: Path | str) -> bool:
 
 
 def path_for_config(path: Path | str) -> str:
-    """asmr_config.lua 中使用的路径（绝对路径，便于 Reaper 跨盘引用）。"""
-    return Path(path).resolve().as_posix()
+    """场景配方中的路径：本机 baseURL 下的绝对路径（posix，Reaper Mac/Win 均可读）。"""
+    p = Path(path).resolve()
+    mapped = remap_storage_path(p)
+    if mapped.exists():
+        p = mapped
+    return p.as_posix()
 
 
 def resolve_media_asset(path_str: str) -> Path:
@@ -140,7 +205,13 @@ def resolve_media_asset(path_str: str) -> Path:
     raw = str(path_str).strip()
     p = Path(raw)
     if p.is_absolute():
-        return p.resolve()
+        resolved = p.resolve()
+        if resolved.is_file():
+            return resolved
+        remapped = remap_storage_path(resolved)
+        if remapped.is_file():
+            return remapped.resolve()
+        return resolved
 
     bu = base_url()
 
@@ -219,15 +290,18 @@ def get_scene_rpp_path(scene_id: str) -> Path:
 
 
 def get_scene_config_path(scene_id: str) -> Path:
-    """场景配方：Rain/scripts/scenes/<scene_id>.lua"""
-    return RAIN_SCENES_DIR / f"{scene_id}.lua"
+    """场景工程配置：Rain/scripts/scenes/<scene_id>.json"""
+    return RAIN_SCENES_DIR / f"{scene_id}.json"
 
 
 def resolve_scene_config_path(scene_id: str) -> Path | None:
-    """优先新布局 scenes/*.lua，回退旧 subprojects/*/scripts/asmr_config.lua。"""
+    """优先 JSON，回退 scenes/*.lua 与旧 subprojects/*/asmr_config.lua。"""
     p = get_scene_config_path(scene_id)
     if p.is_file():
         return p
+    lua_p = RAIN_SCENES_DIR / f"{scene_id}.lua"
+    if lua_p.is_file():
+        return lua_p
     legacy = SUBPROJECTS_DIR / scene_id / "scripts" / "asmr_config.lua"
     return legacy if legacy.is_file() else None
 
@@ -269,7 +343,7 @@ def vlm_matches_path(scene_id: str) -> Path:
 
 
 def audio_layer_dir(layer_id: str) -> Path:
-    """VST WAV 候选目录，如 audio/1_rain/sounds。"""
+    """声音库 WAV 候选目录，如 baseURL/audio/1_rain/sounds。"""
     sounds = audio_dir() / layer_id / "sounds"
     if sounds.is_dir():
         return sounds

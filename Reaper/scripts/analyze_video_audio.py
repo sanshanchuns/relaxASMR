@@ -188,21 +188,23 @@ def merge_into_video_analysis(doc_path: Path, section_md: str) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description="Analyze embedded video audio → 7-layer markdown")
     parser.add_argument("--video", type=Path, help="path to mp4")
-    parser.add_argument("--scene", type=str, help="Rain subproject id (reads asmr_config video path)")
+    parser.add_argument("--scene", type=str, help="Rain scene id（读取 scenes/<id>.json 中的视频路径）")
     parser.add_argument("--repo", type=Path, default=REPO_ROOT)
     parser.add_argument("--update-doc", action="store_true", help="merge into baseURL/material/<scene>_video_analysis.md")
     args = parser.parse_args()
 
     if args.scene:
-        from asmr_config_parser import load_asmr_config
-
         import sys
+
         if str(args.repo) not in sys.path:
             sys.path.insert(0, str(args.repo))
-        from scripts.paths import get_scene_config_path, material_dir, resolve_scene_config_path
+        from scene_config import load_scene_config, resolve_scene_config_path
+        from scripts.config.paths import material_dir
 
-        cfg_path = resolve_scene_config_path(args.scene) or get_scene_config_path(args.scene)
-        cfg = load_asmr_config(cfg_path)
+        cfg_path = resolve_scene_config_path(args.scene)
+        if not cfg_path:
+            raise SystemExit(f"找不到场景配置: {args.scene}")
+        cfg = load_scene_config(cfg_path)
         video = Path(cfg["video"]["path"])
         if not video.is_file():
             video = args.repo / cfg["video"]["path"]

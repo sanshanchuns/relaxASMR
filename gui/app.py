@@ -24,9 +24,9 @@ if str(REAPER_SCRIPTS) not in sys.path:
 
 from rain_subproject_lib import (  # noqa: E402
     REPO_ROOT as LIB_REPO_ROOT,
-    create_from_video,
+    build_scene_config_from_gui,
     derive_scene_id,
-    ensure_video_in_assets,
+    ensure_shared_scripts,
 )
 from gui.reaper_launch import (  # noqa: E402
     default_reaper_candidates,
@@ -37,26 +37,24 @@ from gui.reaper_launch import (  # noqa: E402
 )
 from gui.folder_open import open_folder  # noqa: E402
 from gui.import_reload import load_module, load_scripts_module  # noqa: E402
-from gui.rain_vst_ui import RainVstSection  # noqa: E402
 from gui.video_library_tab import VideoLibraryTab  # noqa: E402
 from gui.youtube_material import (  # noqa: E402
     RAIN_THUMB_TITLE,
     find_material_dir,
     loop_material_dir,
 )
-from scripts.paths import (  # noqa: E402
+from scripts.config.paths import (  # noqa: E402
     audio_layer_dir,
     base_url,
     ensure_base_url_dirs,
     ensure_rain_fx_png,
     export_dir,
     export_wav_name,
-    get_scene_config_path,
     get_scene_rpp_path,
     get_subproject_dir,
-    resolve_scene_config_path,
     get_thumbnail_path,
     get_scene_number,
+    is_mac,
     material_dir as base_material_dir,
 )
 
@@ -164,7 +162,7 @@ class RelaxAsmrApp(tk.Tk):
         self.lbl_video.pack(side=tk.LEFT, fill=tk.X, expand=True)
 
         # 2. 选择四轨音频
-        sec2 = ttk.LabelFrame(self.left_content, text="2. 选择四轨音频 (按画面推荐)", padding=10)
+        sec2 = ttk.LabelFrame(self.left_content, text="2. 选择四轨声音库 (按画面推荐)", padding=10)
         sec2.pack(fill=tk.X, pady=(0, 10))
 
         self.pickers_notebook = ttk.Notebook(sec2)
@@ -305,7 +303,9 @@ class RelaxAsmrApp(tk.Tk):
         self._refresh_material_label()
 
         if is_wsl():
-            self._log("WSL 环境：打开工程将调用 Windows 版 Reaper（勿用 Linux xdg-open）")
+            self._log("WSL 环境：打开/渲染工程将调用 Windows 版 Reaper")
+        elif is_mac():
+            self._log("macOS 环境：使用本机 Reaper；素材默认挂载于 /Volumes/192.168.3.128/…")
         self._log(f"仓库根目录：{LIB_REPO_ROOT}")
         self._log(f"素材 baseURL：{base_url()}")
 
@@ -714,7 +714,7 @@ class RelaxAsmrApp(tk.Tk):
             self._cover_img = None
 
     def _load_existing_analysis(self, out_dir: Path | None, scene_id: str) -> None:
-        from scripts.paths import clip_matches_path, vlm_matches_path
+        from scripts.config.paths import clip_matches_path, vlm_matches_path
 
         mat = out_dir if out_dir else base_material_dir()
         if not mat.is_dir():
@@ -863,8 +863,8 @@ class RelaxAsmrApp(tk.Tk):
                 import shutil
                 from gui.app import LIB_REPO_ROOT, load_module, load_scripts_module, YT_MATERIAL_SCRIPT, RAIN_THUMB_TITLE
                 
-                rain_vst_script = LIB_REPO_ROOT / "scripts" / "video_analysis" / "analyze.py"
-                vst_mod = load_module(rain_vst_script, "relaxasmr_rain_vst_analyze")
+                analyze_script = LIB_REPO_ROOT / "scripts" / "video_analysis" / "analyze.py"
+                vst_mod = load_module(analyze_script, "relaxasmr_video_analyze")
                 
                 scene_id = self.scene_id or getattr(self, 'derive_scene_id', lambda x: x.stem)(loop_video)
                 import re
@@ -987,8 +987,6 @@ class RelaxAsmrApp(tk.Tk):
                 from gui.app import LIB_REPO_ROOT, load_module
                 gen_sub_script = LIB_REPO_ROOT / "Reaper" / "scripts" / "generate_subproject.py"
                 gen_sub = load_module(gen_sub_script, "generate_subproject")
-                
-                from rain_subproject_lib import ensure_shared_scripts
 
                 scene_id = self.scene_id or getattr(self, 'derive_scene_id', lambda x: x.stem)(loop_video)
                 self._log("—— 3. 新建 Reaper 工程 ——")
@@ -1002,29 +1000,15 @@ class RelaxAsmrApp(tk.Tk):
                     self.after(0, lambda: messagebox.showinfo("跳过", "工程已存在，跳过覆盖。"))
                     return
 
-                config_path = get_scene_config_path(scene_id)
-                if not config_path.exists():
-                    legacy = resolve_scene_config_path(scene_id)
-                    if legacy and legacy != config_path:
-                        config_path = legacy
-                if not config_path.exists():
-                    self._log("未找到场景配方，正在初始化脚手架…")
-                    create_from_video(
-                        loop_video,
-                        scene_id=scene_id,
-                        duration_hours=duration,
-                        skip_generate=True,
-                        on_progress=self._log,
-                    )
-                    config_path = get_scene_config_path(scene_id)
-                from gui.core_controller import update_lua_config_with_selections
-                update_lua_config_with_selections(
-                    config_path, scene_id, duration, selected_tracks, LIB_REPO_ROOT,
+                cfg = build_scene_config_from_gui(
+                    loop_video,
+                    scene_id=scene_id,
+                    duration_hours=duration,
+                    selected_tracks=selected_tracks,
                     log_fn=self._log,
                 )
 
                 ensure_shared_scripts()
-                cfg = gen_sub.load_config(config_path)
                 gen_sub.stage_rain_fx_assets(rain_dir)
                 rpp_path.write_text(
                     gen_sub.build_rpp(cfg, LIB_REPO_ROOT, rain_dir, "auto"),
@@ -1205,24 +1189,32 @@ class RelaxAsmrApp(tk.Tk):
             audio_file = wavs[0]
         vid_file = self.video_path
 
-        def to_wsl(p):
-            s = str(p).replace("\\", "/")
-            if s.startswith("//wsl.localhost/Ubuntu"): return s.replace("//wsl.localhost/Ubuntu", "")
-            if s.startswith("//wsl$/Ubuntu"): return s.replace("//wsl$/Ubuntu", "")
-            if ":" in s:
-                d, r = s.split(":", 1)
-                return f"/mnt/{d.lower()}{r}"
-            return s
-
-        script_wsl = to_wsl(LIB_REPO_ROOT / "scripts" / "video_export" / "export_mp4.sh")
-        vid_wsl = to_wsl(vid_file)
-        aud_wsl = to_wsl(audio_file)
-
+        script = LIB_REPO_ROOT / "scripts" / "video_export" / "export_mp4.sh"
         import sys
+        encoder = "auto" if sys.platform == "darwin" else "nvenc"
         if sys.platform == "win32":
-            cmd = ["wsl", "bash", script_wsl, "-v", vid_wsl, "-a", aud_wsl, "--encoder", "nvenc"]
+            def to_wsl(p: Path) -> str:
+                s = str(p).replace("\\", "/")
+                if s.startswith("//wsl.localhost/Ubuntu"):
+                    return s.replace("//wsl.localhost/Ubuntu", "")
+                if s.startswith("//wsl$/Ubuntu"):
+                    return s.replace("//wsl$/Ubuntu", "")
+                if ":" in s:
+                    d, r = s.split(":", 1)
+                    return f"/mnt/{d.lower()}{r}"
+                return s
+
+            cmd = [
+                "wsl", "bash", to_wsl(script),
+                "-v", to_wsl(vid_file), "-a", to_wsl(audio_file),
+                "--encoder", encoder,
+            ]
         else:
-            cmd = ["bash", script_wsl, "-v", vid_wsl, "-a", aud_wsl, "--encoder", "nvenc"]
+            cmd = [
+                "bash", str(script),
+                "-v", str(vid_file.resolve()), "-a", str(audio_file.resolve()),
+                "--encoder", encoder,
+            ]
 
         self._set_export_ui(running=True, status="Elapsed: 00:00:00  Remaining: …")
         self._log("—— 开始合成视频 (export_mp4) ——")

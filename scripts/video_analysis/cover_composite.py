@@ -7,7 +7,7 @@ from pathlib import Path
 import cv2
 import numpy as np
 
-from scripts.paths import ensure_rain_fx_png
+from scripts.config.paths import ensure_rain_fx_png
 
 DEFAULT_RAIN_OPACITY = 0.45
 

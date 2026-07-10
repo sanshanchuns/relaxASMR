@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 """从 loop 视频一键创建 Rain 子工程。
 
-流程：探测视频 →（可选）内嵌音轨四层分析 → 首帧启发式 → 生成配方
-→ 脚手架 → generate_subproject（Group ReaEQ+ReaComp · 轨 5 视频）
+流程：探测视频 → 首帧启发式 → 写入 JSON 配置 → 生成 `.rpp`
 
 用法（仓库根目录）：
 
@@ -25,11 +24,12 @@ if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
 
 from rain_subproject_lib import create_from_video, derive_scene_id, REPO_ROOT
+from scene_config import scene_config_path
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="从 loop 视频创建 Rain 子工程（分析 + 配方 + .rpp）",
+        description="从 loop 视频创建 Rain 子工程（分析 + JSON 配置 + .rpp）",
     )
     parser.add_argument(
         "--video",
@@ -55,7 +55,7 @@ def main() -> None:
     parser.add_argument(
         "--skip-generate",
         action="store_true",
-        help="只写配方/文档，不生成 .rpp",
+        help="只写配置/文档，不生成 .rpp",
     )
     args = parser.parse_args()
 
@@ -81,7 +81,7 @@ def main() -> None:
 
     print(f"==> 场景 ID: {scene}")
     print(f"==> Rain 工程目录: {sub}")
-    print(f"==> 配方:   {sub / 'scripts' / 'scenes' / f'{scene}.lua'}")
+    print(f"==> 配置:   {scene_config_path(scene)}")
     print(f"==> 分析:   baseURL/material/{scene}_video_analysis.md")
     if not args.skip_generate:
         print(f"==> 工程:   {sub / f'{scene}.rpp'}")

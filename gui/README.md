@@ -28,10 +28,11 @@ python3 gui/app.py
 
 ## 功能
 
-1. **导入 Loop 视频** — 选择 MP4，自动复制到 `assets/loop_video/rain_video/<MVI_xxxx>/`（记住上次选文件目录）
-2. **新建 Reaper 子工程 + YouTube 物料** — 画面/音轨分析 → 配方与 `.rpp` → **同步生成** `material/<loop名>/`（`thumbnail.jpg` + `youtube.md`）；封面标题 **Rain Sounds for Sleep**，副标题仅地点，无 4K 角标；可「打开物料目录」
-3. **打开 Reaper 工程** — 一键用 Windows/macOS Reaper 打开当前场景 `.rpp`
-4. **上传到 YouTube** — 使用 YouTube Data API，从物料目录读取标题/描述/Tags，上传对应成片 MP4 并设置缩略图
+1. **导入 Loop 视频** — 选择 MP4，自动规范化到 baseURL
+2. **选择四轨声音库** — CLIP/VLM 推荐 `1_rain` 候选，各轨点选 WAV
+3. **新建 Reaper 工程** — GUI 选音 → 内存构建配置 → 直接生成 `.rpp`（不写配置文件）
+4. **导出音频与合成视频** — 一键混音、合成 MP4
+5. **上传到 YouTube** — 从物料目录读取元数据并上传成片
 
 **上传前置**：
 

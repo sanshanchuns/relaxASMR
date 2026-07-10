@@ -12,7 +12,7 @@ from tkinter import ttk
 import cv2
 from PIL import Image, ImageEnhance, ImageTk
 
-from scripts.paths import base_url, material_dir
+from scripts.config.paths import base_url, material_dir
 
 CELL_W = 168
 CELL_H = 96

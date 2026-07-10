@@ -4,16 +4,14 @@
 
 雨声多层混音：总工程目录 + 多个子工程。媒体引用 `assets/`。
 
-## 子工程产出物
-
-每个 `subprojects/<scene>/` 包含：
+## 产出物
 
 | 文件 | 说明 |
 |------|------|
-| `video_analysis.md` | 画面拆解 + 原声拆解 + 七层配方（唯一分析/配方文档） |
-| `<scene>.rpp` | 3 h 可配置子工程（含 **Group Folder + 总线 FX**） |
-| `scripts/asmr_config.lua` | Reaper 配方数据（与 `video_analysis.md` §三 同步） |
-| `scripts/fx/asmr_sleep_hf_eq.jsfx` | Group 削高频 JS（生成时从模板复制） |
+| `<scene>.rpp` | Reaper 工程（含 Group 总线） |
+| `scripts/scenes/<scene>.json` | 场景配置（轨结构、素材路径、时长；CLI 写入，GUI 可不落盘） |
+| `scripts/fx/asmr_sleep_hf_eq.jsfx` | Group 削高频 JS |
+| `baseURL/material/<scene>_video_analysis.md` | 画面分析文档 |
 
 ## 生成流程
 
@@ -21,16 +19,18 @@
 
 ```bash
 python3 Reaper/scripts/create_rain_subproject.py \
-  --video assets/loop_video/rain_video/<MVI_xxxx>/<...>_loop_*_fade_*.mp4
+  --video <baseURL 或仓库内的 loop MP4>
 ```
 
-产出 `video_analysis.md`、`scripts/asmr_config.lua`、`<scene>.rpp`；打开工程后：`asmr_loop_track` → `asmr_vol_envelope`（`1_rain`）→ 逐轨 `asmr_scatter_track`。
+产出 `material/<scene>_video_analysis.md`、`scripts/scenes/<scene>.json`、`<scene>.rpp`。
 
-**仅生成 `.rpp`（配方已存在）：**
+**仅重新生成 `.rpp`（配置已存在）：**
 
 ```bash
 python3 Reaper/scripts/generate_subproject.py --scene MVI_6918
 ```
+
+打开工程后：`asmr_loop_track` → `asmr_vol_envelope`（`1_rain`）→ 逐轨 `asmr_scatter_track`。
 
 **模板自带：**
 
@@ -52,6 +52,20 @@ python3 Reaper/scripts/generate_subproject.py --scene MVI_6918
 | 7 | video | 仅渲染 |
 
 模板定义：[`scripts/layer_template.lua`](scripts/layer_template.lua) · JS 源：[`scripts/fx/asmr_sleep_hf_eq.jsfx`](scripts/fx/asmr_sleep_hf_eq.jsfx)
+
+## `scripts/` 目录
+
+| 文件 | 用途 |
+|------|------|
+| `scenes/<scene_id>.json` | 场景配置（CLI `create_rain_subproject.py` 写入；`generate_subproject.py` 读取） |
+| `layer_template.lua` | 轨布局 + Group FX 模板（仅 Python 生成 `.rpp` 时用） |
+| `fx/asmr_sleep_hf_eq.jsfx` | Group 削高频 JSFX 源文件 |
+| `asmr_loop_track.lua` | 循环层铺至工程时长 |
+| `asmr_vol_envelope.lua` | `1_rain` 长时音量包络 |
+| `asmr_scatter_track.lua` | 稀疏层随机散布 |
+| `asmr_paths.lua` | 路径/场景解析库（由 `Reaper/scripts/` 同步，勿单独运行） |
+
+已移除旧流程脚本 `rain_bootstrap.lua` / `rain_setup_project.lua` / `rain_paths.lua`（建轨与散布已由 `generate_subproject.py` 生成 `.rpp` 完成）。
 
 ## MVI_6888
 

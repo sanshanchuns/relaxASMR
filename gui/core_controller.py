@@ -9,8 +9,8 @@ import json
 from pathlib import Path
 from typing import Any, Callable
 
-from scripts.common_constants import CLIMATE_NAMES, CLOSE_NAMES, DISTANT_NAMES, SPACE_NAMES
-from scripts.paths import audio_layer_dir, clip_matches_path, vlm_matches_path
+from scripts.config.common_constants import CLIMATE_NAMES, CLOSE_NAMES, DISTANT_NAMES, SPACE_NAMES
+from scripts.config.paths import audio_layer_dir, clip_matches_path, vlm_matches_path
 
 
 def _layer_keys_from_clip(clip_analysis: dict) -> tuple[int | None, int | None, int | None]:
@@ -187,45 +187,3 @@ def reconcile_clip_vlm(
         "rain_tab": "1_rain_clip",
         "show_vlm_tab": True,
     }
-
-
-def update_lua_config_with_selections(
-    config_path: Path,
-    scene_id: str,
-    duration: float,
-    selected_tracks: dict,
-    lib_repo_root: Path,
-    log_fn: Callable[[str], None] | None = None,
-) -> None:
-    import sys
-
-    reaper_scripts = lib_repo_root / "Reaper" / "scripts"
-    if str(reaper_scripts) not in sys.path:
-        sys.path.insert(0, str(reaper_scripts))
-
-    from generate_subproject import load_config
-    from rain_subproject_lib import SCENES, config_to_lua
-    from scripts.audio_loudness import adjust_1_rain_layer_vol
-
-    cfg = load_config(config_path)
-    cfg["duration_hours"] = duration
-
-    def format_path(p: Path) -> str:
-        from scripts.paths import path_for_config
-        return path_for_config(p)
-
-    for layer in cfg.get("loop_layers", []):
-        if layer.get("id") in selected_tracks:
-            layer["paths"] = [format_path(selected_tracks[layer["id"]])]
-
-    for layer in cfg.get("scatter_layers", []):
-        if layer.get("id") in selected_tracks:
-            layer["paths"] = [format_path(selected_tracks[layer["id"]])]
-
-    adjust_1_rain_layer_vol(cfg, log=log_fn)
-
-    lua = config_to_lua(cfg)
-    config_path.write_text(lua, encoding="utf-8")
-
-    SCENES.mkdir(parents=True, exist_ok=True)
-    (SCENES / f"{scene_id}.lua").write_text(lua, encoding="utf-8")

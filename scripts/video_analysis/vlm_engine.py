@@ -6,7 +6,7 @@ from pathlib import Path
 
 def analyze_with_vlm(image_path: Path, on_progress=None) -> dict:
     """
-    Uses Gemini to analyze a single video frame and map it to RAIN VST internal IDs.
+    Uses Gemini to analyze a single video frame and map it to sound-library dimension IDs.
     Returns a dictionary with 'l3_key', 'l2_key', 'l1_key', and 'climate_key'.
     """
     try:

@@ -279,21 +279,9 @@ class TrackPickerUI(ttk.Frame):
         self._stop_audio()
         
         try:
-            from gui.reaper_launch import is_wsl, wsl_to_windows_path
-            import subprocess
-            if is_wsl():
-                win_path = wsl_to_windows_path(wav_path)
-                script = f"$p = New-Object System.Media.SoundPlayer '{win_path}'; $p.PlayLooping(); while($true) {{ Start-Sleep -Seconds 1 }}"
-                cmd = [
-                    "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe",
-                    "-NoProfile",
-                    "-Command",
-                    script
-                ]
-                self._audio_proc = subprocess.Popen(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-            else:
-                import winsound
-                winsound.PlaySound(str(wav_path), winsound.SND_FILENAME | winsound.SND_ASYNC | winsound.SND_LOOP)
+            from gui.audio_playback import play_wav_loop
+
+            self._audio_proc = play_wav_loop(wav_path)
         except Exception as e:
             self._log(f"播放失败: {e}")
 
@@ -301,18 +289,12 @@ class TrackPickerUI(ttk.Frame):
         if getattr(self, "_play_after_id", None):
             self.after_cancel(self._play_after_id)
             self._play_after_id = None
-            
+
         try:
-            from gui.reaper_launch import is_wsl
-            if is_wsl() and getattr(self, "_audio_proc", None):
-                try:
-                    self._audio_proc.kill()
-                except Exception:
-                    pass
-                self._audio_proc = None
-            elif not is_wsl():
-                import winsound
-                winsound.PlaySound(None, winsound.SND_PURGE)
+            from gui.audio_playback import stop_wav_playback
+
+            stop_wav_playback(getattr(self, "_audio_proc", None))
+            self._audio_proc = None
         except Exception:
             pass
 

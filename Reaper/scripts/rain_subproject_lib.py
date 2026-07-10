@@ -17,7 +17,7 @@ import sys
 if str(_REPO) not in sys.path:
     sys.path.insert(0, str(_REPO))
 
-from scripts.paths import (
+from scripts.config.paths import (
     AUDIO_LAYER_IDS,
     RAIN_PROJECT_DIR,
     RAIN_SCENES_DIR,
@@ -239,6 +239,38 @@ def build_asmr_config(
     return cfg, {}
 
 
+def build_scene_config_from_gui(
+    video: Path,
+    *,
+    scene_id: str | None = None,
+    duration_hours: float = 3,
+    selected_tracks: dict[str, Path] | None = None,
+    log_fn: Callable[[str], None] | None = None,
+) -> dict:
+    """从 GUI 选音构建工程配置 dict，供 generate_subproject.build_rpp 直接使用。"""
+    from scripts.config.paths import path_for_config
+    from scripts.new_reaper_project.audio_loudness import adjust_1_rain_layer_vol
+
+    scene_id = derive_scene_id(video, scene_id)
+    _, video_rel = ensure_video_in_assets(video, scene_id)
+    cfg, _ = build_asmr_config(
+        scene_id,
+        video_rel,
+        duration_hours=duration_hours,
+    )
+
+    for layer in cfg.get("loop_layers", []) + cfg.get("scatter_layers", []):
+        lid = layer.get("id")
+        if not lid:
+            continue
+        sel = (selected_tracks or {}).get(lid)
+        if sel:
+            layer["paths"] = [path_for_config(sel)]
+
+    adjust_1_rain_layer_vol(cfg, log=log_fn)
+    return cfg
+
+
 def _layer_paths_from_cfg(cfg: dict) -> dict[str, str]:
     out: dict[str, str] = {}
     for layer in cfg.get("loop_layers", []) + cfg.get("scatter_layers", []):
@@ -276,7 +308,7 @@ def recipe_section_md(cfg: dict, rationales: dict[str, str] | None = None) -> st
         )
     lines.extend([
         "",
-        "详细路径见 `scripts/scenes/<scene_id>.lua` · 生成：`create_rain_subproject.py` / GUI",
+        "详细路径见 `scripts/scenes/<scene_id>.json` · 生成：`create_rain_subproject.py` / GUI",
         "",
     ])
     if rationales:
@@ -297,64 +329,6 @@ def recipe_section_md(cfg: dict, rationales: dict[str, str] | None = None) -> st
         "打开工程后：`asmr_loop_track.lua` 铺循环 → `asmr_vol_envelope.lua` 写 **`1_rain` 包络** → 逐轨 **`asmr_scatter_track.lua`** 散布稀疏层。",
         "",
     ])
-    return "\n".join(lines)
-
-
-def lua_quote(s: str) -> str:
-    return '"' + s.replace("\\", "\\\\").replace('"', '\\"') + '"'
-
-
-def config_to_lua(cfg: dict) -> str:
-    lines = [
-        f"-- 场景配方 · 见 baseURL/material/{cfg['scene_id']}_video_analysis.md §三",
-        f"-- 由 create_rain_subproject.py 自动生成",
-        "",
-        "return {",
-        f"  scene_id = {lua_quote(cfg['scene_id'])},",
-        f"  project_name = {lua_quote(cfg['project_name'])},",
-        f"  series = {lua_quote(cfg['series'])},",
-        f"  duration_hours = {cfg['duration_hours']},",
-        "",
-        "  video = {",
-        f"    track = {cfg['video']['track']},",
-        f"    name = {lua_quote(cfg['video']['name'])},",
-        f"    path = {lua_quote(cfg['video']['path'])},",
-        "    render_only = true,",
-        "  },",
-        "",
-        "  loop_layers = {",
-    ]
-    for layer in cfg["loop_layers"]:
-        lines.append("    {")
-        lines.append(f"      track = {layer['track']},")
-        lines.append(f"      id = {lua_quote(layer['id'])},")
-        lines.append(f"      name = {lua_quote(layer['name'])},")
-        lines.append(f"      vol = {layer['vol']},")
-        lines.append("      paths = {")
-        for p in layer.get("paths") or []:
-            if p:
-                lines.append(f"        {lua_quote(p)},")
-        lines.append("      },")
-        lines.append("    },")
-    lines.append("  },")
-    lines.append("")
-    lines.append("  scatter_layers = {")
-    for layer in cfg["scatter_layers"]:
-        lines.append("    {")
-        lines.append(f"      track = {layer['track']},")
-        lines.append(f"      id = {lua_quote(layer['id'])},")
-        lines.append(f"      name = {lua_quote(layer['name'])},")
-        lines.append(f"      vol = {layer['vol']},")
-        lines.append("      paths = {")
-        for p in layer["paths"]:
-            lines.append(f"        {lua_quote(p)},")
-        lines.append("      },")
-        lines.append("    },")
-    lines.append("  },")
-    lines.append("")
-    lines.append(f"  fade_sec = {cfg['fade_sec']},")
-    lines.append("}")
-    lines.append("")
     return "\n".join(lines)
 
 
@@ -420,7 +394,7 @@ def ensure_shared_scripts() -> Path:
     scripts = RAIN_ROOT / "scripts"
     scripts.mkdir(parents=True, exist_ok=True)
     SCENES.mkdir(parents=True, exist_ok=True)
-    for name in ("rain_bootstrap.lua", "rain_paths.lua", "rain_setup_project.lua", "layer_template.lua"):
+    for name in ("layer_template.lua",):
         src = SCAFFOLD_SRC / name
         dst = scripts / name
         if src.is_file() and src.resolve() != dst.resolve():
@@ -483,12 +457,11 @@ def create_from_video(
         visual=visual,
     )
 
-    log("写入 Reaper 轨道结构…")
+    log("写入场景配置…")
     rain_dir = scaffold_subproject(scene_id)
-    lua = config_to_lua(cfg)
-    SCENES.mkdir(parents=True, exist_ok=True)
-    scene_lua = SCENES / f"{scene_id}.lua"
-    scene_lua.write_text(lua, encoding="utf-8")
+    from scene_config import save_scene_config
+
+    config_path = save_scene_config(cfg)
     write_video_analysis(
         scene_video_analysis_path(scene_id),
         scene_id,
@@ -500,7 +473,7 @@ def create_from_video(
     )
 
     if not skip_generate:
-        from generate_subproject import build_rpp, load_config, stage_rain_fx_assets
+        from generate_subproject import build_rpp, stage_rain_fx_assets
         from media_paths import describe_media_mode
 
         log("生成 Reaper 工程 (.rpp)…")
@@ -508,10 +481,12 @@ def create_from_video(
         rpp_path = rain_dir / f"{scene_id}.rpp"
         log(f"媒体路径: {describe_media_mode(media_mode, REPO_ROOT)}")
         rpp_path.write_text(
-            build_rpp(load_config(scene_lua), REPO_ROOT, rain_dir, media_mode),
+            build_rpp(cfg, REPO_ROOT, rain_dir, media_mode),
             encoding="utf-8",
         )
         log(f"工程: {rpp_path.relative_to(REPO_ROOT)}")
+    else:
+        log(f"配置: {config_path.relative_to(REPO_ROOT)}")
 
     log("完成")
     return rain_dir
