@@ -37,7 +37,7 @@ from gui.reaper_launch import (  # noqa: E402
 )
 from gui.folder_open import open_folder  # noqa: E402
 from gui.import_reload import load_module, load_scripts_module  # noqa: E402
-from gui.video_library_tab import VideoLibraryTab  # noqa: E402
+from gui.video_library_tab import VideoLibraryTab, read_video_quality  # noqa: E402
 from gui.youtube_material import (  # noqa: E402
     RAIN_THUMB_TITLE,
     find_material_dir,
@@ -728,17 +728,8 @@ class RelaxAsmrApp(tk.Tk):
         )
 
     def _video_resolution_label(self, video: Path) -> str:
-        cap = cv2.VideoCapture(str(video))
-        if not cap.isOpened():
-            return ""
-        try:
-            w = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-            h = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-        finally:
-            cap.release()
-        if w > 0 and h > 0:
-            return f"  {w}×{h}"
-        return ""
+        quality = read_video_quality(video)
+        return f"  {quality}" if quality else ""
 
     def _format_video_label(self, scene: str, video: Path) -> str:
         return f"[{scene}] {video}{self._video_resolution_label(video)}"
