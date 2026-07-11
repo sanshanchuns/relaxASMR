@@ -727,6 +727,22 @@ class RelaxAsmrApp(tk.Tk):
             on_progress=self._log,
         )
 
+    def _video_resolution_label(self, video: Path) -> str:
+        cap = cv2.VideoCapture(str(video))
+        if not cap.isOpened():
+            return ""
+        try:
+            w = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+            h = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        finally:
+            cap.release()
+        if w > 0 and h > 0:
+            return f"  {w}×{h}"
+        return ""
+
+    def _format_video_label(self, scene: str, video: Path) -> str:
+        return f"[{scene}] {video}{self._video_resolution_label(video)}"
+
     def _set_video(self, video: Path, *, from_import: bool) -> None:
         try:
             scene = derive_scene_id(video)
@@ -737,7 +753,7 @@ class RelaxAsmrApp(tk.Tk):
         self.video_path = video
         self.video_rel = str(video)
         self.scene_id = scene
-        self.lbl_video.configure(text=f"[{scene}] {video}")
+        self.lbl_video.configure(text=self._format_video_label(scene, video))
         # self.lbl_scene.configure(text=f"场景 ID：{scene}")
         self._cfg["last_video"] = str(video)
         self._cfg["last_video_dir"] = str(video.parent)
@@ -805,7 +821,7 @@ class RelaxAsmrApp(tk.Tk):
             self._cover_img = None
 
     def _load_existing_analysis(self, out_dir: Path | None, scene_id: str) -> None:
-        from scripts.config.paths import clip_matches_path, vlm_matches_path
+        from gui.core_controller import load_cached_rain_tabs
 
         mat = out_dir if out_dir else base_material_dir()
         if not mat.is_dir():
@@ -814,33 +830,14 @@ class RelaxAsmrApp(tk.Tk):
 
         self.material_dir = mat
 
-        clip_json_path = clip_matches_path(scene_id)
-        vlm_json_path = vlm_matches_path(scene_id)
-
         picker1 = getattr(self, "track_pickers", {}).get("1_rain")
         if not picker1:
             return
 
-        if clip_json_path.is_file():
-            self._log(f"找到之前的分析结果: {clip_json_path.name}")
-            if vlm_json_path.is_file():
-                self._apply_rain_tabs({
-                    "rain_tab": "1_rain_clip",
-                    "clip_json": clip_json_path,
-                    "clip_title": "",
-                    "show_vlm_tab": True,
-                    "vlm_json": vlm_json_path,
-                    "vlm_title": "",
-                })
-            else:
-                self._apply_rain_tabs({
-                    "rain_tab": "1_rain",
-                    "clip_json": clip_json_path,
-                    "clip_title": "",
-                    "show_vlm_tab": False,
-                    "vlm_json": None,
-                    "vlm_title": "",
-                })
+        cached = load_cached_rain_tabs(scene_id)
+        if cached:
+            self._log(f"找到之前的分析结果: {Path(cached['clip_json']).name}")
+            self._apply_rain_tabs(cached)
         else:
             picker1.lbl_status.configure(text="未找到数据文件")
             picker1._clear_grid()
@@ -981,20 +978,119 @@ class RelaxAsmrApp(tk.Tk):
                 
                 self._log("—— 2. 自动分析画面 ——")
                 force_refresh = getattr(self, "chk_overwrite_mat_var", tk.BooleanVar()).get()
-                clip_data = vst_mod.analyze_video(
-                    loop_video, out_dir, on_progress=self._log, force_refresh=force_refresh
+                from gui.core_controller import (
+                    clip_analysis_from_matches,
+                    load_cached_rain_tabs,
+                    reconcile_clip_vlm,
+                    save_clip_matches,
                 )
+                from scripts.config.paths import clear_scene_material, get_snapshot_raw_path, material_md_path
+
+                if force_refresh:
+                    self._log("勾选「覆盖物料」：清除旧 snapshot / 封面 / CLIP / VLM / md…")
+                    clear_scene_material(scene_id, on_progress=self._log)
+                    cached = None
+                else:
+                    cached = load_cached_rain_tabs(scene_id)
+
+                clip_analysis: dict = {}
+                frame_jpg: Path | None = get_snapshot_raw_path(scene_id)
+                skip_clip_vlm = cached is not None and not cached.get("partial")
+
+                if skip_clip_vlm:
+                    self._log("CLIP/VLM 已存在，跳过解析，直接加载。")
+
+                    def load_cached_ui() -> None:
+                        self.material_dir = out_dir
+                        self._refresh_material_label()
+                        self._update_cover_preview()
+                        self._apply_rain_tabs(cached)
+                        self._log("步骤 2 九宫格已从缓存加载。")
+
+                    self.after(0, load_cached_ui)
+                    clip_analysis = clip_analysis_from_matches(Path(cached["clip_json"]))
+                elif cached and cached.get("partial"):
+                    self._log("CLIP 已存在，跳过 CLIP；继续 VLM…")
+                    clip_json = Path(cached["clip_json"])
+                    clip_analysis = clip_analysis_from_matches(clip_json)
+
+                    vst_mod.analyze_video(
+                        loop_video,
+                        out_dir,
+                        on_progress=self._log,
+                        force_refresh=False,
+                        skip_clip=True,
+                    )
+                    frame_jpg = get_snapshot_raw_path(scene_id)
+
+                    def load_partial_clip_ui() -> None:
+                        self.material_dir = out_dir
+                        self._refresh_material_label()
+                        self._update_cover_preview()
+                        self._apply_rain_tabs(cached)
+                        self._log("CLIP 阶段已从缓存加载。")
+
+                    self.after(0, load_partial_clip_ui)
+                else:
+                    clip_data = vst_mod.analyze_video(
+                        loop_video,
+                        out_dir,
+                        on_progress=self._log,
+                        force_refresh=force_refresh,
+                        skip_clip=False,
+                    )
+                    clip_analysis = clip_data.get("clip_analysis", {})
+                    frame_jpg = Path(clip_data["frame_jpg"]) if clip_data.get("frame_jpg") else frame_jpg
+
+                    def update_clip_ui() -> None:
+                        self.material_dir = out_dir
+                        self._refresh_material_label()
+                        self._update_cover_preview()
+
+                        clip_json, clip_title, _ = save_clip_matches(
+                            scene_id, clip_analysis, vlm_reconciled=False
+                        )
+                        self._apply_rain_tabs({
+                            "rain_tab": "1_rain_clip",
+                            "clip_json": clip_json,
+                            "clip_title": clip_title,
+                            "show_vlm_tab": False,
+                            "vlm_json": None,
+                            "vlm_title": "",
+                        })
+                        self._log("CLIP 阶段结束，九宫格已就绪。")
+
+                    self.after(0, update_clip_ui)
+
+                if skip_clip_vlm:
+                    pass
+                elif frame_jpg and frame_jpg.is_file():
+                    from scripts.video_analysis.analyze import analyze_vlm_frame
+
+                    vlm_res = analyze_vlm_frame(frame_jpg, on_progress=self._log)
+
+                    def update_vlm_ui() -> None:
+                        result = reconcile_clip_vlm(
+                            scene_id, clip_analysis, vlm_res, self._log
+                        )
+                        self._apply_rain_tabs(result)
+
+                    self.after(0, update_vlm_ui)
+                elif not skip_clip_vlm:
+                    self._log("未找到首帧图片，跳过 VLM 分析。")
+
+                clip_data = {"clip_analysis": clip_analysis}
 
                 self._log("—— 3. 生成 YouTube 物料 ——")
-                target_md_path = out_dir / f"{scene_id}_material.md"
-                if target_md_path.is_file() and not getattr(self, 'chk_overwrite_mat_var', tk.BooleanVar()).get():
-                    self._log(f"物料已存在且未勾选覆盖，跳过生成。")
+                target_md_path = material_md_path(scene_id)
+                if target_md_path.is_file() and not force_refresh:
+                    self._log(f"物料 md 已存在，跳过: {target_md_path.name}")
                 else:
                     yt_mod = load_module(YT_MATERIAL_SCRIPT, "relaxasmr_generate_youtube_material")
                     yt_mod.generate_material(
-                        loop_video, # wait, does generate_material need quadra.jpg? For now it just takes loop_video. We can leave it as is or pass quadra.
+                        loop_video,
                         output_dir=out_dir,
-                        preset_key=clip_data.get('clip_analysis', {}).get('l2', {}).get('key', 'forest_rain'), # use space key
+                        preset_key=clip_data.get("clip_analysis", {}).get("l2", {}).get("key", "forest_rain"),
                         copy_style="forest_rain",
                         thumb_title=RAIN_THUMB_TITLE,
                         thumb_subtitle_place_only=True,
@@ -1003,46 +1099,6 @@ class RelaxAsmrApp(tk.Tk):
                     )
                     if (out_dir / "youtube.md").is_file():
                         (out_dir / "youtube.md").rename(target_md_path)
-                
-                clip_analysis = clip_data.get("clip_analysis", {})
-                frame_jpg = clip_data.get("frame_jpg")
-
-                def update_clip_ui() -> None:
-                    from gui.core_controller import save_clip_matches
-
-                    self.material_dir = out_dir
-                    self._refresh_material_label()
-                    self._update_cover_preview()
-
-                    clip_json, clip_title, _ = save_clip_matches(scene_id, clip_analysis)
-                    self._apply_rain_tabs({
-                        "rain_tab": "1_rain_clip",
-                        "clip_json": clip_json,
-                        "clip_title": clip_title,
-                        "show_vlm_tab": False,
-                        "vlm_json": None,
-                        "vlm_title": "",
-                    })
-                    self._log("CLIP 阶段结束，九宫格已就绪。")
-
-                self.after(0, update_clip_ui)
-
-                if frame_jpg and Path(frame_jpg).is_file():
-                    from scripts.video_analysis.analyze import analyze_vlm_frame
-
-                    vlm_res = analyze_vlm_frame(Path(frame_jpg), on_progress=self._log)
-
-                    def update_vlm_ui() -> None:
-                        from gui.core_controller import reconcile_clip_vlm
-
-                        result = reconcile_clip_vlm(
-                            scene_id, clip_analysis, vlm_res, self._log
-                        )
-                        self._apply_rain_tabs(result)
-
-                    self.after(0, update_vlm_ui)
-                else:
-                    self._log("未找到首帧图片，跳过 VLM 分析。")
             except Exception as exc:
                 def done_err(err: BaseException = exc) -> None:
                     self._log(f"错误：{err}")

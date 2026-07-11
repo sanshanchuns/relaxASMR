@@ -102,12 +102,21 @@ def save_clip_matches(
     scene_id: str,
     clip_analysis: dict,
     all_wavs: list[Path] | None = None,
+    *,
+    vlm_reconciled: bool = False,
 ) -> tuple[Path, str, list[dict[str, Any]]]:
     wavs = all_wavs if all_wavs is not None else list_rain_wavs()
     l3, l2, l1 = _layer_keys_from_clip(clip_analysis)
     matches = get_matches_for_keys(l3, l2, l1, wavs)
     title = format_clip_title(clip_analysis)
-    payload = {"title": title, "candidates": matches, "l3_key": l3, "l2_key": l2, "l1_key": l1}
+    payload = {
+        "title": title,
+        "candidates": matches,
+        "l3_key": l3,
+        "l2_key": l2,
+        "l1_key": l1,
+        "vlm_reconciled": vlm_reconciled,
+    }
     path = clip_matches_path(scene_id)
     path.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
     return path, title, matches
@@ -126,6 +135,66 @@ def save_vlm_matches(
     path = vlm_matches_path(scene_id)
     path.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
     return path, title, matches
+
+
+def clip_analysis_from_matches(clip_json: Path) -> dict:
+    data = json.loads(clip_json.read_text(encoding="utf-8"))
+    return {
+        "l3": {"key": data.get("l3_key")},
+        "l2": {"key": data.get("l2_key")},
+        "l1": {"key": data.get("l1_key")},
+    }
+
+
+def load_cached_rain_tabs(scene_id: str) -> dict[str, Any] | None:
+    """若 clip/vlm 匹配结果已存在，返回 _apply_rain_tabs 所需结构。"""
+    clip_path = clip_matches_path(scene_id)
+    if not clip_path.is_file():
+        return None
+
+    clip_data = json.loads(clip_path.read_text(encoding="utf-8"))
+    clip_title = clip_data.get("title", "")
+    vlm_path = vlm_matches_path(scene_id)
+
+    if vlm_path.is_file():
+        vlm_data = json.loads(vlm_path.read_text(encoding="utf-8"))
+        return {
+            "rain_tab": "1_rain_clip",
+            "clip_json": clip_path,
+            "clip_title": clip_title,
+            "show_vlm_tab": True,
+            "vlm_json": vlm_path,
+            "vlm_title": vlm_data.get("title", ""),
+            "partial": False,
+        }
+
+    if clip_data.get("vlm_reconciled") is False:
+        return {
+            "rain_tab": "1_rain_clip",
+            "clip_json": clip_path,
+            "clip_title": clip_title,
+            "show_vlm_tab": False,
+            "vlm_json": None,
+            "vlm_title": "",
+            "partial": True,
+        }
+
+    return {
+        "rain_tab": "1_rain",
+        "clip_json": clip_path,
+        "clip_title": clip_title,
+        "show_vlm_tab": False,
+        "vlm_json": None,
+        "vlm_title": "",
+        "partial": False,
+    }
+
+
+def _mark_clip_vlm_reconciled(clip_json: Path, *, agree: bool) -> None:
+    data = json.loads(clip_json.read_text(encoding="utf-8"))
+    data["vlm_reconciled"] = True
+    data["vlm_agree"] = agree
+    clip_json.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
 
 
 def reconcile_clip_vlm(
@@ -151,6 +220,7 @@ def reconcile_clip_vlm(
     agree = clip_vlm_agree(clip_analysis, vlm_analysis)
 
     if not vlm_analysis:
+        _mark_clip_vlm_reconciled(clip_json, agree=True)
         return {
             "agree": True,
             "clip_json": clip_json,
@@ -164,6 +234,7 @@ def reconcile_clip_vlm(
     if agree:
         if vlm_json.is_file():
             vlm_json.unlink()
+        _mark_clip_vlm_reconciled(clip_json, agree=True)
         logger("结论: CLIP 与 VLM 一致，采用 CLIP 配方。")
         return {
             "agree": True,
@@ -176,6 +247,7 @@ def reconcile_clip_vlm(
         }
 
     vlm_json, vlm_title, _ = save_vlm_matches(scene_id, vlm_analysis, wavs)
+    _mark_clip_vlm_reconciled(clip_json, agree=False)
     logger(f"已保存: {vlm_json.name}")
     logger("结论: CLIP 与 VLM 不一致，请对比 1_rain_clip / 1_rain_vlm 两个选项卡。")
     return {

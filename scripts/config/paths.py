@@ -12,6 +12,7 @@ import re
 import shutil
 import sys
 from pathlib import Path
+from typing import Callable
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
@@ -340,6 +341,36 @@ def clip_matches_path(scene_id: str) -> Path:
 
 def vlm_matches_path(scene_id: str) -> Path:
     return material_dir() / f"{scene_id}_vlm_matches.json"
+
+
+def material_md_path(scene_id: str) -> Path:
+    return material_dir() / f"{scene_id}_material.md"
+
+
+def scene_material_paths(scene_id: str) -> dict[str, Path]:
+    """单场景在 material/ 下的主要产物路径。"""
+    return {
+        "snapshot_raw": get_snapshot_raw_path(scene_id),
+        "thumbnail": get_thumbnail_path(scene_id),
+        "material_md": material_md_path(scene_id),
+        "clip_matches": clip_matches_path(scene_id),
+        "vlm_matches": vlm_matches_path(scene_id),
+    }
+
+
+def clear_scene_material(
+    scene_id: str,
+    *,
+    on_progress: Callable[[str], None] | None = None,
+) -> None:
+    """删除场景物料缓存，供「覆盖物料」全量重生成。"""
+    paths = list(scene_material_paths(scene_id).values())
+    paths.append(material_dir() / f"{scene_id}_snapshot.jpg")
+    for path in paths:
+        if path.is_file():
+            path.unlink()
+            if on_progress is not None:
+                on_progress(f"已删除: {path.name}")
 
 
 def audio_layer_dir(layer_id: str) -> Path:

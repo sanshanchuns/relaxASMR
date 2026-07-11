@@ -1279,6 +1279,8 @@ def analyze_video(
     output_dir: Path,
     on_progress: Callable[[str], None] | None = None,
     force_refresh: bool = False,
+    *,
+    skip_clip: bool = False,
 ) -> dict:
     """提取首帧 → CLIP 远景/空间/近景 → 雨效封面。不分析视频内嵌音轨。"""
     video_path = Path(video_path)
@@ -1297,15 +1299,24 @@ def analyze_video(
 
     if force_refresh or not raw_jpg.exists():
         extract_first_frame(video_path, raw_jpg, on_progress)
+    else:
+        _notify(on_progress, f"首帧已存在，跳过: {raw_jpg.name}")
 
-    from scripts.video_analysis.clip_engine import analyze_and_map_with_clip
-    _notify(on_progress, "CLIP 分析首帧（远景 + 空间 + 近景）…")
-    _, ai_results = analyze_and_map_with_clip(str(raw_jpg), on_progress)
+    if skip_clip:
+        _notify(on_progress, "CLIP 结果已存在，跳过分析")
+        ai_results: dict = {}
+    else:
+        from scripts.video_analysis.clip_engine import analyze_and_map_with_clip
+        _notify(on_progress, "CLIP 分析首帧（远景 + 空间 + 近景）…")
+        _, ai_results = analyze_and_map_with_clip(str(raw_jpg), on_progress)
 
     from scripts.video_analysis.cover_composite import composite_rain_cover
-    _notify(on_progress, "正在合成雨效封面 (rain_fx.png)…")
-    composite_rain_cover(raw_jpg, thumbnail_jpg)
-    _notify(on_progress, f"封面已保存: {thumbnail_jpg.name}")
+    if force_refresh or not thumbnail_jpg.exists():
+        _notify(on_progress, "正在合成雨效封面 (rain_fx.png)…")
+        composite_rain_cover(raw_jpg, thumbnail_jpg)
+        _notify(on_progress, f"封面已保存: {thumbnail_jpg.name}")
+    else:
+        _notify(on_progress, f"封面已存在，跳过: {thumbnail_jpg.name}")
 
     if legacy_snapshot.is_file():
         legacy_snapshot.unlink()
