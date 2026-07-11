@@ -38,6 +38,7 @@ from gui.reaper_launch import (  # noqa: E402
 from gui.folder_open import open_folder  # noqa: E402
 from gui.import_reload import load_module, load_scripts_module  # noqa: E402
 from gui.video_library_tab import VideoLibraryTab, read_video_quality  # noqa: E402
+from gui.audio_library_tab import AudioLibraryTab, wav_display_title  # noqa: E402
 from gui.youtube_material import (  # noqa: E402
     RAIN_THUMB_TITLE,
     find_material_dir,
@@ -56,6 +57,7 @@ from scripts.config.paths import (  # noqa: E402
     get_scene_number,
     is_mac,
     material_dir as base_material_dir,
+    material_md_path,
 )
 
 CONFIG_PATH = Path(__file__).resolve().parent / "user_config.json"
@@ -75,7 +77,7 @@ class RelaxAsmrApp(tk.Tk):
         self.subproject_dir: Path | None = None
         self.rpp_path: Path | None = None
         self.material_dir: Path | None = None
-        self.custom_video_path: Path | None = None
+        self.upload_mp4_custom: Path | None = None
         self._busy = False
         self._render_running = False
         self._export_running = False
@@ -137,7 +139,30 @@ class RelaxAsmrApp(tk.Tk):
             on_video_select=self._select_video_from_library,
             log_fn=self._log,
         )
-        self.left_notebook.add(self.video_library_tab, text="素材库")
+        self.left_notebook.add(self.video_library_tab, text="视频素材库")
+
+        self.random_library_tab = AudioLibraryTab(
+            self.left_notebook,
+            layer_id="3_random",
+            track_id="3_random",
+            on_selection_changed=self._on_audio_library_selection,
+            log_fn=self._log,
+        )
+        self.left_notebook.add(self.random_library_tab, text="random 素材库")
+
+        self.wildlife_library_tab = AudioLibraryTab(
+            self.left_notebook,
+            layer_id="4_wildlife",
+            track_id="4_wildlife",
+            on_selection_changed=self._on_audio_library_selection,
+            log_fn=self._log,
+        )
+        self.left_notebook.add(self.wildlife_library_tab, text="wildlife 素材库")
+
+        self._audio_library_tabs = {
+            "3_random": self.random_library_tab,
+            "4_wildlife": self.wildlife_library_tab,
+        }
 
         # === 左侧工作流：步骤 1–5（小屏溢出时可垂直滚动）===
         self._setup_workflow_scroll(self.workflow_tab)
@@ -255,6 +280,19 @@ class RelaxAsmrApp(tk.Tk):
         self.btn_upload = ttk.Button(row4, text="上传到 YouTube", command=self._upload_youtube)
         self.btn_upload.pack(side=tk.LEFT)
 
+        row_upload_pick = ttk.Frame(sec4)
+        row_upload_pick.pack(fill=tk.X, pady=(8, 0))
+        ttk.Button(
+            row_upload_pick,
+            text="上传自定义视频",
+            command=self._pick_upload_mp4,
+        ).pack(side=tk.LEFT)
+        ttk.Button(
+            row_upload_pick,
+            text="恢复默认",
+            command=self._reset_upload_mp4_default,
+        ).pack(side=tk.LEFT, padx=(8, 0))
+
         self.lbl_upload = ttk.Label(sec4, text="待上传：—", wraplength=400)
         self.lbl_upload.pack(anchor=tk.W, pady=(8, 0))
         
@@ -286,6 +324,10 @@ class RelaxAsmrApp(tk.Tk):
         self._preview_img = None
         self._right_pane_equalize_pending = False
         self.after_idle(self._equalize_right_pane)
+
+        self._restore_audio_library_selections()
+
+        self.after_idle(self._preload_audio_libraries)
 
         self.left_notebook.bind("<<NotebookTabChanged>>", self._on_left_tab_changed)
 
@@ -425,14 +467,60 @@ class RelaxAsmrApp(tk.Tk):
         if hasattr(self, "video_library_tab"):
             self.video_library_tab.mark_uploaded(num, True)
 
+    def _audio_library_selection_cfg(self) -> dict:
+        sel = self._cfg.get("audio_library_selection")
+        if not isinstance(sel, dict):
+            sel = {}
+            self._cfg["audio_library_selection"] = sel
+        return sel
+
+    def _save_audio_library_selection(self, track_id: str, paths: list[Path]) -> None:
+        cfg = self._audio_library_selection_cfg()
+        cfg[track_id] = [str(p) for p in paths]
+        self._save_config()
+
+    def _restore_audio_library_selections(self) -> None:
+        cfg = self._audio_library_selection_cfg()
+        for track_id, tab in self._audio_library_tabs.items():
+            raw = cfg.get(track_id, [])
+            if not isinstance(raw, list):
+                continue
+            paths = [Path(p) for p in raw if p and Path(p).is_file()]
+            if paths:
+                tab.set_selected(paths)
+                self._sync_track_picker_from_library(track_id, paths)
+
+    def _sync_track_picker_from_library(self, track_id: str, wavs: list[Path]) -> None:
+        picker = self.track_pickers.get(track_id)
+        if not picker:
+            return
+        cands = [
+            {"wav": str(w), "name": wav_display_title(w), "score": 100}
+            for w in wavs[:9]
+        ]
+        picker.set_candidates(cands)
+        picker.set_title(f"素材库已选 {len(cands)} 个")
+
+    def _preload_audio_libraries(self) -> None:
+        for tab in self._audio_library_tabs.values():
+            tab.refresh(force=False)
+
+    def _on_audio_library_selection(self, track_id: str, wavs: list[Path]) -> None:
+        self._save_audio_library_selection(track_id, wavs)
+        self._sync_track_picker_from_library(track_id, wavs)
+
     def _on_left_tab_changed(self, _event=None) -> None:
         self._unbind_left_scroll_wheel()
+        for tab in self._audio_library_tabs.values():
+            tab.stop_playback()
         try:
             tab = self.left_notebook.nametowidget(self.left_notebook.select())
         except tk.TclError:
             return
         if tab is self.video_library_tab:
             self.video_library_tab.on_tab_selected()
+        elif tab in self._audio_library_tabs.values():
+            tab.on_tab_selected()
         elif tab is self.workflow_tab:
             self.after_idle(self._update_left_scrollbar_visibility)
 
@@ -561,6 +649,188 @@ class RelaxAsmrApp(tk.Tk):
             return None
         return max(candidates, key=lambda p: p.stat().st_mtime)
 
+    def _default_upload_mp4(self) -> Path | None:
+        """步骤 5 默认上传：baseURL/export 下与步骤 1 同序号的成片 mp4。"""
+        if not self.scene_id:
+            return None
+        saved = self._get_scene_export_path(self.scene_id, "mp4")
+        if saved and saved.parent.resolve() == export_dir().resolve():
+            return saved
+        num = self._scene_num(self.scene_id)
+        exp = export_dir()
+        if not exp.is_dir():
+            return None
+        loop_name = self.video_path.name if self.video_path else None
+        candidates = [
+            p for p in exp.glob(f"*{num}*.mp4")
+            if p.is_file() and p.name != loop_name
+        ]
+        if not candidates:
+            return None
+        return max(candidates, key=lambda p: p.stat().st_mtime)
+
+    def _resolve_upload_mp4(self) -> Path | None:
+        if self.upload_mp4_custom and self.upload_mp4_custom.is_file():
+            return self.upload_mp4_custom.resolve()
+        return self._default_upload_mp4()
+
+    def _format_upload_label(self, mp4: Path | None) -> str:
+        if not mp4 or not mp4.is_file():
+            return "待上传：—"
+        try:
+            rel = mp4.relative_to(export_dir())
+            prefix = f"待上传：export/{rel}"
+        except ValueError:
+            try:
+                rel = mp4.relative_to(base_url())
+                prefix = f"待上传：{rel}"
+            except ValueError:
+                prefix = f"待上传：{mp4}"
+        if self.upload_mp4_custom and mp4.resolve() == self.upload_mp4_custom.resolve():
+            prefix += "（自定义）"
+        return prefix
+
+    def _refresh_upload_label(self) -> None:
+        if hasattr(self, "lbl_upload"):
+            self.lbl_upload.configure(text=self._format_upload_label(self._resolve_upload_mp4()))
+
+    def _pick_upload_mp4(self) -> None:
+        exp = export_dir()
+        initial = str(exp) if exp.is_dir() else self._video_dialog_initialdir()
+        path = filedialog.askopenfilename(
+            title="选择 export 目录下的上传视频",
+            initialdir=initial,
+            filetypes=[("MP4 视频", "*.mp4"), ("所有文件", "*.*")],
+        )
+        if not path:
+            return
+        picked = Path(path).resolve()
+        if exp.is_dir():
+            try:
+                picked.relative_to(exp.resolve())
+            except ValueError:
+                messagebox.showwarning("提示", f"请选择 export 目录下的 MP4：\n{exp}")
+                return
+        self.upload_mp4_custom = picked
+        self._refresh_upload_label()
+        self._log(f"上传视频（自定义）：{picked}")
+
+    def _reset_upload_mp4_default(self) -> None:
+        self.upload_mp4_custom = None
+        self._refresh_upload_label()
+        self._log("上传视频已恢复为 export 默认同序号成片")
+
+    def _find_loop_video_for_scene(self, scene_id: str) -> Path | None:
+        if self.video_path and self.scene_id == scene_id and self.video_path.is_file():
+            return self.video_path
+        num = self._scene_num(scene_id)
+        bu = base_url()
+        if not bu.is_dir():
+            return None
+        candidates = sorted(bu.glob(f"MVI_{num}*.mp4"), key=lambda p: p.name.lower())
+        candidates += sorted(bu.glob(f"mvi_{num}*.mp4"), key=lambda p: p.name.lower())
+        if not candidates:
+            candidates = sorted(bu.glob(f"*{num}*loop*.mp4"), key=lambda p: p.name.lower())
+        return candidates[0] if candidates else None
+
+    def _run_material_analysis_blocking(
+        self,
+        loop_video: Path,
+        scene_id: str,
+        *,
+        force_refresh: bool = False,
+    ) -> None:
+        """阻塞式生成物料（供上传前自动补全；逻辑同「开始分析」）。"""
+        from gui.core_controller import (
+            clip_analysis_from_matches,
+            load_cached_rain_tabs,
+            reconcile_clip_vlm,
+            save_clip_matches,
+        )
+
+        analyze_script = LIB_REPO_ROOT / "scripts" / "video_analysis" / "analyze.py"
+        vst_mod = load_module(analyze_script, "relaxasmr_video_analyze")
+
+        ensure_base_url_dirs()
+        ensure_rain_fx_png()
+        out_dir = base_material_dir()
+        out_dir.mkdir(parents=True, exist_ok=True)
+
+        from scripts.config.paths import clear_scene_material, get_snapshot_raw_path
+
+        if force_refresh:
+            clear_scene_material(scene_id, on_progress=self._log)
+            cached = None
+        else:
+            cached = load_cached_rain_tabs(scene_id)
+
+        clip_analysis: dict = {}
+        frame_jpg = get_snapshot_raw_path(scene_id)
+
+        skip_clip_vlm = cached is not None and not cached.get("partial")
+
+        if skip_clip_vlm:
+            self._log("CLIP/VLM 已存在，跳过解析。")
+            clip_analysis = clip_analysis_from_matches(Path(cached["clip_json"]))
+        elif cached and cached.get("partial"):
+            self._log("CLIP 已存在，跳过 CLIP；继续 VLM…")
+            clip_analysis = clip_analysis_from_matches(Path(cached["clip_json"]))
+            vst_mod.analyze_video(
+                loop_video, out_dir, on_progress=self._log, force_refresh=False, skip_clip=True
+            )
+            frame_jpg = get_snapshot_raw_path(scene_id)
+        else:
+            clip_data = vst_mod.analyze_video(
+                loop_video,
+                out_dir,
+                on_progress=self._log,
+                force_refresh=force_refresh,
+                skip_clip=False,
+            )
+            clip_analysis = clip_data.get("clip_analysis", {})
+            frame_jpg = Path(clip_data["frame_jpg"]) if clip_data.get("frame_jpg") else frame_jpg
+            save_clip_matches(scene_id, clip_analysis, vlm_reconciled=False)
+
+        if not skip_clip_vlm and frame_jpg and frame_jpg.is_file():
+            from scripts.video_analysis.analyze import analyze_vlm_frame
+
+            vlm_res = analyze_vlm_frame(frame_jpg, on_progress=self._log)
+            reconcile_clip_vlm(scene_id, clip_analysis, vlm_res, self._log)
+
+        target_md_path = material_md_path(scene_id)
+        if target_md_path.is_file() and not force_refresh:
+            self._log(f"物料 md 已存在，跳过: {target_md_path.name}")
+            return
+
+        yt_mod = load_module(YT_MATERIAL_SCRIPT, "relaxasmr_generate_youtube_material")
+        yt_mod.generate_material(
+            loop_video,
+            output_dir=out_dir,
+            preset_key=clip_analysis.get("l2", {}).get("key", "forest_rain"),
+            copy_style="forest_rain",
+            thumb_title=RAIN_THUMB_TITLE,
+            thumb_subtitle_place_only=True,
+            duration_override_s=float(self.duration_var.get()) * 3600,
+            on_progress=self._log,
+        )
+        if (out_dir / "youtube.md").is_file():
+            (out_dir / "youtube.md").rename(target_md_path)
+
+    def _ensure_material_for_upload(self, scene_id: str) -> Path:
+        md_path = material_md_path(scene_id)
+        if md_path.is_file():
+            return md_path
+        loop_video = self._find_loop_video_for_scene(scene_id)
+        if not loop_video:
+            raise FileNotFoundError(
+                f"未找到 {scene_id} 的 loop 源视频（baseURL 根目录 MVI_{self._scene_num(scene_id)}*.mp4），无法自动生成物料。"
+            )
+        self._log(f"物料不存在，自动执行分析生成：{scene_id}")
+        self._run_material_analysis_blocking(loop_video, scene_id, force_refresh=False)
+        if not md_path.is_file():
+            raise FileNotFoundError(f"分析完成但仍未找到物料：{md_path.name}")
+        return md_path
+
     def _format_export_status(self, path: Path | None) -> str:
         if not path or not path.is_file():
             return "待开始"
@@ -599,8 +869,7 @@ class RelaxAsmrApp(tk.Tk):
 
         self._set_render_ui(running=False, status=self._format_export_status(wav))
         self._set_export_ui(running=False, status=self._format_export_status(mp4))
-        if hasattr(self, "lbl_upload"):
-            self.lbl_upload.configure(text=f"待上传：{mp4}" if mp4 else "待上传：—")
+        self._refresh_upload_label()
         self._save_config()
 
     def _set_busy(self, busy: bool) -> None:
@@ -743,7 +1012,10 @@ class RelaxAsmrApp(tk.Tk):
 
         self.video_path = video
         self.video_rel = str(video)
+        prev_scene = self.scene_id
         self.scene_id = scene
+        if prev_scene != scene:
+            self.upload_mp4_custom = None
         self.lbl_video.configure(text=self._format_video_label(scene, video))
         # self.lbl_scene.configure(text=f"场景 ID：{scene}")
         self._cfg["last_video"] = str(video)
@@ -1429,47 +1701,20 @@ class RelaxAsmrApp(tk.Tk):
     def _upload_youtube(self) -> None:
         if self._busy:
             return
-        if not self.scene_id:
-            messagebox.showwarning("提示", "请先选择场景。")
-            return
-            
-        import re
-        match = re.search(r'\d+', self.scene_id)
-        num = match.group() if match else self.scene_id
-        rpp_dir = LIB_REPO_ROOT / "Reaper" / "Projects" / "Rain"
 
-        md_candidates = []
-        def gather_mds(d: Path):
-            if not d or not d.is_dir(): return
-            for pattern in [f"*{num}*_material.md", f"*{num}*youtube.md", "youtube.md", f"MVI_{num}.md", f"{num}.md"]:
-                for p in d.glob(pattern):
-                    if p not in md_candidates:
-                        md_candidates.append(p)
-                        
-        gather_mds(self.material_dir)
-        gather_mds(rpp_dir)
-        
-        if not md_candidates:
-            messagebox.showwarning("提示", f"未找到包含 {num} 的物料 md 文件。")
+        upload_mp4 = self._resolve_upload_mp4()
+        if not upload_mp4 or not upload_mp4.is_file():
+            messagebox.showwarning(
+                "提示",
+                "未找到待上传视频。\n请先完成步骤 4 合成 export 成片，或点击「上传自定义视频」选择 export 目录下的 MP4。",
+            )
             return
-        md_path = md_candidates[0]
-            
-        # Find the _3h_*k.mp4 file
-        mp4_candidates = []
-        if self.material_dir and self.material_dir.is_dir():
-            mp4_candidates.extend(self.material_dir.glob(f"*{num}*.mp4"))
-        mp4_candidates.extend(rpp_dir.glob(f"*{num}*.mp4"))
-        
-        if self.video_path:
-            mp4_candidates = [p for p in mp4_candidates if p.name != self.video_path.name]
-            
-        if not mp4_candidates:
-            messagebox.showwarning("提示", f"未找到包含 {num} 的 mp4 视频，请先进行视频合成！")
+
+        try:
+            upload_scene_id = derive_scene_id(upload_mp4)
+        except ValueError as exc:
+            messagebox.showerror("无法识别场景", str(exc))
             return
-            
-        # Sort to get the most recent export
-        mp4_candidates.sort(key=lambda p: p.stat().st_mtime, reverse=True)
-        video_path = mp4_candidates[0]
 
         account = "leo_usa" if self.use_leo_usa_var.get() else "leo"
         privacy = self.privacy_var.get()
@@ -1496,19 +1741,21 @@ class RelaxAsmrApp(tk.Tk):
         self._set_busy(True)
         self._log("—— 开始上传到 YouTube ——")
         self._log(f"账号：{account}")
-        self._log(f"物料：{md_path.name}")
-        self._log(f"视频：{video_path.name}")
+        self._log(f"场景：{upload_scene_id}")
+        self._log(f"视频：{upload_mp4}")
         self._log("首次上传需在浏览器完成 OAuth 授权")
 
         def worker() -> None:
             try:
+                md_path = self._ensure_material_for_upload(upload_scene_id)
                 up_mod = load_scripts_module("video_upload.youtube_upload")
+                self._log(f"物料：{md_path.name}")
                 record = up_mod.upload_from_material(
                     md_path,
                     language=language,
                     privacy_status=privacy,
                     account=account,
-                    override_video_path=video_path,
+                    override_video_path=upload_mp4,
                     on_log=self._log,
                 )
 
@@ -1516,7 +1763,7 @@ class RelaxAsmrApp(tk.Tk):
                     url = record["url"]
                     self._cfg["last_upload_url"] = url
                     self._save_config()
-                    self._mark_scene_uploaded(self.scene_id)
+                    self._mark_scene_uploaded(upload_scene_id)
                     self.lbl_upload.configure(text=f"上传：{url}")
                     messagebox.showinfo("上传完成", f"视频已上传：\n{url}\n\n可见性：{privacy}")
 

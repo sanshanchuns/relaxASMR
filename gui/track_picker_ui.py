@@ -6,8 +6,8 @@ from pathlib import Path
 from tkinter import ttk
 from typing import Callable, Optional
 
-CELL_W = 150
-CELL_H = 72
+CELL_W = 180
+CELL_H = 56
 CELL_PAD = 4
 
 
@@ -115,6 +115,26 @@ class TrackPickerUI(ttk.Frame):
             self.grid_frame.columnconfigure(i, minsize=CELL_W + CELL_PAD * 2)
             self.grid_frame.rowconfigure(i, minsize=CELL_H + CELL_PAD * 2)
 
+    def set_candidates(self, candidates: list[dict]) -> None:
+        """直接设置候选列表（无需 JSON 文件）。"""
+        self.lbl_status.configure(
+            text=f"已加载 {len(candidates)} 个候选" if candidates else "暂无候选数据"
+        )
+        for i in range(9):
+            cell = self._grid_cells[i]
+            if i < len(candidates):
+                match = candidates[i]
+                name = match.get("name", match.get("rain_name", "未知"))
+                wav_path = match.get("wav")
+                cell["lbl_name"].configure(text=name)
+                cell["wav_path"] = Path(wav_path) if wav_path else None
+                cell["name"] = name
+            else:
+                cell["lbl_name"].configure(text="—")
+                cell["wav_path"] = None
+                cell["name"] = None
+        self._update_all_visuals()
+
     def load_candidates(self, json_path: Path | str) -> None:
         """加载候选 JSON 文件并刷新 UI。"""
         p = Path(json_path)
@@ -137,25 +157,8 @@ class TrackPickerUI(ttk.Frame):
             else:
                 self.lbl_status.configure(text="数据格式错误")
                 return
-                
-            self.lbl_status.configure(text=f"已加载 {len(cands)} 个候选")
-            for i in range(9):
-                cell = self._grid_cells[i]
-                if i < len(cands):
-                    match = cands[i]
-                    name = match.get("name", match.get("rain_name", "未知"))
-                    score = match.get("score", 0.0)
-                    wav_path = match.get("wav")
-                    
-                    cell["lbl_name"].configure(text=name)
-                    cell["wav_path"] = Path(wav_path) if wav_path else None
-                    cell["name"] = name
-                else:
-                    cell["lbl_name"].configure(text="—")
-                    cell["wav_path"] = None
-                    cell["name"] = None
 
-            self._update_all_visuals()
+            self.set_candidates(cands)
 
         except Exception as e:
             self._log(f"加载 {self.track_name} 失败: {e}")

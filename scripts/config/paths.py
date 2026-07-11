@@ -379,3 +379,8 @@ def audio_layer_dir(layer_id: str) -> Path:
     if sounds.is_dir():
         return sounds
     return audio_dir() / layer_id
+
+
+def audio_booms_dir(layer_id: str) -> Path:
+    """Boom 声源目录，如 baseURL/audio/3_random/booms。"""
+    return audio_dir() / layer_id / "booms"
