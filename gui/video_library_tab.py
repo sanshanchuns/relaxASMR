@@ -45,34 +45,62 @@ def _thumb_cache_dir() -> Path:
     return d
 
 
-def extract_first_frame(video: Path, out: Path, *, width: int = CELL_W - 4) -> bool:
-    if out.is_file() and out.stat().st_mtime >= video.stat().st_mtime:
-        return True
+def _quality_from_size(width: int, height: int) -> str:
+    if width >= 3840 or height >= 2160:
+        return "4K"
+    if width >= 1920 or height >= 1080:
+        return "FHD"
+    return ""
+
+
+def read_video_quality(video: Path) -> str:
     cap = cv2.VideoCapture(str(video))
     if not cap.isOpened():
-        return False
+        return ""
+    try:
+        w = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+        h = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+    finally:
+        cap.release()
+    return _quality_from_size(w, h)
+
+
+def extract_first_frame(video: Path, out: Path, *, width: int = CELL_W - 4) -> tuple[bool, str]:
+    if out.is_file() and out.stat().st_mtime >= video.stat().st_mtime:
+        quality_cache = out.with_suffix(".quality")
+        if quality_cache.is_file():
+            return True, quality_cache.read_text(encoding="utf-8").strip()
+        return True, read_video_quality(video)
+    cap = cv2.VideoCapture(str(video))
+    if not cap.isOpened():
+        return False, ""
     ok, frame = cap.read()
     cap.release()
     if not ok or frame is None:
-        return False
+        return False, ""
     h, w = frame.shape[:2]
     if w <= 0 or h <= 0:
-        return False
+        return False, ""
+    quality = _quality_from_size(w, h)
     scale = width / w
     nh = max(1, int(h * scale))
     resized = cv2.resize(frame, (width, nh))
     out.parent.mkdir(parents=True, exist_ok=True)
-    return cv2.imwrite(str(out), resized)
+    saved = cv2.imwrite(str(out), resized)
+    if saved and quality:
+        out.with_suffix(".quality").write_text(quality, encoding="utf-8")
+    return saved, quality
 
 
-def load_thumb_image(video: Path) -> Image.Image | None:
+def load_thumb_image(video: Path) -> tuple[Image.Image | None, str]:
     cache = _thumb_cache_dir() / f"{video.stem}_{int(video.stat().st_mtime)}.jpg"
-    if not extract_first_frame(video, cache):
-        return None
+    ok, quality = extract_first_frame(video, cache)
+    if not ok:
+        return None, quality
     try:
-        return Image.open(cache).convert("RGB")
+        return Image.open(cache).convert("RGB"), quality
     except OSError:
-        return None
+        return None, quality
 
 
 def styled_thumb(img: Image.Image, *, uploaded: bool) -> Image.Image:
@@ -220,19 +248,27 @@ class VideoLibraryTab(ttk.Frame):
         self._update_stats()
 
     def _load_and_render(self, videos: list[Path]) -> None:
-        items: list[tuple[Path, str, Image.Image | None]] = []
+        items: list[tuple[Path, str, Image.Image | None, str]] = []
         for video in videos:
             num = scene_num_from_video(video)
             cache_key = f"{video}:{video.stat().st_mtime_ns}"
             thumb = self._thumb_cache.get(cache_key)
+            quality = ""
             if thumb is None:
-                thumb = load_thumb_image(video)
+                thumb, quality = load_thumb_image(video)
                 if thumb is not None:
                     self._thumb_cache[cache_key] = thumb
-            items.append((video, num, thumb))
+            else:
+                cache = _thumb_cache_dir() / f"{video.stem}_{int(video.stat().st_mtime)}.jpg"
+                qf = cache.with_suffix(".quality")
+                if qf.is_file():
+                    quality = qf.read_text(encoding="utf-8").strip()
+                elif cache.is_file():
+                    quality = read_video_quality(video)
+            items.append((video, num, thumb, quality))
         self.after(0, lambda: self._render_grid(items))
 
-    def _render_grid(self, items: list[tuple[Path, str, Image.Image | None]]) -> None:
+    def _render_grid(self, items: list[tuple[Path, str, Image.Image | None, str]]) -> None:
         self._loading = False
         self._loaded_once = True
         self._photo_refs.clear()
@@ -252,7 +288,7 @@ class VideoLibraryTab(ttk.Frame):
 
         cols = max(2, self._canvas.winfo_width() // (CELL_W + CELL_PAD * 2)) if self._canvas.winfo_width() > 1 else 3
 
-        for idx, (video, num, thumb) in enumerate(items):
+        for idx, (video, num, thumb, quality) in enumerate(items):
             row, col = divmod(idx, cols)
             uploaded = self._is_uploaded(num)
 
@@ -277,6 +313,8 @@ class VideoLibraryTab(ttk.Frame):
             img_lbl.pack(fill=tk.BOTH, expand=True, padx=1, pady=(1, 0))
 
             base_name = f"MVI_{num}" if num.isdigit() else video.stem[:20]
+            if quality:
+                base_name = f"{base_name} {quality}"
             name_lbl = tk.Label(
                 border,
                 text=base_name,
