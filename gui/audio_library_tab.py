@@ -2,11 +2,12 @@
 
 from __future__ import annotations
 
-import threading
 import tkinter as tk
 from collections.abc import Callable
 from pathlib import Path
 from tkinter import messagebox, ttk
+
+from gui.tk_thread import bind_ui_root, schedule_on_main
 
 from scripts.config.paths import audio_booms_dir
 
@@ -66,6 +67,7 @@ class AudioLibraryTab(ttk.Frame):
         self._loaded_once = False
         self._list_signature: str | None = None
         self._build_ui()
+        bind_ui_root(self)
 
     def _build_ui(self) -> None:
         toolbar = ttk.Frame(self)
@@ -151,7 +153,8 @@ class AudioLibraryTab(ttk.Frame):
             return
         self._list_signature = sig
         self._loading = True
-        threading.Thread(target=self._load_and_render, args=(wavs,), daemon=True).start()
+        items = [(w, wav_display_title(w)) for w in wavs]
+        schedule_on_main(self, self._render_grid, items)
 
     def on_tab_selected(self) -> None:
         if self._loaded_once and self._cells:
@@ -162,10 +165,6 @@ class AudioLibraryTab(ttk.Frame):
     def stop_playback(self) -> None:
         self._hover_key = None
         self._stop_audio()
-
-    def _load_and_render(self, wavs: list[Path]) -> None:
-        items = [(w, wav_display_title(w)) for w in wavs]
-        self.after(0, lambda: self._render_grid(items))
 
     def _render_grid(self, items: list[tuple[Path, str]]) -> None:
         self._loading = False

@@ -41,7 +41,16 @@ from gui.folder_open import open_folder  # noqa: E402
 from gui.import_reload import load_module, load_scripts_module  # noqa: E402
 from gui.video_library_tab import VideoLibraryTab, read_video_quality  # noqa: E402
 from gui.audio_library_tab import AudioLibraryTab, wav_display_title  # noqa: E402
+from gui.ui_theme import (
+    apply_primary_button_style,
+    apply_tk_theme,
+    apply_ttk_theme,
+    get_theme,
+    normalize_theme,
+    theme_toggle_label,
+)  # noqa: E402
 from gui.export_mix_preview import ExportMixPreviewGrid  # noqa: E402
+from gui.tk_thread import ensure_ui_pump  # noqa: E402
 from gui.export_wav import (  # noqa: E402
     expected_export_wav_path,
     format_duration_short,
@@ -99,7 +108,9 @@ class RelaxAsmrApp(tk.Tk):
         self.protocol("WM_DELETE_WINDOW", self._on_closing)
 
         self._load_config()
+        self._theme_mode = normalize_theme(self._cfg.get("theme", "light"))
         self._build_ui()
+        ensure_ui_pump(self)
 
     def _on_closing(self) -> None:
         self._stop_video_loop()
@@ -155,7 +166,48 @@ class RelaxAsmrApp(tk.Tk):
         except OSError:
             pass
 
+    def _setup_primary_button_style(self) -> str:
+        return apply_primary_button_style(ttk.Style(self))
+
+    def _theme_tk_widgets(self) -> dict[str, tk.Widget | list[tk.Widget]]:
+        library_canvases: list[tk.Widget] = []
+        for tab in getattr(self, "_audio_library_tabs", {}).values():
+            canvas = getattr(tab, "_canvas", None)
+            if canvas is not None:
+                library_canvases.append(canvas)
+        video_tab = getattr(self, "video_library_tab", None)
+        video_canvas = getattr(video_tab, "_canvas", None) if video_tab is not None else None
+        if video_canvas is not None:
+            library_canvases.append(video_canvas)
+        return {
+            "cover_canvas": getattr(self, "cover_thumb_canvas", None),
+            "preview_canvas": getattr(self, "preview_video_canvas", None),
+            "left_scroll_canvas": getattr(self, "_left_scroll_canvas", None),
+            "library_canvases": library_canvases,
+            "cover_title": getattr(self, "lbl_cover_title_en", None),
+            "preview_title": getattr(self, "lbl_preview_title_zh", None),
+            "cover_desc": getattr(self, "txt_cover_desc_en", None),
+            "preview_desc": getattr(self, "txt_preview_desc_zh", None),
+            "log_text": getattr(self, "log_text", None),
+        }
+
+    def _apply_theme(self, mode: str | None = None) -> None:
+        self._theme_mode = normalize_theme(mode or self._theme_mode)
+        palette = get_theme(self._theme_mode)
+        apply_ttk_theme(ttk.Style(self), palette)
+        apply_tk_theme(self, palette, self._theme_tk_widgets())
+        if hasattr(self, "btn_theme_toggle"):
+            self.btn_theme_toggle.configure(text=theme_toggle_label(self._theme_mode))
+        self._cfg["theme"] = self._theme_mode
+        self._save_config()
+
+    def _toggle_theme(self) -> None:
+        next_mode = "light" if self._theme_mode == "dark" else "dark"
+        self._apply_theme(next_mode)
+
     def _build_ui(self) -> None:
+        primary_btn = self._setup_primary_button_style()
+
         self.main_pane = ttk.PanedWindow(self, orient=tk.HORIZONTAL)
         self.main_pane.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
 
@@ -233,8 +285,21 @@ class RelaxAsmrApp(tk.Tk):
         row1 = ttk.Frame(sec1)
         row1.pack(fill=tk.X)
         ttk.Button(row1, text="选择 MP4…", command=self._import_video).pack(side=tk.LEFT)
-        self.btn_analyze = ttk.Button(row1, text="开始分析", command=self._start_analysis)
+        self.btn_analyze = ttk.Button(
+            row1,
+            text="开始分析",
+            command=self._start_analysis,
+            style=primary_btn,
+        )
         self.btn_analyze.pack(side=tk.LEFT, padx=(8, 0))
+        self.btn_open_output = ttk.Button(row1, text="打开物料目录", command=self._open_output)
+        self.btn_open_output.pack(side=tk.LEFT, padx=(8, 0))
+        self.btn_theme_toggle = ttk.Button(
+            row1,
+            text=theme_toggle_label(self._theme_mode),
+            command=self._toggle_theme,
+        )
+        self.btn_theme_toggle.pack(side=tk.LEFT, padx=(8, 0))
         self.chk_overwrite_mat_var = tk.BooleanVar(value=False)
         ttk.Checkbutton(row1, text="覆盖物料", variable=self.chk_overwrite_mat_var).pack(
             side=tk.LEFT, padx=(8, 0)
@@ -242,8 +307,8 @@ class RelaxAsmrApp(tk.Tk):
 
         row2 = ttk.Frame(sec1)
         row2.pack(fill=tk.X, pady=(8, 0))
-        self.lbl_video = ttk.Label(row2, text="未选择", wraplength=400)
-        self.lbl_video.pack(side=tk.LEFT, fill=tk.X, expand=True)
+        self.lbl_video = ttk.Label(row2, text="未选择")
+        self.lbl_video.pack(side=tk.LEFT, anchor=tk.W)
 
         # 2. 选择四轨音频
         sec2 = ttk.LabelFrame(self.left_content, text="2. 选择四轨声音库 (按画面推荐)", padding=10)
@@ -270,13 +335,24 @@ class RelaxAsmrApp(tk.Tk):
 
         row_gen = ttk.Frame(sec3)
         row_gen.pack(fill=tk.X)
-        ttk.Label(row_gen, text="成片时长(小时)").pack(side=tk.LEFT)
 
+        self.btn_gen_project = ttk.Button(
+            row_gen,
+            text="新建Reaper工程",
+            command=self._create_project,
+            style=primary_btn,
+        )
+        self.btn_gen_project.pack(side=tk.LEFT)
+        self.btn_open_reaper = ttk.Button(
+            row_gen,
+            text="打开Reaper工程",
+            command=self._open_reaper,
+        )
+        self.btn_open_reaper.pack(side=tk.LEFT, padx=(8, 0))
+
+        ttk.Label(row_gen, text="成片时长(小时)").pack(side=tk.LEFT, padx=(8, 0))
         self.duration_var = tk.StringVar(value=self._initial_duration_str())
-        ttk.Entry(row_gen, textvariable=self.duration_var, width=5).pack(side=tk.LEFT, padx=8)
-
-        self.btn_gen_project = ttk.Button(row_gen, text="生成 / 覆盖 Reaper 子工程", command=self._create_project)
-        self.btn_gen_project.pack(side=tk.LEFT, padx=(8, 0))
+        ttk.Entry(row_gen, textvariable=self.duration_var, width=5).pack(side=tk.LEFT, padx=(8, 0))
         
         self.chk_overwrite_rpp_var = tk.BooleanVar(value=False)
         ttk.Checkbutton(row_gen, text="覆盖已有 .rpp", variable=self.chk_overwrite_rpp_var).pack(side=tk.LEFT, padx=(8, 0))
@@ -285,16 +361,14 @@ class RelaxAsmrApp(tk.Tk):
         sec_export = ttk.LabelFrame(self.left_content, text="4. 导出音频与合成视频", padding=10)
         sec_export.pack(fill=tk.X, pady=(0, 10))
 
-        row_open = ttk.Frame(sec_export)
-        row_open.pack(fill=tk.X)
-        self.btn_open_reaper = ttk.Button(row_open, text="打开 Reaper 工程", command=self._open_reaper)
-        self.btn_open_reaper.pack(side=tk.LEFT)
-        self.btn_open_output = ttk.Button(row_open, text="打开物料目录", command=self._open_output)
-        self.btn_open_output.pack(side=tk.LEFT, padx=(8, 0))
-
         row_mix = ttk.Frame(sec_export)
-        row_mix.pack(fill=tk.X, pady=(10, 0))
-        self.btn_render_reaper = ttk.Button(row_mix, text="一键输出混音", command=self._render_headless)
+        row_mix.pack(fill=tk.X)
+        self.btn_render_reaper = ttk.Button(
+            row_mix,
+            text="一键输出混音",
+            command=self._render_headless,
+            style=primary_btn,
+        )
         self.btn_render_reaper.pack(side=tk.LEFT)
         self.btn_open_export = ttk.Button(row_mix, text="打开混音目录", command=self._open_export_dir)
         self.btn_open_export.pack(side=tk.LEFT, padx=(8, 0))
@@ -303,7 +377,12 @@ class RelaxAsmrApp(tk.Tk):
 
         row_export = ttk.Frame(sec_export)
         row_export.pack(fill=tk.X, pady=(10, 0))
-        self.btn_export = ttk.Button(row_export, text="一键合成视频", command=self._export_mp4)
+        self.btn_export = ttk.Button(
+            row_export,
+            text="一键合成视频",
+            command=self._export_mp4,
+            style=primary_btn,
+        )
         self.btn_export.pack(side=tk.LEFT)
         self.lbl_export = ttk.Label(row_export, text="待开始", wraplength=360)
         self.lbl_export.pack(side=tk.LEFT, padx=(8, 0))
@@ -494,6 +573,7 @@ class RelaxAsmrApp(tk.Tk):
             self._log("macOS 环境：使用本机 Reaper；素材默认挂载于 /Volumes/192.168.3.128/…")
         self._log(f"仓库根目录：{LIB_REPO_ROOT}")
         self._log(f"素材 baseURL：{base_url()}")
+        self._apply_theme(self._theme_mode)
 
     def _setup_workflow_scroll(self, parent: ttk.Frame) -> None:
         """工作流左侧：内容不足时不显示滚动条；小屏溢出时显示。"""
@@ -924,6 +1004,22 @@ class RelaxAsmrApp(tk.Tk):
             except (TypeError, ValueError):
                 return 3.0
 
+    def _resolve_valid_export_mp4(
+        self, scene_id: str, hours: float | None = None
+    ) -> Path | None:
+        """仅当时长接近目标成片时视为有效 MP4。"""
+        h = self._target_duration_hours() if hours is None else float(hours)
+        saved = self._get_scene_export_path(scene_id, "mp4")
+        if saved and wav_matches_target_hours(saved, h):
+            return saved.resolve()
+        latest = self._find_latest_mp4_for_scene(scene_id)
+        if latest and wav_matches_target_hours(latest, h):
+            return latest.resolve()
+        return None
+
+    def _confirm_overwrite(self, title: str, message: str) -> bool:
+        return messagebox.askyesno(title, message, icon="warning")
+
     def _resolve_valid_export_wav(
         self, scene_id: str, hours: float | None = None
     ) -> Path | None:
@@ -1246,7 +1342,8 @@ class RelaxAsmrApp(tk.Tk):
     def _set_busy(self, busy: bool) -> None:
         self._busy = busy
         state = tk.DISABLED if busy else tk.NORMAL
-        if hasattr(self, 'btn_create_proj'): self.btn_create_proj.configure(state=state)
+        if hasattr(self, "btn_gen_project"):
+            self.btn_gen_project.configure(state=state)
         if hasattr(self, 'btn_analyze'): self.btn_analyze.configure(state=state)
         if hasattr(self, 'btn_upload'): self.btn_upload.configure(state=state)
         if hasattr(self, 'btn_export') and not getattr(self, "_export_running", False):
@@ -1890,6 +1987,15 @@ class RelaxAsmrApp(tk.Tk):
         )
 
         loop_video = self.video_path
+        scene_id = self.scene_id or derive_scene_id(loop_video)
+        rpp_path = get_scene_rpp_path(scene_id)
+        if self.chk_overwrite_rpp_var.get() and rpp_path.is_file():
+            if not self._confirm_overwrite(
+                "确认覆盖 Reaper 工程",
+                f"将覆盖已有工程文件：\n{rpp_path}\n\n是否继续？",
+            ):
+                return
+
         self._set_busy(True)
         self._log("—— 开始生成子工程 ——")
 
@@ -1966,15 +2072,19 @@ class RelaxAsmrApp(tk.Tk):
         self._persist_duration_hours(duration)
         wav_name = export_wav_name(self.scene_id, duration)
         wav_path = export_dir() / wav_name
-        if wav_path.is_file():
-            if wav_matches_target_hours(wav_path, duration):
-                self._log(f"将覆盖已有成品: {wav_name}")
-            else:
-                actual = wav_duration_seconds(wav_path)
-                hint = format_duration_short(actual) if actual is not None else "未知"
-                self._log(
-                    f"将覆盖不合格成品: {wav_name}（当前约 {hint}，目标 {duration:g}h）"
-                )
+        existing_wav = self._resolve_valid_export_wav(self.scene_id, duration)
+        if existing_wav:
+            if not self._confirm_overwrite(
+                "确认覆盖混音",
+                f"已存在合格混音（约 {duration:g}h）：\n{existing_wav}\n\n重新输出将覆盖该文件。是否继续？",
+            ):
+                return
+        elif wav_path.is_file():
+            actual = wav_duration_seconds(wav_path)
+            hint = format_duration_short(actual) if actual is not None else "未知"
+            self._log(
+                f"将覆盖不合格成品: {wav_name}（当前约 {hint}，目标 {duration:g}h）"
+            )
         self._set_render_ui(running=True, status="Elapsed: 00:00:00  Remaining: …")
         self._log(f"—— 开始输出混音: {wav_name} ——")
 
@@ -2111,16 +2221,31 @@ class RelaxAsmrApp(tk.Tk):
         match = re.search(r'\d+', self.scene_id)
         num = match.group() if match else self.scene_id
 
-        saved_wav = self._resolve_valid_export_wav(self.scene_id)
+        try:
+            duration = self._parse_duration_hours()
+        except ValueError as exc:
+            messagebox.showerror("参数错误", str(exc))
+            return
+
+        saved_wav = self._resolve_valid_export_wav(self.scene_id, duration)
         if saved_wav:
             audio_file = saved_wav
         else:
             messagebox.showwarning(
                 "提示",
-                f"未找到时长符合 {self._target_duration_hours():g}h 的混音文件。\n"
-                f"请先「一键输出混音」生成 {export_wav_name(self.scene_id, self._target_duration_hours())}。",
+                f"未找到时长符合 {duration:g}h 的混音文件。\n"
+                f"请先「一键输出混音」生成 {export_wav_name(self.scene_id, duration)}。",
             )
             return
+
+        existing_mp4 = self._resolve_valid_export_mp4(self.scene_id, duration)
+        if existing_mp4:
+            if not self._confirm_overwrite(
+                "确认覆盖视频",
+                f"已存在合格成片（约 {duration:g}h）：\n{existing_mp4}\n\n重新合成将覆盖该文件。是否继续？",
+            ):
+                return
+
         vid_file = self.video_path
 
         script = LIB_REPO_ROOT / "scripts" / "video_export" / "export_mp4.sh"

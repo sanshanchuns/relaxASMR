@@ -1,0 +1,186 @@
+"""GUI 浅色 / 深色主题。"""
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+
+import tkinter as tk
+from tkinter import ttk
+
+
+@dataclass(frozen=True)
+class UiTheme:
+    name: str
+    window_bg: str
+    fg: str
+    text_bg: str
+    canvas_bg: str
+    entry_bg: str
+    entry_fg: str
+    select_bg: str
+    select_fg: str
+    trough: str
+
+
+LIGHT = UiTheme(
+    name="light",
+    window_bg="#f3f3f3",
+    fg="#1a1a1a",
+    text_bg="#ffffff",
+    canvas_bg="#ffffff",
+    entry_bg="#ffffff",
+    entry_fg="#1a1a1a",
+    select_bg="#cce4f7",
+    select_fg="#1a1a1a",
+    trough="#e0e0e0",
+)
+
+DARK = UiTheme(
+    name="dark",
+    window_bg="#1e1e1e",
+    fg="#e8e8e8",
+    text_bg="#252526",
+    canvas_bg="#2d2d2d",
+    entry_bg="#3c3c3c",
+    entry_fg="#e8e8e8",
+    select_bg="#264f78",
+    select_fg="#ffffff",
+    trough="#3a3a3a",
+)
+
+PRIMARY_BG = "#0078d4"
+PRIMARY_FG = "#ffffff"
+PRIMARY_DISABLED_BG = "#9eb9d4"
+PRIMARY_ACTIVE_BG = "#005a9e"
+PRIMARY_PRESSED_BG = "#004578"
+
+
+def normalize_theme(name: str | None) -> str:
+    if name and str(name).lower().startswith("dark"):
+        return "dark"
+    return "light"
+
+
+def get_theme(name: str | None) -> UiTheme:
+    return DARK if normalize_theme(name) == "dark" else LIGHT
+
+
+def theme_toggle_label(mode: str) -> str:
+    return "浅色模式" if normalize_theme(mode) == "dark" else "深色模式"
+
+
+def ensure_clam_style(style: ttk.Style) -> None:
+    try:
+        if style.theme_use() not in ("clam", "alt"):
+            style.theme_use("clam")
+    except tk.TclError:
+        pass
+
+
+def apply_primary_button_style(style: ttk.Style) -> str:
+    ensure_clam_style(style)
+    style.configure(
+        "Primary.TButton",
+        foreground=PRIMARY_FG,
+        background=PRIMARY_BG,
+        font=("", 10, "bold"),
+        padding=(10, 5),
+    )
+    style.map(
+        "Primary.TButton",
+        background=[
+            ("disabled", PRIMARY_DISABLED_BG),
+            ("active", PRIMARY_ACTIVE_BG),
+            ("pressed", PRIMARY_PRESSED_BG),
+        ],
+        foreground=[("disabled", "#f0f4f8")],
+    )
+    return "Primary.TButton"
+
+
+def apply_ttk_theme(style: ttk.Style, theme: UiTheme) -> None:
+    ensure_clam_style(style)
+    bg = theme.window_bg
+    fg = theme.fg
+    style.configure(".", background=bg, foreground=fg)
+    style.configure("TFrame", background=bg)
+    style.configure("TLabel", background=bg, foreground=fg)
+    style.configure("TLabelframe", background=bg, foreground=fg, bordercolor=theme.trough)
+    style.configure("TLabelframe.Label", background=bg, foreground=fg)
+    style.configure("TButton", background=theme.trough, foreground=fg)
+    style.map(
+        "TButton",
+        background=[("active", theme.entry_bg), ("pressed", theme.trough)],
+        foreground=[("disabled", "#888888")],
+    )
+    style.configure("TNotebook", background=bg, borderwidth=0)
+    style.configure(
+        "TNotebook.Tab",
+        background=theme.trough,
+        foreground=fg,
+        padding=(10, 4),
+    )
+    style.map(
+        "TNotebook.Tab",
+        background=[("selected", theme.text_bg), ("active", theme.entry_bg)],
+        foreground=[("selected", fg)],
+    )
+    style.configure(
+        "TEntry",
+        fieldbackground=theme.entry_bg,
+        foreground=theme.entry_fg,
+        insertcolor=theme.entry_fg,
+    )
+    style.configure(
+        "TCombobox",
+        fieldbackground=theme.entry_bg,
+        foreground=theme.entry_fg,
+        background=theme.trough,
+        arrowcolor=fg,
+    )
+    style.map(
+        "TCombobox",
+        fieldbackground=[("readonly", theme.entry_bg)],
+        foreground=[("readonly", theme.entry_fg)],
+    )
+    style.configure("TCheckbutton", background=bg, foreground=fg)
+    style.map("TCheckbutton", background=[("active", bg)])
+    style.configure("Horizontal.TPanedwindow", background=bg)
+    style.configure("Vertical.TPanedwindow", background=bg)
+    style.configure("TScrollbar", background=theme.trough, troughcolor=bg)
+    apply_primary_button_style(style)
+
+
+def apply_tk_theme(root: tk.Misc, theme: UiTheme, widgets: dict[str, tk.Widget | list[tk.Widget]]) -> None:
+    root.configure(bg=theme.window_bg)
+    canvas_keys = (
+        "cover_canvas",
+        "preview_canvas",
+        "left_scroll_canvas",
+        "library_canvas",
+        "video_library_canvas",
+        "library_canvases",
+    )
+    for key in canvas_keys:
+        w = widgets.get(key)
+        if w is None:
+            continue
+        if isinstance(w, list):
+            for item in w:
+                item.configure(bg=theme.canvas_bg)
+        else:
+            w.configure(bg=theme.canvas_bg)
+    for key in ("cover_title", "preview_title"):
+        w = widgets.get(key)
+        if w is not None:
+            w.configure(bg=theme.window_bg, fg=theme.fg)
+    for key in ("cover_desc", "preview_desc", "log_text"):
+        w = widgets.get(key)
+        if w is not None:
+            w.configure(
+                bg=theme.text_bg,
+                fg=theme.fg,
+                insertbackground=theme.fg,
+                selectbackground=theme.select_bg,
+                selectforeground=theme.select_fg,
+            )

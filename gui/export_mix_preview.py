@@ -8,6 +8,8 @@ from pathlib import Path
 from tkinter import ttk
 from typing import Callable
 
+from gui.tk_thread import bind_ui_root, schedule_on_main
+
 _HOVER_DELAY_MS = 400
 _PREVIEW_CLIP_SEC = 30.0
 _BORDER_THICKNESS = 2
@@ -31,6 +33,7 @@ class ExportMixPreviewGrid(ttk.Frame):
         self._audio_proc = None
         self._play_thread: threading.Thread | None = None
         self._build_ui()
+        bind_ui_root(self)
 
     def _build_ui(self) -> None:
         self._border = tk.Frame(
@@ -125,14 +128,14 @@ class ExportMixPreviewGrid(ttk.Frame):
 
                 proc = play_wav_preview(wav, max_seconds=_PREVIEW_CLIP_SEC, loop=True)
             except Exception as exc:
-                self.after(0, lambda: self._log(f"混音试听失败: {exc}"))
+                schedule_on_main(self, self._log, f"混音试听失败: {exc}")
                 return
 
             def attach() -> None:
                 if self._hover and proc is not None:
                     self._audio_proc = proc
 
-            self.after(0, attach)
+            schedule_on_main(self, attach)
 
         self._play_thread = threading.Thread(target=worker, daemon=True)
         self._play_thread.start()

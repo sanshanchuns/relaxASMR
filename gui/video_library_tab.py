@@ -13,6 +13,7 @@ import cv2
 from PIL import Image, ImageEnhance, ImageTk
 
 from scripts.config.paths import base_url, material_dir
+from gui.tk_thread import bind_ui_root, schedule_on_main
 
 CELL_W = 168
 CELL_H = 96
@@ -145,6 +146,7 @@ class VideoLibraryTab(ttk.Frame):
         self._loaded_once = False
         self._list_signature: str | None = None
         self._build_ui()
+        bind_ui_root(self)
 
     def _build_ui(self) -> None:
         toolbar = ttk.Frame(self)
@@ -266,7 +268,7 @@ class VideoLibraryTab(ttk.Frame):
                 elif cache.is_file():
                     quality = read_video_quality(video)
             items.append((video, num, thumb, quality))
-        self.after(0, lambda: self._render_grid(items))
+        schedule_on_main(self, self._render_grid, items)
 
     def _render_grid(self, items: list[tuple[Path, str, Image.Image | None, str]]) -> None:
         self._loading = False
