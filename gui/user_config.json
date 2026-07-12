@@ -1,7 +1,7 @@
 {
   "base_url": "/mnt/e/自然之声/to_youtube",
-  "last_video": "/mnt/e/自然之声/to_youtube/MVI_6989_loop_0.96_dur_19_fade_0.5.mp4",
-  "last_rpp": "/home/leo/workspace/relaxASMR/Reaper/Projects/Rain/MVI_6989.rpp",
+  "last_video": "/mnt/e/自然之声/to_youtube/MVI_7004_loop_0.98_dur_15_fade_0.5.mp4",
+  "last_rpp": "/home/leo/workspace/relaxASMR/Reaper/Projects/Rain/MVI_7004.rpp",
   "duration_hours": 3,
   "reaper_exe": "D:\\Program Files\\REAPER (x64)\\reaper.exe",
   "last_video_dir": "/mnt/e/自然之声/to_youtube",
@@ -11,7 +11,7 @@
   "last_upload_url": "https://www.youtube.com/watch?v=0Ac4J6fgxaI",
   "youtube_account": "leo",
   "last_vst_dir": "/mnt/e/自然之声/待上传youtube/MVI_6989_loop_0.96_dur_19_fade_0.5.mp4",
-  "last_export_mp4": "/mnt/e/自然之声/to_youtube/export/MVI_6989_3h_fhd.mp4",
+  "last_export_mp4": "",
   "last_vst_match_wav": "/mnt/e/自然之声/待上传youtube/rain_vst/preset/21.水面涟漪.wav",
   "last_vst_match_rain": "/mnt/e/自然之声/待上传youtube/rain_vst/preset/21.Stirring Water Whirls.rain",
   "last_vst_match_score": 0.9822237603132083,
@@ -20,18 +20,24 @@
   "uploaded_ids": {
     "6919": true,
     "6921": true,
-    "6952": true,
     "6953": true,
     "6989": true,
     "6927": true,
     "6918": true,
-    "6892": true
+    "6892": true,
+    "6952": true
   },
   "theme": "light",
   "export_outputs": {
     "MVI_6989": {
       "wav": "/mnt/e/自然之声/to_youtube/export/MVI_6989_3h.wav",
       "mp4": "/mnt/e/自然之声/to_youtube/export/MVI_6989_3h_fhd.mp4"
+    },
+    "MVI_6972": {
+      "mp4": "/mnt/e/自然之声/to_youtube/export/MVI_6989_3h_fhd.mp4"
+    },
+    "MVI_7004": {
+      "wav": "/mnt/e/自然之声/to_youtube/export/MVI_7004_3h.wav"
     }
   },
   "audio_library_selection": {

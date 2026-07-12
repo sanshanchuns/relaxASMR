@@ -6,6 +6,8 @@ from pathlib import Path
 from unittest.mock import patch
 
 from gui.export_wav import (
+    export_mp4_belongs_to_scene,
+    find_export_mp4_for_scene,
     format_mp4_export_stats_suffix,
     format_size_compact_bytes,
     wav_matches_target_hours,
@@ -34,3 +36,32 @@ def test_format_mp4_export_stats_suffix(tmp_path: Path) -> None:
         suffix = format_mp4_export_stats_suffix(mp4)
         assert "6.2 Mbps" in suffix
         assert suffix.endswith("0M")
+
+
+def test_export_mp4_belongs_to_scene(tmp_path: Path) -> None:
+    own = tmp_path / "MVI_7004_3h_fhd.mp4"
+    other = tmp_path / "MVI_6989_3h_fhd.mp4"
+    own.write_bytes(b"x")
+    other.write_bytes(b"x")
+    assert export_mp4_belongs_to_scene(own, "MVI_7004", hours=3.0)
+    assert not export_mp4_belongs_to_scene(other, "MVI_7004", hours=3.0)
+    assert not export_mp4_belongs_to_scene(own, "MVI_7004", hours=2.0)
+
+
+def test_find_export_mp4_for_scene(tmp_path: Path) -> None:
+    old = tmp_path / "MVI_7004_3h_fhd.mp4"
+    newer = tmp_path / "MVI_7004_3h_4k.mp4"
+    wrong = tmp_path / "MVI_6989_3h_fhd.mp4"
+    old.write_bytes(b"old")
+    newer.write_bytes(b"newer")
+    wrong.write_bytes(b"wrong")
+    old_ts = 1_000_000_000
+    newer_ts = 2_000_000_000
+    old.touch()
+    newer.touch()
+    import os
+
+    os.utime(old, (old_ts, old_ts))
+    os.utime(newer, (newer_ts, newer_ts))
+    found = find_export_mp4_for_scene("MVI_7004", hours=3.0, export_root=tmp_path)
+    assert found == newer

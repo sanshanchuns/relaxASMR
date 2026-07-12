@@ -40,6 +40,54 @@ def expected_export_wav_path(scene_id: str, hours: float) -> Path:
     return export_dir() / export_wav_name(scene_id, hours)
 
 
+def export_mp4_belongs_to_scene(
+    path: Path,
+    scene_id: str,
+    *,
+    hours: float | None = None,
+) -> bool:
+    """成片 MP4 须属于当前场景序号，且文件名含目标时长标记（如 3h）。"""
+    if not path.is_file():
+        return False
+    if scene_id not in path.name:
+        return False
+    if hours is not None:
+        from scripts.config.paths import duration_render_suffix
+
+        if duration_render_suffix(hours) not in path.stem:
+            return False
+    return True
+
+
+def find_export_mp4_for_scene(
+    scene_id: str,
+    *,
+    hours: float | None = None,
+    export_root: Path | None = None,
+) -> Path | None:
+    """在 export 目录查找同序号、含目标时长标记的成片 MP4。"""
+    import re
+
+    from scripts.config.paths import duration_render_suffix, export_dir
+
+    root = export_root or export_dir()
+    if not root.is_dir():
+        return None
+    match = re.search(r"\d+", scene_id)
+    num = match.group() if match else scene_id
+    duration_token = duration_render_suffix(hours) if hours is not None else None
+    candidates: list[Path] = []
+    for path in root.glob(f"*{num}*.mp4"):
+        if not export_mp4_belongs_to_scene(path, scene_id, hours=hours):
+            continue
+        if duration_token and duration_token not in path.stem:
+            continue
+        candidates.append(path)
+    if not candidates:
+        return None
+    return max(candidates, key=lambda p: p.stat().st_mtime)
+
+
 def format_duration_short(seconds: float) -> str:
     s = max(0, int(round(seconds)))
     h, rem = divmod(s, 3600)

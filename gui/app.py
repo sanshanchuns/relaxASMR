@@ -55,6 +55,8 @@ from gui.tk_thread import bind_ui_root, ensure_ui_pump, schedule_on_main  # noqa
 from gui.job_progress import make_elapsed_ticker, parse_progress_pct  # noqa: E402
 from gui.export_wav import (  # noqa: E402
     expected_export_wav_path,
+    export_mp4_belongs_to_scene,
+    find_export_mp4_for_scene,
     format_duration_short,
     format_mp4_export_stats_suffix,
     wav_duration_seconds,
@@ -1000,13 +1002,11 @@ class RelaxAsmrApp(tk.Tk):
                 if raw:
                     p = Path(raw)
                     if p.is_file():
+                        if kind == "mp4" and not export_mp4_belongs_to_scene(
+                            p, scene_id, hours=self._target_duration_hours()
+                        ):
+                            return None
                         return p.resolve()
-        if kind == "mp4":
-            legacy = self._cfg.get("last_export_mp4")
-            if legacy:
-                p = Path(legacy)
-                if p.is_file():
-                    return p.resolve()
         return None
 
     def _target_duration_hours(self) -> float:
@@ -1022,12 +1022,13 @@ class RelaxAsmrApp(tk.Tk):
     def _resolve_valid_export_mp4(
         self, scene_id: str, hours: float | None = None
     ) -> Path | None:
-        """仅当时长接近目标成片时视为有效 MP4。"""
+        """仅当 export 下存在同序号、时长符合目标的成片 MP4 时视为有效。"""
         h = self._target_duration_hours() if hours is None else float(hours)
         saved = self._get_scene_export_path(scene_id, "mp4")
-        if saved and wav_matches_target_hours(saved, h):
-            return saved.resolve()
-        latest = self._find_latest_mp4_for_scene(scene_id)
+        if saved and export_mp4_belongs_to_scene(saved, scene_id, hours=h):
+            if wav_matches_target_hours(saved, h):
+                return saved.resolve()
+        latest = find_export_mp4_for_scene(scene_id, hours=h)
         if latest and wav_matches_target_hours(latest, h):
             return latest.resolve()
         return None
@@ -1088,37 +1089,34 @@ class RelaxAsmrApp(tk.Tk):
             return None
         return max(candidates, key=lambda p: p.stat().st_mtime)
 
+    def _clear_invalid_export_mp4(self, scene_id: str, hours: float | None = None) -> None:
+        h = self._target_duration_hours() if hours is None else float(hours)
+        outputs = self._export_outputs_cfg()
+        scene = outputs.get(scene_id)
+        if not isinstance(scene, dict):
+            return
+        raw = scene.get("mp4")
+        if not raw:
+            return
+        p = Path(raw)
+        if (
+            not p.is_file()
+            or not export_mp4_belongs_to_scene(p, scene_id, hours=h)
+            or not wav_matches_target_hours(p, h)
+        ):
+            scene.pop("mp4", None)
+            if self._cfg.get("last_export_mp4") == raw:
+                self._cfg["last_export_mp4"] = ""
+            self._save_config()
+
     def _find_latest_mp4_for_scene(self, scene_id: str) -> Path | None:
-        num = self._scene_num(scene_id)
-        candidates: list[Path] = []
-        for d in (export_dir(), base_material_dir(), LIB_REPO_ROOT / "Reaper" / "Projects" / "Rain"):
-            if d.is_dir():
-                candidates.extend(d.glob(f"*{num}*.mp4"))
-        loop_name = self.video_path.name if self.video_path else None
-        candidates = [p for p in candidates if p.name != loop_name]
-        if not candidates:
-            return None
-        return max(candidates, key=lambda p: p.stat().st_mtime)
+        return find_export_mp4_for_scene(scene_id, hours=self._target_duration_hours())
 
     def _default_upload_mp4(self) -> Path | None:
         """步骤 5 默认上传：baseURL/export 下与步骤 1 同序号的成片 mp4。"""
         if not self.scene_id:
             return None
-        saved = self._get_scene_export_path(self.scene_id, "mp4")
-        if saved and saved.parent.resolve() == export_dir().resolve():
-            return saved
-        num = self._scene_num(self.scene_id)
-        exp = export_dir()
-        if not exp.is_dir():
-            return None
-        loop_name = self.video_path.name if self.video_path else None
-        candidates = [
-            p for p in exp.glob(f"*{num}*.mp4")
-            if p.is_file() and p.name != loop_name
-        ]
-        if not candidates:
-            return None
-        return max(candidates, key=lambda p: p.stat().st_mtime)
+        return self._resolve_valid_export_mp4(self.scene_id)
 
     def _resolve_upload_mp4(self) -> Path | None:
         if self.upload_mp4_custom and self.upload_mp4_custom.is_file():
@@ -1365,6 +1363,23 @@ class RelaxAsmrApp(tk.Tk):
                 base = f"已完成 · {path.name}"
         return base + format_mp4_export_stats_suffix(path)
 
+    def _format_export_mp4_status(
+        self,
+        path: Path | None,
+        *,
+        scene_id: str | None = None,
+        hours: float | None = None,
+    ) -> str:
+        if not path or not path.is_file():
+            return "待开始"
+        sid = scene_id or self.scene_id
+        h = self._target_duration_hours() if hours is None else float(hours)
+        if not sid or not export_mp4_belongs_to_scene(path, sid, hours=h):
+            return "待开始"
+        if not wav_matches_target_hours(path, h):
+            return "待开始"
+        return self._format_export_status(path)
+
     def _refresh_step4_outputs(self, scene_id: str | None = None) -> None:
         sid = scene_id or self.scene_id
         if not sid:
@@ -1377,8 +1392,9 @@ class RelaxAsmrApp(tk.Tk):
             return
 
         wav = self._resolve_valid_export_wav(sid)
-        mp4 = self._get_scene_export_path(sid, "mp4") or self._find_latest_mp4_for_scene(sid)
         self._clear_invalid_export_wav(sid)
+        self._clear_invalid_export_mp4(sid)
+        mp4 = self._resolve_valid_export_mp4(sid)
         if wav:
             self._save_scene_export_path(sid, "wav", wav)
         else:
@@ -1387,14 +1403,18 @@ class RelaxAsmrApp(tk.Tk):
             self._save_scene_export_path(sid, "mp4", mp4)
         else:
             self.last_export_mp4 = None
-            self._cfg["last_export_mp4"] = ""
+            if self._cfg.get("last_export_mp4"):
+                self._cfg["last_export_mp4"] = ""
 
         self._set_render_ui(
             running=False,
             status=self._format_export_wav_status(wav),
             wav_path=wav,
         )
-        self._set_export_ui(running=False, status=self._format_export_status(mp4))
+        self._set_export_ui(
+            running=False,
+            status=self._format_export_mp4_status(mp4, scene_id=sid),
+        )
         self._refresh_upload_label()
         self._save_config()
 
