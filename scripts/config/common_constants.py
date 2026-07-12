@@ -125,3 +125,73 @@ CLIMATE_LEGACY_FILE_TAGS: dict[int, str] = {
     8: "C8_中雨_密集_干燥_远方",
     9: "C9_极轻_密集_极湿_近贴",
 }
+
+# natural_rain 预设 Close 层仅有 6 种；仅在同材质/近义材质间做别名映射
+CLOSE_KEY_TO_PRESET_TAG: dict[int, str] = {
+    190: "WoodRoof",  # 薄木板 → 木屋顶
+    180: "WoodRoof",  # 共振木材 / 木桥
+    170: "Concrete",  # 漫反射石面 → 混凝土石板
+    120: "StoneEchoing",  # 砖墙 → 石墙
+}
+
+# Space 层预设仅有 FoliageCanopy / FoliageDense；无同类预设时不做跨材质映射
+SPACE_KEY_TO_PRESET_TAG: dict[int, str] = {}
+
+
+def preset_tag_from_english(english_name: str) -> str:
+    return english_name.replace(" ", "")
+
+
+def distant_preset_tag(key: int | None) -> str:
+    if not key:
+        return ""
+    return preset_tag_from_english(DISTANT_NAMES.get(key, ("", ""))[0])
+
+
+def space_preset_tag(key: int | None) -> str:
+    if not key:
+        return ""
+    if key in SPACE_KEY_TO_PRESET_TAG:
+        return SPACE_KEY_TO_PRESET_TAG[key]
+    return preset_tag_from_english(SPACE_NAMES.get(key, ("", ""))[0])
+
+
+def close_preset_tag(key: int | None) -> str:
+    if not key:
+        return ""
+    if key in CLOSE_KEY_TO_PRESET_TAG:
+        return CLOSE_KEY_TO_PRESET_TAG[key]
+    return preset_tag_from_english(CLOSE_NAMES.get(key, ("", ""))[0])
+
+
+def format_rain_match_query(
+    l3_key: int | None,
+    l2_key: int | None,
+    l1_key: int | None,
+) -> str:
+    """识别标签 + 预设文件名片段，供无匹配时日志输出。"""
+    l3_cn = DISTANT_NAMES.get(l3_key, ("", "未知"))[1] if l3_key else "未知"
+    l2_cn = SPACE_NAMES.get(l2_key, ("", "未知"))[1] if l2_key else "未知"
+    l1_cn = CLOSE_NAMES.get(l1_key, ("", "未知"))[1] if l1_key else "未知"
+    tags = " / ".join(
+        tag
+        for tag in (
+            distant_preset_tag(l3_key),
+            space_preset_tag(l2_key),
+            close_preset_tag(l1_key),
+        )
+        if tag
+    )
+    return f"{l3_cn} + {l2_cn} + {l1_cn} ({tags})"
+
+
+def format_rain_preset_display_name(stem: str) -> str:
+    """从 WAV 文件名提取远景/空间/近景/气候，供步骤 2 宫格显示。"""
+    import re
+
+    match = re.match(r"(\d+)_([^_]+)_([^_]+)_([^_]+)_(C\d+)_", stem)
+    if not match:
+        return stem
+    _, distant, space, close, climate = match.groups()
+    climate_label = CLIMATE_NAMES.get(int(climate[1:]), climate)
+    return f"{distant} / {space} / {close}\n{climate_label}"

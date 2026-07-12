@@ -7,7 +7,7 @@ from tkinter import ttk
 from typing import Callable, Optional
 
 CELL_W = 180
-CELL_H = 56
+CELL_H = 68
 CELL_PAD = 4
 _HOVER_DELAY_MS = 400
 _BORDER_THICKNESS = 2
@@ -126,7 +126,7 @@ class TrackPickerUI(ttk.Frame):
     def set_candidates(self, candidates: list[dict]) -> None:
         """直接设置候选列表（无需 JSON 文件）。"""
         self.lbl_status.configure(
-            text=f"已加载 {len(candidates)} 个候选" if candidates else "暂无候选数据"
+            text=f"已加载 {len(candidates)} 个候选" if candidates else "无匹配"
         )
         for i in range(9):
             cell = self._grid_cells[i]

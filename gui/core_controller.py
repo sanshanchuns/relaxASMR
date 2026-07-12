@@ -9,7 +9,16 @@ import json
 from pathlib import Path
 from typing import Any, Callable
 
-from scripts.config.common_constants import CLIMATE_NAMES, CLOSE_NAMES, DISTANT_NAMES, SPACE_NAMES
+from scripts.config.common_constants import (
+    CLOSE_NAMES,
+    DISTANT_NAMES,
+    SPACE_NAMES,
+    close_preset_tag,
+    distant_preset_tag,
+    format_rain_match_query,
+    format_rain_preset_display_name,
+    space_preset_tag,
+)
 from scripts.config.paths import audio_layer_dir, clip_matches_path, vlm_matches_path
 
 # 步骤 2 稀疏层（散布轨）：选中后写入 Reaper 轨 2–4
@@ -116,29 +125,25 @@ def get_matches_for_keys(
     l1_key: int | None,
     all_wavs: list[Path],
 ) -> list[dict[str, Any]]:
-    """根据远景 + 空间 + 近景三个维度，在声源库中匹配最多 9 条 WAV。"""
+    """三层标签须全部命中预设文件名片段，否则返回空列表（不凑候选）。"""
     import re
 
-    l3_en = DISTANT_NAMES.get(l3_key, ("", ""))[0].replace(" ", "") if l3_key else ""
-    l2_en = SPACE_NAMES.get(l2_key, ("", ""))[0].replace(" ", "") if l2_key else ""
-    l1_en = CLOSE_NAMES.get(l1_key, ("", ""))[0].replace(" ", "") if l1_key else ""
+    l3_en = distant_preset_tag(l3_key)
+    l2_en = space_preset_tag(l2_key)
+    l1_en = close_preset_tag(l1_key)
+    if not (l3_en and l2_en and l1_en):
+        return []
 
-    l3_cn = DISTANT_NAMES.get(l3_key, ("", "未知"))[1] if l3_key else "未知"
-    l1_cn = CLOSE_NAMES.get(l1_key, ("", "未知"))[1] if l1_key else "未知"
-
-    out_data: list[dict[str, Any]] = []
+    matched: list[Path] = []
     for w in all_wavs:
         name = w.stem
-        if l3_en and l3_en not in name:
+        if l3_en not in name or l2_en not in name or l1_en not in name:
             continue
-        if l2_en and l2_en not in name:
-            continue
-        if l1_en and l1_en not in name:
-            continue
+        matched.append(w)
 
-        m = re.search(r"_C(\d+)_", name)
-        c_idx = int(m.group(1)) if m else 1
-        display_name = CLIMATE_NAMES.get(c_idx, f"C{c_idx} {l3_cn} {l1_cn}")
+    out_data: list[dict[str, Any]] = []
+    for w in matched:
+        display_name = format_rain_preset_display_name(w.stem)
         out_data.append({"wav": str(w), "score": 100, "name": display_name})
 
     def get_c_index(wav_str: str) -> int:
@@ -146,10 +151,24 @@ def get_matches_for_keys(
         return int(m.group(1)) if m else 99
 
     out_data.sort(key=lambda x: get_c_index(x["wav"]))
-    if not out_data:
-        cands = all_wavs[:9]
-        out_data = [{"wav": str(c), "score": 100, "name": c.stem} for c in cands]
     return out_data[:9]
+
+
+def _log_rain_match_result(
+    source: str,
+    l3_key: int | None,
+    l2_key: int | None,
+    l1_key: int | None,
+    matches: list[dict[str, Any]],
+    log_fn: Callable[[str], None] | None,
+) -> None:
+    if not log_fn:
+        return
+    query = format_rain_match_query(l3_key, l2_key, l1_key)
+    if matches:
+        log_fn(f"{source} 匹配 {len(matches)} 条：{query}")
+    else:
+        log_fn(f"{source} 无匹配：{query}")
 
 
 def format_clip_title(clip_analysis: dict) -> str:
@@ -179,10 +198,12 @@ def save_clip_matches(
     all_wavs: list[Path] | None = None,
     *,
     vlm_reconciled: bool = False,
+    log_fn: Callable[[str], None] | None = None,
 ) -> tuple[Path, str, list[dict[str, Any]]]:
     wavs = all_wavs if all_wavs is not None else list_rain_wavs()
     l3, l2, l1 = _layer_keys_from_clip(clip_analysis)
     matches = get_matches_for_keys(l3, l2, l1, wavs)
+    _log_rain_match_result("1_rain_clip", l3, l2, l1, matches, log_fn)
     title = format_clip_title(clip_analysis)
     payload = {
         "title": title,
@@ -201,10 +222,13 @@ def save_vlm_matches(
     scene_id: str,
     vlm_analysis: dict,
     all_wavs: list[Path] | None = None,
+    *,
+    log_fn: Callable[[str], None] | None = None,
 ) -> tuple[Path, str, list[dict[str, Any]]]:
     wavs = all_wavs if all_wavs is not None else list_rain_wavs()
     l3, l2, l1 = _layer_keys_from_vlm(vlm_analysis)
     matches = get_matches_for_keys(l3, l2, l1, wavs)
+    _log_rain_match_result("1_rain_vlm", l3, l2, l1, matches, log_fn)
     title = format_vlm_title(vlm_analysis)
     payload = {"title": title, "candidates": matches, "l3_key": l3, "l2_key": l2, "l1_key": l1}
     path = vlm_matches_path(scene_id)
@@ -288,7 +312,7 @@ def reconcile_clip_vlm(
       show_vlm_tab — 是否显示 1_rain_vlm
     """
     wavs = all_wavs if all_wavs is not None else list_rain_wavs()
-    clip_json, clip_title, _ = save_clip_matches(scene_id, clip_analysis, wavs)
+    clip_json, clip_title, _ = save_clip_matches(scene_id, clip_analysis, wavs, log_fn=logger)
     logger(f"已保存: {clip_json.name}")
 
     vlm_json = vlm_matches_path(scene_id)
@@ -321,7 +345,7 @@ def reconcile_clip_vlm(
             "show_vlm_tab": False,
         }
 
-    vlm_json, vlm_title, _ = save_vlm_matches(scene_id, vlm_analysis, wavs)
+    vlm_json, vlm_title, _ = save_vlm_matches(scene_id, vlm_analysis, wavs, log_fn=logger)
     _mark_clip_vlm_reconciled(clip_json, agree=False)
     logger(f"已保存: {vlm_json.name}")
     logger("结论: CLIP 与 VLM 不一致，请对比 1_rain_clip / 1_rain_vlm 两个选项卡。")

@@ -11,7 +11,7 @@
   "last_upload_url": "https://www.youtube.com/watch?v=0Ac4J6fgxaI",
   "youtube_account": "leo",
   "last_vst_dir": "/mnt/e/自然之声/待上传youtube/MVI_6989_loop_0.96_dur_19_fade_0.5.mp4",
-  "last_export_mp4": "",
+  "last_export_mp4": "/mnt/e/自然之声/to_youtube/export/MVI_7004_3h_fhd.mp4",
   "last_vst_match_wav": "/mnt/e/自然之声/待上传youtube/rain_vst/preset/21.水面涟漪.wav",
   "last_vst_match_rain": "/mnt/e/自然之声/待上传youtube/rain_vst/preset/21.Stirring Water Whirls.rain",
   "last_vst_match_score": 0.9822237603132083,
@@ -37,7 +37,8 @@
       "mp4": "/mnt/e/自然之声/to_youtube/export/MVI_6989_3h_fhd.mp4"
     },
     "MVI_7004": {
-      "wav": "/mnt/e/自然之声/to_youtube/export/MVI_7004_3h.wav"
+      "wav": "/mnt/e/自然之声/to_youtube/export/MVI_7004_3h.wav",
+      "mp4": "/mnt/e/自然之声/to_youtube/export/MVI_7004_3h_fhd.mp4"
     }
   },
   "audio_library_selection": {

@@ -33,7 +33,7 @@ SPACE_PROMPTS = {
     580: "有屋檐、窗户或建筑遮挡的半封闭避雨空间 (Sheltered space looking out from a window or roof)",
     590: "被茂密树林和高大树冠完全遮盖的森林深处 (Deep dense forest entirely covered by trees)",
     610: "两旁有建筑物遮挡的城市街道、小巷或公路 (Urban street or alleyway surrounded by buildings)",
-    530: "极其开阔的天空与无遮挡的户外草地 (Wide open sky and outdoor space)"
+    530: "被树冠遮挡的森林空间，可见缝隙天光或林下开阔感 (Forest space under tree canopy with filtered sky light)",
 }
 
 CLOSE_PROMPTS = {

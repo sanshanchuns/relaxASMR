@@ -105,6 +105,7 @@ class RelaxAsmrApp(tk.Tk):
         self._busy = False
         self._render_running = False
         self._export_running = False
+        self._upload_running = False
         self.last_export_wav: Path | None = None
         self.last_export_mp4: Path | None = None
         
@@ -119,7 +120,25 @@ class RelaxAsmrApp(tk.Tk):
         bind_ui_root(self)
         bind_ui_root(self)
 
+    def _step45_task_running(self) -> bool:
+        return self._render_running or self._export_running or self._upload_running
+
     def _on_closing(self) -> None:
+        if self._step45_task_running():
+            tasks: list[str] = []
+            if self._render_running:
+                tasks.append("步骤 4 · 输出混音")
+            if self._export_running:
+                tasks.append("步骤 4 · 合成视频")
+            if self._upload_running:
+                tasks.append("步骤 5 · 上传 YouTube")
+            detail = "\n".join(f"· {t}" for t in tasks)
+            if not messagebox.askyesno(
+                "确认关闭",
+                f"以下任务正在执行：\n{detail}\n\n关闭窗口会中断任务。确定要关闭吗？",
+                icon="warning",
+            ):
+                return
         self._stop_video_loop()
         try:
             if os.path.exists("/tmp/relaxasmr_preview.mp4"):
@@ -335,6 +354,7 @@ class RelaxAsmrApp(tk.Tk):
             self.track_pickers[track_id] = picker
 
         self._ensure_rain_boom_tab()
+        self._select_rain_boom_tab()
 
         # 3. 新建 Reaper 工程
         sec3 = ttk.LabelFrame(self.left_content, text="3. 新建 Reaper 工程", padding=10)
@@ -765,15 +785,8 @@ class RelaxAsmrApp(tk.Tk):
                 tab.set_selected(paths, notify=False)
                 self._sync_track_picker_from_library(track_id, paths)
 
-    def _rain_tab_insert_anchor(self):
-        return self.track_pickers.get("1_rain_vlm") or self.track_pickers.get("1_rain")
-
     def _ensure_rain_boom_tab(self):
         from gui.track_picker_ui import TrackPickerUI
-
-        anchor = self._rain_tab_insert_anchor()
-        if not anchor:
-            return None
 
         boom = self.track_pickers.get("1_rain_boom")
         if not boom:
@@ -785,7 +798,7 @@ class RelaxAsmrApp(tk.Tk):
         else:
             frame = boom.master
 
-        target_idx = self.pickers_notebook.index(anchor.master) + 1
+        target_idx = 0
         try:
             current_idx = self.pickers_notebook.index(frame)
         except tk.TclError:
@@ -797,6 +810,15 @@ class RelaxAsmrApp(tk.Tk):
             self.pickers_notebook.insert(target_idx, frame)
 
         return boom
+
+    def _select_rain_boom_tab(self) -> None:
+        boom = self.track_pickers.get("1_rain_boom")
+        if not boom:
+            return
+        try:
+            self.pickers_notebook.select(boom.master)
+        except tk.TclError:
+            pass
 
     def _sync_track_picker_from_library(self, track_id: str, wavs: list[Path]) -> None:
         from gui.core_controller import SCATTER_LAYER_IDS
@@ -1299,7 +1321,7 @@ class RelaxAsmrApp(tk.Tk):
             )
             clip_analysis = clip_data.get("clip_analysis", {})
             frame_jpg = Path(clip_data["frame_jpg"]) if clip_data.get("frame_jpg") else frame_jpg
-            save_clip_matches(scene_id, clip_analysis, vlm_reconciled=False)
+            save_clip_matches(scene_id, clip_analysis, vlm_reconciled=False, log_fn=self._log)
 
         if not skip_clip_vlm and frame_jpg and frame_jpg.is_file():
             from scripts.video_analysis.analyze import analyze_vlm_frame
@@ -1548,6 +1570,7 @@ class RelaxAsmrApp(tk.Tk):
         boom_tab = self._audio_library_tabs.get("1_rain_boom")
         if boom_tab:
             self._sync_track_picker_from_library("1_rain_boom", boom_tab.get_selected())
+        self._select_rain_boom_tab()
 
     def _generate_loop_material(self, loop_video: Path, sub_dir: Path, scene: str, duration_hours: float) -> Path:
         """根据 loop 视频生成 YouTube 物料（缩略图 + *_material.json）。"""
@@ -1756,6 +1779,7 @@ class RelaxAsmrApp(tk.Tk):
             boom_tab = self._audio_library_tabs.get("1_rain_boom")
             if boom_tab:
                 self._sync_track_picker_from_library("1_rain_boom", boom_tab.get_selected())
+            self._select_rain_boom_tab()
 
         self._update_cover_preview()
 
@@ -1970,8 +1994,8 @@ class RelaxAsmrApp(tk.Tk):
                     clip_analysis = clip_data.get("clip_analysis", {})
                     frame_jpg = Path(clip_data["frame_jpg"]) if clip_data.get("frame_jpg") else frame_jpg
 
-                    clip_json, clip_title, _ = save_clip_matches(
-                        scene_id, clip_analysis, vlm_reconciled=False
+                    clip_json, clip_title, clip_matches = save_clip_matches(
+                        scene_id, clip_analysis, vlm_reconciled=False, log_fn=self._log
                     )
                     rain_tab_result = {
                         "rain_tab": "1_rain_clip",
@@ -1987,7 +2011,10 @@ class RelaxAsmrApp(tk.Tk):
                         self._refresh_material_label()
                         self._update_cover_preview()
                         self._apply_rain_tabs(rain_tab_result)
-                        self._log("CLIP 阶段结束，九宫格已就绪。")
+                        if clip_matches:
+                            self._log("CLIP 阶段结束，九宫格已就绪。")
+                        else:
+                            self._log("CLIP 阶段结束。")
 
                     self.after(0, update_clip_ui)
 
@@ -2521,6 +2548,7 @@ class RelaxAsmrApp(tk.Tk):
             return
 
         self._set_busy(True)
+        self._upload_running = True
         self._log("—— 开始上传到 YouTube ——")
         self._log(f"账号：{account}")
         self._log(f"场景：{upload_scene_id}")
@@ -2570,7 +2598,11 @@ class RelaxAsmrApp(tk.Tk):
 
                 schedule_on_main(self, done_err)
             finally:
-                schedule_on_main(self, lambda: self._set_busy(False))
+                def clear_upload_busy() -> None:
+                    self._upload_running = False
+                    self._set_busy(False)
+
+                schedule_on_main(self, clear_upload_busy)
 
         threading.Thread(target=worker, daemon=True).start()
 
