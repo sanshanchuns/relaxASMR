@@ -127,32 +127,19 @@ def force_stop_all_playback() -> None:
 
 
 def _wav_bits_per_sample(wav_path: Path) -> int:
-    if not which("ffprobe"):
-        return 16
-    try:
-        out = subprocess.check_output(
-            [
-                "ffprobe",
-                "-v",
-                "error",
-                "-select_streams",
-                "a:0",
-                "-show_entries",
-                "stream=bits_per_sample",
-                "-of",
-                "default=nw=1:nk=1",
-                str(wav_path),
-            ],
-            text=True,
-            stderr=subprocess.DEVNULL,
-        ).strip()
-        return int(out) if out.isdigit() else 16
-    except (subprocess.CalledProcessError, ValueError, OSError):
-        return 16
+    from scripts.audio.booms_16bit import wav_bits_per_sample
+
+    return wav_bits_per_sample(wav_path)
 
 
 def _wav_for_legacy_player(wav_path: Path) -> Path:
     """SoundPlayer / winsound 仅可靠支持 16-bit PCM。"""
+    from scripts.audio.booms_16bit import (
+        booms_16bit_path_for,
+        is_booms_16bit_fresh,
+        transcode_wav_to_s16le,
+    )
+
     wav_path = wav_path.resolve()
     if _wav_bits_per_sample(wav_path) <= 16:
         return wav_path
@@ -161,26 +148,28 @@ def _wav_for_legacy_player(wav_path: Path) -> Path:
     cached = _S16_CACHE.get(cache_key)
     if cached and cached.is_file():
         return cached
+
+    l2 = booms_16bit_path_for(wav_path)
+    if l2 is not None:
+        if is_booms_16bit_fresh(wav_path, l2):
+            _S16_CACHE[cache_key] = l2
+            return l2
+        if not which("ffmpeg"):
+            return wav_path
+        try:
+            transcode_wav_to_s16le(wav_path, l2)
+        except (OSError, subprocess.CalledProcessError):
+            pass
+        else:
+            if l2.is_file():
+                _S16_CACHE[cache_key] = l2
+                return l2
+
     if not which("ffmpeg"):
         return wav_path
     digest = hashlib.md5(cache_key.encode()).hexdigest()[:12]
     tmp = Path(tempfile.gettempdir()) / f"relaxasmr_prev_{digest}.wav"
-    subprocess.run(
-        [
-            "ffmpeg",
-            "-y",
-            "-loglevel",
-            "error",
-            "-i",
-            str(wav_path),
-            "-c:a",
-            "pcm_s16le",
-            str(tmp),
-        ],
-        check=True,
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-    )
+    transcode_wav_to_s16le(wav_path, tmp)
     _S16_CACHE[cache_key] = tmp
     return tmp
 

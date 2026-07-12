@@ -415,6 +415,11 @@ def audio_booms_dir(layer_id: str) -> Path:
     return audio_dir() / layer_id / "booms"
 
 
+def audio_booms_16bit_dir(layer_id: str) -> Path:
+    """Boom 16-bit 试听缓存：baseURL/audio/<layer>/booms_16bit/（与 booms/ 同名镜像）。"""
+    return audio_dir() / layer_id / "booms_16bit"
+
+
 def _extra_bin_dirs() -> list[Path]:
     """GUI/.app 启动时常缺失的常用可执行文件目录。"""
     dirs: list[Path] = []
