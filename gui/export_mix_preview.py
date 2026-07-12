@@ -9,15 +9,11 @@ from tkinter import ttk
 from typing import Callable
 
 from gui.tk_thread import bind_ui_root, schedule_on_main
+from gui.ui_theme import LIGHT, UiTheme, grid_theme, paint_widget_bg
 
 _HOVER_DELAY_MS = 400
 _PREVIEW_CLIP_SEC = 30.0
 _BORDER_THICKNESS = 2
-_COLOR_BORDER_DEFAULT = "#c8c8c8"
-_COLOR_BORDER_HOVER = "#4a90d9"
-_COLOR_TEXT_DEFAULT = "#222222"
-_COLOR_TEXT_MUTED = "#666666"
-_COLOR_TEXT_HOVER = "#1a5fb4"
 
 
 class ExportMixPreviewGrid(ttk.Frame):
@@ -32,25 +28,28 @@ class ExportMixPreviewGrid(ttk.Frame):
         self._play_after_id: str | None = None
         self._audio_proc = None
         self._play_thread: threading.Thread | None = None
+        self._grid_theme = grid_theme(LIGHT)
         self._build_ui()
         bind_ui_root(self)
 
     def _build_ui(self) -> None:
+        colors = self._grid_theme
         self._border = tk.Frame(
             self,
+            bg=colors.cell_bg,
             highlightthickness=_BORDER_THICKNESS,
-            highlightbackground=_COLOR_BORDER_DEFAULT,
-            highlightcolor=_COLOR_BORDER_HOVER,
+            highlightbackground=colors.border_default,
+            highlightcolor=colors.border_hover,
         )
         self._border.pack()
-        self._inner = tk.Frame(self._border, padx=6, pady=4)
+        self._inner = tk.Frame(self._border, padx=6, pady=4, bg=colors.cell_bg)
         self._inner.pack()
         self._lbl = tk.Label(
             self._inner,
             text="待开始",
-            fg=_COLOR_TEXT_MUTED,
+            fg=colors.fg_muted,
+            bg=colors.cell_bg,
             font=("", 9),
-            bg=self._inner.cget("bg"),
             anchor=tk.W,
         )
         self._lbl.pack()
@@ -73,25 +72,30 @@ class ExportMixPreviewGrid(ttk.Frame):
         self._lbl.configure(text=display)
         self._refresh_border()
 
+    def apply_theme(self, theme: UiTheme) -> None:
+        self._grid_theme = grid_theme(theme)
+        paint_widget_bg(self._grid_theme.cell_bg, self._border, self._inner, self._lbl)
+        self._refresh_border()
+
     def _refresh_border(self) -> None:
+        colors = self._grid_theme
         if self._hover and self._playable:
-            color = _COLOR_BORDER_HOVER
-            fg = _COLOR_TEXT_HOVER
+            color = colors.border_hover
+            fg = colors.fg_hover
             font = ("", 9, "bold")
         elif self._playable:
-            color = _COLOR_BORDER_DEFAULT
-            fg = _COLOR_TEXT_DEFAULT
+            color = colors.border_default
+            fg = colors.fg_default
             font = ("", 9)
         else:
-            color = _COLOR_BORDER_DEFAULT
-            fg = _COLOR_TEXT_MUTED if self._lbl.cget("text") == "待开始" else _COLOR_TEXT_DEFAULT
+            color = colors.border_default
+            fg = colors.fg_muted if self._lbl.cget("text") == "待开始" else colors.fg_default
             font = ("", 9)
         self._border.configure(
             highlightbackground=color,
             highlightcolor=color,
         )
-        bg = self._inner.cget("bg")
-        self._lbl.configure(fg=fg, font=font, bg=bg)
+        self._lbl.configure(fg=fg, font=font, bg=colors.cell_bg)
 
     def _on_enter(self, _event=None) -> None:
         if not self._playable:

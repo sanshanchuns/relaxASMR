@@ -222,6 +222,18 @@ class RelaxAsmrApp(tk.Tk):
         palette = get_theme(self._theme_mode)
         apply_ttk_theme(ttk.Style(self), palette)
         apply_tk_theme(self, palette, self._theme_tk_widgets())
+        for picker in getattr(self, "track_pickers", {}).values():
+            if hasattr(picker, "apply_theme"):
+                picker.apply_theme(palette)
+        mix_preview = getattr(self, "mix_preview_grid", None)
+        if mix_preview is not None and hasattr(mix_preview, "apply_theme"):
+            mix_preview.apply_theme(palette)
+        for tab in getattr(self, "_audio_library_tabs", {}).values():
+            if hasattr(tab, "apply_theme"):
+                tab.apply_theme(palette)
+        video_tab = getattr(self, "video_library_tab", None)
+        if video_tab is not None and hasattr(video_tab, "apply_theme"):
+            video_tab.apply_theme(palette)
         if hasattr(self, "btn_theme_toggle"):
             self.btn_theme_toggle.configure(text=theme_toggle_label(self._theme_mode))
         self._cfg["theme"] = self._theme_mode

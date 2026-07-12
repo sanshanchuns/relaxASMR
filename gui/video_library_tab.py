@@ -14,6 +14,7 @@ from PIL import Image, ImageEnhance, ImageTk
 
 from scripts.config.paths import base_url, material_dir
 from gui.tk_thread import bind_ui_root, schedule_on_main
+from gui.ui_theme import LIGHT, UiTheme, grid_theme, paint_widget_bg
 
 CELL_W = 168
 CELL_H = 96
@@ -145,6 +146,7 @@ class VideoLibraryTab(ttk.Frame):
         self._loading = False
         self._loaded_once = False
         self._list_signature: str | None = None
+        self._grid_theme = grid_theme(LIGHT)
         self._build_ui()
         bind_ui_root(self)
 
@@ -299,19 +301,21 @@ class VideoLibraryTab(ttk.Frame):
                 width=CELL_W + CELL_PAD,
                 height=CELL_H + LABEL_H + CELL_PAD,
                 cursor="hand2",
+                bg=self._grid_theme.cell_bg,
             )
             outer.grid(row=row, column=col, padx=CELL_PAD, pady=CELL_PAD)
             outer.grid_propagate(False)
 
             border = tk.Frame(
                 outer,
+                bg=self._grid_theme.cell_bg,
                 highlightthickness=2,
-                highlightbackground="#888888" if uploaded else "#c8c8c8",
-                highlightcolor="#4a90d9",
+                highlightbackground=self._grid_theme.border_default,
+                highlightcolor=self._grid_theme.border_hover,
             )
             border.pack(fill=tk.BOTH, expand=True)
 
-            img_lbl = tk.Label(border, bd=0, relief=tk.FLAT)
+            img_lbl = tk.Label(border, bd=0, relief=tk.FLAT, bg=self._grid_theme.cell_bg)
             img_lbl.pack(fill=tk.BOTH, expand=True, padx=1, pady=(1, 0))
 
             base_name = f"MVI_{num}" if num.isdigit() else video.stem[:20]
@@ -321,7 +325,8 @@ class VideoLibraryTab(ttk.Frame):
                 border,
                 text=base_name,
                 font=("", 8),
-                fg="#666666" if uploaded else "#222222",
+                fg=self._grid_theme.fg_default,
+                bg=self._grid_theme.cell_bg,
                 anchor=tk.CENTER,
             )
             name_lbl.pack(fill=tk.X, pady=(0, 2))
@@ -344,6 +349,18 @@ class VideoLibraryTab(ttk.Frame):
         self._update_stats()
         self.after_idle(self._sync_scroll_region)
 
+    def apply_theme(self, theme: UiTheme) -> None:
+        self._grid_theme = grid_theme(theme)
+        for cell in self._cells.values():
+            paint_widget_bg(
+                self._grid_theme.cell_bg,
+                cell["outer"],
+                cell["border"],
+                cell["img_lbl"],
+                cell["name_lbl"],
+            )
+            self._apply_cell_style(cell)
+
     def _apply_cell_style(self, cell: dict) -> None:
         num = cell["num"]
         uploaded = self._is_uploaded(num)
@@ -352,12 +369,18 @@ class VideoLibraryTab(ttk.Frame):
         border = cell["border"]
         img_lbl = cell["img_lbl"]
         name_lbl = cell["name_lbl"]
+        colors = self._grid_theme
 
-        border.configure(highlightbackground="#666666" if uploaded else "#c8c8c8")
+        border.configure(
+            highlightbackground=colors.border_uploaded if uploaded else colors.border_default,
+            highlightcolor=colors.border_hover,
+        )
         name_lbl.configure(
-            fg="#888888" if uploaded else "#222222",
+            fg=colors.fg_muted if uploaded else colors.fg_default,
+            bg=colors.cell_bg,
             text=cell["base_name"] + ("  ✓已上传" if uploaded else ""),
         )
+        img_lbl.configure(bg=colors.cell_bg)
 
         if thumb is not None:
             shown = styled_thumb(thumb, uploaded=uploaded)

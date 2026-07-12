@@ -6,17 +6,13 @@ from pathlib import Path
 from tkinter import ttk
 from typing import Callable, Optional
 
+from gui.ui_theme import LIGHT, UiTheme, grid_theme, paint_widget_bg
+
 CELL_W = 180
 CELL_H = 68
 CELL_PAD = 4
 _HOVER_DELAY_MS = 400
 _BORDER_THICKNESS = 2
-_COLOR_BORDER_DEFAULT = "#c8c8c8"
-_COLOR_BORDER_HOVER = "#4a90d9"
-_COLOR_BORDER_SELECTED = "black"
-_COLOR_TEXT_DEFAULT = "#222222"
-_COLOR_TEXT_MUTED = "#666666"
-_COLOR_TEXT_HOVER = "#1a5fb4"
 
 
 class TrackPickerUI(ttk.Frame):
@@ -39,6 +35,7 @@ class TrackPickerUI(ttk.Frame):
         self._play_after_id: str | None = None
         self.on_select_callback: Callable[[str], None] | None = None
         
+        self._grid_theme = grid_theme(LIGHT)
         self._build_ui()
 
     def _build_ui(self) -> None:
@@ -59,7 +56,7 @@ class TrackPickerUI(ttk.Frame):
         for i in range(9):
             row = i // 3
             col = i % 3
-            cell = tk.Frame(self.grid_frame, width=CELL_W, height=CELL_H)
+            cell = tk.Frame(self.grid_frame, width=CELL_W, height=CELL_H, bg=self._grid_theme.cell_bg)
             cell.grid(row=row, column=col, padx=CELL_PAD, pady=CELL_PAD)
             cell.grid_propagate(False)
 
@@ -67,9 +64,10 @@ class TrackPickerUI(ttk.Frame):
                 cell,
                 width=CELL_W - 2,
                 height=CELL_H - 2,
+                bg=self._grid_theme.cell_bg,
                 highlightthickness=_BORDER_THICKNESS,
-                highlightbackground=_COLOR_BORDER_DEFAULT,
-                highlightcolor=_COLOR_BORDER_HOVER,
+                highlightbackground=self._grid_theme.border_default,
+                highlightcolor=self._grid_theme.border_hover,
             )
             border.pack(fill=tk.BOTH, expand=True)
             border.pack_propagate(False)
@@ -77,7 +75,8 @@ class TrackPickerUI(ttk.Frame):
             inner_cell = tk.LabelFrame(
                 border,
                 text=f"备选 {i + 1}",
-                fg=_COLOR_TEXT_MUTED,
+                fg=self._grid_theme.fg_muted,
+                bg=self._grid_theme.cell_bg,
                 font=("", 8),
                 bd=0,
                 relief=tk.FLAT,
@@ -90,11 +89,13 @@ class TrackPickerUI(ttk.Frame):
                 text="—",
                 wraplength=CELL_W - 16,
                 justify="center",
-                fg=_COLOR_TEXT_MUTED,
+                fg=self._grid_theme.fg_muted,
+                bg=self._grid_theme.cell_bg,
                 font=("", 9),
-                bg=inner_cell.cget("bg"),
             )
             lbl_name.pack(fill=tk.BOTH, expand=True, padx=4, pady=(0, 4))
+
+            paint_widget_bg(self._grid_theme.cell_bg, cell, border, inner_cell, lbl_name)
 
             def on_click(e, idx=i):
                 self.select_cell(idx)
@@ -112,6 +113,7 @@ class TrackPickerUI(ttk.Frame):
                 w.configure(cursor="hand2")
 
             self._grid_cells.append({
+                "outer": cell,
                 "border": border,
                 "frame": inner_cell,
                 "lbl_name": lbl_name,
@@ -230,38 +232,45 @@ class TrackPickerUI(ttk.Frame):
         for i in range(9):
             self._update_cell_visuals(i)
             
+    def apply_theme(self, theme: UiTheme) -> None:
+        self._grid_theme = grid_theme(theme)
+        for cell in self._grid_cells:
+            paint_widget_bg(self._grid_theme.cell_bg, cell["outer"], cell["border"], cell["frame"], cell["lbl_name"])
+        self._update_all_visuals()
+
     def _update_cell_visuals(self, idx: int) -> None:
         cell = self._grid_cells[idx]
         is_selected = self._selected_idx == idx
         is_playing = self._hover_idx == idx
         has_content = bool(cell["name"])
+        colors = self._grid_theme
 
         header = "选中" if is_selected else f"备选 {idx + 1}"
 
         if is_selected:
             cell["border"].configure(
                 highlightthickness=_BORDER_THICKNESS,
-                highlightbackground=_COLOR_BORDER_SELECTED,
-                highlightcolor=_COLOR_BORDER_SELECTED,
+                highlightbackground=colors.border_selected,
+                highlightcolor=colors.border_selected,
             )
-            cell["frame"].configure(text=header, fg=_COLOR_BORDER_SELECTED, font=("", 8, "bold"))
-            cell["lbl_name"].configure(fg=_COLOR_BORDER_SELECTED, font=("", 9, "bold"))
+            cell["frame"].configure(text=header, fg=colors.fg_selected, font=("", 8, "bold"))
+            cell["lbl_name"].configure(fg=colors.fg_selected, font=("", 9, "bold"))
         elif is_playing and has_content:
             cell["border"].configure(
                 highlightthickness=_BORDER_THICKNESS,
-                highlightbackground=_COLOR_BORDER_HOVER,
-                highlightcolor=_COLOR_BORDER_HOVER,
+                highlightbackground=colors.border_hover,
+                highlightcolor=colors.border_hover,
             )
-            cell["frame"].configure(text=header, fg=_COLOR_TEXT_HOVER, font=("", 8, "bold"))
-            cell["lbl_name"].configure(fg=_COLOR_TEXT_HOVER, font=("", 9, "bold"))
+            cell["frame"].configure(text=header, fg=colors.fg_hover, font=("", 8, "bold"))
+            cell["lbl_name"].configure(fg=colors.fg_hover, font=("", 9, "bold"))
         else:
             cell["border"].configure(
                 highlightthickness=_BORDER_THICKNESS,
-                highlightbackground=_COLOR_BORDER_DEFAULT,
-                highlightcolor=_COLOR_BORDER_HOVER,
+                highlightbackground=colors.border_default,
+                highlightcolor=colors.border_hover,
             )
-            fg = _COLOR_TEXT_DEFAULT if has_content else _COLOR_TEXT_MUTED
-            cell["frame"].configure(text=header, fg=_COLOR_TEXT_MUTED, font=("", 8))
+            fg = colors.fg_default if has_content else colors.fg_muted
+            cell["frame"].configure(text=header, fg=colors.fg_muted, font=("", 8))
             cell["lbl_name"].configure(fg=fg, font=("", 9))
 
         self.update_idletasks()

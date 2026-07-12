@@ -8,6 +8,7 @@ from pathlib import Path
 from tkinter import messagebox, ttk
 
 from gui.tk_thread import bind_ui_root, schedule_on_main
+from gui.ui_theme import LIGHT, UiTheme, grid_theme, paint_widget_bg
 
 from scripts.config.paths import audio_booms_dir
 
@@ -66,6 +67,7 @@ class AudioLibraryTab(ttk.Frame):
         self._loading = False
         self._loaded_once = False
         self._list_signature: str | None = None
+        self._grid_theme = grid_theme(LIGHT)
         self._build_ui()
         bind_ui_root(self)
 
@@ -197,6 +199,7 @@ class AudioLibraryTab(ttk.Frame):
                 width=CELL_W + CELL_PAD,
                 height=CELL_H + CELL_PAD,
                 cursor="hand2",
+                bg=self._grid_theme.cell_bg,
             )
             outer.grid(row=row, column=col, padx=CELL_PAD, pady=CELL_PAD)
             outer.grid_propagate(False)
@@ -205,9 +208,10 @@ class AudioLibraryTab(ttk.Frame):
                 outer,
                 width=CELL_W - 2,
                 height=CELL_H - 2,
+                bg=self._grid_theme.cell_bg,
                 highlightthickness=_BORDER_THICKNESS,
-                highlightbackground="#c8c8c8",
-                highlightcolor="#4a90d9",
+                highlightbackground=self._grid_theme.border_default,
+                highlightcolor=self._grid_theme.border_hover,
             )
             border.pack(fill=tk.BOTH, expand=True)
             border.pack_propagate(False)
@@ -219,6 +223,7 @@ class AudioLibraryTab(ttk.Frame):
                 justify=tk.CENTER,
                 font=("", 9),
                 anchor=tk.CENTER,
+                bg=self._grid_theme.cell_bg,
             )
             lbl.pack(fill=tk.BOTH, expand=True, padx=4, pady=2)
 
@@ -284,18 +289,25 @@ class AudioLibraryTab(ttk.Frame):
             self._apply_cell_style(cell)
         self._update_stats()
 
+    def apply_theme(self, theme: UiTheme) -> None:
+        self._grid_theme = grid_theme(theme)
+        for cell in self._cells.values():
+            paint_widget_bg(self._grid_theme.cell_bg, cell["outer"], cell["border"], cell["lbl"])
+            self._apply_cell_style(cell)
+
     def _apply_cell_style(self, cell: dict) -> None:
         selected = cell.get("selected", False)
         playing = self._hover_key == cell["key"]
+        colors = self._grid_theme
         if selected:
-            cell["border"].configure(highlightbackground="black", highlightcolor="black")
-            cell["lbl"].configure(text=cell["title"], fg="black")
+            cell["border"].configure(highlightbackground=colors.border_selected, highlightcolor=colors.border_selected)
+            cell["lbl"].configure(text=cell["title"], fg=colors.fg_selected, bg=colors.cell_bg)
         elif playing:
-            cell["border"].configure(highlightbackground="#4a90d9", highlightcolor="#4a90d9")
-            cell["lbl"].configure(text=cell["title"], fg="#1a5fb4")
+            cell["border"].configure(highlightbackground=colors.border_hover, highlightcolor=colors.border_hover)
+            cell["lbl"].configure(text=cell["title"], fg=colors.fg_hover, bg=colors.cell_bg)
         else:
-            cell["border"].configure(highlightbackground="#c8c8c8", highlightcolor="#4a90d9")
-            cell["lbl"].configure(text=cell["title"], fg="#222222")
+            cell["border"].configure(highlightbackground=colors.border_default, highlightcolor=colors.border_hover)
+            cell["lbl"].configure(text=cell["title"], fg=colors.fg_default, bg=colors.cell_bg)
 
     def _on_cell_enter(self, key: str) -> None:
         if self._hover_key == key:

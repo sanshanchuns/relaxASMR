@@ -1,17 +1,17 @@
 {
   "base_url": "/mnt/e/自然之声/to_youtube",
-  "last_video": "/mnt/e/自然之声/to_youtube/MVI_7004_loop_0.98_dur_15_fade_0.5.mp4",
-  "last_rpp": "/home/leo/workspace/relaxASMR/Reaper/Projects/Rain/MVI_7004.rpp",
+  "last_video": "/Volumes/192.168.3.128/自然之声/to_youtube/MVI_7037_loop_0.97_dur_12_fade_0.5.mp4",
+  "last_rpp": "/home/leo/workspace/relaxASMR/Reaper/Projects/Rain/MVI_6989.rpp",
   "duration_hours": 3,
   "reaper_exe": "D:\\Program Files\\REAPER (x64)\\reaper.exe",
-  "last_video_dir": "/mnt/e/自然之声/to_youtube",
+  "last_video_dir": "/Volumes/192.168.3.128/自然之声/to_youtube",
   "last_material_dir": "/mnt/e/自然之声/待上传youtube/output_audio",
   "youtube_privacy": "public",
   "youtube_language": "en",
   "last_upload_url": "https://www.youtube.com/watch?v=0Ac4J6fgxaI",
   "youtube_account": "leo",
   "last_vst_dir": "/mnt/e/自然之声/待上传youtube/MVI_6989_loop_0.96_dur_19_fade_0.5.mp4",
-  "last_export_mp4": "/mnt/e/自然之声/to_youtube/export/MVI_7004_3h_fhd.mp4",
+  "last_export_mp4": "",
   "last_vst_match_wav": "/mnt/e/自然之声/待上传youtube/rain_vst/preset/21.水面涟漪.wav",
   "last_vst_match_rain": "/mnt/e/自然之声/待上传youtube/rain_vst/preset/21.Stirring Water Whirls.rain",
   "last_vst_match_score": 0.9822237603132083,
@@ -20,25 +20,18 @@
   "uploaded_ids": {
     "6919": true,
     "6921": true,
+    "6952": true,
     "6953": true,
     "6989": true,
     "6927": true,
     "6918": true,
-    "6892": true,
-    "6952": true
+    "6892": true
   },
   "theme": "light",
   "export_outputs": {
     "MVI_6989": {
       "wav": "/mnt/e/自然之声/to_youtube/export/MVI_6989_3h.wav",
       "mp4": "/mnt/e/自然之声/to_youtube/export/MVI_6989_3h_fhd.mp4"
-    },
-    "MVI_6972": {
-      "mp4": "/mnt/e/自然之声/to_youtube/export/MVI_6989_3h_fhd.mp4"
-    },
-    "MVI_7004": {
-      "wav": "/mnt/e/自然之声/to_youtube/export/MVI_7004_3h.wav",
-      "mp4": "/mnt/e/自然之声/to_youtube/export/MVI_7004_3h_fhd.mp4"
     }
   },
   "audio_library_selection": {
@@ -62,19 +55,19 @@
       "/mnt/e/自然之声/to_youtube/audio/4_wildlife/booms/QP01 0050 Deciduous forest morning songbirds robin.wav"
     ],
     "1_rain_boom": [
-      "/mnt/e/自然之声/to_youtube/audio/1_rain/booms/QP01 0011 Rain soft.wav",
-      "/mnt/e/自然之声/to_youtube/audio/1_rain/booms/QP01 0012 Rain moderate.wav",
-      "/mnt/e/自然之声/to_youtube/audio/1_rain/booms/QP01 0013 Rain strong.wav",
-      "/mnt/e/自然之声/to_youtube/audio/1_rain/booms/QP01 0014 Rain downpour.wav",
-      "/mnt/e/自然之声/to_youtube/audio/1_rain/booms/QP01 0015 Rain storm aftermath.wav",
-      "/mnt/e/自然之声/to_youtube/audio/1_rain/booms/QP01 0016 Thunderstorm.wav",
-      "/mnt/e/自然之声/to_youtube/audio/1_rain/booms/QP03 0292 Rain quiet light tone.wav",
-      "/mnt/e/自然之声/to_youtube/audio/1_rain/booms/QP03 0293 Rain light shower on water.wav",
-      "/mnt/e/自然之声/to_youtube/audio/1_rain/booms/QP03 0294 Rain shower onset.wav"
+      "/Volumes/192.168.3.128/自然之声/to_youtube/audio/1_rain/booms/QP01 0011 Rain soft.wav",
+      "/Volumes/192.168.3.128/自然之声/to_youtube/audio/1_rain/booms/QP01 0012 Rain moderate.wav",
+      "/Volumes/192.168.3.128/自然之声/to_youtube/audio/1_rain/booms/QP01 0013 Rain strong.wav",
+      "/Volumes/192.168.3.128/自然之声/to_youtube/audio/1_rain/booms/QP01 0015 Rain storm aftermath.wav",
+      "/Volumes/192.168.3.128/自然之声/to_youtube/audio/1_rain/booms/QP01 0014 Rain downpour.wav",
+      "/Volumes/192.168.3.128/自然之声/to_youtube/audio/1_rain/booms/QP03 0292 Rain quiet light tone.wav",
+      "/Volumes/192.168.3.128/自然之声/to_youtube/audio/1_rain/booms/QP03 0295 Rain light consistent leaves.wav",
+      "/Volumes/192.168.3.128/自然之声/to_youtube/audio/1_rain/booms/QP03 0296 Rain light mod consistent leaves.wav",
+      "/Volumes/192.168.3.128/自然之声/to_youtube/audio/1_rain/booms/QP03 0297 Rain light leaf drips.wav"
     ]
   },
   "track_picker_selection": {
-    "1_rain_boom": "/mnt/e/自然之声/to_youtube/audio/1_rain/booms/QP01 0011 Rain soft.wav",
+    "1_rain_boom": "/Volumes/192.168.3.128/自然之声/to_youtube/audio/1_rain/booms/QP01 0011 Rain soft.wav",
     "3_random": "/mnt/e/自然之声/to_youtube/audio/3_random/booms/QP01 0010 Thunder very distant rolling.wav"
   },
   "target_duration": "3"

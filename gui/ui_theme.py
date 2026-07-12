@@ -22,6 +22,21 @@ class UiTheme:
     trough: str
 
 
+@dataclass(frozen=True)
+class GridTheme:
+    """九宫格 / 素材库宫格配色（须显式设置 bg，避免 macOS 跟随系统深浅色）。"""
+
+    cell_bg: str
+    fg_default: str
+    fg_muted: str
+    fg_hover: str
+    fg_selected: str
+    border_default: str
+    border_hover: str
+    border_selected: str
+    border_uploaded: str
+
+
 LIGHT = UiTheme(
     name="light",
     window_bg="#f3f3f3",
@@ -63,6 +78,42 @@ def normalize_theme(name: str | None) -> str:
 
 def get_theme(name: str | None) -> UiTheme:
     return DARK if normalize_theme(name) == "dark" else LIGHT
+
+
+def grid_theme(theme: UiTheme) -> GridTheme:
+    if theme.name == "dark":
+        return GridTheme(
+            cell_bg=theme.entry_bg,
+            fg_default=theme.fg,
+            fg_muted="#999999",
+            fg_hover="#6eb5ff",
+            fg_selected="#ffffff",
+            border_default="#555555",
+            border_hover="#4a90d9",
+            border_selected="#e8e8e8",
+            border_uploaded="#666666",
+        )
+    return GridTheme(
+        cell_bg=theme.text_bg,
+        fg_default="#222222",
+        fg_muted="#666666",
+        fg_hover="#1a5fb4",
+        fg_selected="#000000",
+        border_default="#c8c8c8",
+        border_hover="#4a90d9",
+        border_selected="#000000",
+        border_uploaded="#888888",
+    )
+
+
+def paint_widget_bg(bg: str, *widgets: tk.Widget | None) -> None:
+    for widget in widgets:
+        if widget is None:
+            continue
+        try:
+            widget.configure(bg=bg)
+        except tk.TclError:
+            pass
 
 
 def theme_toggle_label(mode: str) -> str:

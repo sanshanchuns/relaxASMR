@@ -33,6 +33,7 @@ scripts/youtube_top3/output/
 __pycache__/
 *.py[cod]
 *$py.class
+gui/user_config.json
 scripts/cloak_browser/.profiles/
 scripts/video_upload/credentials.json
 scripts/video_upload/token.json
