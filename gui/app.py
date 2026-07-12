@@ -89,7 +89,7 @@ YT_MATERIAL_SCRIPT = LIB_REPO_ROOT / "scripts" / "video_export" / "generate_yout
 class RelaxAsmrApp(tk.Tk):
     def __init__(self) -> None:
         super().__init__()
-        self.title("relaxASMR · Rain 子工程")
+        self.title("自然之声-自动化界面")
         self.geometry("1600x900")
         self.minsize(720, 520)
 
@@ -400,6 +400,13 @@ class RelaxAsmrApp(tk.Tk):
 
         row4 = ttk.Frame(sec4)
         row4.pack(fill=tk.X)
+        self.btn_upload = ttk.Button(
+            row4,
+            text="上传到 YouTube",
+            command=self._upload_youtube,
+            style=primary_btn,
+        )
+        self.btn_upload.pack(side=tk.LEFT, padx=(0, 16))
         ttk.Label(row4, text="可见性").pack(side=tk.LEFT)
         self.privacy_var = tk.StringVar(value=self._cfg.get("youtube_privacy", "public"))
         ttk.Combobox(
@@ -422,10 +429,8 @@ class RelaxAsmrApp(tk.Tk):
             value=self._cfg.get("youtube_account", "leo") == "leo_usa"
         )
         ttk.Checkbutton(row4, text="leo_usa", variable=self.use_leo_usa_var).pack(
-            side=tk.LEFT, padx=(0, 16)
+            side=tk.LEFT
         )
-        self.btn_upload = ttk.Button(row4, text="上传到 YouTube", command=self._upload_youtube)
-        self.btn_upload.pack(side=tk.LEFT)
 
         row_upload_pick = ttk.Frame(sec4)
         row_upload_pick.pack(fill=tk.X, pady=(8, 0))
