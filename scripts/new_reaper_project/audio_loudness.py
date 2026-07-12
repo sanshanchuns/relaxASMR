@@ -10,9 +10,9 @@ from typing import Callable
 
 from scripts.config.paths import REPO_ROOT
 
-# YouTube 睡眠系列默认目标区间（可在 gui/user_config.json 覆盖）
-DEFAULT_LUFS_TARGET_MIN = -26.0
-DEFAULT_LUFS_TARGET_MAX = -24.0
+# YouTube 睡眠系列默认目标（可在 gui/user_config.json 用 lufs_target_min/max 覆盖）
+DEFAULT_LUFS_TARGET_MIN = -28.0
+DEFAULT_LUFS_TARGET_MAX = -28.0
 # 1_rain ReaEQ + Group ReaEQ 默认旁路，响度归一按无 EQ 链路计算
 DEFAULT_FX_COMPENSATION_DB = 0.0
 

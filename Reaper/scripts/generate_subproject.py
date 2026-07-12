@@ -35,10 +35,12 @@ RAIN_FX_SRC = REPO_ROOT / "Reaper" / "Projects" / "Rain" / "scripts" / "fx" / "a
 GROUP_JS_EQ_PARAMS = [120, -3, 3500, 1.2, -5, 6000, 0.8, -4, 8000]
 GROUP_JS_EQ_NAME = "relaxASMR/asmr_sleep_hf_eq.jsfx"
 
-REACOMP_VST = [
-    '      <VST "VST: ReaComp (Cockos)" reacomp.dll 0 "" 1919247213<5653547265636D726561636F6D700000> ""',
-    "        bWNlcu9e7f4EAAAAAQAAAAAAAAACAAAAAAAAAAQAAAAAAAAACAAAAAAAAAACAAAAAQAAAAAAAAACAAAAAAAAAFwAAAAAAAAAAAAQAA==",
-    "        776t3g3wrd4AAIA/ED74PKabxDsK16M8AAAAAAAAAAAAAIA/AAAAAAAAAAAAAAAAnNEHMwAAgD8AAAAAzcxMPQAAAAAAAAAAAAAAAAAAgD4AAAAAAAAAAAAAAAA=",
+# Group 总线 ReaLimit：Threshold 0 · Ceiling −1 dB · True peak · Release 15 dB/s · HQ
+# preset 来自 MVI_6989.rpp 实测配置
+REALIMIT_VST = [
+    '      <VST "VST: ReaLimit (Cockos)" realimit.dll 0 "" 1919708532<565354726C6D747265616C696D697400> ""',
+    "        dG1scu5e7f4CAAAAAQAAAAAAAAACAAAAAAAAAAIAAAABAAAAAAAAAAIAAAAAAAAAMAAAAAEAAAAAABAA",
+    "        AwAAAAEAAAAAAAAAAAAAAAAAAAAAAPC/AgAAAAAAAAAAAAAAAAAAAD+fduMQw8Y/",
     "        AAAQAAAA",
     "      >",
 ]
@@ -70,9 +72,149 @@ TRACK_FX_PRESETS: dict[str, list[str]] = {
 # 视频轨混音时静音（-inf dB），仅最终渲染用
 VIDEO_TRACK_VOL = 0.0
 
+# Group 总线开头淡入（秒）；统一在生成/渲染前写入 Group VOLENV2
+GROUP_FADE_IN_SEC = 5.0
 
-# 默认渲染：前 10s time selection → baseURL/export/$project.wav
-DEFAULT_RENDER_SELECTION_SEC = 10.0
+VOLENV2_BLOCK_RE = re.compile(r"    <VOLENV2\n(?:.*\n)*?    >\n")
+
+
+# Headless 渲染：RENDER_RANGE 2 = Entire project（-renderproject 不读 GUI，只读工程内设置）
+
+
+def _project_length_sec_from_rpp(text: str, duration_hours: float | None) -> float:
+    if duration_hours is not None and duration_hours > 0:
+        return float(duration_hours) * 3600.0
+    match = re.search(r"^\s*MAXPROJLEN\s+\d+\s+([\d.]+)\s*$", text, re.MULTILINE)
+    if match:
+        return float(match.group(1))
+    return 0.0
+
+
+def ensure_rpp_full_project_render(
+    rpp_path: Path,
+    *,
+    duration_hours: float | None = None,
+) -> bool:
+    """将 RPP 渲染边界设为 Entire Project；时长来自调用方传入的成片时长（小时）。"""
+    text = rpp_path.read_text(encoding="utf-8")
+    total_sec = _project_length_sec_from_rpp(text, duration_hours)
+    if total_sec <= 0:
+        return False
+
+    sel_end = int(total_sec) if total_sec == int(total_sec) else total_sec
+    render_range_re = re.compile(r"^(\s*)RENDER_RANGE\s+\d+\s+.*$")
+    selection_re = re.compile(r"^(\s*)(SELECTION2?)\s+[\d.]+\s+\S+.*$")
+    maxprojlen_re = re.compile(r"^(\s*)MAXPROJLEN\s+\d+\s+[\d.]+\s*$")
+    render_pattern_re = re.compile(r"^(\s*)RENDER_PATTERN\s+\S+\s*$")
+    suffix = duration_render_suffix(float(duration_hours)) if duration_hours else None
+
+    out_lines: list[str] = []
+    changed = False
+    for line in text.splitlines(keepends=True):
+        stripped = line.rstrip("\r\n")
+        m = render_range_re.match(stripped)
+        if m:
+            new = f"{m.group(1)}RENDER_RANGE 2 0 0 0 1000"
+            if new != stripped:
+                changed = True
+            out_lines.append(new + "\n")
+            continue
+        m = selection_re.match(stripped)
+        if m:
+            new = f"{m.group(1)}{m.group(2)} {sel_end} 0"
+            if new != stripped:
+                changed = True
+            out_lines.append(new + "\n")
+            continue
+        m = maxprojlen_re.match(stripped)
+        if m:
+            new = f"{m.group(1)}MAXPROJLEN 1 {sel_end}"
+            if new != stripped:
+                changed = True
+            out_lines.append(new + "\n")
+            continue
+        m = render_pattern_re.match(stripped)
+        if m and suffix is not None:
+            new = f'{m.group(1)}RENDER_PATTERN $project_{suffix}'
+            if new != stripped:
+                changed = True
+            out_lines.append(new + "\n")
+            continue
+        out_lines.append(line)
+
+    if changed:
+        rpp_path.write_text("".join(out_lines), encoding="utf-8")
+
+    env_text, env_changed = ensure_rpp_mix_envelopes(
+        rpp_path.read_text(encoding="utf-8"),
+        total_sec=total_sec,
+    )
+    if env_changed:
+        rpp_path.write_text(env_text, encoding="utf-8")
+        changed = True
+
+    return changed
+
+
+def build_group_fade_in_envelope(
+    total_sec: float,
+    fade_sec: float = GROUP_FADE_IN_SEC,
+) -> str:
+    """Group 轨 Volume 包络：开头 fade in，其余时间保持 1.0。"""
+    fade_sec = max(0.0, min(float(fade_sec), float(total_sec)))
+    end = int(total_sec) if total_sec == int(total_sec) else total_sec
+    lines = [
+        "    <VOLENV2",
+        "      ACT 1 -1",
+        "      VIS 1 1 1",
+        "      LANEHEIGHT 0 0",
+        "      ARM 1",
+        "      DEFSHAPE 0 -1 -1",
+        "      PT 0 0 0",
+    ]
+    if fade_sec > 0:
+        lines.append(f"      PT {fade_sec:g} 1 0")
+    lines.append(f"      PT {end:g} 1 0")
+    lines.append("    >")
+    return "\n".join(lines)
+
+
+def ensure_rpp_mix_envelopes(
+    text: str,
+    *,
+    total_sec: float,
+    fade_sec: float = GROUP_FADE_IN_SEC,
+) -> tuple[str, bool]:
+    """统一后期：1_rain 去掉 Volume 包络；Group 写入开头 fade in。"""
+    parts = re.split(r"(?=  <TRACK \{)", text)
+    if len(parts) <= 1:
+        return text, False
+
+    changed = False
+    out: list[str] = [parts[0]]
+    fade_block = build_group_fade_in_envelope(total_sec, fade_sec)
+
+    for part in parts[1:]:
+        new_part = part
+        if re.search(r"^\s*NAME 1_rain\s*$", part, re.MULTILINE):
+            new_part, n = VOLENV2_BLOCK_RE.subn("", part)
+            if n:
+                changed = True
+        elif re.search(r"^\s*NAME Group\s*$", part, re.MULTILINE):
+            stripped, n = VOLENV2_BLOCK_RE.subn("", part)
+            if n or fade_block not in stripped:
+                changed = True
+            new_part, inserted = re.subn(
+                r"(    MAINSEND 1 0\n)",
+                r"\1" + fade_block + "\n",
+                stripped,
+                count=1,
+            )
+            if inserted == 0:
+                new_part = stripped
+        out.append(new_part)
+
+    return "".join(out), changed
 
 
 def render_output_dir_for_rpp(repo_root: Path, media_mode: str) -> str:
@@ -154,35 +296,6 @@ def stage_media(
 
 
 
-def build_vol_envelope(duration_hours: float) -> str:
-    """生成长时音量包络 (1_rain)"""
-    total_sec = duration_hours * 3600
-    points_count = 33
-    max_db = 1.0
-    min_db = -1.0
-    mid = (max_db + min_db) / 2
-    amp = (max_db - min_db) / 2
-    
-    lines = [
-        "  <VOLENV2",
-        "    ACT 1 -1",
-        "    VIS 1 1 1",
-        "    LANEHEIGHT 0 0",
-        "    ARM 1",
-        "    DEFSHAPE 0 -1 -1"
-    ]
-    
-    n = points_count - 1
-    for i in range(points_count):
-        phase = 2 * math.pi * (i / n)
-        db = mid + amp * math.sin(phase)
-        linear = 10 ** (db / 20)
-        t = (i / n) * total_sec
-        lines.append(f"    PT {t:.6f} {linear:.6f} 0")
-    
-    lines.append("  >")
-    return "\n".join(lines)
-
 def make_track(
     name: str,
     vol: float = 1.0,
@@ -243,20 +356,15 @@ def js_eq_slider_line(params: list[float]) -> str:
     return " ".join(parts)
 
 
-def make_group_fxchain_reaeq() -> list[str]:
+def make_group_fxchain_limiter() -> list[str]:
     lines = [
         "    <FXCHAIN",
         "      SHOW 0",
         "      LASTSEL 0",
         "      DOCKED 0",
-        "      BYPASS 1 0 0",
+        "      BYPASS 0 0 0",
     ]
-    lines.extend(REAEQ_VST)
-    lines.append(f"      FLOATPOS 0 0 0 0")
-    lines.append(f"      FXID {{{guid()}}}")
-    lines.append("      WAK 0 0")
-    lines.append("      BYPASS 0 0 0")
-    lines.extend(REACOMP_VST)
+    lines.extend(REALIMIT_VST)
     lines.extend(
         [
             "      FLOATPOS 0 0 0 0",
@@ -288,7 +396,7 @@ def make_group_fxchain(js_ref: str, params: list[float]) -> list[str]:
         "      WAK 0 0",
         "      BYPASS 0 0 0",
     ]
-    lines.extend(REACOMP_VST)
+    lines.extend(REALIMIT_VST)
     lines.extend(
         [
             "      FLOATPOS 0 0 0 0",
@@ -300,7 +408,13 @@ def make_group_fxchain(js_ref: str, params: list[float]) -> list[str]:
     return lines
 
 
-def make_group_track(js_ref: str, params: list[float]) -> str:
+def make_group_track(
+    js_ref: str,
+    params: list[float],
+    *,
+    total_sec: float = 0.0,
+    fade_sec: float = GROUP_FADE_IN_SEC,
+) -> str:
     track_id = guid()
     lines = [
         f"  <TRACK {{{track_id}}}",
@@ -330,7 +444,9 @@ def make_group_track(js_ref: str, params: list[float]) -> str:
         "    MIDIOUT -1",
         "    MAINSEND 1 0",
     ]
-    lines.extend(make_group_fxchain_reaeq())
+    if total_sec > 0:
+        lines.append(build_group_fade_in_envelope(total_sec, fade_sec))
+    lines.extend(make_group_fxchain_limiter())
     lines.append("  >")
     return "\n".join(lines)
 
@@ -406,8 +522,8 @@ def build_rpp(cfg: dict, repo_root: Path, rpp_dir: Path, media_mode: str = "auto
     total_sec = hours * 3600
     maxprojlen = int(total_sec)
     render_dir = render_output_dir_for_rpp(repo_root, media_mode)
-    sel_end = DEFAULT_RENDER_SELECTION_SEC
-    sel_str = str(int(sel_end)) if sel_end == int(sel_end) else str(sel_end)
+    sel_end = int(total_sec) if total_sec == int(total_sec) else total_sec
+    sel_str = str(sel_end)
 
     header = [
         '<REAPER_PROJECT 0.1 "7.73/win64" 0 0',
@@ -450,7 +566,7 @@ def build_rpp(cfg: dict, repo_root: Path, rpp_dir: Path, media_mode: str = "auto
         f"  RENDER_PATTERN $project_{duration_render_suffix(hours)}",
         "  RENDER_FMT 0 2 0",
         "  RENDER_1X 0",
-        "  RENDER_RANGE 1 0 0 0 1000",
+        "  RENDER_RANGE 2 0 0 0 1000",
         "  RENDER_RESAMPLE 3 0 1",
         "  RENDER_ADDTOPROJ 0",
         "  RENDER_STEMS 0",
@@ -554,35 +670,59 @@ def build_rpp(cfg: dict, repo_root: Path, rpp_dir: Path, media_mode: str = "auto
         paths = [p for p in layer.get("paths", []) if p]
         if not paths:
             continue
-        rel = paths[0]
-        ap = resolve_media_asset(rel)
-        file_ref, src_type, file_suffix = stage_media(ap, rpp_dir, media_mode, repo_root)
-        
-        ap_len = media_duration(ap)
-        
+
+        media_entries: list[tuple[Path, str, str, str, float]] = []
+        for rel in paths:
+            ap = resolve_media_asset(rel)
+            file_ref, src_type, file_suffix = stage_media(ap, rpp_dir, media_mode, repo_root)
+            ap_len = media_duration(ap)
+            media_entries.append((ap, file_ref, src_type, file_suffix, ap_len))
+
+        ap_len = max(e[4] for e in media_entries)
+
         min_gap = float(layer.get("min_gap_min", 0)) * 60
         max_gap = float(layer.get("max_gap_min", 0)) * 60
         randomness = float(layer.get("randomness", 0))
-        
+
         if min_gap > 0 and max_gap > 0 and cfg_dur_s > 0:
             span = cfg_dur_s - ap_len
-            count = math.floor(span / ((min_gap + max_gap) / 2))
-            
+            count = math.floor(span / ((min_gap + max_gap) / 2)) if span > 0 else 0
+
             random.seed(t + 42)
-            
-            for i in range(1, count + 1):
-                progress = i / (count + 1)
-                ideal_pos = progress * span
-                max_jitter = min(ideal_pos - min_gap, span - ideal_pos - min_gap) / 2
-                max_jitter = max(0, max_jitter)
-                jitter = (random.random() * 2 - 1) * randomness * max_jitter
-                pos = ideal_pos + jitter
-                
+
+            if count >= 1:
+                for i in range(1, count + 1):
+                    progress = i / (count + 1)
+                    ideal_pos = progress * span
+                    max_jitter = min(ideal_pos - min_gap, span - ideal_pos - min_gap) / 2
+                    max_jitter = max(0, max_jitter)
+                    jitter = (random.random() * 2 - 1) * randomness * max_jitter
+                    pos = ideal_pos + jitter
+
+                    ap, file_ref, src_type, file_suffix, item_len = random.choice(
+                        media_entries
+                    )
+                    tracks_by_num[t].append(
+                        make_item(
+                            ap.name,
+                            pos,
+                            item_len,
+                            False,
+                            file_ref,
+                            src_type,
+                            float(layer.get("vol", 1.0)),
+                            iid,
+                            file_suffix,
+                        )
+                    )
+                    iid += 1
+            else:
+                ap, file_ref, src_type, file_suffix, item_len = random.choice(media_entries)
                 tracks_by_num[t].append(
                     make_item(
                         ap.name,
-                        pos,
-                        ap_len,
+                        0,
+                        item_len,
                         False,
                         file_ref,
                         src_type,
@@ -593,11 +733,12 @@ def build_rpp(cfg: dict, repo_root: Path, rpp_dir: Path, media_mode: str = "auto
                 )
                 iid += 1
         else:
+            ap, file_ref, src_type, file_suffix, item_len = random.choice(media_entries)
             tracks_by_num[t].append(
                 make_item(
                     ap.name,
                     0,
-                    ap_len,
+                    item_len,
                     False,
                     file_ref,
                     src_type,
@@ -644,7 +785,15 @@ def build_rpp(cfg: dict, repo_root: Path, rpp_dir: Path, media_mode: str = "auto
     body: list[str] = []
 
     js_ref = group_js_ref(rpp_dir, repo_root, media_mode)
-    body.append(make_group_track(js_ref, GROUP_JS_EQ_PARAMS))
+    group_fade = float(cfg.get("group_fade_in_sec", GROUP_FADE_IN_SEC))
+    body.append(
+        make_group_track(
+            js_ref,
+            GROUP_JS_EQ_PARAMS,
+            total_sec=cfg_dur_s,
+            fade_sec=group_fade,
+        )
+    )
 
     track_fx_by_name: dict[str, list[str]] = dict(TRACK_FX_PRESETS)
 
@@ -667,9 +816,6 @@ def build_rpp(cfg: dict, repo_root: Path, rpp_dir: Path, media_mode: str = "auto
                 fx_preset=track_fx_by_name.get(name),
             )
         )
-        if name == "1_rain" and cfg_dur_s > 0:
-            body.append(build_vol_envelope(cfg_dur_s / 3600))
-            
         for item in tracks_by_num[t]:
             body.append(item)
         body.append("  >")

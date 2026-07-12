@@ -9,7 +9,12 @@ import subprocess
 from collections.abc import Callable
 from pathlib import Path
 
-from .parse_youtube_md import parse_youtube_md, pick_description, pick_title
+from .material_store import (
+    load_material_metadata,
+    resolve_material_in_dir,
+    scene_id_from_material_path,
+)
+from .parse_youtube_md import pick_description, pick_title
 
 VIDEO_UPLOAD_DIR = Path(__file__).resolve().parent
 CONFIG_DIR = VIDEO_UPLOAD_DIR / "config"
@@ -204,21 +209,48 @@ def run_oauth_local_server(flow, *, on_log: Callable[[str], None] | None = None)
     return flow.run_local_server(port=0, open_browser=True)
 
 
-def resolve_video_for_material(material_dir: Path) -> Path:
+def resolve_video_for_material(material_dir: Path, meta: dict | None = None) -> Path:
     material_dir = material_dir.resolve()
-    md = material_dir / "youtube.md"
-    if md.is_file():
-        meta = parse_youtube_md(md)
-        if meta.get("video_name"):
-            candidate = material_dir.parent.parent / meta["video_name"]
+    if material_dir.is_file():
+        if meta is None:
+            meta = load_material_metadata(material_dir)
+        material_dir = material_dir.parent
+    elif meta is None:
+        mat_path = resolve_material_in_dir(material_dir)
+        if mat_path is not None:
+            meta = load_material_metadata(mat_path)
+
+    search_roots: list[Path] = []
+    for root in (material_dir.parent, material_dir.parent.parent):
+        if root not in search_roots:
+            search_roots.append(root)
+
+    if meta and meta.get("video_name"):
+        for root in search_roots:
+            candidate = root / meta["video_name"]
             if candidate.is_file():
                 return candidate
-    candidate = material_dir.parent.parent / f"{material_dir.name}.mp4"
-    if candidate.is_file():
-        return candidate
+
+    for root in search_roots:
+        candidate = root / f"{material_dir.name}.mp4"
+        if candidate.is_file():
+            return candidate
+
     raise FileNotFoundError(
-        f"找不到与物料目录对应的 MP4：{material_dir.parent.parent / (material_dir.name + '.mp4')}"
+        f"找不到与物料目录对应的 MP4（已搜索 {', '.join(str(r) for r in search_roots)}）"
     )
+
+
+def resolve_thumbnail_path(material_dir: Path, meta: dict, material_path: Path | None) -> Path:
+    scene_id = meta.get("scene_id") or ""
+    if not scene_id and material_path is not None:
+        scene_id = scene_id_from_material_path(material_path)
+    if scene_id:
+        candidate = material_dir / f"{scene_id}_thumbnail.jpg"
+        if candidate.is_file():
+            return candidate
+    legacy = material_dir / "thumbnail.jpg"
+    return legacy
 
 
 def get_youtube_service(
@@ -332,7 +364,7 @@ def upload_from_material(
     on_log: Callable[[str], None] | None = None,
     on_progress: Callable[[int], None] | None = None,
 ) -> dict:
-    """从物料目录上传：youtube.md + 对应 output MP4 + thumbnail.jpg。"""
+    """从物料目录上传：*_material.json + 对应 MP4 + 缩略图。"""
 
     def log(msg: str) -> None:
         if on_log:
@@ -341,24 +373,25 @@ def upload_from_material(
             print(msg)
 
     material_dir = Path(material_dir).resolve()
-    if material_dir.is_file() and material_dir.suffix == ".md":
-        md_path = material_dir
-        material_dir = md_path.parent
+    material_path: Path | None = None
+    if material_dir.is_file() and material_dir.suffix.lower() in (".json", ".md"):
+        material_path = material_dir
+        material_dir = material_path.parent
     else:
-        md_path = material_dir / "youtube.md"
-        
-    if not md_path.is_file():
-        raise FileNotFoundError(f"找不到物料 md：{md_path}")
+        material_path = resolve_material_in_dir(material_dir)
 
-    meta = parse_youtube_md(md_path)
+    if material_path is None or not material_path.is_file():
+        raise FileNotFoundError(f"找不到物料文件（*_material.json / *_material.md）：{material_dir}")
+
+    meta = load_material_metadata(material_path)
     title = pick_title(meta, language)
     description = pick_description(meta, language)
     tags = meta.get("tags", [])
     if not title:
-        raise ValueError("youtube.md 中缺少标题")
+        raise ValueError(f"{material_path.name} 中缺少标题")
 
-    video_path = override_video_path or resolve_video_for_material(material_dir)
-    thumb_path = material_dir / "thumbnail.jpg"
+    video_path = override_video_path or resolve_video_for_material(material_dir, meta)
+    thumb_path = resolve_thumbnail_path(material_dir, meta, material_path)
 
     creds_path, tok_path, account_name = resolve_account_paths(
         account,

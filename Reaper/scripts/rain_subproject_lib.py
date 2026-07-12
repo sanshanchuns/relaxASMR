@@ -247,7 +247,7 @@ def build_scene_config_from_gui(
     selected_tracks: dict[str, Path] | None = None,
     log_fn: Callable[[str], None] | None = None,
 ) -> dict:
-    """从 GUI 选音构建工程配置 dict，供 generate_subproject.build_rpp 直接使用。"""
+    """从 GUI 步骤 2 宫格选中构建工程配置（仅认 selected_tracks，未选则轨道留空）。"""
     from scripts.config.paths import path_for_config
     from scripts.new_reaper_project.audio_loudness import adjust_1_rain_layer_vol
 
@@ -264,8 +264,14 @@ def build_scene_config_from_gui(
         if not lid:
             continue
         sel = (selected_tracks or {}).get(lid)
-        if sel:
+        if sel and Path(sel).is_file():
             layer["paths"] = [path_for_config(sel)]
+            if log_fn:
+                log_fn(f"工程配方 {lid} ← {Path(sel).name}")
+        else:
+            layer["paths"] = []
+            if log_fn:
+                log_fn(f"工程配方 {lid} ← （未选声源，轨道留空）")
 
     adjust_1_rain_layer_vol(cfg, log=log_fn)
     return cfg

@@ -39,6 +39,13 @@ from gui.folder_open import open_folder  # noqa: E402
 from gui.import_reload import load_module, load_scripts_module  # noqa: E402
 from gui.video_library_tab import VideoLibraryTab, read_video_quality  # noqa: E402
 from gui.audio_library_tab import AudioLibraryTab, wav_display_title  # noqa: E402
+from gui.export_mix_preview import ExportMixPreviewGrid  # noqa: E402
+from gui.export_wav import (  # noqa: E402
+    expected_export_wav_path,
+    format_duration_short,
+    wav_duration_seconds,
+    wav_matches_target_hours,
+)
 from gui.youtube_material import (  # noqa: E402
     RAIN_THUMB_TITLE,
     find_material_dir,
@@ -57,7 +64,8 @@ from scripts.config.paths import (  # noqa: E402
     get_scene_number,
     is_mac,
     material_dir as base_material_dir,
-    material_md_path,
+    material_json_path,
+    material_metadata_path,
 )
 
 CONFIG_PATH = Path(__file__).resolve().parent / "user_config.json"
@@ -100,6 +108,34 @@ class RelaxAsmrApp(tk.Tk):
             pass
         self.destroy()
 
+    def _format_duration_hours(self, hours: float | int | str) -> str:
+        h = float(hours)
+        return str(int(h)) if h == int(h) else f"{h:g}"
+
+    def _initial_duration_str(self) -> str:
+        for key in ("duration_hours", "target_duration"):
+            raw = self._cfg.get(key)
+            if raw is None or str(raw).strip() == "":
+                continue
+            try:
+                return self._format_duration_hours(raw)
+            except (TypeError, ValueError):
+                continue
+        return "3"
+
+    def _parse_duration_hours(self) -> float:
+        try:
+            return float(self.duration_var.get())
+        except (ValueError, tk.TclError) as exc:
+            raise ValueError("成片时长必须是数字。") from exc
+
+    def _persist_duration_hours(self, hours: float) -> None:
+        h = float(hours)
+        stored = int(h) if h == int(h) else h
+        self._cfg["duration_hours"] = stored
+        self._cfg["target_duration"] = self._format_duration_hours(h)
+        self._save_config()
+
     def _load_config(self) -> None:
         self._cfg = {}
         if CONFIG_PATH.is_file():
@@ -141,6 +177,25 @@ class RelaxAsmrApp(tk.Tk):
         )
         self.left_notebook.add(self.video_library_tab, text="视频素材库")
 
+        self.rain_boom_library_tab = AudioLibraryTab(
+            self.left_notebook,
+            layer_id="1_rain",
+            track_id="1_rain_boom",
+            on_selection_changed=self._on_audio_library_selection,
+            log_fn=self._log,
+        )
+        self.left_notebook.add(self.rain_boom_library_tab, text="rain boom 素材库")
+
+        self.impact_library_tab = AudioLibraryTab(
+            self.left_notebook,
+            layer_id="2_impact",
+            track_id="2_impact",
+            booms_dir=audio_layer_dir("2_impact"),
+            on_selection_changed=self._on_audio_library_selection,
+            log_fn=self._log,
+        )
+        self.left_notebook.add(self.impact_library_tab, text="impact 素材库")
+
         self.random_library_tab = AudioLibraryTab(
             self.left_notebook,
             layer_id="3_random",
@@ -160,6 +215,8 @@ class RelaxAsmrApp(tk.Tk):
         self.left_notebook.add(self.wildlife_library_tab, text="wildlife 素材库")
 
         self._audio_library_tabs = {
+            "1_rain_boom": self.rain_boom_library_tab,
+            "2_impact": self.impact_library_tab,
             "3_random": self.random_library_tab,
             "4_wildlife": self.wildlife_library_tab,
         }
@@ -203,6 +260,8 @@ class RelaxAsmrApp(tk.Tk):
             picker.pack()
             self.track_pickers[track_id] = picker
 
+        self._ensure_rain_boom_tab()
+
         # 3. 新建 Reaper 工程
         sec3 = ttk.LabelFrame(self.left_content, text="3. 新建 Reaper 工程", padding=10)
         sec3.pack(fill=tk.X, pady=(0, 10))
@@ -211,7 +270,7 @@ class RelaxAsmrApp(tk.Tk):
         row_gen.pack(fill=tk.X)
         ttk.Label(row_gen, text="成片时长(小时)").pack(side=tk.LEFT)
 
-        self.duration_var = tk.StringVar(value=self._cfg.get("target_duration", "3"))
+        self.duration_var = tk.StringVar(value=self._initial_duration_str())
         ttk.Entry(row_gen, textvariable=self.duration_var, width=5).pack(side=tk.LEFT, padx=8)
 
         self.btn_gen_project = ttk.Button(row_gen, text="生成 / 覆盖 Reaper 子工程", command=self._create_project)
@@ -235,8 +294,10 @@ class RelaxAsmrApp(tk.Tk):
         row_mix.pack(fill=tk.X, pady=(10, 0))
         self.btn_render_reaper = ttk.Button(row_mix, text="一键输出混音", command=self._render_headless)
         self.btn_render_reaper.pack(side=tk.LEFT)
-        self.lbl_render_progress = ttk.Label(row_mix, text="待开始", wraplength=360)
-        self.lbl_render_progress.pack(side=tk.LEFT, padx=(8, 0))
+        self.btn_open_export = ttk.Button(row_mix, text="打开混音目录", command=self._open_export_dir)
+        self.btn_open_export.pack(side=tk.LEFT, padx=(8, 0))
+        self.mix_preview_grid = ExportMixPreviewGrid(row_mix, log_fn=self._log)
+        self.mix_preview_grid.pack(side=tk.LEFT, padx=(8, 0))
 
         row_export = ttk.Frame(sec_export)
         row_export.pack(fill=tk.X, pady=(10, 0))
@@ -301,12 +362,90 @@ class RelaxAsmrApp(tk.Tk):
         self.right_pane.pack(fill=tk.BOTH, expand=True)
 
         self.cover_frame = ttk.LabelFrame(self.right_pane, text="封面预览", padding=10)
-        self.lbl_cover = ttk.Label(self.cover_frame, text="无封面", anchor=tk.CENTER)
-        self.lbl_cover.pack(fill=tk.BOTH, expand=True)
+        self.cover_body = ttk.Frame(self.cover_frame)
+        self.cover_body.pack(fill=tk.BOTH, expand=True)
+        self.cover_body.columnconfigure(0, weight=0, minsize=213)
+        self.cover_body.columnconfigure(1, weight=1)
+        self.cover_body.rowconfigure(0, weight=1)
+
+        self._cover_slot_w, self._cover_slot_h = 213, 120
+        self.cover_thumb_canvas = tk.Canvas(
+            self.cover_body,
+            width=self._cover_slot_w,
+            height=self._cover_slot_h,
+            highlightthickness=0,
+            bd=0,
+        )
+        self.cover_thumb_canvas.grid(row=0, column=0, sticky="nw", padx=(0, 10))
+
+        cover_meta = ttk.Frame(self.cover_body)
+        cover_meta.grid(row=0, column=1, sticky="nsew")
+        cover_meta.columnconfigure(0, weight=1)
+        cover_meta.rowconfigure(1, weight=1)
+
+        self.lbl_cover_title_en = tk.Label(
+            cover_meta,
+            text="",
+            anchor="nw",
+            justify=tk.LEFT,
+            wraplength=320,
+            font=("", 11, "bold"),
+        )
+        self.lbl_cover_title_en.grid(row=0, column=0, sticky="new")
+
+        self.txt_cover_desc_en = tk.Text(
+            cover_meta,
+            height=6,
+            wrap=tk.WORD,
+            relief=tk.FLAT,
+            borderwidth=0,
+            state=tk.DISABLED,
+            font=("", 10),
+        )
+        self.txt_cover_desc_en.grid(row=1, column=0, sticky="nsew", pady=(8, 0))
 
         self.preview_frame = ttk.LabelFrame(self.right_pane, text="视频预览", padding=10)
-        self.lbl_preview = ttk.Label(self.preview_frame, text="无预览", anchor=tk.CENTER)
-        self.lbl_preview.pack(fill=tk.BOTH, expand=True)
+        self.preview_body = ttk.Frame(self.preview_frame)
+        self.preview_body.pack(fill=tk.BOTH, expand=True)
+        self.preview_body.columnconfigure(0, weight=0, minsize=213)
+        self.preview_body.columnconfigure(1, weight=1)
+        self.preview_body.rowconfigure(0, weight=1)
+
+        self._preview_slot_w, self._preview_slot_h = 213, 120
+        self.preview_video_canvas = tk.Canvas(
+            self.preview_body,
+            width=self._preview_slot_w,
+            height=self._preview_slot_h,
+            highlightthickness=0,
+            bd=0,
+        )
+        self.preview_video_canvas.grid(row=0, column=0, sticky="nw", padx=(0, 10))
+
+        preview_meta = ttk.Frame(self.preview_body)
+        preview_meta.grid(row=0, column=1, sticky="nsew")
+        preview_meta.columnconfigure(0, weight=1)
+        preview_meta.rowconfigure(1, weight=1)
+
+        self.lbl_preview_title_zh = tk.Label(
+            preview_meta,
+            text="",
+            anchor="nw",
+            justify=tk.LEFT,
+            wraplength=320,
+            font=("", 11, "bold"),
+        )
+        self.lbl_preview_title_zh.grid(row=0, column=0, sticky="new")
+
+        self.txt_preview_desc_zh = tk.Text(
+            preview_meta,
+            height=6,
+            wrap=tk.WORD,
+            relief=tk.FLAT,
+            borderwidth=0,
+            state=tk.DISABLED,
+            font=("", 10),
+        )
+        self.txt_preview_desc_zh.grid(row=1, column=0, sticky="nsew", pady=(8, 0))
 
         sec_log = ttk.LabelFrame(self.right_pane, text="日志", padding=8)
         self.log_text = tk.Text(sec_log, height=14, wrap=tk.WORD, state=tk.DISABLED)
@@ -324,6 +463,7 @@ class RelaxAsmrApp(tk.Tk):
         self._preview_img = None
         self._right_pane_equalize_pending = False
         self.after_idle(self._equalize_right_pane)
+        self.after_idle(self._init_preview_panel)
 
         self._restore_audio_library_selections()
 
@@ -479,6 +619,47 @@ class RelaxAsmrApp(tk.Tk):
         cfg[track_id] = [str(p) for p in paths]
         self._save_config()
 
+    def _track_picker_selection_cfg(self) -> dict:
+        sel = self._cfg.get("track_picker_selection")
+        if not isinstance(sel, dict):
+            sel = {}
+            self._cfg["track_picker_selection"] = sel
+        return sel
+
+    def _save_track_picker_selection(self, track_key: str, path: Path | None) -> None:
+        cfg = self._track_picker_selection_cfg()
+        if path and path.is_file():
+            cfg[track_key] = str(path.resolve())
+        else:
+            cfg.pop(track_key, None)
+        self._save_config()
+
+    def _picker_by_track_name(self, track_name: str):
+        for picker in self.track_pickers.values():
+            if picker.track_name == track_name:
+                return picker
+        return None
+
+    def _apply_saved_track_picker_selection(self, track_key: str, picker) -> bool:
+        raw = self._track_picker_selection_cfg().get(track_key)
+        if not raw:
+            return False
+        p = Path(raw)
+        if not p.is_file():
+            return False
+        if hasattr(picker, "select_wav"):
+            return picker.select_wav(p, notify=False)
+        return False
+
+    def _prepare_scatter_pickers_for_project(self) -> None:
+        """生成工程前：素材库 → 步骤 2 同步，并恢复上次点选。"""
+        from gui.core_controller import SCATTER_LAYER_IDS
+
+        for tid in SCATTER_LAYER_IDS:
+            tab = self._audio_library_tabs.get(tid)
+            if tab:
+                self._sync_track_picker_from_library(tid, tab.get_selected())
+
     def _restore_audio_library_selections(self) -> None:
         cfg = self._audio_library_selection_cfg()
         for track_id, tab in self._audio_library_tabs.items():
@@ -487,10 +668,47 @@ class RelaxAsmrApp(tk.Tk):
                 continue
             paths = [Path(p) for p in raw if p and Path(p).is_file()]
             if paths:
-                tab.set_selected(paths)
+                tab.set_selected(paths, notify=False)
                 self._sync_track_picker_from_library(track_id, paths)
 
+    def _rain_tab_insert_anchor(self):
+        return self.track_pickers.get("1_rain_vlm") or self.track_pickers.get("1_rain")
+
+    def _ensure_rain_boom_tab(self):
+        from gui.track_picker_ui import TrackPickerUI
+
+        anchor = self._rain_tab_insert_anchor()
+        if not anchor:
+            return None
+
+        boom = self.track_pickers.get("1_rain_boom")
+        if not boom:
+            frame = ttk.Frame(self.pickers_notebook, padding=6)
+            boom = TrackPickerUI(frame, track_name="1_rain_boom", log_fn=self._log)
+            boom.on_select_callback = self._on_grid_select
+            boom.pack()
+            self.track_pickers["1_rain_boom"] = boom
+        else:
+            frame = boom.master
+
+        target_idx = self.pickers_notebook.index(anchor.master) + 1
+        try:
+            current_idx = self.pickers_notebook.index(frame)
+        except tk.TclError:
+            current_idx = -1
+
+        if current_idx < 0:
+            self.pickers_notebook.insert(target_idx, frame, text="1_rain_boom")
+        elif current_idx != target_idx:
+            self.pickers_notebook.insert(target_idx, frame)
+
+        return boom
+
     def _sync_track_picker_from_library(self, track_id: str, wavs: list[Path]) -> None:
+        from gui.core_controller import SCATTER_LAYER_IDS
+
+        if track_id == "1_rain_boom":
+            self._ensure_rain_boom_tab()
         picker = self.track_pickers.get(track_id)
         if not picker:
             return
@@ -498,8 +716,20 @@ class RelaxAsmrApp(tk.Tk):
             {"wav": str(w), "name": wav_display_title(w), "score": 100}
             for w in wavs[:9]
         ]
+        if not cands:
+            picker.set_candidates([])
+            picker.clear_selection()
+            return
         picker.set_candidates(cands)
-        picker.set_title(f"素材库已选 {len(cands)} 个")
+        if track_id == "1_rain_boom":
+            picker.set_title(
+                f"rain boom 已选 {len(cands)} 个" if cands else "rain boom 素材库未选"
+            )
+        else:
+            picker.set_title(f"素材库已选 {len(cands)} 个")
+
+        if self._apply_saved_track_picker_selection(track_id, picker):
+            pass
 
     def _preload_audio_libraries(self) -> None:
         for tab in self._audio_library_tabs.values():
@@ -511,6 +741,8 @@ class RelaxAsmrApp(tk.Tk):
 
     def _on_left_tab_changed(self, _event=None) -> None:
         self._unbind_left_scroll_wheel()
+        if hasattr(self, "mix_preview_grid"):
+            self.mix_preview_grid.stop_playback()
         for tab in self._audio_library_tabs.values():
             tab.stop_playback()
         try:
@@ -535,6 +767,59 @@ class RelaxAsmrApp(tk.Tk):
         self.rpp_path = rpp.resolve()
         self._cfg["last_rpp"] = str(self.rpp_path)
         self._save_config()
+
+    def _pane_thumb_size(self, frame: ttk.LabelFrame) -> tuple[int, int]:
+        """LabelFrame 内左栏固定 16:9 占位尺寸。"""
+        frame.update_idletasks()
+        frame_h = frame.winfo_height()
+        if frame_h > 1:
+            h = max(frame_h - 24, 120)
+            return max(int(h * 16 / 9), 160), h
+        _, cell_h = self._preview_cell_size()
+        h = max(cell_h, 120)
+        return max(int(h * 16 / 9), 160), h
+
+    def _cover_thumb_size(self) -> tuple[int, int]:
+        if hasattr(self, "cover_frame"):
+            return self._pane_thumb_size(self.cover_frame)
+        _, cell_h = self._preview_cell_size()
+        h = max(cell_h, 120)
+        return max(int(h * 16 / 9), 160), h
+
+    def _preview_thumb_size(self) -> tuple[int, int]:
+        if hasattr(self, "preview_frame"):
+            return self._pane_thumb_size(self.preview_frame)
+        return self._cover_thumb_size()
+
+    def _apply_cover_slot_geometry(self, slot_w: int, slot_h: int) -> None:
+        self._cover_slot_w = slot_w
+        self._cover_slot_h = slot_h
+        if hasattr(self, "cover_thumb_canvas"):
+            self.cover_thumb_canvas.configure(width=slot_w, height=slot_h)
+        if hasattr(self, "cover_body"):
+            self.cover_body.columnconfigure(0, minsize=slot_w)
+
+    def _apply_preview_slot_geometry(self, slot_w: int, slot_h: int) -> None:
+        self._preview_slot_w = slot_w
+        self._preview_slot_h = slot_h
+        if hasattr(self, "preview_video_canvas"):
+            self.preview_video_canvas.configure(width=slot_w, height=slot_h)
+        if hasattr(self, "preview_body"):
+            self.preview_body.columnconfigure(0, minsize=slot_w)
+
+    def _show_preview_placeholder(self, text: str) -> None:
+        if not hasattr(self, "preview_video_canvas"):
+            return
+        slot_w, slot_h = self._preview_thumb_size()
+        self._apply_preview_slot_geometry(slot_w, slot_h)
+        self.preview_video_canvas.delete("all")
+        self.preview_video_canvas.create_text(
+            slot_w // 2,
+            slot_h // 2,
+            text=text,
+            anchor=tk.CENTER,
+            width=max(slot_w - 8, 80),
+        )
 
     def _preview_cell_size(self) -> tuple[int, int]:
         """右侧每个预览格的最大缩略图尺寸（约 1/3 高度）。"""
@@ -568,10 +853,15 @@ class RelaxAsmrApp(tk.Tk):
         def _done() -> None:
             self._right_pane_equalize_pending = False
             self._equalize_right_pane()
-            if self._cover_path():
-                self._update_cover_preview()
+            self._update_cover_preview()
+            self._refresh_preview_layout()
 
         self.after_idle(_done)
+
+    def _init_preview_panel(self) -> None:
+        if not self.video_path or not self.video_path.is_file():
+            self._show_preview_placeholder("无预览")
+        self._update_preview_metadata()
 
     def _log(self, msg: str) -> None:
         def append() -> None:
@@ -621,6 +911,54 @@ class RelaxAsmrApp(tk.Tk):
                 if p.is_file():
                     return p.resolve()
         return None
+
+    def _target_duration_hours(self) -> float:
+        try:
+            return self._parse_duration_hours()
+        except ValueError:
+            raw = self._cfg.get("duration_hours", self._cfg.get("target_duration", 3))
+            try:
+                return float(raw)
+            except (TypeError, ValueError):
+                return 3.0
+
+    def _resolve_valid_export_wav(
+        self, scene_id: str, hours: float | None = None
+    ) -> Path | None:
+        """仅当 WAV 实际时长接近目标成片时长时视为有效成品。"""
+        h = self._target_duration_hours() if hours is None else float(hours)
+        expected = expected_export_wav_path(scene_id, h)
+        if wav_matches_target_hours(expected, h):
+            return expected.resolve()
+
+        saved = self._get_scene_export_path(scene_id, "wav")
+        if saved and wav_matches_target_hours(saved, h):
+            return saved.resolve()
+        return None
+
+    def _format_export_wav_status(
+        self, path: Path | None, hours: float | None = None
+    ) -> str:
+        if not path or not path.is_file():
+            return "待开始"
+        h = self._target_duration_hours() if hours is None else float(hours)
+        if not wav_matches_target_hours(path, h):
+            return "待开始"
+        return self._format_export_status(path)
+
+    def _clear_invalid_export_wav(self, scene_id: str, hours: float | None = None) -> None:
+        h = self._target_duration_hours() if hours is None else float(hours)
+        outputs = self._export_outputs_cfg()
+        scene = outputs.get(scene_id)
+        if not isinstance(scene, dict):
+            return
+        raw = scene.get("wav")
+        if not raw:
+            return
+        p = Path(raw)
+        if not p.is_file() or not wav_matches_target_hours(p, h):
+            scene.pop("wav", None)
+            self._save_config()
 
     def _scene_num(self, scene_id: str) -> str:
         import re
@@ -797,9 +1135,9 @@ class RelaxAsmrApp(tk.Tk):
             vlm_res = analyze_vlm_frame(frame_jpg, on_progress=self._log)
             reconcile_clip_vlm(scene_id, clip_analysis, vlm_res, self._log)
 
-        target_md_path = material_md_path(scene_id)
-        if target_md_path.is_file() and not force_refresh:
-            self._log(f"物料 md 已存在，跳过: {target_md_path.name}")
+        existing = material_metadata_path(scene_id)
+        if existing and not force_refresh:
+            self._log(f"物料已存在，跳过: {existing.name}")
             return
 
         yt_mod = load_module(YT_MATERIAL_SCRIPT, "relaxasmr_generate_youtube_material")
@@ -811,15 +1149,15 @@ class RelaxAsmrApp(tk.Tk):
             thumb_title=RAIN_THUMB_TITLE,
             thumb_subtitle_place_only=True,
             duration_override_s=float(self.duration_var.get()) * 3600,
+            scene_id=scene_id,
+            force_refresh_visual=force_refresh,
             on_progress=self._log,
         )
-        if (out_dir / "youtube.md").is_file():
-            (out_dir / "youtube.md").rename(target_md_path)
 
     def _ensure_material_for_upload(self, scene_id: str) -> Path:
-        md_path = material_md_path(scene_id)
-        if md_path.is_file():
-            return md_path
+        existing = material_metadata_path(scene_id)
+        if existing:
+            return existing
         loop_video = self._find_loop_video_for_scene(scene_id)
         if not loop_video:
             raise FileNotFoundError(
@@ -827,9 +1165,12 @@ class RelaxAsmrApp(tk.Tk):
             )
         self._log(f"物料不存在，自动执行分析生成：{scene_id}")
         self._run_material_analysis_blocking(loop_video, scene_id, force_refresh=False)
-        if not md_path.is_file():
-            raise FileNotFoundError(f"分析完成但仍未找到物料：{md_path.name}")
-        return md_path
+        existing = material_metadata_path(scene_id)
+        if not existing:
+            raise FileNotFoundError(
+                f"分析完成但仍未找到物料：{material_json_path(scene_id).name}"
+            )
+        return existing
 
     def _format_export_status(self, path: Path | None) -> str:
         if not path or not path.is_file():
@@ -849,14 +1190,15 @@ class RelaxAsmrApp(tk.Tk):
         if not sid:
             self.last_export_wav = None
             self.last_export_mp4 = None
-            self._set_render_ui(running=False, status="待开始")
+            self._set_render_ui(running=False, status="待开始", wav_path=None)
             self._set_export_ui(running=False, status="待开始")
             if hasattr(self, "lbl_upload"):
                 self.lbl_upload.configure(text="待上传：—")
             return
 
-        wav = self._get_scene_export_path(sid, "wav") or self._find_latest_wav_for_scene(sid)
+        wav = self._resolve_valid_export_wav(sid)
         mp4 = self._get_scene_export_path(sid, "mp4") or self._find_latest_mp4_for_scene(sid)
+        self._clear_invalid_export_wav(sid)
         if wav:
             self._save_scene_export_path(sid, "wav", wav)
         else:
@@ -867,7 +1209,11 @@ class RelaxAsmrApp(tk.Tk):
             self.last_export_mp4 = None
             self._cfg["last_export_mp4"] = ""
 
-        self._set_render_ui(running=False, status=self._format_export_status(wav))
+        self._set_render_ui(
+            running=False,
+            status=self._format_export_wav_status(wav),
+            wav_path=wav,
+        )
         self._set_export_ui(running=False, status=self._format_export_status(mp4))
         self._refresh_upload_label()
         self._save_config()
@@ -883,11 +1229,21 @@ class RelaxAsmrApp(tk.Tk):
         if hasattr(self, 'btn_render_reaper') and not getattr(self, "_render_running", False):
             self.btn_render_reaper.configure(state=state)
 
-    def _set_render_ui(self, *, running: bool, status: str | None = None) -> None:
+    def _set_render_ui(
+        self,
+        *,
+        running: bool,
+        status: str | None = None,
+        wav_path: Path | None = None,
+    ) -> None:
         self._render_running = running
         self.btn_render_reaper.configure(state=tk.DISABLED if running else tk.NORMAL)
-        if status is not None:
-            self.lbl_render_progress.configure(text=status)
+        if status is not None and hasattr(self, "mix_preview_grid"):
+            self.mix_preview_grid.set_status(
+                status,
+                wav_path=wav_path,
+                running=running,
+            )
 
     def _set_export_ui(self, *, running: bool, status: str | None = None) -> None:
         self._export_running = running
@@ -916,13 +1272,19 @@ class RelaxAsmrApp(tk.Tk):
         pass #(text="物料：—")
 
     def _on_grid_select(self, track_name: str) -> None:
-        """同层 clip/vlm 互斥：选中一个 tab 时清除同层另一个 tab 的选中。"""
-        base = track_name.split("_vlm")[0].split("_clip")[0]
-        for picker in self.track_pickers.values():
-            other = picker.track_name
-            other_base = other.split("_vlm")[0].split("_clip")[0]
-            if other != track_name and other_base == base:
-                picker.clear_selection()
+        """1_rain_clip / 1_rain_vlm / 1_rain_boom 互斥（一致时为 1_rain）。"""
+        from gui.core_controller import is_rain_loop_exclusive_track_name
+
+        if is_rain_loop_exclusive_track_name(track_name):
+            for picker in self.track_pickers.values():
+                other = picker.track_name
+                if other != track_name and is_rain_loop_exclusive_track_name(other):
+                    picker.clear_selection()
+                    self._save_track_picker_selection(other, None)
+
+        picker = self._picker_by_track_name(track_name)
+        if picker:
+            self._save_track_picker_selection(track_name, picker.get_selected())
 
     def _add_picker_tab(self, track_name: str, matches: list[dict], out_dir: Path) -> TrackPickerUI:
         """Helper to add new track picker tabs."""
@@ -971,16 +1333,23 @@ class RelaxAsmrApp(tk.Tk):
         picker1.on_select_callback = self._on_grid_select
         picker1.set_title(result["clip_title"])
         picker1.load_candidates(result["clip_json"])
+        self._apply_saved_track_picker_selection(picker1.track_name, picker1)
 
         if result.get("show_vlm_tab") and result.get("vlm_json"):
             vlm_picker = self._ensure_vlm_tab(picker1)
             vlm_picker.set_title(result["vlm_title"])
             vlm_picker.load_candidates(result["vlm_json"])
+            self._apply_saved_track_picker_selection(vlm_picker.track_name, vlm_picker)
         else:
             self._remove_vlm_tab()
 
+        self._ensure_rain_boom_tab()
+        boom_tab = self._audio_library_tabs.get("1_rain_boom")
+        if boom_tab:
+            self._sync_track_picker_from_library("1_rain_boom", boom_tab.get_selected())
+
     def _generate_loop_material(self, loop_video: Path, sub_dir: Path, scene: str, duration_hours: float) -> Path:
-        """根据 loop 视频生成 YouTube 物料（缩略图 + youtube.md）。"""
+        """根据 loop 视频生成 YouTube 物料（缩略图 + *_material.json）。"""
         yt_mod = load_module(YT_MATERIAL_SCRIPT, "relaxasmr_generate_youtube_material")
         out_dir = loop_material_dir(sub_dir, loop_video)
         out_dir.parent.mkdir(parents=True, exist_ok=True)
@@ -993,6 +1362,7 @@ class RelaxAsmrApp(tk.Tk):
             thumb_title=RAIN_THUMB_TITLE,
             thumb_subtitle_place_only=True,
             duration_override_s=duration_hours * 3600,
+            scene_id=scene,
             on_progress=self._log,
         )
 
@@ -1066,22 +1436,96 @@ class RelaxAsmrApp(tk.Tk):
         path = get_thumbnail_path(self.scene_id)
         return path if path.is_file() else None
 
-    def _update_cover_preview(self) -> None:
-        if not hasattr(self, "lbl_cover"):
+    def _load_material_meta_fields(self) -> tuple[str, str, str, str]:
+        title_en = desc_en = title_zh = desc_zh = ""
+        if self.scene_id:
+            from scripts.video_upload.material_store import load_material_metadata
+
+            meta_path = material_metadata_path(self.scene_id)
+            if meta_path:
+                try:
+                    meta = load_material_metadata(meta_path)
+                    title_en = (meta.get("title_en") or "").strip()
+                    desc_en = (meta.get("description_en") or "").strip()
+                    title_zh = (meta.get("title_zh") or "").strip()
+                    desc_zh = (meta.get("description_zh") or "").strip()
+                except Exception as exc:
+                    title_en = f"物料读取失败: {exc}"
+        return title_en, desc_en, title_zh, desc_zh
+
+    def _update_cover_metadata(self) -> None:
+        if not hasattr(self, "lbl_cover_title_en"):
             return
+        title_en, desc_en, _, _ = self._load_material_meta_fields()
+        wrap = max(
+            getattr(self, "cover_body", self).winfo_width() - getattr(self, "_cover_slot_w", 213) - 24,
+            160,
+        )
+        self.lbl_cover_title_en.configure(
+            text=title_en or "（无 English Title）",
+            wraplength=wrap,
+        )
+        self.txt_cover_desc_en.configure(state=tk.NORMAL)
+        self.txt_cover_desc_en.delete("1.0", tk.END)
+        self.txt_cover_desc_en.insert("1.0", desc_en or "（无 English Description）")
+        self.txt_cover_desc_en.configure(state=tk.DISABLED)
+        self._update_preview_metadata()
+
+    def _update_preview_metadata(self) -> None:
+        if not hasattr(self, "lbl_preview_title_zh"):
+            return
+        _, _, title_zh, desc_zh = self._load_material_meta_fields()
+        wrap = max(
+            getattr(self, "preview_body", self).winfo_width() - getattr(self, "_preview_slot_w", 213) - 24,
+            160,
+        )
+        self.lbl_preview_title_zh.configure(
+            text=title_zh or "（无中文标题）",
+            wraplength=wrap,
+        )
+        self.txt_preview_desc_zh.configure(state=tk.NORMAL)
+        self.txt_preview_desc_zh.delete("1.0", tk.END)
+        self.txt_preview_desc_zh.insert("1.0", desc_zh or "（无中文说明）")
+        self.txt_preview_desc_zh.configure(state=tk.DISABLED)
+
+    def _update_cover_preview(self) -> None:
+        if not hasattr(self, "cover_thumb_canvas"):
+            return
+        slot_w, slot_h = self._cover_thumb_size()
+        self._apply_cover_slot_geometry(slot_w, slot_h)
+        self.cover_thumb_canvas.delete("all")
+
         path = self._cover_path()
         if not path:
-            self.lbl_cover.configure(image="", text="无封面")
+            self.cover_thumb_canvas.create_text(
+                slot_w // 2,
+                slot_h // 2,
+                text="无预览",
+                anchor=tk.CENTER,
+            )
             self._cover_img = None
+            self._update_cover_metadata()
             return
         try:
             img = Image.open(path)
-            img.thumbnail(self._preview_cell_size(), Image.Resampling.LANCZOS)
+            img.thumbnail((slot_w, slot_h), Image.Resampling.LANCZOS)
             self._cover_img = ImageTk.PhotoImage(img)
-            self.lbl_cover.configure(image=self._cover_img, text="")
+            self.cover_thumb_canvas.create_image(
+                slot_w // 2,
+                slot_h // 2,
+                anchor=tk.CENTER,
+                image=self._cover_img,
+            )
         except Exception as exc:
-            self.lbl_cover.configure(image="", text=f"封面加载失败: {exc}")
+            self.cover_thumb_canvas.create_text(
+                slot_w // 2,
+                slot_h // 2,
+                text=f"封面加载失败: {exc}",
+                anchor=tk.CENTER,
+                width=slot_w - 8,
+            )
             self._cover_img = None
+        self._update_cover_metadata()
 
     def _load_existing_analysis(self, out_dir: Path | None, scene_id: str) -> None:
         from gui.core_controller import load_cached_rain_tabs
@@ -1107,6 +1551,10 @@ class RelaxAsmrApp(tk.Tk):
             self._remove_vlm_tab()
             self.pickers_notebook.tab(picker1.master, text="1_rain")
             picker1.track_name = "1_rain"
+            self._ensure_rain_boom_tab()
+            boom_tab = self._audio_library_tabs.get("1_rain_boom")
+            if boom_tab:
+                self._sync_track_picker_from_library("1_rain_boom", boom_tab.get_selected())
 
         self._update_cover_preview()
 
@@ -1118,18 +1566,29 @@ class RelaxAsmrApp(tk.Tk):
             self._cap.release()
             self._cap = None
 
+    def _refresh_preview_layout(self) -> None:
+        if self._cap is None:
+            if not self.video_path or not self.video_path.is_file():
+                self._show_preview_placeholder("无预览")
+            self._update_preview_metadata()
+            return
+        slot_w, slot_h = self._preview_thumb_size()
+        self._apply_preview_slot_geometry(slot_w, slot_h)
+
     def _update_preview(self, video_path: Path | None) -> None:
-        if not hasattr(self, "lbl_preview"):
+        if not hasattr(self, "preview_video_canvas"):
             return
 
         self._stop_video_loop()
 
         if not video_path or not video_path.is_file():
-            self.lbl_preview.configure(image="", text="无预览")
             self._preview_img = None
+            self._show_preview_placeholder("无预览")
+            self._update_preview_metadata()
             return
 
-        self.lbl_preview.configure(image="", text="加载视频预览中...")
+        self._show_preview_placeholder("加载视频预览中...")
+        self._update_preview_metadata()
 
         def copy_and_play() -> None:
             try:
@@ -1138,41 +1597,45 @@ class RelaxAsmrApp(tk.Tk):
                 shutil.copy2(video_path, tmp_path)
                 self.after(0, lambda: self._start_video_loop(tmp_path))
             except Exception as exc:
-                self.after(0, lambda: self.lbl_preview.configure(text=f"视频复制失败: {exc}"))
+                self.after(0, lambda: self._show_preview_placeholder(f"视频复制失败: {exc}"))
 
         threading.Thread(target=copy_and_play, daemon=True).start()
 
     def _start_video_loop(self, tmp_path: str):
         self._cap = cv2.VideoCapture(tmp_path)
         if not self._cap.isOpened():
-            self.lbl_preview.configure(text="无法打开临时视频文件进行循环播放")
+            self._show_preview_placeholder("无法打开临时视频文件进行循环播放")
             return
-            
-        self.lbl_preview.configure(text="")
+
         self._play_next_frame()
-        
+
     def _play_next_frame(self):
         if self._cap is None:
             return
-            
+
         ret, frame = self._cap.read()
         if not ret:
-            # 循环播放
             self._cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
             ret, frame = self._cap.read()
-            
+
         if ret:
             try:
-                max_w, max_h = self._preview_cell_size()
+                slot_w, slot_h = self._preview_thumb_size()
+                self._apply_preview_slot_geometry(slot_w, slot_h)
                 frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                 img = Image.fromarray(frame)
-                img.thumbnail((max_w, max_h), Image.Resampling.LANCZOS)
+                img.thumbnail((slot_w, slot_h), Image.Resampling.LANCZOS)
                 self._preview_img = ImageTk.PhotoImage(img)
-                self.lbl_preview.configure(image=self._preview_img)
+                self.preview_video_canvas.delete("all")
+                self.preview_video_canvas.create_image(
+                    slot_w // 2,
+                    slot_h // 2,
+                    anchor=tk.CENTER,
+                    image=self._preview_img,
+                )
             except Exception:
                 pass
-                
-        # 30fps 大致是 33ms 一帧
+
         self._video_loop_id = self.after(33, self._play_next_frame)
 
     def _video_dialog_initialdir(self) -> str:
@@ -1215,10 +1678,11 @@ class RelaxAsmrApp(tk.Tk):
             return
             
         loop_video = self.video_path
+        force_refresh = self.chk_overwrite_mat_var.get()
         self._set_busy(True)
         self._log("—— 开始执行分析与物料生成 ——")
 
-        def worker() -> None:
+        def worker(*, force_refresh: bool = force_refresh) -> None:
             try:
                 import threading
                 import shutil
@@ -1240,17 +1704,16 @@ class RelaxAsmrApp(tk.Tk):
                 out_dir.mkdir(parents=True, exist_ok=True)
                 
                 self._log("—— 2. 自动分析画面 ——")
-                force_refresh = getattr(self, "chk_overwrite_mat_var", tk.BooleanVar()).get()
                 from gui.core_controller import (
                     clip_analysis_from_matches,
                     load_cached_rain_tabs,
                     reconcile_clip_vlm,
                     save_clip_matches,
                 )
-                from scripts.config.paths import clear_scene_material, get_snapshot_raw_path, material_md_path
+                from scripts.config.paths import clear_scene_material, get_snapshot_raw_path, material_metadata_path
 
                 if force_refresh:
-                    self._log("勾选「覆盖物料」：清除旧 snapshot / 封面 / CLIP / VLM / md…")
+                    self._log("勾选「覆盖物料」：清除旧 snapshot / 封面 / CLIP / VLM / visual_scene / md…")
                     clear_scene_material(scene_id, on_progress=self._log)
                     cached = None
                 else:
@@ -1259,6 +1722,7 @@ class RelaxAsmrApp(tk.Tk):
                 clip_analysis: dict = {}
                 frame_jpg: Path | None = get_snapshot_raw_path(scene_id)
                 skip_clip_vlm = cached is not None and not cached.get("partial")
+                rain_tab_result: dict | None = None
 
                 if skip_clip_vlm:
                     self._log("CLIP/VLM 已存在，跳过解析，直接加载。")
@@ -1305,22 +1769,23 @@ class RelaxAsmrApp(tk.Tk):
                     clip_analysis = clip_data.get("clip_analysis", {})
                     frame_jpg = Path(clip_data["frame_jpg"]) if clip_data.get("frame_jpg") else frame_jpg
 
+                    clip_json, clip_title, _ = save_clip_matches(
+                        scene_id, clip_analysis, vlm_reconciled=False
+                    )
+                    rain_tab_result = {
+                        "rain_tab": "1_rain_clip",
+                        "clip_json": clip_json,
+                        "clip_title": clip_title,
+                        "show_vlm_tab": False,
+                        "vlm_json": None,
+                        "vlm_title": "",
+                    }
+
                     def update_clip_ui() -> None:
                         self.material_dir = out_dir
                         self._refresh_material_label()
                         self._update_cover_preview()
-
-                        clip_json, clip_title, _ = save_clip_matches(
-                            scene_id, clip_analysis, vlm_reconciled=False
-                        )
-                        self._apply_rain_tabs({
-                            "rain_tab": "1_rain_clip",
-                            "clip_json": clip_json,
-                            "clip_title": clip_title,
-                            "show_vlm_tab": False,
-                            "vlm_json": None,
-                            "vlm_title": "",
-                        })
+                        self._apply_rain_tabs(rain_tab_result)
                         self._log("CLIP 阶段结束，九宫格已就绪。")
 
                     self.after(0, update_clip_ui)
@@ -1331,12 +1796,12 @@ class RelaxAsmrApp(tk.Tk):
                     from scripts.video_analysis.analyze import analyze_vlm_frame
 
                     vlm_res = analyze_vlm_frame(frame_jpg, on_progress=self._log)
+                    rain_tab_result = reconcile_clip_vlm(
+                        scene_id, clip_analysis, vlm_res, self._log
+                    )
 
                     def update_vlm_ui() -> None:
-                        result = reconcile_clip_vlm(
-                            scene_id, clip_analysis, vlm_res, self._log
-                        )
-                        self._apply_rain_tabs(result)
+                        self._apply_rain_tabs(rain_tab_result)
 
                     self.after(0, update_vlm_ui)
                 elif not skip_clip_vlm:
@@ -1345,9 +1810,9 @@ class RelaxAsmrApp(tk.Tk):
                 clip_data = {"clip_analysis": clip_analysis}
 
                 self._log("—— 3. 生成 YouTube 物料 ——")
-                target_md_path = material_md_path(scene_id)
-                if target_md_path.is_file() and not force_refresh:
-                    self._log(f"物料 md 已存在，跳过: {target_md_path.name}")
+                existing = material_metadata_path(scene_id)
+                if existing and not force_refresh:
+                    self._log(f"物料已存在，跳过: {existing.name}")
                 else:
                     yt_mod = load_module(YT_MATERIAL_SCRIPT, "relaxasmr_generate_youtube_material")
                     yt_mod.generate_material(
@@ -1358,10 +1823,11 @@ class RelaxAsmrApp(tk.Tk):
                         thumb_title=RAIN_THUMB_TITLE,
                         thumb_subtitle_place_only=True,
                         duration_override_s=float(self.duration_var.get()) * 3600,
+                        scene_id=scene_id,
+                        force_refresh_visual=force_refresh,
                         on_progress=self._log,
                     )
-                    if (out_dir / "youtube.md").is_file():
-                        (out_dir / "youtube.md").rename(target_md_path)
+                    self.after(0, self._update_cover_preview)
             except Exception as exc:
                 def done_err(err: BaseException = exc) -> None:
                     self._log(f"错误：{err}")
@@ -1383,20 +1849,20 @@ class RelaxAsmrApp(tk.Tk):
             return
             
         try:
-            duration = float(self.duration_var.get())
-        except ValueError:
+            duration = self._parse_duration_hours()
+        except ValueError as exc:
             from tkinter import messagebox
-            messagebox.showerror("参数错误", "成片时长必须是数字。")
+            messagebox.showerror("参数错误", str(exc))
             return
-            
-        selected_tracks = {}
-        if hasattr(self, "track_pickers"):
-            for tid, picker in self.track_pickers.items():
-                sel = picker.get_selected()
-                if sel:
-                    # Map 1_rain_clip and 1_rain_vlm to 1_rain
-                    actual_tid = "1_rain" if tid in ("1_rain_clip", "1_rain_vlm") else tid
-                    selected_tracks[actual_tid] = sel
+
+        self._persist_duration_hours(duration)
+        from gui.core_controller import collect_selected_tracks_for_reaper
+
+        self._prepare_scatter_pickers_for_project()
+        selected_tracks = collect_selected_tracks_for_reaper(
+            self.track_pickers if hasattr(self, "track_pickers") else {},
+            log_fn=self._log,
+        )
 
         loop_video = self.video_path
         self._set_busy(True)
@@ -1467,20 +1933,30 @@ class RelaxAsmrApp(tk.Tk):
             return
 
         try:
-            duration = float(self.duration_var.get())
-        except ValueError:
-            messagebox.showerror("参数错误", "成片时长必须是数字。")
+            duration = self._parse_duration_hours()
+        except ValueError as exc:
+            messagebox.showerror("参数错误", str(exc))
             return
 
+        self._persist_duration_hours(duration)
         wav_name = export_wav_name(self.scene_id, duration)
         wav_path = export_dir() / wav_name
+        if wav_path.is_file():
+            if wav_matches_target_hours(wav_path, duration):
+                self._log(f"将覆盖已有成品: {wav_name}")
+            else:
+                actual = wav_duration_seconds(wav_path)
+                hint = format_duration_short(actual) if actual is not None else "未知"
+                self._log(
+                    f"将覆盖不合格成品: {wav_name}（当前约 {hint}，目标 {duration:g}h）"
+                )
         self._set_render_ui(running=True, status="Elapsed: 00:00:00  Remaining: …")
         self._log(f"—— 开始输出混音: {wav_name} ——")
 
         def worker() -> None:
             try:
                 exe = (self._cfg.get("reaper_exe") or "").strip() or None
-                self._log(f"渲染工程: {rpp_path.name}")
+                self._log(f"渲染工程: {rpp_path.name}（Entire Project · {duration:g}h）")
 
                 def on_progress(msg: str) -> None:
                     self.after(0, lambda m=msg: self._set_render_ui(running=True, status=m))
@@ -1492,20 +1968,26 @@ class RelaxAsmrApp(tk.Tk):
                     duration_hours=duration,
                     on_progress=on_progress,
                 )
-                result_wav = wav_path if wav_path.is_file() else self._find_latest_wav_for_scene(self.scene_id)
-                self._log(f"混音完成: {result_wav.name if result_wav else wav_name}")
+                if not wav_path.is_file():
+                    raise FileNotFoundError(f"渲染结束但未找到输出文件: {wav_path.name}")
+                if not wav_matches_target_hours(wav_path, duration):
+                    actual = wav_duration_seconds(wav_path)
+                    hint = format_duration_short(actual) if actual is not None else "未知"
+                    raise RuntimeError(
+                        f"输出时长不符：{wav_path.name} 约 {hint}，期望 {duration:g} 小时"
+                    )
+                result_wav = wav_path
+                self._log(f"混音完成: {result_wav.name}")
 
                 def done_ok() -> None:
-                    if result_wav and self.scene_id:
+                    if self.scene_id:
                         self._save_scene_export_path(self.scene_id, "wav", result_wav)
                     self._set_render_ui(
                         running=False,
-                        status=self._format_export_status(result_wav),
+                        status=self._format_export_wav_status(result_wav, duration),
+                        wav_path=result_wav,
                     )
-                    messagebox.showinfo(
-                        "成功",
-                        f"{result_wav.name if result_wav else wav_name} 渲染完成！",
-                    )
+                    messagebox.showinfo("成功", f"{result_wav.name} 渲染完成！")
 
                 self.after(0, done_ok)
             except Exception as exc:
@@ -1569,6 +2051,15 @@ class RelaxAsmrApp(tk.Tk):
         except Exception as exc:
             messagebox.showerror("打开失败", str(exc))
 
+    def _open_export_dir(self) -> None:
+        target = export_dir()
+        target.mkdir(parents=True, exist_ok=True)
+        try:
+            open_folder(target)
+            self._log(f"已打开混音目录：{target}")
+        except Exception as exc:
+            messagebox.showerror("打开失败", str(exc))
+
     def _open_output(self) -> None:
         target = base_material_dir()
         target.mkdir(parents=True, exist_ok=True)
@@ -1595,18 +2086,16 @@ class RelaxAsmrApp(tk.Tk):
         match = re.search(r'\d+', self.scene_id)
         num = match.group() if match else self.scene_id
 
-        saved_wav = self._get_scene_export_path(self.scene_id, "wav")
+        saved_wav = self._resolve_valid_export_wav(self.scene_id)
         if saved_wav:
             audio_file = saved_wav
         else:
-            target_dir = LIB_REPO_ROOT / "Reaper" / "Projects" / "Rain"
-            wavs = list(target_dir.glob(f"*{num}*.wav"))
-            exp_wavs = list(export_dir().glob(f"*{num}*.wav"))
-            wavs = sorted(set(wavs + exp_wavs), key=lambda p: p.stat().st_mtime, reverse=True)
-            if not wavs:
-                messagebox.showwarning("提示", f"未找到包含 {num} 的音频文件。\n请先「一键输出混音」！")
-                return
-            audio_file = wavs[0]
+            messagebox.showwarning(
+                "提示",
+                f"未找到时长符合 {self._target_duration_hours():g}h 的混音文件。\n"
+                f"请先「一键输出混音」生成 {export_wav_name(self.scene_id, self._target_duration_hours())}。",
+            )
+            return
         vid_file = self.video_path
 
         script = LIB_REPO_ROOT / "scripts" / "video_export" / "export_mp4.sh"

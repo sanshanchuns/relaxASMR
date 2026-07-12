@@ -170,6 +170,88 @@ def resolve_reaper_exe(explicit: str | None = None) -> Path | str | None:
     return found[0] if found else None
 
 
+def _resolve_linux_reaper_mount(exe: Path | str | None) -> tuple[Path | str, Path | None]:
+    """返回 (win 或 path 给 cmd, WSL 下 linux_exe 或 None)。"""
+    if not is_wsl():
+        if isinstance(exe, Path):
+            return exe, exe
+        resolved = resolve_reaper_exe(exe if isinstance(exe, str) else None)
+        if isinstance(resolved, Path):
+            return resolved, resolved
+        if resolved:
+            return resolved, None
+        raise FileNotFoundError("找不到 Reaper 可执行文件")
+
+    win_exe = resolve_reaper_exe(exe if isinstance(exe, str) else None)
+    if not win_exe:
+        raise FileNotFoundError(
+            "找不到 Windows Reaper。请在 GUI 设置中填写 reaper_exe，"
+            "或安装到默认路径（如 D:\\Program Files\\REAPER (x64)）。"
+        )
+    linux_exe: Path | None = None
+    if isinstance(exe, Path):
+        linux_exe = exe
+    else:
+        win_text = str(win_exe).lower()
+        for mount in WSL_REAPER_MOUNT_CANDIDATES:
+            p = Path(mount)
+            if p.is_file() and wsl_to_windows_path(p).lower() == win_text:
+                linux_exe = p
+                break
+        if linux_exe is None:
+            for mount in WSL_REAPER_MOUNT_CANDIDATES:
+                p = Path(mount)
+                if p.is_file():
+                    linux_exe = p
+                    break
+    return win_exe, linux_exe
+
+
+def run_reaper_lua(
+    lua: Path,
+    *,
+    reaper_exe: str | None = None,
+    nosplash: bool = True,
+) -> None:
+    """在单个 Reaper 进程中执行 ReaScript（批量 open + render）。
+
+    Reaper CLI：reaper.exe script.lua（非 -runlua）
+    """
+    lua = lua.resolve()
+    if not lua.is_file():
+        raise FileNotFoundError(f"找不到 Lua 脚本：{lua}")
+
+    prefix = ["-nosplash"] if nosplash else []
+    win_exe, linux_exe = _resolve_linux_reaper_mount(reaper_exe)
+    if is_wsl():
+        win_lua = wsl_to_windows_path(lua)
+        if linux_exe is None:
+            win_exe_str = win_exe if isinstance(win_exe, str) else wsl_to_windows_path(win_exe)
+            cmd = " ".join(f'"{x}"' for x in [win_exe_str, *prefix, win_lua])
+            proc = subprocess.Popen([str(windows_cmd_exe()), "/c", cmd])
+        else:
+            proc = subprocess.Popen([str(linux_exe), *prefix, win_lua])
+    elif isinstance(win_exe, Path):
+        proc = subprocess.Popen([str(win_exe), *prefix, str(lua)])
+    else:
+        proc = subprocess.Popen([str(win_exe), *prefix, str(lua)])
+
+    rc = proc.wait()
+    if rc != 0:
+        raise subprocess.CalledProcessError(rc, proc.args)
+
+
+def _ensure_rpp_full_project_render(rpp: Path, duration_hours: float | None) -> None:
+    """渲染前写入 Entire Project，避免工程内 10s Time Selection 被 -renderproject 采用。"""
+    repo = Path(__file__).resolve().parents[1]
+    scripts = repo / "Reaper" / "scripts"
+    if str(scripts) not in sys.path:
+        sys.path.insert(0, str(scripts))
+    from generate_subproject import ensure_rpp_full_project_render
+
+    ensure_rpp_full_project_render(rpp, duration_hours=duration_hours)
+
+
 def render_reaper_project(
     rpp: Path,
     *,
@@ -183,47 +265,28 @@ def render_reaper_project(
     if not rpp.is_file():
         raise FileNotFoundError(f"找不到工程文件：{rpp}")
 
+    _ensure_rpp_full_project_render(rpp, duration_hours)
+
     proc: subprocess.Popen | None = None
 
     if is_wsl():
-        exe = resolve_reaper_exe(reaper_exe)
-        if not exe:
-            raise FileNotFoundError(
-                "找不到 Windows Reaper。请在 GUI 设置中填写 reaper_exe，"
-                "或安装到默认路径（如 D:\\Program Files\\REAPER (x64)）。"
-            )
-        linux_exe: Path | None = None
-        if isinstance(exe, Path):
-            linux_exe = exe
-        else:
-            for mount in WSL_REAPER_MOUNT_CANDIDATES:
-                p = Path(mount)
-                if p.is_file() and wsl_to_windows_path(p).lower() == str(exe).lower():
-                    linux_exe = p
-                    break
-            if linux_exe is None:
-                for mount in WSL_REAPER_MOUNT_CANDIDATES:
-                    p = Path(mount)
-                    if p.is_file():
-                        linux_exe = p
-                        break
+        win_exe, linux_exe = _resolve_linux_reaper_mount(reaper_exe)
         win_rpp = wsl_to_windows_path(rpp)
         if linux_exe is None:
-            win_exe = exe if isinstance(exe, str) else wsl_to_windows_path(exe)
+            win_exe_str = win_exe if isinstance(win_exe, str) else wsl_to_windows_path(win_exe)
             proc = subprocess.Popen(
-                [str(windows_cmd_exe()), "/c", f'"{win_exe}" -renderproject "{win_rpp}"'],
+                [str(windows_cmd_exe()), "/c", f'"{win_exe_str}" -renderproject "{win_rpp}"'],
             )
         else:
             proc = subprocess.Popen([str(linux_exe), "-renderproject", win_rpp])
     else:
-        exe = resolve_reaper_exe(reaper_exe)
-        if isinstance(exe, Path):
-            proc = subprocess.Popen([str(exe), "-renderproject", str(rpp)])
+        win_exe, linux_exe = _resolve_linux_reaper_mount(reaper_exe)
+        if isinstance(win_exe, Path):
+            proc = subprocess.Popen([str(win_exe), "-renderproject", str(rpp)])
+        elif linux_exe:
+            proc = subprocess.Popen([str(linux_exe), "-renderproject", str(rpp)])
         else:
-            candidates = default_reaper_candidates()
-            if not candidates:
-                raise FileNotFoundError("找不到 Reaper 可执行文件")
-            proc = subprocess.Popen([str(candidates[0]), "-renderproject", str(rpp)])
+            proc = subprocess.Popen([str(win_exe), "-renderproject", str(rpp)])
 
     assert proc is not None
     if on_progress:

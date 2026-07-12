@@ -14,12 +14,18 @@ CELL_W = 180
 CELL_H = 56
 CELL_PAD = 6
 MAX_SELECT = 9
-_HOVER_DELAY_MS = 300
+_HOVER_DELAY_MS = 400
 _BORDER_THICKNESS = 2
 
 
-def list_boom_wavs(layer_id: str) -> list[Path]:
-    root = audio_booms_dir(layer_id)
+def resolve_booms_dir(*, layer_id: str = "", booms_dir: Path | None = None) -> Path:
+    if booms_dir is not None:
+        return booms_dir
+    return audio_booms_dir(layer_id)
+
+
+def list_boom_wavs(layer_id: str = "", *, booms_dir: Path | None = None) -> list[Path]:
+    root = resolve_booms_dir(layer_id=layer_id, booms_dir=booms_dir)
     if not root.is_dir():
         return []
     return sorted(
@@ -43,10 +49,12 @@ class AudioLibraryTab(ttk.Frame):
         track_id: str,
         on_selection_changed: Callable[[str, list[Path]], None] | None = None,
         log_fn: Callable[[str], None] | None = None,
+        booms_dir: Path | None = None,
     ) -> None:
         super().__init__(parent, padding=8)
         self.layer_id = layer_id
         self.track_id = track_id
+        self._booms_dir = booms_dir
         self._on_selection_changed = on_selection_changed
         self._log = log_fn or (lambda _msg: None)
         self._cells: dict[str, dict] = {}
@@ -123,11 +131,12 @@ class AudioLibraryTab(ttk.Frame):
     def get_selected(self) -> list[Path]:
         return list(self._selected)
 
-    def set_selected(self, paths: list[Path]) -> None:
+    def set_selected(self, paths: list[Path], *, notify: bool = True) -> None:
         valid = [p.resolve() for p in paths if p.is_file()][:MAX_SELECT]
         self._selected = valid
         self._apply_all_styles()
-        self._notify_selection()
+        if notify:
+            self._notify_selection()
 
     def refresh(self, *, force: bool = False) -> None:
         if self._loading:
@@ -135,7 +144,7 @@ class AudioLibraryTab(ttk.Frame):
         if not force and self._loaded_once and self._cells:
             self._apply_all_styles()
             return
-        wavs = list_boom_wavs(self.layer_id)
+        wavs = list_boom_wavs(self.layer_id, booms_dir=self._booms_dir)
         sig = "|".join(f"{p.name}:{p.stat().st_mtime_ns}" for p in wavs)
         if not force and self._loaded_once and sig == self._list_signature:
             self._apply_all_styles()
@@ -167,7 +176,7 @@ class AudioLibraryTab(ttk.Frame):
         for child in self._grid_host.winfo_children():
             child.destroy()
 
-        booms = audio_booms_dir(self.layer_id)
+        booms = resolve_booms_dir(layer_id=self.layer_id, booms_dir=self._booms_dir)
         self.lbl_base.configure(text=f"声源目录：{booms}")
 
         if not items:
@@ -221,6 +230,7 @@ class AudioLibraryTab(ttk.Frame):
                 "outer": outer,
                 "border": border,
                 "lbl": lbl,
+                "selected": is_selected,
             }
             self._cells[key] = cell
             self._bind_cell_events(cell)
@@ -294,16 +304,25 @@ class AudioLibraryTab(ttk.Frame):
         if self._play_after_id:
             self.after_cancel(self._play_after_id)
             self._play_after_id = None
+        prev_key = self._hover_key
+        self._stop_audio()
+        if prev_key and prev_key != key:
+            prev_cell = self._cells.get(prev_key)
+            if prev_cell:
+                self._apply_cell_style(prev_cell)
         self._hover_key = key
 
         def start_play() -> None:
+            if self._hover_key != key:
+                return
             cell = self._cells.get(key)
             if not cell:
                 return
             wav = cell["wav"]
             if wav.is_file():
-                self._play_audio_loop(wav)
-                self._apply_cell_style(cell)
+                self._play_audio_preview(wav, key)
+                if self._hover_key == key:
+                    self._apply_cell_style(cell)
 
         self._play_after_id = self.after(_HOVER_DELAY_MS, start_play)
 
@@ -323,12 +342,13 @@ class AudioLibraryTab(ttk.Frame):
             if cell:
                 self._apply_cell_style(cell)
 
-    def _play_audio_loop(self, wav_path: Path) -> None:
-        self._stop_audio()
+    def _play_audio_preview(self, wav_path: Path, key: str) -> None:
         try:
-            from gui.audio_playback import play_wav_loop
+            from gui.audio_playback import play_wav_preview
 
-            self._audio_proc = play_wav_loop(wav_path)
+            if self._hover_key != key:
+                return
+            self._audio_proc = play_wav_preview(wav_path)
         except Exception as exc:
             self._log(f"播放失败: {exc}")
 

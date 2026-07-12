@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate YouTube metadata (.md) and thumbnail for export_mp4 outputs."""
+"""Generate YouTube metadata (.json) and thumbnail for export_mp4 outputs."""
 
 from __future__ import annotations
 
@@ -19,6 +19,8 @@ except ImportError:
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPT_DIR.parent.parent
+if str(SCRIPT_DIR.parent) not in sys.path:
+    sys.path.insert(0, str(SCRIPT_DIR.parent))
 PRESETS_PATH = SCRIPT_DIR / "youtube_presets.json"
 BADGE_4K_PATH = SCRIPT_DIR / "4k.png"
 THUMB_W, THUMB_H = 1280, 720
@@ -236,6 +238,151 @@ def limit_words(text: str, max_words: int = SUBTITLE_MAX_WORDS) -> str:
     return " ".join(words[:max_words])
 
 
+SCENE_TEMPLATES: dict[str, dict] = {
+    "park_pond_path": {
+        "place_zh_short": "公园荷塘",
+        "place_en_short": "Park Lotus Pond",
+        "place_zh_long": "公园荷塘雨景",
+        "place_en_long": "rainy park with lotus pond and stone path",
+        "bullet_zh": "🪷 荷塘湿地 · 蜿蜒石径 · 雨后草坪",
+        "bullet_en": "🪷 Lotus pond and wetland · winding stone path · rain-soaked lawn",
+        "tags_zh": ["公园", "荷塘", "荷花"],
+        "tags_en": ["park", "lotus pond", "lotus"],
+        "hashtags_zh": "#雨声 #ASMR #白噪音 #4K #助眠 #荷花 #公园",
+        "hashtags_en": "#rain #ASMR #whitenoise #4K #sleep #lotus #park",
+        "thumb_place": "park with lotus pond and stone path",
+    },
+    "park_pond": {
+        "place_zh_short": "公园荷塘",
+        "place_en_short": "Park Lotus Pond",
+        "place_zh_long": "公园荷塘雨景",
+        "place_en_long": "rainy park beside a lotus pond",
+        "bullet_zh": "🪷 荷塘荷花 · 雨后草坪 · 远处林木",
+        "bullet_en": "🪷 Lotus pond and flowers · rain-soaked lawn · distant trees",
+        "tags_zh": ["公园", "荷塘", "荷花"],
+        "tags_en": ["park", "lotus pond", "lotus"],
+        "hashtags_zh": "#雨声 #ASMR #白噪音 #4K #助眠 #荷花 #公园",
+        "hashtags_en": "#rain #ASMR #whitenoise #4K #sleep #lotus #park",
+        "thumb_place": "park beside a lotus pond",
+    },
+    "grove_pond_path": {
+        "place_zh_short": "林间荷塘",
+        "place_en_short": "Forest Lotus Grove",
+        "place_zh_long": "林间荷塘雨景",
+        "place_en_long": "rainy forest grove by a lotus pond path",
+        "bullet_zh": "🪷 林间荷塘 · 石径小径 · 雨后绿树",
+        "bullet_en": "🪷 Forest lotus pond · stone path · rain-wet green trees",
+        "tags_zh": ["林间", "荷塘", "小径"],
+        "tags_en": ["forest grove", "lotus pond", "stone path"],
+        "hashtags_zh": "#雨声 #ASMR #白噪音 #4K #助眠 #林间 #荷花",
+        "hashtags_en": "#rain #ASMR #whitenoise #4K #sleep #forest #lotus",
+        "thumb_place": "forest grove by a lotus pond path",
+    },
+    "grove_pond": {
+        "place_zh_short": "林间池塘",
+        "place_en_short": "Forest Pond",
+        "place_zh_long": "林间池塘雨景",
+        "place_en_long": "misty forest pond with lily pads",
+        "bullet_zh": "🪷 荷叶池塘 · 雨后林木 · 静谧水面",
+        "bullet_en": "🪷 Forest pond and lily pads · rain-wet trees · calm water",
+        "tags_zh": ["林间", "池塘", "荷叶"],
+        "tags_en": ["forest pond", "lotus pond", "lily pads"],
+        "hashtags_zh": "#雨声 #ASMR #白噪音 #4K #助眠 #林间 #池塘",
+        "hashtags_en": "#rain #ASMR #whitenoise #4K #sleep #forest #pond",
+        "thumb_place": "forest pond with lily pads in the rain",
+    },
+    "park_path": {
+        "place_zh_short": "林间公园",
+        "place_en_short": "Rainy Forest Park",
+        "place_zh_long": "林间公园雨景",
+        "place_en_long": "rainy forest park with a winding stone path",
+        "bullet_zh": "🌳 绿树草坪 · 蜿蜒石径 · 雨后湿地",
+        "bullet_en": "🌳 Green trees and lawn · winding stone path · wet ground after rain",
+        "tags_zh": ["公园", "林间", "石径"],
+        "tags_en": ["forest park", "rainy park", "stone path"],
+        "hashtags_zh": "#雨声 #ASMR #白噪音 #4K #助眠 #公园 #自然音",
+        "hashtags_en": "#rain #ASMR #whitenoise #4K #sleep #park #nature",
+        "thumb_place": "park with a winding stone path",
+    },
+    "grove_path": {
+        "place_zh_short": "林间小径",
+        "place_en_short": "Rainy Forest Path",
+        "place_zh_long": "林间小径雨景",
+        "place_en_long": "rainy forest grove along a stone path",
+        "bullet_zh": "🌳 雨后林木 · 石径蜿蜒 · 静谧林间",
+        "bullet_en": "🌳 Rain-wet forest trees · winding stone path · quiet grove",
+        "tags_zh": ["林间", "小径", "雨景"],
+        "tags_en": ["forest path", "stone path", "rainy forest"],
+        "hashtags_zh": "#雨声 #ASMR #白噪音 #4K #助眠 #林间 #自然音",
+        "hashtags_en": "#rain #ASMR #whitenoise #4K #sleep #forest #nature",
+        "thumb_place": "forest grove along a stone path",
+    },
+    "park": {
+        "place_zh_short": "公园绿地",
+        "place_en_short": "Rainy Green Park",
+        "place_zh_long": "公园绿地雨景",
+        "place_en_long": "green park in the rain",
+        "bullet_zh": "🌳 雨后草坪 · 开阔绿地 · 远处林木",
+        "bullet_en": "🌳 Rain-soaked lawn · open green park · distant trees",
+        "tags_zh": ["公园", "绿地", "雨景"],
+        "tags_en": ["green park", "rainy park", "lawn"],
+        "hashtags_zh": "#雨声 #ASMR #白噪音 #4K #助眠 #公园 #自然音",
+        "hashtags_en": "#rain #ASMR #whitenoise #4K #sleep #park #nature",
+        "thumb_place": "green park in the rain",
+    },
+    "grove": {
+        "place_zh_short": "林间雨景",
+        "place_en_short": "Lush Rainy Grove",
+        "place_zh_long": "林间雨景",
+        "place_en_long": "lush forest grove in the rain",
+        "bullet_zh": "🌳 雨后林木 · 浓绿树冠 · 静谧氛围",
+        "bullet_en": "🌳 Rain-wet trees · lush green canopy · peaceful mood",
+        "tags_zh": ["林间", "雨景", "自然"],
+        "tags_en": ["forest grove", "rainy forest", "lush green"],
+        "hashtags_zh": "#雨声 #ASMR #白噪音 #4K #助眠 #林间 #自然音",
+        "hashtags_en": "#rain #ASMR #whitenoise #4K #sleep #forest #nature",
+        "thumb_place": "lush forest grove in the rain",
+    },
+    "pond": {
+        "place_zh_short": "荷花池",
+        "place_en_short": "Peaceful Lotus Pond",
+        "place_zh_long": "荷花池雨景",
+        "place_en_long": "peaceful lotus pond in the rain",
+        "bullet_zh": "🪷 荷叶荷花 · 雨中湿地 · 静谧水面",
+        "bullet_en": "🪷 Lotus leaves and flowers · rainy wetland · calm water",
+        "tags_zh": ["荷花池", "荷塘", "荷花"],
+        "tags_en": ["lotus pond", "lotus", "pond"],
+        "hashtags_zh": "#雨声 #ASMR #白噪音 #4K #助眠 #荷花 #自然音",
+        "hashtags_en": "#rain #ASMR #whitenoise #4K #sleep #lotus #nature",
+        "thumb_place": "peaceful lotus pond in the rain",
+    },
+    "nature": {
+        "place_zh_short": "自然雨景",
+        "place_en_short": "Peaceful Rain Nature",
+        "place_zh_long": "自然雨景",
+        "place_en_long": "quiet nature scene in the rain",
+        "bullet_zh": "🌧 自然雨声 · 静谧氛围 · 无音乐无人声",
+        "bullet_en": "🌧 Natural rain ambience · peaceful mood · no music or voice",
+        "tags_zh": ["自然", "雨景"],
+        "tags_en": ["nature rain", "ambient"],
+        "hashtags_zh": "#雨声 #ASMR #白噪音 #4K #助眠 #自然音",
+        "hashtags_en": "#rain #ASMR #whitenoise #4K #sleep #nature",
+        "thumb_place": "quiet nature scene in the rain",
+    },
+}
+
+
+def scene_template_by_key(key: str, *, misty: bool = False) -> dict:
+    """按 scene_key 返回完整 scene dict（供 CV/VLM 修正后复用）。"""
+    tpl = SCENE_TEMPLATES.get(key, SCENE_TEMPLATES["nature"])
+    scene = dict(tpl)
+    scene["scene_key"] = key
+    scene["misty"] = misty
+    mood = "Misty rainy" if misty else "Peaceful rainy"
+    scene["thumb_subtitle"] = limit_words(f"{mood} {scene['thumb_place']}")
+    return scene
+
+
 def analyze_frame_scene(frame_path: Path) -> dict:
     """从缩略图帧启发式推断场景（标题/说明/副标题共用）。"""
     img = Image.open(frame_path).convert("RGB")
@@ -256,7 +403,8 @@ def analyze_frame_scene(frame_path: Path) -> dict:
     green = center["g"] > center["r"] * 1.06 and center["g"] > center["b"] * 1.02
     grass = bottom_left["g"] > 90 and bottom_left["g"] > bottom_left["r"] * 1.12
     path = (
-        abs(bottom_right["r"] - bottom_right["g"]) < 20
+        not water
+        and abs(bottom_right["r"] - bottom_right["g"]) < 20
         and 55 < bottom_right["brightness"] < 155
         and bottom_right["r"] < center["g"]
     )
@@ -282,148 +430,11 @@ def analyze_frame_scene(frame_path: Path) -> dict:
     else:
         key = "nature"
 
-    scenes = {
-        "park_pond_path": {
-            "place_zh_short": "公园荷塘",
-            "place_en_short": "Park Lotus Pond",
-            "place_zh_long": "公园荷塘雨景",
-            "place_en_long": "rainy park with lotus pond and stone path",
-            "bullet_zh": "🪷 荷塘湿地 · 蜿蜒石径 · 雨后草坪",
-            "bullet_en": "🪷 Lotus pond and wetland · winding stone path · rain-soaked lawn",
-            "tags_zh": ["公园", "荷塘", "荷花"],
-            "tags_en": ["park", "lotus pond", "lotus"],
-            "hashtags_zh": "#雨声 #ASMR #白噪音 #4K #助眠 #荷花 #公园",
-            "hashtags_en": "#rain #ASMR #whitenoise #4K #sleep #lotus #park",
-            "thumb_place": "park with lotus pond and stone path",
-        },
-        "park_pond": {
-            "place_zh_short": "公园荷塘",
-            "place_en_short": "Park Lotus Pond",
-            "place_zh_long": "公园荷塘雨景",
-            "place_en_long": "rainy park beside a lotus pond",
-            "bullet_zh": "🪷 荷塘荷花 · 雨后草坪 · 远处林木",
-            "bullet_en": "🪷 Lotus pond and flowers · rain-soaked lawn · distant trees",
-            "tags_zh": ["公园", "荷塘", "荷花"],
-            "tags_en": ["park", "lotus pond", "lotus"],
-            "hashtags_zh": "#雨声 #ASMR #白噪音 #4K #助眠 #荷花 #公园",
-            "hashtags_en": "#rain #ASMR #whitenoise #4K #sleep #lotus #park",
-            "thumb_place": "park beside a lotus pond",
-        },
-        "grove_pond_path": {
-            "place_zh_short": "林间荷塘",
-            "place_en_short": "Forest Lotus Grove",
-            "place_zh_long": "林间荷塘雨景",
-            "place_en_long": "rainy forest grove by a lotus pond path",
-            "bullet_zh": "🪷 林间荷塘 · 石径小径 · 雨后绿树",
-            "bullet_en": "🪷 Forest lotus pond · stone path · rain-wet green trees",
-            "tags_zh": ["林间", "荷塘", "小径"],
-            "tags_en": ["forest grove", "lotus pond", "stone path"],
-            "hashtags_zh": "#雨声 #ASMR #白噪音 #4K #助眠 #林间 #荷花",
-            "hashtags_en": "#rain #ASMR #whitenoise #4K #sleep #forest #lotus",
-            "thumb_place": "forest grove by a lotus pond path",
-        },
-        "grove_pond": {
-            "place_zh_short": "林间荷塘",
-            "place_en_short": "Misty Lotus Grove",
-            "place_zh_long": "林间荷塘雨景",
-            "place_en_long": "misty forest grove by a lotus pond",
-            "bullet_zh": "🪷 雾气荷塘 · 雨后林木 · 静谧湿地",
-            "bullet_en": "🪷 Misty lotus pond · rain-wet forest · quiet wetland",
-            "tags_zh": ["林间", "荷塘", "雾气"],
-            "tags_en": ["forest grove", "lotus pond", "misty rain"],
-            "hashtags_zh": "#雨声 #ASMR #白噪音 #4K #助眠 #林间 #荷花",
-            "hashtags_en": "#rain #ASMR #whitenoise #4K #sleep #forest #lotus",
-            "thumb_place": "forest grove by a misty lotus pond",
-        },
-        "park_path": {
-            "place_zh_short": "林间公园",
-            "place_en_short": "Rainy Forest Park",
-            "place_zh_long": "林间公园雨景",
-            "place_en_long": "rainy forest park with a winding stone path",
-            "bullet_zh": "🌳 绿树草坪 · 蜿蜒石径 · 雨后湿地",
-            "bullet_en": "🌳 Green trees and lawn · winding stone path · wet ground after rain",
-            "tags_zh": ["公园", "林间", "石径"],
-            "tags_en": ["forest park", "rainy park", "stone path"],
-            "hashtags_zh": "#雨声 #ASMR #白噪音 #4K #助眠 #公园 #自然音",
-            "hashtags_en": "#rain #ASMR #whitenoise #4K #sleep #park #nature",
-            "thumb_place": "park with a winding stone path",
-        },
-        "grove_path": {
-            "place_zh_short": "林间小径",
-            "place_en_short": "Rainy Forest Path",
-            "place_zh_long": "林间小径雨景",
-            "place_en_long": "rainy forest grove along a stone path",
-            "bullet_zh": "🌳 雨后林木 · 石径蜿蜒 · 静谧林间",
-            "bullet_en": "🌳 Rain-wet forest trees · winding stone path · quiet grove",
-            "tags_zh": ["林间", "小径", "雨景"],
-            "tags_en": ["forest path", "stone path", "rainy forest"],
-            "hashtags_zh": "#雨声 #ASMR #白噪音 #4K #助眠 #林间 #自然音",
-            "hashtags_en": "#rain #ASMR #whitenoise #4K #sleep #forest #nature",
-            "thumb_place": "forest grove along a stone path",
-        },
-        "park": {
-            "place_zh_short": "公园绿地",
-            "place_en_short": "Rainy Green Park",
-            "place_zh_long": "公园绿地雨景",
-            "place_en_long": "green park in the rain",
-            "bullet_zh": "🌳 雨后草坪 · 开阔绿地 · 远处林木",
-            "bullet_en": "🌳 Rain-soaked lawn · open green park · distant trees",
-            "tags_zh": ["公园", "绿地", "雨景"],
-            "tags_en": ["green park", "rainy park", "lawn"],
-            "hashtags_zh": "#雨声 #ASMR #白噪音 #4K #助眠 #公园 #自然音",
-            "hashtags_en": "#rain #ASMR #whitenoise #4K #sleep #park #nature",
-            "thumb_place": "green park in the rain",
-        },
-        "grove": {
-            "place_zh_short": "林间雨景",
-            "place_en_short": "Lush Rainy Grove",
-            "place_zh_long": "林间雨景",
-            "place_en_long": "lush forest grove in the rain",
-            "bullet_zh": "🌳 雨后林木 · 浓绿树冠 · 静谧氛围",
-            "bullet_en": "🌳 Rain-wet trees · lush green canopy · peaceful mood",
-            "tags_zh": ["林间", "雨景", "自然"],
-            "tags_en": ["forest grove", "rainy forest", "lush green"],
-            "hashtags_zh": "#雨声 #ASMR #白噪音 #4K #助眠 #林间 #自然音",
-            "hashtags_en": "#rain #ASMR #whitenoise #4K #sleep #forest #nature",
-            "thumb_place": "lush forest grove in the rain",
-        },
-        "pond": {
-            "place_zh_short": "荷花池",
-            "place_en_short": "Peaceful Lotus Pond",
-            "place_zh_long": "荷花池雨景",
-            "place_en_long": "peaceful lotus pond in the rain",
-            "bullet_zh": "🪷 荷叶荷花 · 雨中湿地 · 静谧水面",
-            "bullet_en": "🪷 Lotus leaves and flowers · rainy wetland · calm water",
-            "tags_zh": ["荷花池", "荷塘", "荷花"],
-            "tags_en": ["lotus pond", "lotus", "pond"],
-            "hashtags_zh": "#雨声 #ASMR #白噪音 #4K #助眠 #荷花 #自然音",
-            "hashtags_en": "#rain #ASMR #whitenoise #4K #sleep #lotus #nature",
-            "thumb_place": "peaceful lotus pond in the rain",
-        },
-        "nature": {
-            "place_zh_short": "自然雨景",
-            "place_en_short": "Peaceful Rain Nature",
-            "place_zh_long": "自然雨景",
-            "place_en_long": "quiet nature scene in the rain",
-            "bullet_zh": "🌧 自然雨声 · 静谧氛围 · 无音乐无人声",
-            "bullet_en": "🌧 Natural rain ambience · peaceful mood · no music or voice",
-            "tags_zh": ["自然", "雨景"],
-            "tags_en": ["nature rain", "ambient"],
-            "hashtags_zh": "#雨声 #ASMR #白噪音 #4K #助眠 #自然音",
-            "hashtags_en": "#rain #ASMR #whitenoise #4K #sleep #nature",
-            "thumb_place": "quiet nature scene in the rain",
-        },
-    }
-
-    scene = dict(scenes[key])
-    scene["scene_key"] = key
-    scene["misty"] = misty
-    mood = "Misty rainy" if misty else "Peaceful rainy"
-    scene["thumb_subtitle"] = limit_words(f"{mood} {scene['thumb_place']}")
-    return scene
+    return scene_template_by_key(key, misty=misty)
 
 
-# scripts/video_export/material_ref/forest_rain.md — 爆款标题/描述/Tags/封面叠字模版
+# 爆款模版：material_ref/forest_rain.md + design/rain_series/metadata_templates_report.md
+# 实际生成见 video_export/viral_metadata.py（每条视频 50% 模版 + 50% 画面发挥）
 FOREST_RAIN_REF = Path(__file__).resolve().parent / "material_ref" / "forest_rain.md"
 FOREST_RAIN_VIDEO_TITLE_EN = "Relaxing Rain Sounds for Sleeping"
 FOREST_RAIN_THUMB_TITLE = "Rain Sounds"
@@ -456,7 +467,7 @@ FOREST_RAIN_SCENE_TAGS = [
 VIRAL_SCENE_RAIN: dict[str, str] = {
     "grove": "Calming Rain on Forest Leaves",
     "grove_path": "Heavy Rain on Forest Path",
-    "grove_pond": "Rain on Misty Forest Grove",
+    "grove_pond": "Calming Rain on Forest Pond",
     "grove_pond_path": "Rain on Forest Grove Path",
     "park": "Gentle Rain on Green Park",
     "park_path": "Rain on Forest Park Path",
@@ -492,49 +503,30 @@ def viral_format_zh(meta: dict, *, show_4k: bool) -> str:
     return f"{dur}{k4}雨景循环 ASMR"
 
 
-def build_forest_rain_youtube_copy(scene: dict, meta: dict, *, show_4k: bool = False) -> dict:
-    """按 material_ref/forest_rain.md T1：固定标题 | 场景 | 格式（雨景循环，非黑屏）。"""
-    scene_key = scene.get("scene_key", "nature")
-    scene_rain = VIRAL_SCENE_RAIN.get(scene_key, f"Calming Rain on {scene['place_en_short']}")
-    hear = scene.get("thumb_place", scene["place_en_long"])
-    fmt_en = viral_format_en(meta, show_4k=show_4k)
-    fmt_zh = viral_format_zh(meta, show_4k=show_4k)
+def build_forest_rain_youtube_copy(
+    scene: dict,
+    meta: dict,
+    *,
+    show_4k: bool = False,
+    video_seed: str = "",
+    vlm_ctx: dict | None = None,
+) -> dict:
+    """爆款文案：约 50% 模版 + 50% 画面发挥（见 viral_metadata.py / metadata_templates_report.md）。"""
+    from video_export.viral_metadata import build_varied_forest_rain_copy
 
-    title_en = f"{FOREST_RAIN_VIDEO_TITLE_EN} | {scene_rain} | {fmt_en}"
-    title_zh = f"{FOREST_RAIN_TITLE_ZH} | {scene['place_zh_short']}雨声 | {fmt_zh}"
+    def scene_rain_resolver(scene_key: str, sc: dict) -> str:
+        return VIRAL_SCENE_RAIN.get(scene_key, f"Calming Rain on {sc['place_en_short']}")
 
-    desc_en = (
-        f"Fall asleep fast with gentle rain sounds on {hear}.\n\n"
-        "✅ Deep sleep & beat insomnia\n"
-        "✅ Anxiety / stress / tinnitus relief\n"
-        "✅ Perfect for study, meditation, baby sleep\n\n"
-        f"What you'll see & hear: seamless {hear} rain loop, soft ambience, distant thunder...\n\n"
-        "Subscribe for more relaxing rain sounds 🌧️\n"
-        "Like if this helped you sleep!\n\n"
-        "#rainsounds #sleepsounds #asmr #whitenoise #insomnia #relaxingrain #forestrain"
+    return build_varied_forest_rain_copy(
+        scene,
+        meta,
+        video_seed=video_seed or scene.get("scene_key", "nature"),
+        show_4k=show_4k,
+        scene_rain_resolver=scene_rain_resolver,
+        core_tags=FOREST_RAIN_CORE_TAGS,
+        scene_tags=FOREST_RAIN_SCENE_TAGS,
+        vlm_ctx=vlm_ctx,
     )
-    desc_zh = (
-        f"伴着{scene['place_zh_long']}的雨声快速入睡。\n\n"
-        "✅ 深度睡眠 · 缓解失眠\n"
-        "✅ 减轻焦虑、压力与耳鸣\n"
-        "✅ 适合学习、冥想、宝宝入睡\n\n"
-        f"你将听到：{scene['bullet_zh']}\n\n"
-        "订阅获取更多放松雨声 🌧️\n"
-        "有帮助请点赞！\n\n"
-        "#雨声 #助眠 #ASMR #白噪音 #失眠 #放松雨声 #森林雨"
-    )
-
-    tags = list(dict.fromkeys(FOREST_RAIN_CORE_TAGS + FOREST_RAIN_SCENE_TAGS + scene.get("tags_en", [])))
-
-    return {
-        "title_zh": title_zh,
-        "title_en": title_en,
-        "description_zh": desc_zh,
-        "description_en": desc_en,
-        "tags": tags,
-        "subtitle_zh": "睡眠 · 专注 · 冥想 · 减压",
-        "subtitle_en": "Sleep · Focus · Meditation · Stress Relief",
-    }
 
 
 def build_forest_rain_thumb_text(scene: dict, meta: dict, *, show_4k: bool = False) -> tuple[str, str]:
@@ -550,6 +542,69 @@ def build_forest_rain_thumb_text(scene: dict, meta: dict, *, show_4k: bool = Fal
 
 def auto_thumb_subtitle(frame_path: Path) -> str:
     return analyze_frame_scene(frame_path)["thumb_subtitle"]
+
+
+def _resolve_scene_id(video: Path, scene_id: str) -> str:
+    if scene_id:
+        return scene_id
+    m = re.search(r"(MVI_\d+)", video.stem, re.I)
+    return m.group(1).upper() if m else ""
+
+
+def _resolve_youtube_copy_forest_rain(
+    scene: dict,
+    meta: dict,
+    *,
+    video_seed: str,
+    show_4k: bool,
+    scene_id: str,
+    frame_jpg: Path,
+    use_vlm_copy: bool,
+    visual_context: dict | None = None,
+    on_progress: Callable[[str], None] | None,
+) -> dict:
+    from video_export.metadata_vlm import (
+        generate_youtube_copy_with_vlm,
+        load_vlm_context,
+        merge_vlm_copy_with_tags,
+    )
+
+    vlm_ctx = load_vlm_context(scene_id)
+    if use_vlm_copy and frame_jpg.is_file():
+        vlm_copy = generate_youtube_copy_with_vlm(
+            frame_jpg,
+            scene,
+            meta,
+            video_seed=video_seed,
+            vlm_ctx=vlm_ctx,
+            visual_context=visual_context,
+            show_4k=show_4k,
+            on_progress=on_progress,
+        )
+        if vlm_copy:
+            return merge_vlm_copy_with_tags(
+                vlm_copy,
+                FOREST_RAIN_CORE_TAGS,
+                FOREST_RAIN_SCENE_TAGS,
+                scene,
+            )
+
+    if on_progress:
+        on_progress("使用模版池生成差异化文案（viral_metadata）…")
+    copy = build_forest_rain_youtube_copy(
+        scene,
+        meta,
+        show_4k=show_4k,
+        video_seed=video_seed,
+        vlm_ctx=vlm_ctx,
+    )
+    if visual_context:
+        from video_export.visual_scene import validate_copy_against_visual, sanitize_copy_for_visual
+        if validate_copy_against_visual(copy, visual_context):
+            copy = sanitize_copy_for_visual(copy, visual_context)
+            if on_progress:
+                on_progress("模版池文案已按视觉锁定修正")
+    return copy
 
 
 def build_rain_youtube_copy(scene: dict, meta: dict) -> dict:
@@ -850,6 +905,11 @@ def render_markdown(
     ]
     if scene_key:
         lines.append(f"- 画面推断：`{scene_key}`（auto_from_scene）")
+    meta_src = youtube_copy.get("metadata_source")
+    if meta_src:
+        tmpl = youtube_copy.get("template_id", "")
+        src_note = f"{meta_src}" + (f" · {tmpl}" if tmpl else "")
+        lines.append(f"- 文案来源：`{src_note}`")
     lines.extend([
         "",
         "## 中文说明",
@@ -922,9 +982,12 @@ def generate_material(
     show_4k_badge: bool | None = None,
     layout: str = "",
     duration_override_s: float | None = None,
+    scene_id: str = "",
+    use_vlm_copy: bool = True,
+    force_refresh_visual: bool = False,
     on_progress: Callable[[str], None] | None = None,
 ) -> Path:
-    """生成 YouTube 物料（缩略图 + youtube.md）。返回输出目录。"""
+    """生成 YouTube 物料（缩略图 + *_material.json）。返回输出目录。"""
 
     def log(msg: str) -> None:
         if on_progress:
@@ -976,18 +1039,21 @@ def generate_material(
     else:
         show_4k = show_4k_badge
 
-    md_path = out_dir / "youtube.md"
+    resolved_scene_id = _resolve_scene_id(video, scene_id)
 
-    import re
     match = re.search(r'\d+', stem)
     num = match.group() if match else stem
     
     thumb_jpg = out_dir / f"MVI_{num}_thumbnail.jpg"
     raw_jpg = out_dir / f"MVI_{num}_snapshot_raw.jpg"
+    scene_raw_jpg = out_dir / f"{resolved_scene_id}_snapshot_raw.jpg" if resolved_scene_id else None
 
     if thumb_jpg.is_file():
         frame_jpg = thumb_jpg
         log(f"找到封面图：{thumb_jpg.name}，跳过截帧")
+    elif scene_raw_jpg and scene_raw_jpg.is_file():
+        frame_jpg = scene_raw_jpg
+        log(f"找到场景首帧：{scene_raw_jpg.name}，跳过截帧")
     elif raw_jpg.is_file():
         frame_jpg = raw_jpg
         log(f"找到原始首帧：{raw_jpg.name}，跳过截帧")
@@ -996,11 +1062,35 @@ def generate_material(
         log(f"截取分析快照 @ {use_thumb_time}s … (1280x720 JPG)")
         extract_frame(video, frame_jpg, float(use_thumb_time))
 
-    scene = analyze_frame_scene(frame_jpg)
-    log(f"画面场景：{scene['scene_key']} · {scene['place_en_short']}")
+    from video_export.visual_scene import resolve_visual_scene
+
+    heuristic_scene = analyze_frame_scene(frame_jpg)
+    scene, visual_context = resolve_visual_scene(
+        frame_jpg,
+        heuristic_scene,
+        scene_id=resolved_scene_id,
+        material_dir=out_dir,
+        use_vlm_visual=use_vlm_copy,
+        force_refresh=force_refresh_visual,
+        on_progress=on_progress,
+    )
+    resolved_key = visual_context.get("resolved_scene_key", scene.get("scene_key"))
+    log(f"画面场景：{resolved_key} · {scene['place_en_short']}")
+    if resolved_key != heuristic_scene.get("scene_key"):
+        log(f"  （启发式 {heuristic_scene.get('scene_key')} → 修正 {resolved_key}）")
 
     if copy_style == "forest_rain" and scene:
-        youtube_copy = build_forest_rain_youtube_copy(scene, meta, show_4k=show_4k)
+        youtube_copy = _resolve_youtube_copy_forest_rain(
+            scene,
+            meta,
+            video_seed=resolved_scene_id or stem,
+            show_4k=show_4k,
+            scene_id=resolved_scene_id,
+            frame_jpg=frame_jpg,
+            use_vlm_copy=use_vlm_copy,
+            visual_context=visual_context,
+            on_progress=on_progress,
+        )
         if title_zh:
             youtube_copy["title_zh"] = title_zh
         if title_en:
@@ -1009,11 +1099,19 @@ def generate_material(
         thumb_title_resolved = thumb_title or preset.get("thumb_title_en") or viral_title
         if thumb_subtitle_place_only and scene:
             thumb_subtitle_resolved = scene["place_en_short"]
+        elif youtube_copy.get("scene_rain_en"):
+            fmt_en = viral_format_en(meta, show_4k=show_4k)
+            thumb_subtitle_resolved = limit_words(
+                thumb_subtitle or f"{youtube_copy['scene_rain_en']} | {fmt_en}",
+                max_words=14,
+            )
         else:
             thumb_subtitle_resolved = limit_words(
                 thumb_subtitle or preset.get("thumb_subtitle_en") or viral_sub,
                 max_words=14,
             )
+        src = youtube_copy.get("metadata_source", "template")
+        log(f"文案来源：{src}" + (f" · {youtube_copy.get('template_id', '')}" if youtube_copy.get("template_id") else ""))
     else:
         youtube_copy = resolve_youtube_copy(preset, scene, meta, stem, title_zh, title_en)
         thumb_title_resolved, thumb_subtitle_resolved = resolve_thumb_text(
@@ -1023,21 +1121,24 @@ def generate_material(
             thumb_subtitle_resolved = scene["place_en_short"]
     log(f"缩略图文案：{thumb_title_resolved!r} / {thumb_subtitle_resolved!r}")
 
-    md_path.write_text(
-        render_markdown(
-            video,
-            meta,
-            parsed,
-            preset,
-            "",
-            thumb_title_resolved,
-            thumb_subtitle_resolved,
-            youtube_copy,
-            scene_key=scene["scene_key"] if preset.get("auto_from_scene") or copy_style == "forest_rain" else "",
-        ),
-        encoding="utf-8",
+    from video_upload.material_store import build_material_record, write_material_json
+
+    json_path = (
+        out_dir / f"{resolved_scene_id}_material.json"
+        if resolved_scene_id
+        else out_dir / f"{stem}_material.json"
     )
-    log(f"已写入：{out_dir / 'youtube.md'}")
+    record = build_material_record(
+        scene_id=resolved_scene_id or stem,
+        video_name=video.name,
+        youtube_copy=youtube_copy,
+        meta=meta,
+        thumb_title=thumb_title_resolved,
+        thumb_subtitle=thumb_subtitle_resolved,
+        scene_key=resolved_key if preset.get("auto_from_scene") or copy_style == "forest_rain" else "",
+    )
+    write_material_json(json_path, record)
+    log(f"已写入：{json_path.name}")
     return out_dir
 
 
@@ -1081,6 +1182,16 @@ def main() -> None:
         default="forest_rain",
         help="文案风格：forest_rain=material_ref/forest_rain.md 爆款模版",
     )
+    parser.add_argument(
+        "--scene-id",
+        default="",
+        help="场景 ID（如 MVI_6918），用于加载 VLM/CLIP 上下文",
+    )
+    parser.add_argument(
+        "--no-vlm-copy",
+        action="store_true",
+        help="禁用 Gemini VLM 差异化文案，仅使用模版池",
+    )
     args = parser.parse_args()
 
     video = args.video.resolve()
@@ -1110,10 +1221,11 @@ def main() -> None:
         thumb_subtitle=args.thumb_subtitle,
         show_4k_badge=False if args.no_4k_badge else None,
         layout=args.layout,
+        scene_id=args.scene_id,
+        use_vlm_copy=not args.no_vlm_copy,
     )
     print(f"==> Done: {out_dir}/")
-    print("    youtube.md")
-    print("    thumbnail.jpg")
+    print("    *_material.json")
 
 
 if __name__ == "__main__":

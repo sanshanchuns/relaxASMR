@@ -1,7 +1,7 @@
 -- 雨声系列 · 四层音频 + 视频轨
 -- 轨 1–4 = 1_rain / 2_impact / 3_random / 4_wildlife（素材在 baseURL/audio/）
 -- 轨 5 = 视频 looper（仅最终渲染）
--- Group = Folder 父轨 · ReaEQ + ReaComp
+-- Group = Folder 父轨 · ReaLimit（−1 dBTP · True peak）
 
 return {
   video_track = 5,
@@ -13,7 +13,7 @@ return {
       js_name = "relaxASMR/asmr_sleep_hf_eq.jsfx",
       params = { 120, -3, 3500, 1.2, -5, 6000, 0.8, -4, 8000 },
     },
-    reacomp = true,
+    realimit = true,
   },
 
   layers = {

@@ -1,0 +1,69 @@
+{
+  "base_url": "/mnt/e/自然之声/to_youtube",
+  "last_video": "/mnt/e/自然之声/to_youtube/MVI_6989_loop_0.96_dur_19_fade_0.5.mp4",
+  "last_rpp": "/home/leo/workspace/relaxASMR/Reaper/Projects/Rain/MVI_6989.rpp",
+  "duration_hours": 3,
+  "reaper_exe": "D:\\Program Files\\REAPER (x64)\\reaper.exe",
+  "last_video_dir": "/mnt/e/自然之声/to_youtube",
+  "last_material_dir": "/mnt/e/自然之声/待上传youtube/output_audio",
+  "youtube_privacy": "public",
+  "youtube_language": "en",
+  "last_upload_url": "https://www.youtube.com/watch?v=rI7-MOXsZgk",
+  "youtube_account": "leo",
+  "last_vst_dir": "/mnt/e/自然之声/待上传youtube/MVI_6989_loop_0.96_dur_19_fade_0.5.mp4",
+  "last_export_mp4": "",
+  "last_vst_match_wav": "/mnt/e/自然之声/待上传youtube/rain_vst/preset/21.水面涟漪.wav",
+  "last_vst_match_rain": "/mnt/e/自然之声/待上传youtube/rain_vst/preset/21.Stirring Water Whirls.rain",
+  "last_vst_match_score": 0.9822237603132083,
+  "last_vst_frame": "/mnt/e/自然之声/待上传youtube/output_audio/MVI_6989_芭蕉密林微风细雨.jpg",
+  "last_vst_matches": [],
+  "uploaded_ids": {
+    "6919": true,
+    "6921": true,
+    "6952": true,
+    "6953": true
+  },
+  "theme": "light",
+  "export_outputs": {
+    "MVI_6989": {
+      "wav": "/mnt/e/自然之声/to_youtube/export/MVI_6989_3h.wav"
+    }
+  },
+  "audio_library_selection": {
+    "3_random": [
+      "/mnt/e/自然之声/to_youtube/audio/3_random/booms/QP01 0010 Thunder very distant rolling.wav",
+      "/mnt/e/自然之声/to_youtube/audio/3_random/booms/QP03 0284 Thunder distant very slow long.wav",
+      "/mnt/e/自然之声/to_youtube/audio/3_random/booms/QP01 0009 Thunder distant.wav",
+      "/mnt/e/自然之声/to_youtube/audio/3_random/booms/QP03 0283 Thunder distant slow long.wav",
+      "/mnt/e/自然之声/to_youtube/audio/3_random/booms/QP03 0285 Thunder distant short.wav",
+      "/mnt/e/自然之声/to_youtube/audio/3_random/booms/QP03 0287 Thunder very distant.wav",
+      "/mnt/e/自然之声/to_youtube/audio/3_random/booms/QP03 0286 Thunder distant.wav",
+      "/mnt/e/自然之声/to_youtube/audio/3_random/booms/QP03 0290 Thunder distant faint.wav",
+      "/mnt/e/自然之声/to_youtube/audio/3_random/booms/QP03 0282 Thunder distant long rolling.wav"
+    ],
+    "4_wildlife": [
+      "/mnt/e/自然之声/to_youtube/audio/4_wildlife/booms/QP01 0096 Wetland lake early morning.wav",
+      "/mnt/e/自然之声/to_youtube/audio/4_wildlife/booms/QP01 0046 Deciduous forest country morning.wav",
+      "/mnt/e/自然之声/to_youtube/audio/4_wildlife/booms/QP01 0051 Deciduous forest day songbirds.wav",
+      "/mnt/e/自然之声/to_youtube/audio/4_wildlife/booms/QP01 0121 Canyon early morning.wav",
+      "/mnt/e/自然之声/to_youtube/audio/4_wildlife/booms/QP01 0057 Deciduous forest woodpecker drumming.wav",
+      "/mnt/e/自然之声/to_youtube/audio/4_wildlife/booms/QP01 0050 Deciduous forest morning songbirds robin.wav"
+    ],
+    "1_rain_boom": [
+      "/mnt/e/自然之声/to_youtube/audio/1_rain/booms/QP01 0011 Rain soft.wav",
+      "/mnt/e/自然之声/to_youtube/audio/1_rain/booms/QP01 0012 Rain moderate.wav",
+      "/mnt/e/自然之声/to_youtube/audio/1_rain/booms/QP01 0013 Rain strong.wav",
+      "/mnt/e/自然之声/to_youtube/audio/1_rain/booms/QP01 0014 Rain downpour.wav",
+      "/mnt/e/自然之声/to_youtube/audio/1_rain/booms/QP01 0015 Rain storm aftermath.wav",
+      "/mnt/e/自然之声/to_youtube/audio/1_rain/booms/QP01 0016 Thunderstorm.wav",
+      "/mnt/e/自然之声/to_youtube/audio/1_rain/booms/QP03 0292 Rain quiet light tone.wav",
+      "/mnt/e/自然之声/to_youtube/audio/1_rain/booms/QP03 0293 Rain light shower on water.wav",
+      "/mnt/e/自然之声/to_youtube/audio/1_rain/booms/QP03 0294 Rain shower onset.wav"
+    ]
+  },
+  "track_picker_selection": {
+    "1_rain_boom": "/mnt/e/自然之声/to_youtube/audio/1_rain/booms/QP01 0011 Rain soft.wav",
+    "3_random": "/mnt/e/自然之声/to_youtube/audio/3_random/booms/QP01 0010 Thunder very distant rolling.wav"
+  },
+  "target_duration": "3"
+}

@@ -9,6 +9,14 @@ from typing import Callable, Optional
 CELL_W = 180
 CELL_H = 56
 CELL_PAD = 4
+_HOVER_DELAY_MS = 400
+_BORDER_THICKNESS = 2
+_COLOR_BORDER_DEFAULT = "#c8c8c8"
+_COLOR_BORDER_HOVER = "#4a90d9"
+_COLOR_BORDER_SELECTED = "black"
+_COLOR_TEXT_DEFAULT = "#222222"
+_COLOR_TEXT_MUTED = "#666666"
+_COLOR_TEXT_HOVER = "#1a5fb4"
 
 
 class TrackPickerUI(ttk.Frame):
@@ -59,9 +67,9 @@ class TrackPickerUI(ttk.Frame):
                 cell,
                 width=CELL_W - 2,
                 height=CELL_H - 2,
-                highlightthickness=1,
-                highlightbackground="#b0b0b0",
-                highlightcolor="#b0b0b0",
+                highlightthickness=_BORDER_THICKNESS,
+                highlightbackground=_COLOR_BORDER_DEFAULT,
+                highlightcolor=_COLOR_BORDER_HOVER,
             )
             border.pack(fill=tk.BOTH, expand=True)
             border.pack_propagate(False)
@@ -69,7 +77,7 @@ class TrackPickerUI(ttk.Frame):
             inner_cell = tk.LabelFrame(
                 border,
                 text=f"备选 {i + 1}",
-                fg="#666666",
+                fg=_COLOR_TEXT_MUTED,
                 font=("", 8),
                 bd=0,
                 relief=tk.FLAT,
@@ -82,7 +90,7 @@ class TrackPickerUI(ttk.Frame):
                 text="—",
                 wraplength=CELL_W - 16,
                 justify="center",
-                fg="#666666",
+                fg=_COLOR_TEXT_MUTED,
                 font=("", 9),
                 bg=inner_cell.cget("bg"),
             )
@@ -133,6 +141,15 @@ class TrackPickerUI(ttk.Frame):
                 cell["lbl_name"].configure(text="—")
                 cell["wav_path"] = None
                 cell["name"] = None
+        if self._selected_wav:
+            valid = {
+                Path(c["wav"]).resolve()
+                for c in candidates
+                if c.get("wav") and Path(c["wav"]).is_file()
+            }
+            if self._selected_wav.resolve() not in valid:
+                self._selected_idx = None
+                self._selected_wav = None
         self._update_all_visuals()
 
     def load_candidates(self, json_path: Path | str) -> None:
@@ -190,6 +207,20 @@ class TrackPickerUI(ttk.Frame):
         if self.on_select_callback:
             self.on_select_callback(self.track_name)
 
+    def select_wav(self, wav: Path | str, *, notify: bool = True) -> bool:
+        """按 WAV 路径选中对应格子（用于重启后恢复选中状态）。"""
+        target = Path(wav).resolve()
+        for i, cell in enumerate(self._grid_cells):
+            wp = cell.get("wav_path")
+            if wp and wp.resolve() == target:
+                self._selected_idx = i
+                self._selected_wav = wp
+                self._update_all_visuals()
+                if notify and self.on_select_callback:
+                    self.on_select_callback(self.track_name)
+                return True
+        return False
+
     def clear_selection(self) -> None:
         self._selected_idx = None
         self._selected_wav = None
@@ -203,26 +234,35 @@ class TrackPickerUI(ttk.Frame):
         cell = self._grid_cells[idx]
         is_selected = self._selected_idx == idx
         is_playing = self._hover_idx == idx
+        has_content = bool(cell["name"])
 
-        base_text = "选中" if is_selected else f"备选 {idx + 1}"
-        header = f"{base_text} 🔊" if is_playing else base_text
+        header = "选中" if is_selected else f"备选 {idx + 1}"
 
         if is_selected:
             cell["border"].configure(
-                highlightthickness=2,
-                highlightbackground="black",
-                highlightcolor="black",
+                highlightthickness=_BORDER_THICKNESS,
+                highlightbackground=_COLOR_BORDER_SELECTED,
+                highlightcolor=_COLOR_BORDER_SELECTED,
             )
-            cell["frame"].configure(text=header, fg="black", font=("", 8, "bold"))
-            cell["lbl_name"].configure(fg="black", font=("", 9, "bold"))
+            cell["frame"].configure(text=header, fg=_COLOR_BORDER_SELECTED, font=("", 8, "bold"))
+            cell["lbl_name"].configure(fg=_COLOR_BORDER_SELECTED, font=("", 9, "bold"))
+        elif is_playing and has_content:
+            cell["border"].configure(
+                highlightthickness=_BORDER_THICKNESS,
+                highlightbackground=_COLOR_BORDER_HOVER,
+                highlightcolor=_COLOR_BORDER_HOVER,
+            )
+            cell["frame"].configure(text=header, fg=_COLOR_TEXT_HOVER, font=("", 8, "bold"))
+            cell["lbl_name"].configure(fg=_COLOR_TEXT_HOVER, font=("", 9, "bold"))
         else:
             cell["border"].configure(
-                highlightthickness=1,
-                highlightbackground="#b0b0b0",
-                highlightcolor="#b0b0b0",
+                highlightthickness=_BORDER_THICKNESS,
+                highlightbackground=_COLOR_BORDER_DEFAULT,
+                highlightcolor=_COLOR_BORDER_HOVER,
             )
-            cell["frame"].configure(text=header, fg="#666666", font=("", 8))
-            cell["lbl_name"].configure(fg="#666666", font=("", 9))
+            fg = _COLOR_TEXT_DEFAULT if has_content else _COLOR_TEXT_MUTED
+            cell["frame"].configure(text=header, fg=_COLOR_TEXT_MUTED, font=("", 8))
+            cell["lbl_name"].configure(fg=fg, font=("", 9))
 
         self.update_idletasks()
         
@@ -243,20 +283,34 @@ class TrackPickerUI(ttk.Frame):
         if getattr(self, "_play_after_id", None):
             self.after_cancel(self._play_after_id)
             self._play_after_id = None
-        
+
+        prev_idx = getattr(self, "_hover_idx", None)
+        if prev_idx is not None and prev_idx != idx:
+            self._stop_audio()
+            self._update_cell_visuals(prev_idx)
+        elif prev_idx is None:
+            self._stop_audio()
+
         self._hover_idx = idx
         
         def start_play():
+            if getattr(self, "_hover_idx", None) != idx:
+                return
             self._stop_audio()
             cell = self._grid_cells[idx]
             wav = cell["wav_path"]
             if wav and wav.is_file():
-                self._play_audio_loop(wav)
-                self._play_audio_loop(wav)
-                self._update_cell_visuals(idx)
+                try:
+                    from gui.audio_playback import play_wav_preview
+
+                    self._audio_proc = play_wav_preview(wav)
+                except Exception as e:
+                    self._log(f"播放失败: {e}")
+                if getattr(self, "_hover_idx", None) == idx:
+                    self._update_cell_visuals(idx)
                 
-        # Debounce: wait 300ms before starting playback
-        self._play_after_id = self.after(300, start_play)
+        # Debounce: wait before starting playback (与素材库一致)
+        self._play_after_id = self.after(_HOVER_DELAY_MS, start_play)
 
     def _on_grid_leave(self, idx: int) -> None:
         cell_frame = self._grid_cells[idx]["frame"]
@@ -278,16 +332,6 @@ class TrackPickerUI(ttk.Frame):
         self._stop_audio()
         self._update_cell_visuals(idx)
 
-    def _play_audio_loop(self, wav_path: Path) -> None:
-        self._stop_audio()
-        
-        try:
-            from gui.audio_playback import play_wav_loop
-
-            self._audio_proc = play_wav_loop(wav_path)
-        except Exception as e:
-            self._log(f"播放失败: {e}")
-
     def _stop_audio(self) -> None:
         if getattr(self, "_play_after_id", None):
             self.after_cancel(self._play_after_id)
@@ -304,14 +348,8 @@ class TrackPickerUI(ttk.Frame):
     def force_stop_all(self) -> None:
         self._stop_audio()
         try:
-            from gui.reaper_launch import is_wsl
-            if is_wsl():
-                import subprocess
-                subprocess.Popen([
-                    "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe",
-                    "-NoProfile",
-                    "-Command",
-                    "Get-WmiObject Win32_Process -Filter \"CommandLine LIKE '%System.Media.SoundPlayer%'\" | ForEach-Object { Stop-Process -Id $_.ProcessId -Force }"
-                ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            from gui.audio_playback import force_stop_all_playback
+
+            force_stop_all_playback()
         except Exception:
             pass

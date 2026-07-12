@@ -141,6 +141,8 @@ def ensure_base_url_dirs() -> None:
         d.mkdir(parents=True, exist_ok=True)
     for layer_id in AUDIO_LAYER_IDS:
         audio_layer_dir(layer_id).mkdir(parents=True, exist_ok=True)
+    for layer_id in ("1_rain", "3_random", "4_wildlife"):
+        audio_booms_dir(layer_id).mkdir(parents=True, exist_ok=True)
 
 
 def rain_fx_video() -> Path:
@@ -344,7 +346,27 @@ def vlm_matches_path(scene_id: str) -> Path:
 
 
 def material_md_path(scene_id: str) -> Path:
+    """Legacy 物料 Markdown 路径（只读兼容）。"""
     return material_dir() / f"{scene_id}_material.md"
+
+
+def material_json_path(scene_id: str) -> Path:
+    return material_dir() / f"{scene_id}_material.json"
+
+
+def material_metadata_path(scene_id: str) -> Path | None:
+    """优先 JSON，其次 legacy MD。"""
+    json_path = material_json_path(scene_id)
+    if json_path.is_file():
+        return json_path
+    md_path = material_md_path(scene_id)
+    if md_path.is_file():
+        return md_path
+    return None
+
+
+def visual_scene_path(scene_id: str) -> Path:
+    return material_dir() / f"{scene_id}_visual_scene.json"
 
 
 def scene_material_paths(scene_id: str) -> dict[str, Path]:
@@ -352,9 +374,11 @@ def scene_material_paths(scene_id: str) -> dict[str, Path]:
     return {
         "snapshot_raw": get_snapshot_raw_path(scene_id),
         "thumbnail": get_thumbnail_path(scene_id),
+        "material_json": material_json_path(scene_id),
         "material_md": material_md_path(scene_id),
         "clip_matches": clip_matches_path(scene_id),
         "vlm_matches": vlm_matches_path(scene_id),
+        "visual_scene": visual_scene_path(scene_id),
     }
 
 
@@ -379,6 +403,11 @@ def audio_layer_dir(layer_id: str) -> Path:
     if sounds.is_dir():
         return sounds
     return audio_dir() / layer_id
+
+
+def audio_rain_booms_dir() -> Path:
+    """Rain boom 声源目录：baseURL/audio/1_rain/booms/。"""
+    return audio_booms_dir("1_rain")
 
 
 def audio_booms_dir(layer_id: str) -> Path:

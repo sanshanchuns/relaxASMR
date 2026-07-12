@@ -12,6 +12,81 @@ from typing import Any, Callable
 from scripts.config.common_constants import CLIMATE_NAMES, CLOSE_NAMES, DISTANT_NAMES, SPACE_NAMES
 from scripts.config.paths import audio_layer_dir, clip_matches_path, vlm_matches_path
 
+# 步骤 2 稀疏层（散布轨）：选中后写入 Reaper 轨 2–4
+SCATTER_LAYER_IDS = ("2_impact", "3_random", "4_wildlife")
+
+# 步骤 2 中竞争 Reaper 1_rain loop 层的三个 tab（track_name）
+RAIN_LOOP_EXCLUSIVE_TRACK_NAMES = frozenset({
+    "1_rain_clip",
+    "1_rain_vlm",
+    "1_rain_boom",
+    "1_rain",  # CLIP/VLM 一致时的单 tab
+})
+
+# track_pickers 字典 key（1_rain 对应 tab 显示名可能是 1_rain_clip 或 1_rain）
+RAIN_LOOP_PICKER_KEYS = ("1_rain", "1_rain_vlm", "1_rain_boom")
+
+# 防御性多选冲突时的优先级：boom > vlm > clip
+RAIN_LOOP_PICKER_PRIORITY = ("1_rain_boom", "1_rain_vlm", "1_rain")
+
+
+def is_rain_loop_exclusive_track_name(track_name: str) -> bool:
+    return track_name in RAIN_LOOP_EXCLUSIVE_TRACK_NAMES
+
+
+def collect_selected_tracks_for_reaper(
+    track_pickers: dict[str, Any],
+    *,
+    log_fn: Callable[[str], None] | None = None,
+) -> dict[str, Path]:
+    """从步骤 2 拾取器收集写入 Reaper 的轨道路径。
+
+    1_rain_clip / 1_rain_vlm / 1_rain_boom（及一致时的 1_rain）三者互斥，
+    最终只写入 layer id ``1_rain`` 一条 loop 路径。
+    """
+    log = log_fn or (lambda _msg: None)
+    selected: dict[str, Path] = {}
+
+    rain_candidates: list[tuple[str, str, Path]] = []
+    for key in RAIN_LOOP_PICKER_KEYS:
+        picker = track_pickers.get(key)
+        if not picker:
+            continue
+        sel = picker.get_selected()
+        if sel:
+            track_name = getattr(picker, "track_name", key)
+            rain_candidates.append((key, track_name, Path(sel)))
+
+    if rain_candidates:
+        if len(rain_candidates) > 1:
+            names = ", ".join(t[1] for t in rain_candidates)
+            log(f"警告：多个 rain loop 选项同时选中 ({names})，按优先级只采用一个")
+        chosen: tuple[str, Path] | None = None
+        for key in RAIN_LOOP_PICKER_PRIORITY:
+            for cand_key, track_name, sel in rain_candidates:
+                if cand_key == key:
+                    chosen = (track_name, sel)
+                    break
+            if chosen:
+                break
+        if chosen is None:
+            chosen = (rain_candidates[0][1], rain_candidates[0][2])
+        track_name, rain_path = chosen
+        selected["1_rain"] = rain_path
+        log(f"1_rain loop 层：{track_name} → {rain_path.name}")
+
+    for tid, picker in track_pickers.items():
+        if tid in RAIN_LOOP_PICKER_KEYS:
+            continue
+        sel = picker.get_selected()
+        if sel:
+            selected[tid] = Path(sel)
+            if tid in SCATTER_LAYER_IDS:
+                log(f"{tid} 散布层：{Path(sel).name}")
+        elif tid in SCATTER_LAYER_IDS:
+            log(f"{tid} 散布层：未选中，生成工程时将留空")
+    return selected
+
 
 def _layer_keys_from_clip(clip_analysis: dict) -> tuple[int | None, int | None, int | None]:
     return (

@@ -1,0 +1,182 @@
+[
+  {
+    "file": "20_WarmBuzz_FoliageDense_Water_C9_大雨_远方.wav",
+    "ok": true,
+    "start_s": 9.45,
+    "seam_db": 0.008574863522333942,
+    "mel_diff": 0.000187,
+    "cost": 0.007788,
+    "output_s": 30.0,
+    "search_range": [
+      2.0,
+      10.0
+    ],
+    "candidates": 161,
+    "metric": "combined",
+    "source_duration_s": 42.0,
+    "duration_s": 30.0,
+    "mode": "optimize"
+  },
+  {
+    "file": "20_WarmBuzz_FoliageDense_WoodRoof_C1_极轻细雨_近贴.wav",
+    "ok": true,
+    "start_s": 7.55,
+    "seam_db": 0.00645170336584755,
+    "mel_diff": 3e-05,
+    "cost": 0.000804,
+    "output_s": 30.0,
+    "search_range": [
+      2.0,
+      10.0
+    ],
+    "candidates": 161,
+    "metric": "combined",
+    "source_duration_s": 42.0,
+    "duration_s": 30.0,
+    "mode": "optimize"
+  },
+  {
+    "file": "20_WarmBuzz_FoliageDense_WoodRoof_C2_极轻密集_近贴.wav",
+    "ok": true,
+    "start_s": 8.1,
+    "seam_db": 0.005868307734893108,
+    "mel_diff": 4.2e-05,
+    "cost": 0.004172,
+    "output_s": 30.0,
+    "search_range": [
+      2.0,
+      10.0
+    ],
+    "candidates": 161,
+    "metric": "combined",
+    "source_duration_s": 42.0,
+    "duration_s": 30.0,
+    "mode": "optimize"
+  },
+  {
+    "file": "20_WarmBuzz_FoliageDense_WoodRoof_C3_小阵雨_中距.wav",
+    "ok": true,
+    "start_s": 9.1,
+    "seam_db": 0.029534910485253363,
+    "mel_diff": 0.000195,
+    "cost": 0.029653,
+    "output_s": 30.0,
+    "search_range": [
+      2.0,
+      10.0
+    ],
+    "candidates": 161,
+    "metric": "combined",
+    "source_duration_s": 42.0,
+    "duration_s": 30.0,
+    "mode": "optimize"
+  },
+  {
+    "file": "20_WarmBuzz_FoliageDense_WoodRoof_C4_中雨_均衡.wav",
+    "ok": true,
+    "start_s": 6.45,
+    "seam_db": 0.018693957012423823,
+    "mel_diff": 0.000263,
+    "cost": 0.022816,
+    "output_s": 30.0,
+    "search_range": [
+      2.0,
+      10.0
+    ],
+    "candidates": 161,
+    "metric": "combined",
+    "source_duration_s": 42.0,
+    "duration_s": 30.0,
+    "mode": "optimize"
+  },
+  {
+    "file": "20_WarmBuzz_FoliageDense_WoodRoof_C5_中雨极湿_近贴.wav",
+    "ok": true,
+    "start_s": 4.45,
+    "seam_db": 0.0005616258736154123,
+    "mel_diff": 1.4e-05,
+    "cost": 0.001303,
+    "output_s": 30.0,
+    "search_range": [
+      2.0,
+      10.0
+    ],
+    "candidates": 161,
+    "metric": "combined",
+    "source_duration_s": 42.0,
+    "duration_s": 30.0,
+    "mode": "optimize"
+  },
+  {
+    "file": "20_WarmBuzz_FoliageDense_WoodRoof_C6_中雨极湿_远方.wav",
+    "ok": true,
+    "start_s": 9.45,
+    "seam_db": 0.010015828162067919,
+    "mel_diff": 2.5e-05,
+    "cost": 0.001549,
+    "output_s": 30.0,
+    "search_range": [
+      2.0,
+      10.0
+    ],
+    "candidates": 161,
+    "metric": "combined",
+    "source_duration_s": 42.0,
+    "duration_s": 30.0,
+    "mode": "optimize"
+  },
+  {
+    "file": "20_WarmBuzz_FoliageDense_WoodRoof_C7_中雨密集_干燥_远方.wav",
+    "ok": true,
+    "start_s": 2.75,
+    "seam_db": 0.010269464618836821,
+    "mel_diff": 0.002635,
+    "cost": 0.028263,
+    "output_s": 30.0,
+    "search_range": [
+      2.0,
+      10.0
+    ],
+    "candidates": 161,
+    "metric": "combined",
+    "source_duration_s": 42.0,
+    "duration_s": 30.0,
+    "mode": "optimize"
+  },
+  {
+    "file": "20_WarmBuzz_FoliageDense_WoodRoof_C8_大雨_近贴.wav",
+    "ok": true,
+    "start_s": 3.45,
+    "seam_db": 0.0010270846880402473,
+    "mel_diff": 0.001368,
+    "cost": 0.012692,
+    "output_s": 30.0,
+    "search_range": [
+      2.0,
+      10.0
+    ],
+    "candidates": 161,
+    "metric": "combined",
+    "source_duration_s": 42.0,
+    "duration_s": 30.0,
+    "mode": "optimize"
+  },
+  {
+    "file": "20_WarmBuzz_FoliageDense_WoodRoof_C9_大雨_远方.wav",
+    "ok": true,
+    "start_s": 3.25,
+    "seam_db": 0.015589614649869077,
+    "mel_diff": 0.000207,
+    "cost": 0.007748,
+    "output_s": 30.0,
+    "search_range": [
+      2.0,
+      10.0
+    ],
+    "candidates": 161,
+    "metric": "combined",
+    "source_duration_s": 42.0,
+    "duration_s": 30.0,
+    "mode": "optimize"
+  }
+]

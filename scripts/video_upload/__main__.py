@@ -16,7 +16,7 @@ from video_upload.youtube_upload import DEFAULT_ACCOUNT, resolve_account_paths, 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="上传子工程物料到 YouTube")
-    parser.add_argument("material_dir", type=Path, help="含 youtube.md / thumbnail.jpg 的目录")
+    parser.add_argument("material_dir", type=Path, help="含 *_material.json / 缩略图的目录")
     parser.add_argument(
         "--privacy",
         choices=("private", "unlisted", "public"),
