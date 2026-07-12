@@ -1194,6 +1194,52 @@ class RelaxAsmrApp(tk.Tk):
             candidates = sorted(bu.glob(f"*{num}*loop*.mp4"), key=lambda p: p.name.lower())
         return candidates[0] if candidates else None
 
+    def _loop_video_for_upload(self, scene_id: str) -> Path | None:
+        """上传前自动补全物料/封面：在 baseURL 根目录按同序号查找 loop MP4。"""
+        return self._find_loop_video_for_scene(scene_id)
+
+    def _generate_cover_via_analyze(
+        self,
+        loop_video: Path,
+        scene_id: str,
+        *,
+        force_refresh: bool = False,
+    ) -> Path:
+        analyze_script = LIB_REPO_ROOT / "scripts" / "video_analysis" / "analyze.py"
+        vst_mod = load_module(analyze_script, "relaxasmr_video_analyze")
+        ensure_base_url_dirs()
+        ensure_rain_fx_png()
+        out_dir = base_material_dir()
+        out_dir.mkdir(parents=True, exist_ok=True)
+        vst_mod.analyze_video(
+            loop_video,
+            out_dir,
+            on_progress=self._log,
+            force_refresh=force_refresh,
+            skip_clip=True,
+        )
+        return get_thumbnail_path(scene_id)
+
+    def _ensure_thumbnail_for_upload(self, scene_id: str) -> Path:
+        thumb = get_thumbnail_path(scene_id)
+        if thumb.is_file():
+            return thumb
+
+        loop_video = self._loop_video_for_upload(scene_id)
+        if not loop_video:
+            raise FileNotFoundError("NO_LOOP_VIDEO")
+
+        self._log(f"封面不存在，自动执行分析生成：{thumb.name}")
+        self._log(f"baseURL loop：{loop_video.name}")
+        self._generate_cover_via_analyze(loop_video, scene_id, force_refresh=False)
+        if not thumb.is_file():
+            self._generate_cover_via_analyze(loop_video, scene_id, force_refresh=True)
+        if not thumb.is_file():
+            raise FileNotFoundError(f"分析完成但仍未找到封面：{thumb.name}")
+
+        schedule_on_main(self, self._update_cover_preview)
+        return thumb
+
     def _run_material_analysis_blocking(
         self,
         loop_video: Path,
@@ -1261,32 +1307,37 @@ class RelaxAsmrApp(tk.Tk):
         existing = material_metadata_path(scene_id)
         if existing and not force_refresh:
             self._log(f"物料已存在，跳过: {existing.name}")
-            return
+        else:
+            yt_mod = load_module(YT_MATERIAL_SCRIPT, "relaxasmr_generate_youtube_material")
+            yt_mod.generate_material(
+                loop_video,
+                output_dir=out_dir,
+                preset_key=clip_analysis.get("l2", {}).get("key", "forest_rain"),
+                copy_style="forest_rain",
+                thumb_title=RAIN_THUMB_TITLE,
+                thumb_subtitle_place_only=True,
+                duration_override_s=float(self.duration_var.get()) * 3600,
+                scene_id=scene_id,
+                force_refresh_visual=force_refresh,
+                on_progress=self._log,
+            )
 
-        yt_mod = load_module(YT_MATERIAL_SCRIPT, "relaxasmr_generate_youtube_material")
-        yt_mod.generate_material(
-            loop_video,
-            output_dir=out_dir,
-            preset_key=clip_analysis.get("l2", {}).get("key", "forest_rain"),
-            copy_style="forest_rain",
-            thumb_title=RAIN_THUMB_TITLE,
-            thumb_subtitle_place_only=True,
-            duration_override_s=float(self.duration_var.get()) * 3600,
-            scene_id=scene_id,
-            force_refresh_visual=force_refresh,
-            on_progress=self._log,
-        )
+        thumb = get_thumbnail_path(scene_id)
+        if not thumb.is_file():
+            self._log(f"封面缺失，补生成: {thumb.name}")
+            self._generate_cover_via_analyze(loop_video, scene_id, force_refresh=False)
+            if not thumb.is_file():
+                self._generate_cover_via_analyze(loop_video, scene_id, force_refresh=True)
 
     def _ensure_material_for_upload(self, scene_id: str) -> Path:
         existing = material_metadata_path(scene_id)
         if existing:
             return existing
-        loop_video = self._find_loop_video_for_scene(scene_id)
+        loop_video = self._loop_video_for_upload(scene_id)
         if not loop_video:
-            raise FileNotFoundError(
-                f"未找到 {scene_id} 的 loop 源视频（baseURL 根目录 MVI_{self._scene_num(scene_id)}*.mp4），无法自动生成物料。"
-            )
-        self._log(f"物料不存在，自动执行分析生成：{scene_id}")
+            raise FileNotFoundError("NO_LOOP_VIDEO")
+        self._log(f"物料不存在，自动执行「开始分析」：{scene_id}")
+        self._log(f"baseURL loop：{loop_video.name}")
         self._run_material_analysis_blocking(loop_video, scene_id, force_refresh=False)
         existing = material_metadata_path(scene_id)
         if not existing:
@@ -2431,6 +2482,19 @@ class RelaxAsmrApp(tk.Tk):
             )
             return
 
+        needs_autogen = (
+            material_metadata_path(upload_scene_id) is None
+            or not get_thumbnail_path(upload_scene_id).is_file()
+        )
+        if needs_autogen and not self._loop_video_for_upload(upload_scene_id):
+            num = self._scene_num(upload_scene_id)
+            messagebox.showwarning(
+                "提示",
+                f"未找到 {upload_scene_id} 的物料/封面，且 baseURL 下没有同序号 loop MP4。\n"
+                f"请在 baseURL 放置 MVI_{num}*.mp4 后再上传。",
+            )
+            return
+
         self._set_busy(True)
         self._log("—— 开始上传到 YouTube ——")
         self._log(f"账号：{account}")
@@ -2443,8 +2507,8 @@ class RelaxAsmrApp(tk.Tk):
         def worker() -> None:
             try:
                 md_path = self._ensure_material_for_upload(upload_scene_id)
+                self._ensure_thumbnail_for_upload(upload_scene_id)
                 up_mod = load_scripts_module("video_upload.youtube_upload")
-                self._log(f"物料：{md_path.name}")
                 record = up_mod.upload_from_material(
                     md_path,
                     language=language,
@@ -2470,7 +2534,14 @@ class RelaxAsmrApp(tk.Tk):
                     stop_upload_progress()
                     self._log(f"错误：{err}")
                     self._refresh_upload_label()
-                    messagebox.showerror("上传失败", str(err))
+                    if "NO_LOOP_VIDEO" in str(err):
+                        num = self._scene_num(upload_scene_id)
+                        messagebox.showwarning(
+                            "提示",
+                            f"baseURL 下未找到 MVI_{num}*.mp4，无法自动生成物料/封面。",
+                        )
+                    else:
+                        messagebox.showerror("上传失败", str(err))
 
                 schedule_on_main(self, done_err)
             finally:

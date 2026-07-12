@@ -342,6 +342,20 @@ def upload_video(
     return response["id"]
 
 
+def _log_upload_text_field(log: Callable[[str], None], label: str, value: str) -> None:
+    text = (value or "").strip()
+    if not text:
+        log(f"{label}：（空）")
+        return
+    lines = text.splitlines()
+    if len(lines) == 1:
+        log(f"{label}：{lines[0]}")
+        return
+    log(f"{label}：")
+    for line in lines:
+        log(f"  {line}")
+
+
 def set_thumbnail(service, video_id: str, thumb_path: Path) -> None:
     from googleapiclient.http import MediaFileUpload
 
@@ -393,6 +407,17 @@ def upload_from_material(
     video_path = override_video_path or resolve_video_for_material(material_dir, meta)
     thumb_path = resolve_thumbnail_path(material_dir, meta, material_path)
 
+    lang_label = "中文" if language == "zh" else "English"
+    log("—— 上传元数据 ——")
+    log(f"物料：{material_path.name}")
+    _log_upload_text_field(log, f"标题（{lang_label}）", title)
+    _log_upload_text_field(log, f"描述（{lang_label}）", description)
+    if thumb_path.is_file():
+        log(f"封面：{thumb_path.name}")
+    else:
+        log(f"封面：未找到 {thumb_path.name}（上传后将尝试自动截帧）")
+    log(f"视频文件：{video_path.name}")
+
     creds_path, tok_path, account_name = resolve_account_paths(
         account,
         credentials_path=credentials_path,
@@ -405,7 +430,7 @@ def upload_from_material(
     service = get_youtube_service(creds_path, tok_path, account=account_name, on_log=on_log)
 
     log(f"上传视频：{video_path.name}（{privacy_status}）…")
-    log(f"  分类：Travel & Events · 语言：English")
+    log(f"  分类：Travel & Events · 语言：{lang_label}")
 
     def prog(pct: int) -> None:
         if on_progress:
@@ -436,13 +461,14 @@ def upload_from_material(
             subprocess.run(cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
             if fallback_thumb.is_file():
                 thumb_path = fallback_thumb
+                log(f"封面（自动截帧）：{thumb_path.name}")
         except Exception as e:
             log(f"自动截帧失败：{e}")
             
     if thumb_path.is_file():
-        log("设置缩略图…")
+        log(f"设置封面：{thumb_path.name}")
         set_thumbnail(service, video_id, thumb_path)
-        log("缩略图已设置")
+        log("封面已设置")
     else:
         log("无法提供缩略图，将使用 YouTube 自动生成（可能为黑屏）")
 
