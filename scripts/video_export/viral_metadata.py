@@ -246,15 +246,21 @@ def _duration_title_en(meta: dict) -> str:
 
 
 def _viral_format_en(meta: dict, *, show_4k: bool) -> str:
-    dur = _duration_title_en(meta)
-    k4 = "4K " if show_4k else ""
-    return f"{dur} {k4}Rain Loop ASMR".strip()
+    from video_export.metadata_vlm import format_segment_en, resolve_video_quality
+
+    quality, _ = resolve_video_quality(meta)
+    if show_4k and quality != "4K":
+        quality = "4K"
+    return format_segment_en(meta, quality)
 
 
 def _viral_format_zh(meta: dict, *, show_4k: bool) -> str:
-    dur = meta["duration_human"]
-    k4 = "4K " if show_4k else ""
-    return f"{dur}{k4}雨景循环 ASMR"
+    from video_export.metadata_vlm import format_segment_zh, resolve_video_quality
+
+    quality, _ = resolve_video_quality(meta)
+    if show_4k and quality != "4K":
+        quality = "4K"
+    return format_segment_zh(meta, quality)
 
 
 def _build_title_en(

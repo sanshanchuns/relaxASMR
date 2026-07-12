@@ -492,15 +492,21 @@ def duration_title_en(meta: dict) -> str:
 
 def viral_format_en(meta: dict, *, show_4k: bool) -> str:
     """三段式「格式」：本系列为循环雨景实景（非黑屏）。"""
-    dur = duration_title_en(meta)
-    k4 = "4K " if show_4k else ""
-    return f"{dur} {k4}Rain Loop ASMR".strip()
+    from video_export.metadata_vlm import format_segment_en, resolve_video_quality
+
+    quality, _ = resolve_video_quality(meta)
+    if show_4k and quality != "4K":
+        quality = "4K"
+    return format_segment_en(meta, quality)
 
 
 def viral_format_zh(meta: dict, *, show_4k: bool) -> str:
-    dur = meta["duration_human"]
-    k4 = "4K " if show_4k else ""
-    return f"{dur}{k4}雨景循环 ASMR"
+    from video_export.metadata_vlm import format_segment_zh, resolve_video_quality
+
+    quality, _ = resolve_video_quality(meta)
+    if show_4k and quality != "4K":
+        quality = "4K"
+    return format_segment_zh(meta, quality)
 
 
 def build_forest_rain_youtube_copy(
@@ -1034,10 +1040,14 @@ def generate_material(
         log(f"视频仅长 {actual_video_dur:.1f}s，截帧时间自动调整为 0.0s（第一帧）")
         
     badge_path = resolve_badge_path(preset)
+    from video_export.metadata_vlm import resolve_video_quality
+
+    quality, show_4k_from_meta = resolve_video_quality(meta)
     if show_4k_badge is None:
-        show_4k = "4k" in stem.lower() or meta["width"] >= 3840
+        show_4k = show_4k_from_meta
     else:
         show_4k = show_4k_badge
+    log(f"视频画质：{quality or '未知'}（{meta['width']}×{meta['height']}）")
 
     resolved_scene_id = _resolve_scene_id(video, scene_id)
 

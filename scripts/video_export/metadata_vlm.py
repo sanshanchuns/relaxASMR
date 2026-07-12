@@ -100,15 +100,77 @@ def _duration_title_en(meta: dict) -> str:
     return f"{s} Seconds"
 
 
-def _format_en(meta: dict, *, show_4k: bool) -> str:
+def resolve_video_quality(meta: dict) -> tuple[str, bool]:
+    """从 ffprobe 宽高解析画质标签。返回 (标签, 是否显示 4K 角标)。"""
+    w = int(meta.get("width") or 0)
+    h = int(meta.get("height") or 0)
+    if w >= 3840 or h >= 2160:
+        return "4K", True
+    if w >= 1920 or h >= 1080:
+        return "FHD", False
+    return "", False
+
+
+def format_segment_en(meta: dict, quality: str) -> str:
     dur = _duration_title_en(meta)
-    k4 = "4K " if show_4k else ""
-    return f"{dur} {k4}Rain Loop ASMR".strip()
+    prefix = f"{quality} " if quality else ""
+    return f"{dur} {prefix}Rain Loop ASMR".strip()
 
 
-def _format_zh(meta: dict, *, show_4k: bool) -> str:
-    k4 = "4K " if show_4k else ""
-    return f"{meta['duration_human']}{k4}雨景循环 ASMR"
+def format_segment_zh(meta: dict, quality: str) -> str:
+    return f"{meta['duration_human']}{quality}雨景循环 ASMR" if quality else f"{meta['duration_human']}雨景循环 ASMR"
+
+
+def _format_en(meta: dict, *, show_4k: bool, quality: str | None = None) -> str:
+    q = quality if quality is not None else resolve_video_quality(meta)[0]
+    if show_4k and q != "4K":
+        q = "4K"
+    return format_segment_en(meta, q)
+
+
+def _format_zh(meta: dict, *, show_4k: bool, quality: str | None = None) -> str:
+    q = quality if quality is not None else resolve_video_quality(meta)[0]
+    if show_4k and q != "4K":
+        q = "4K"
+    return format_segment_zh(meta, q)
+
+
+def _footage_constraint(meta: dict, *, quality: str) -> str:
+    res = f"{meta.get('width', '?')}×{meta.get('height', '?')}"
+    if quality == "4K":
+        return (
+            f"- Real 4K ({res}) rain loop FOOTAGE (NOT black screen). "
+            'Never mention "black screen".'
+        )
+    label = quality or "FHD"
+    return (
+        f"- Real {label} ({res}) rain loop FOOTAGE (NOT black screen). "
+        f"This video is {label}, NOT 4K — never write \"4K\", \"4k\", or \"Ultra HD\" "
+        "in title or description."
+    )
+
+
+def _hashtag_hint(*, quality: str) -> str:
+    if quality == "4K":
+        return "Example: #rainsounds #sleepsounds #asmr #whitenoise #insomnia #relaxingrain #4K"
+    return "Example: #rainsounds #sleepsounds #asmr #whitenoise #insomnia #relaxingrain #FHD"
+
+
+def sanitize_resolution_in_copy(copy: dict, *, quality: str) -> dict:
+    """FHD 成片若 VLM 仍写出 4K，替换为实际画质标签。"""
+    if quality == "4K":
+        return copy
+    repl = quality or "FHD"
+    out = dict(copy)
+    for key in ("title_en", "title_zh", "description_en", "description_zh", "scene_rain_en"):
+        raw = out.get(key)
+        if not raw:
+            continue
+        text = str(raw)
+        text = re.sub(r"\b4K\b", repl, text, flags=re.IGNORECASE)
+        text = re.sub(r"\bUltra\s*HD\b", repl, text, flags=re.IGNORECASE)
+        out[key] = text
+    return out
 
 
 def select_title_template(video_seed: str) -> str:
@@ -129,6 +191,9 @@ def build_metadata_prompt(
     fmt_en = _format_en(meta, show_4k=show_4k)
     fmt_zh = _format_zh(meta, show_4k=show_4k)
     dur_en = _duration_title_en(meta)
+    quality, _ = resolve_video_quality(meta)
+    footage_line = _footage_constraint(meta, quality=quality)
+    hashtag_line = _hashtag_hint(quality=quality)
 
     acoustic = ""
     if vlm_ctx:
@@ -156,7 +221,7 @@ Write UNIQUE title and description for THIS specific video frame — avoid gener
 
 {visual_block}
 ## Channel constraints (MUST follow)
-- Real 4K rain loop FOOTAGE (NOT black screen). Never mention "black screen".
+{footage_line}
 - Format segment for English title MUST be exactly: `{fmt_en}`
 - English title ≤ 100 characters; include rain + sleep/relax/ASMR keywords.
 - Use assigned title template structure: **{template_id}** → `{tmpl}`
@@ -180,7 +245,7 @@ Write UNIQUE title and description for THIS specific video frame — avoid gener
 Acoustic mix hint (sound design, not necessarily visible): {acoustic or "not available"}
 
 ## Description hashtags (pick 6–10, include #asmr #rainsounds #whitenoise)
-Example: #rainsounds #sleepsounds #asmr #whitenoise #insomnia #relaxingrain #4K
+{hashtag_line}
 
 Return ONLY raw JSON (no markdown):
 {{
@@ -246,6 +311,7 @@ def generate_youtube_copy_with_vlm(
     fmt_en = _format_en(meta, show_4k=show_4k)
     template_id = select_title_template(video_seed)
     ctx = enrich_layer_context(vlm_ctx or {})
+    quality, _ = resolve_video_quality(meta)
 
     def _run_once(extra_note: str = "") -> dict | None:
         prompt = build_metadata_prompt(
@@ -291,6 +357,9 @@ def generate_youtube_copy_with_vlm(
                         result = sanitize_copy_for_visual(result, visual_context)
                         if on_progress:
                             on_progress(f"已自动修正违规词：{violations[:3]}")
+
+        if result:
+            result = sanitize_resolution_in_copy(result, quality=quality)
 
         if on_progress and result:
             on_progress(f"VLM 文案完成 · 模版 {template_id} · {result['title_en'][:60]}…")

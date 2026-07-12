@@ -12,6 +12,8 @@ sys.path.insert(0, str(ROOT / "scripts"))
 from video_export.metadata_vlm import (  # noqa: E402
     build_metadata_prompt,
     enrich_layer_context,
+    resolve_video_quality,
+    sanitize_resolution_in_copy,
     select_title_template,
 )
 from video_export.viral_metadata import (  # noqa: E402
@@ -89,7 +91,38 @@ class TestMetadataVariation(unittest.TestCase):
         self.assertIn("T1", prompt)
         self.assertIn("3 Hours 4K Rain Loop ASMR", prompt)
         self.assertIn("NOT black screen", prompt)
-        self.assertIn("title_en", prompt)
+
+    def test_resolve_video_quality_fhd(self):
+        meta = {**SAMPLE_META, "width": 1920, "height": 1080}
+        quality, show_4k = resolve_video_quality(meta)
+        self.assertEqual(quality, "FHD")
+        self.assertFalse(show_4k)
+
+    def test_fhd_prompt_forbids_4k(self):
+        meta = {**SAMPLE_META, "width": 1920, "height": 1080}
+        prompt = build_metadata_prompt(
+            SAMPLE_SCENE,
+            meta,
+            enrich_layer_context({"l1_key": 100, "l2_key": 590, "l3_key": 900}),
+            video_seed="MVI_6989",
+            show_4k=False,
+            template_id="T1",
+        )
+        self.assertIn("3 Hours FHD Rain Loop ASMR", prompt)
+        self.assertIn("NOT 4K", prompt)
+        self.assertNotIn("Real 4K rain loop", prompt)
+
+    def test_sanitize_resolution_in_copy_replaces_4k(self):
+        copy = sanitize_resolution_in_copy(
+            {
+                "title_en": "Rain in 4K",
+                "description_en": "Transform your space with this 4K real-time rain recording.",
+            },
+            quality="FHD",
+        )
+        self.assertIn("FHD", copy["title_en"])
+        self.assertNotIn("4K", copy["title_en"])
+        self.assertIn("FHD real-time", copy["description_en"])
 
 
 if __name__ == "__main__":
