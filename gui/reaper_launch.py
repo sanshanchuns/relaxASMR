@@ -17,6 +17,30 @@ def format_hms(seconds: float) -> str:
     return f"{s // 3600:02d}:{s % 3600 // 60:02d}:{s % 60:02d}"
 
 
+def format_job_progress(
+    elapsed: float,
+    pct: int,
+    *,
+    tail: bool = False,
+    done: bool = False,
+) -> str:
+    """长任务进度文案；tail=True 表示收尾阶段（faststart / WAV 头写入等）。"""
+    if done:
+        pct_text = "100%"
+        remain_text = "00:00:00"
+    elif tail or pct >= 99:
+        pct_text = "99%+"
+        remain_text = "…"
+    elif pct > 0:
+        remain = elapsed * (100 - pct) / pct
+        pct_text = f"{pct}%"
+        remain_text = format_hms(remain)
+    else:
+        pct_text = "…"
+        remain_text = "…"
+    return f"Elapsed: {format_hms(elapsed)}  Remaining: ~{remain_text}  ({pct_text})"
+
+
 def _estimate_wav_data_bytes(duration_sec: float) -> int:
     """48 kHz · stereo · 24-bit PCM 粗估。"""
     return int(duration_sec * 48000 * 2 * 3)
@@ -36,27 +60,19 @@ def _poll_render_progress(
     while proc.poll() is None:
         elapsed = time.monotonic() - start
         pct = 0
-        remain = total_sec if total_sec > 0 else 0
+        tail = False
 
         if output_wav and output_wav.is_file() and expected_data > 0:
             size = max(0, output_wav.stat().st_size - 44)
-            pct = min(99, int(size * 100 / expected_data))
-            if pct > 0:
-                remain = elapsed * (100 - pct) / pct
-            elif total_sec > 0:
-                remain = total_sec
+            raw_pct = int(size * 100 / expected_data)
+            tail = raw_pct >= 99
+            pct = min(raw_pct, 100)
 
         if on_progress:
             if pct > 0 or (output_wav and output_wav.is_file()):
-                on_progress(
-                    f"Elapsed: {format_hms(elapsed)}  "
-                    f"Remaining: ~{format_hms(remain)}  ({pct}%)"
-                )
+                on_progress(format_job_progress(elapsed, pct, tail=tail))
             else:
-                on_progress(
-                    f"Elapsed: {format_hms(elapsed)}  "
-                    f"Remaining: ~{format_hms(remain)}  (…)"
-                )
+                on_progress(format_job_progress(elapsed, 0))
         time.sleep(1)
 
 

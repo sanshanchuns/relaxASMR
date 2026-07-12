@@ -310,9 +310,10 @@ def play_wav_preview(
     wav_path: Path,
     *,
     max_seconds: float | None = None,
+    loop: bool = False,
 ) -> subprocess.Popen | None:
-    """悬停试听：播一遍（不循环）。大文件可只播开头片段。"""
+    """悬停试听。大文件可只播开头片段；loop=True 时循环该片段。"""
     src = wav_path
     if max_seconds is not None:
         src = wav_preview_clip(wav_path, max_seconds=max_seconds)
-    return _play_locked(src, loop=False)
+    return _play_locked(src, loop=loop)

@@ -28,6 +28,10 @@ def test_build_scene_config_only_uses_grid_selection(tmp_path: Path, monkeypatch
         "scripts.new_reaper_project.audio_loudness.adjust_1_rain_layer_vol",
         lambda cfg, **_: None,
     )
+    monkeypatch.setattr(
+        "scripts.new_reaper_project.audio_loudness.apply_scatter_layer_vols",
+        lambda cfg, **_: None,
+    )
 
     cfg = build_scene_config_from_gui(
         video,
@@ -57,6 +61,10 @@ def test_build_scene_config_empty_layers_when_unselected(tmp_path: Path, monkeyp
     )
     monkeypatch.setattr(
         "scripts.new_reaper_project.audio_loudness.adjust_1_rain_layer_vol",
+        lambda cfg, **_: None,
+    )
+    monkeypatch.setattr(
+        "scripts.new_reaper_project.audio_loudness.apply_scatter_layer_vols",
         lambda cfg, **_: None,
     )
 

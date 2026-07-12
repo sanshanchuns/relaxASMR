@@ -72,6 +72,9 @@ TRACK_FX_PRESETS: dict[str, list[str]] = {
 # 视频轨混音时静音（-inf dB），仅最终渲染用
 VIDEO_TRACK_VOL = 0.0
 
+# 稀疏层 item 音量固定 1.0，推子由 audio_loudness.apply_scatter_layer_vols 写入
+SCATTER_ITEM_VOL = 1.0
+
 # Group 总线开头淡入（秒）；统一在生成/渲染前写入 Group VOLENV2
 GROUP_FADE_IN_SEC = 5.0
 
@@ -710,7 +713,7 @@ def build_rpp(cfg: dict, repo_root: Path, rpp_dir: Path, media_mode: str = "auto
                             False,
                             file_ref,
                             src_type,
-                            float(layer.get("vol", 1.0)),
+                            SCATTER_ITEM_VOL,
                             iid,
                             file_suffix,
                         )
@@ -726,7 +729,7 @@ def build_rpp(cfg: dict, repo_root: Path, rpp_dir: Path, media_mode: str = "auto
                         False,
                         file_ref,
                         src_type,
-                        float(layer.get("vol", 1.0)),
+                        SCATTER_ITEM_VOL,
                         iid,
                         file_suffix,
                     )
@@ -742,7 +745,7 @@ def build_rpp(cfg: dict, repo_root: Path, rpp_dir: Path, media_mode: str = "auto
                     False,
                     file_ref,
                     src_type,
-                    float(layer.get("vol", 1.0)),
+                    SCATTER_ITEM_VOL,
                     iid,
                     file_suffix,
                 )

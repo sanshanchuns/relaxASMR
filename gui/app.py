@@ -9,8 +9,10 @@ os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"  # Suppress TensorFlow warnings
 import sys
 import threading
 import shutil
+import time
 import cv2
 import tkinter as tk
+from collections.abc import Callable
 from pathlib import Path
 from tkinter import filedialog, messagebox, ttk
 from PIL import Image, ImageTk
@@ -1031,6 +1033,29 @@ class RelaxAsmrApp(tk.Tk):
     def _refresh_upload_label(self) -> None:
         if hasattr(self, "lbl_upload"):
             self.lbl_upload.configure(text=self._format_upload_label(self._resolve_upload_mp4()))
+
+    def _format_transfer_progress(self, elapsed: float, pct: int) -> str:
+        from gui.upload_progress import format_transfer_progress
+
+        return format_transfer_progress(elapsed, pct)
+
+    def _make_upload_progress_updater(self) -> tuple[float, Callable[[int], None]]:
+        """上传进度：整段仅当百分比变化 ≥1% 时刷新 UI。"""
+        from gui.upload_progress import should_refresh_upload_progress
+
+        start = time.monotonic()
+        last_shown = [-1]
+
+        def on_progress(pct: int) -> None:
+            if not should_refresh_upload_progress(pct, last_shown[0]):
+                return
+            last_shown[0] = max(0, min(100, int(pct)))
+            elapsed = time.monotonic() - start
+            text = self._format_transfer_progress(elapsed, last_shown[0])
+            if hasattr(self, "lbl_upload"):
+                self.after(0, lambda t=text: self.lbl_upload.configure(text=t))
+
+        return start, on_progress
 
     def _pick_upload_mp4(self) -> None:
         exp = export_dir()
@@ -2100,7 +2125,15 @@ class RelaxAsmrApp(tk.Tk):
 
         script = LIB_REPO_ROOT / "scripts" / "video_export" / "export_mp4.sh"
         import sys
+
+        def _line_buffered_bash(script_path: str, args: list[str]) -> list[str]:
+            cmd = ["bash", script_path, *args]
+            if shutil.which("stdbuf"):
+                cmd = ["stdbuf", "-oL", "-eL", *cmd]
+            return cmd
+
         encoder = "auto" if sys.platform == "darwin" else "nvenc"
+        export_args = ["--encoder", encoder]
         if sys.platform == "win32":
             def to_wsl(p: Path) -> str:
                 s = str(p).replace("\\", "/")
@@ -2114,16 +2147,17 @@ class RelaxAsmrApp(tk.Tk):
                 return s
 
             cmd = [
-                "wsl", "bash", to_wsl(script),
-                "-v", to_wsl(vid_file), "-a", to_wsl(audio_file),
-                "--encoder", encoder,
+                "wsl",
+                *_line_buffered_bash(
+                    to_wsl(script),
+                    ["-v", to_wsl(vid_file), "-a", to_wsl(audio_file), *export_args],
+                ),
             ]
         else:
-            cmd = [
-                "bash", str(script),
-                "-v", str(vid_file.resolve()), "-a", str(audio_file.resolve()),
-                "--encoder", encoder,
-            ]
+            cmd = _line_buffered_bash(
+                str(script),
+                ["-v", str(vid_file.resolve()), "-a", str(audio_file.resolve()), *export_args],
+            )
 
         self._set_export_ui(running=True, status="Elapsed: 00:00:00  Remaining: …")
         self._log("—— 开始合成视频 (export_mp4) ——")
@@ -2141,8 +2175,12 @@ class RelaxAsmrApp(tk.Tk):
                     text=True,
                     bufsize=1,
                 )
-                for line in iter(proc.stdout.readline, ''):
+                assert proc.stdout is not None
+                while True:
+                    line = proc.stdout.readline()
                     if not line:
+                        if proc.poll() is not None:
+                            break
                         continue
                     line = line.strip()
                     if not line:
@@ -2233,12 +2271,14 @@ class RelaxAsmrApp(tk.Tk):
         self._log(f"场景：{upload_scene_id}")
         self._log(f"视频：{upload_mp4}")
         self._log("首次上传需在浏览器完成 OAuth 授权")
+        self.lbl_upload.configure(text=self._format_transfer_progress(0.0, 0))
 
         def worker() -> None:
             try:
                 md_path = self._ensure_material_for_upload(upload_scene_id)
                 up_mod = load_scripts_module("video_upload.youtube_upload")
                 self._log(f"物料：{md_path.name}")
+                _, on_upload_progress = self._make_upload_progress_updater()
                 record = up_mod.upload_from_material(
                     md_path,
                     language=language,
@@ -2246,6 +2286,7 @@ class RelaxAsmrApp(tk.Tk):
                     account=account,
                     override_video_path=upload_mp4,
                     on_log=self._log,
+                    on_progress=on_upload_progress,
                 )
 
                 def done_ok() -> None:
@@ -2260,6 +2301,7 @@ class RelaxAsmrApp(tk.Tk):
             except Exception as exc:
                 def done_err(err: BaseException = exc) -> None:
                     self._log(f"错误：{err}")
+                    self._refresh_upload_label()
                     messagebox.showerror("上传失败", str(err))
 
                 self.after(0, done_err)

@@ -19,7 +19,7 @@ _COLOR_TEXT_HOVER = "#1a5fb4"
 
 
 class ExportMixPreviewGrid(ttk.Frame):
-    """紧凑混音状态格：完成且有效 WAV 时悬停试听（仅播开头片段）。"""
+    """紧凑混音状态格：完成且有效 WAV 时悬停循环试听开头片段。"""
 
     def __init__(self, parent: tk.Widget, *, log_fn: Callable[[str], None] | None = None):
         super().__init__(parent)
@@ -123,7 +123,7 @@ class ExportMixPreviewGrid(ttk.Frame):
             try:
                 from gui.audio_playback import play_wav_preview
 
-                proc = play_wav_preview(wav, max_seconds=_PREVIEW_CLIP_SEC)
+                proc = play_wav_preview(wav, max_seconds=_PREVIEW_CLIP_SEC, loop=True)
             except Exception as exc:
                 self.after(0, lambda: self._log(f"混音试听失败: {exc}"))
                 return

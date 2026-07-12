@@ -204,7 +204,6 @@ def build_asmr_config(
                 "track": 2,
                 "id": "2_impact",
                 "name": "雨打树叶",
-                "vol": 0.5,
                 "paths": [],
                 "min_gap_min": 3,
                 "max_gap_min": 8,
@@ -215,7 +214,6 @@ def build_asmr_config(
                 "track": 3,
                 "id": "3_random",
                 "name": "随机散音",
-                "vol": 0.35,
                 "paths": [],
                 "min_gap_min": 5,
                 "max_gap_min": 15,
@@ -226,7 +224,6 @@ def build_asmr_config(
                 "track": 4,
                 "id": "4_wildlife",
                 "name": "野生生态",
-                "vol": 0.28,
                 "paths": [],
                 "min_gap_min": 12,
                 "max_gap_min": 28,
@@ -249,7 +246,10 @@ def build_scene_config_from_gui(
 ) -> dict:
     """从 GUI 步骤 2 宫格选中构建工程配置（仅认 selected_tracks，未选则轨道留空）。"""
     from scripts.config.paths import path_for_config
-    from scripts.new_reaper_project.audio_loudness import adjust_1_rain_layer_vol
+    from scripts.new_reaper_project.audio_loudness import (
+        adjust_1_rain_layer_vol,
+        apply_scatter_layer_vols,
+    )
 
     scene_id = derive_scene_id(video, scene_id)
     _, video_rel = ensure_video_in_assets(video, scene_id)
@@ -274,6 +274,7 @@ def build_scene_config_from_gui(
                 log_fn(f"工程配方 {lid} ← （未选声源，轨道留空）")
 
     adjust_1_rain_layer_vol(cfg, log=log_fn)
+    apply_scatter_layer_vols(cfg, log=log_fn)
     return cfg
 
 

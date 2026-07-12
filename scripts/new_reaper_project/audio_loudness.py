@@ -20,6 +20,15 @@ MAX_ANALYZE_SECONDS = 180.0
 VOL_MIN = 0.01
 VOL_MAX = 128.0
 
+# 稀疏层 2/4 轨道推子（item 固定 1.0）；3_random 由 LUFS 动态计算
+SCATTER_LEGACY_TRACK_VOL: dict[str, float] = {
+    "2_impact": 0.5,
+    "4_wildlife": 0.28,
+}
+# 3_random 目标 = 1_rain LUFS 目标 + 此偏移（负值 = 低于主 bed，保留存在感）
+DEFAULT_3_RANDOM_LUFS_OFFSET_DB = -10.0
+VOL_FALLBACK_3_RANDOM = 0.35
+
 
 def _read_user_audio_cfg() -> dict:
     cfg_path = REPO_ROOT / "gui" / "user_config.json"
@@ -98,6 +107,112 @@ def vol_for_target_lufs(
     gain_db = target_lufs - measured_lufs + fx_compensation_db
     vol = 10 ** (gain_db / 20.0)
     return max(VOL_MIN, min(VOL_MAX, vol))
+
+
+def resolve_3_random_lufs_offset_db() -> float:
+    data = _read_user_audio_cfg()
+    try:
+        return float(data.get("random_lufs_offset_db", DEFAULT_3_RANDOM_LUFS_OFFSET_DB))
+    except (TypeError, ValueError):
+        return DEFAULT_3_RANDOM_LUFS_OFFSET_DB
+
+
+def _find_scatter_layer(cfg: dict, layer_id: str) -> dict | None:
+    for layer in cfg.get("scatter_layers", []):
+        if layer.get("id") == layer_id:
+            return layer
+    return None
+
+
+def _scatter_paths(layer: dict) -> list[Path]:
+    return [Path(p) for p in layer.get("paths", []) if p and Path(p).is_file()]
+
+
+def _measure_loudest_lufs(paths: list[Path]) -> tuple[float | None, Path | None]:
+    best: float | None = None
+    best_path: Path | None = None
+    for wav in paths:
+        measured = measure_lufs_i(wav)
+        if measured is not None and (best is None or measured > best):
+            best = measured
+            best_path = wav
+    return best, best_path
+
+
+def adjust_3_random_layer_vol(
+    cfg: dict,
+    *,
+    log: Callable[[str], None] | None = None,
+) -> dict | None:
+    """3_random：按 booms 实测 LUFS 写轨道推子（item 保持 1.0），低于主 bed 约 10 LU。"""
+    layer = _find_scatter_layer(cfg, "3_random")
+    if not layer:
+        return None
+
+    paths = _scatter_paths(layer)
+    if not paths:
+        if log:
+            log("3_random 未选择素材，跳过响度归一化")
+        return None
+
+    _, _, rain_target = resolve_lufs_target()
+    offset = resolve_3_random_lufs_offset_db()
+    target_lufs = rain_target + offset
+    fx_comp = resolve_fx_compensation_db()
+
+    measured, wav = _measure_loudest_lufs(paths)
+    if measured is None or wav is None:
+        layer["vol"] = VOL_FALLBACK_3_RANDOM
+        if log:
+            log(f"3_random 响度测量失败，推子 fallback vol={VOL_FALLBACK_3_RANDOM}")
+        return {"fallback_vol": VOL_FALLBACK_3_RANDOM, "wav": paths[0]}
+
+    new_vol = round(
+        vol_for_target_lufs(measured, target_lufs, fx_compensation_db=fx_comp),
+        4,
+    )
+    layer["vol"] = new_vol
+
+    info = {
+        "measured_lufs": measured,
+        "target_lufs": target_lufs,
+        "rain_target_lufs": rain_target,
+        "offset_db": offset,
+        "fx_compensation_db": fx_comp,
+        "new_vol": new_vol,
+        "wav": wav,
+    }
+    if log:
+        capped = "（已触及上限）" if new_vol >= VOL_MAX else ""
+        log(
+            f"3_random [{wav.name}] 实测 {measured:.1f} LUFS-I → "
+            f"目标 {target_lufs:.1f}（主 bed {rain_target:.1f}{offset:+.0f} LU），"
+            f"推子 vol → {new_vol:.3f}{capped}"
+            + (f"（FX 补偿 +{fx_comp:.1f} dB）" if fx_comp else "")
+        )
+    return info
+
+
+def apply_scatter_layer_vols(
+    cfg: dict,
+    *,
+    log: Callable[[str], None] | None = None,
+) -> None:
+    """稀疏层推子：3_random 动态 LUFS；2/4 有素材时用 legacy 固定推子；item 均为 1.0。"""
+    adjust_3_random_layer_vol(cfg, log=log)
+
+    for layer in cfg.get("scatter_layers", []):
+        lid = layer.get("id", "")
+        if lid == "3_random":
+            continue
+        if not _scatter_paths(layer):
+            continue
+        legacy = SCATTER_LEGACY_TRACK_VOL.get(lid)
+        if legacy is None:
+            continue
+        layer["vol"] = legacy
+        if log:
+            log(f"{lid} 推子 vol → {legacy:.2f}（legacy 固定）")
 
 
 def adjust_1_rain_layer_vol(

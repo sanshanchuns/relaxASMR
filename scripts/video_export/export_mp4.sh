@@ -118,53 +118,131 @@ default_output_path() {
   fi
 }
 
+parse_bitrate_bps() {
+  local raw="${1:-0}"
+  if [[ "$raw" =~ ^([0-9]+(\.[0-9]+)?)[kK]$ ]]; then
+    awk -v n="${BASH_REMATCH[1]}" 'BEGIN {printf "%.0f", n * 1000}'
+  elif [[ "$raw" =~ ^([0-9]+(\.[0-9]+)?)[mM]$ ]]; then
+    awk -v n="${BASH_REMATCH[1]}" 'BEGIN {printf "%.0f", n * 1000000}'
+  elif [[ "$raw" =~ ^[0-9]+$ ]]; then
+    printf '%s' "$raw"
+  else
+    printf '0'
+  fi
+}
+
+file_size_bytes() {
+  local path="$1"
+  if [[ ! -f "$path" ]]; then
+    printf '0'
+    return
+  fi
+  stat -c%s "$path" 2>/dev/null || stat -f%z "$path" 2>/dev/null || printf '0'
+}
+
 run_ffmpeg_with_progress() {
   local target_sec="$1"
-  shift
+  local output_file="$2"
+  shift 2
   local progress_file
   progress_file=$(mktemp)
   trap 'rm -f "$progress_file"' RETURN
+
+  local video_bps audio_bps expected_bytes
+  video_bps=$(parse_bitrate_bps "$VIDEO_BITRATE")
+  audio_bps=$(parse_bitrate_bps "$AUDIO_BITRATE")
+  expected_bytes=$(awk -v dur="$target_sec" -v vb="$video_bps" -v ab="$audio_bps" \
+    'BEGIN {printf "%.0f", dur * (vb + ab) / 8 * 1.05}')
 
   ffmpeg -nostats -loglevel error -progress "$progress_file" "$@" &
   local ffmpeg_pid=$!
 
   while kill -0 "$ffmpeg_pid" 2>/dev/null; do
-    local now elapsed out_us remain_sec pct
-    now=$(date +%s)
-    elapsed=$((now - START_TS))
+    local elapsed out_us out_sec target_us progress_state speed_val
+    elapsed=$(( $(date +%s) - START_TS ))
     out_us=0
+    out_sec=0
+    progress_state=""
+    speed_val=""
     if [[ -f "$progress_file" ]]; then
       local raw
       raw=$(grep -E '^out_time_us=' "$progress_file" | tail -1 | cut -d= -f2)
       if is_uint "$raw"; then
         out_us=$raw
+        out_sec=$(( out_us / 1000000 ))
+      fi
+      progress_state=$(grep -E '^progress=' "$progress_file" | tail -1 | cut -d= -f2 || true)
+      raw=$(grep -E '^speed=' "$progress_file" | tail -1 | cut -d= -f2 || true)
+      if [[ -n "$raw" ]]; then
+        speed_val=$(awk -v s="$raw" 'BEGIN { gsub(/x$/,"",s); if (s+0>0.05) printf "%.4f", s+0 }')
       fi
     fi
 
-    remain_sec=0
-    pct=0
+    local pct=0 byte_pct=0 display_pct=0 out_bytes remain_sec=0
+    local pct_display="…" remain_display="…"
+
     if awk -v t="$target_sec" 'BEGIN {exit (t > 0) ? 0 : 1}'; then
-      local target_us
       target_us=$(awk -v t="$target_sec" 'BEGIN {printf "%d", t * 1000000}')
+      out_bytes=$(file_size_bytes "$output_file")
+
       if is_uint "$out_us" && is_uint "$target_us" && [[ "$out_us" -gt 0 && "$target_us" -gt 0 ]]; then
         pct=$((out_us * 100 / target_us))
         if [[ "$pct" -gt 100 ]]; then pct=100; fi
-        local remain_us=$((target_us - out_us))
-        if [[ "$remain_us" -lt 0 ]]; then remain_us=0; fi
-        remain_sec=$((elapsed * remain_us / out_us))
+      fi
+      if is_uint "$expected_bytes" && [[ "$expected_bytes" -gt 0 && "$out_bytes" -gt 0 ]]; then
+        byte_pct=$((out_bytes * 100 / expected_bytes))
+        if [[ "$byte_pct" -gt 100 ]]; then byte_pct=100; fi
+      fi
+
+      display_pct=$pct
+      if [[ "$byte_pct" -gt 0 && ( "$byte_pct" -lt "$display_pct" || "$pct" -ge 97 ) ]]; then
+        display_pct=$byte_pct
+      fi
+
+      if [[ "$progress_state" == "end" ]]; then
+        pct_display="100%"
+        remain_display="00:00:00"
+      elif [[ "$display_pct" -gt 0 ]]; then
+        local remain_speed=0 remain_linear=0 remain_bytes=0 remain_project=0
+        if [[ -n "$speed_val" ]]; then
+          remain_speed=$(awk -v t="$target_sec" -v o="$out_sec" -v sp="$speed_val" \
+            'BEGIN {printf "%.0f", (t-o)/sp}')
+        fi
+        if [[ "$out_us" -gt 0 ]]; then
+          remain_linear=$(( elapsed * (target_us - out_us) / out_us ))
+        fi
+        if [[ "$expected_bytes" -gt "$out_bytes" && "$out_bytes" -gt 0 ]]; then
+          remain_bytes=$(( (expected_bytes - out_bytes) / 100000000 ))
+          if [[ "$byte_pct" -ge 90 ]]; then
+            remain_bytes=$(( remain_bytes + 30 ))
+          fi
+        fi
+        if [[ "$display_pct" -ge 5 && "$display_pct" -lt 100 ]]; then
+          remain_project=$(( elapsed * (100 - display_pct) / display_pct ))
+        fi
+
+        remain_sec=$remain_linear
+        for candidate in "$remain_speed" "$remain_bytes" "$remain_project"; do
+          if [[ "$candidate" -gt "$remain_sec" ]]; then
+            remain_sec=$candidate
+          fi
+        done
+
+        pct_display="${display_pct}%"
+        remain_display=$(format_remaining "$remain_sec")
       fi
     fi
 
     if [[ -t 1 ]]; then
-      printf "\r  Elapsed: %s  Remaining: ~%s  (%d%%)  " \
+      printf "\r  Elapsed: %s  Remaining: ~%s  (%s)  " \
         "$(format_elapsed "$elapsed")" \
-        "$(format_remaining "$remain_sec")" \
-        "$pct"
+        "$remain_display" \
+        "$pct_display"
     else
-      printf "PROGRESS Elapsed: %s  Remaining: ~%s  (%d%%)\n" \
+      printf "PROGRESS Elapsed: %s  Remaining: ~%s  (%s)\n" \
         "$(format_elapsed "$elapsed")" \
-        "$(format_remaining "$remain_sec")" \
-        "$pct"
+        "$remain_display" \
+        "$pct_display"
     fi
     sleep 1
   done
@@ -330,7 +408,7 @@ for current_enc in "${ENCODER_LIST[@]}"; do
 
   echo "==> Attempting Video encode: ${ENCODE_DESC} ${VIDEO_BITRATE} max ${MAXRATE} (60fps source)"
   
-  if run_ffmpeg_with_progress "$TARGET_SEC" "${ffmpeg_args[@]}" "$OUTPUT"; then
+  if run_ffmpeg_with_progress "$TARGET_SEC" "$OUTPUT" "${ffmpeg_args[@]}" "$OUTPUT"; then
     success=true
     break
   else
