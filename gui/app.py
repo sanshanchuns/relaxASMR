@@ -717,23 +717,90 @@ class RelaxAsmrApp(tk.Tk):
         return ids
 
     def _is_video_uploaded(self, scene_num: str) -> bool:
-        return bool(self._uploaded_ids_cfg().get(str(scene_num)))
+        from gui.upload_status import is_uploaded_cfg_entry
 
-    def _set_video_uploaded(self, scene_num: str, uploaded: bool) -> None:
+        return is_uploaded_cfg_entry(self._uploaded_ids_cfg().get(str(scene_num)))
+
+    def _upload_entry_mp4(self, scene_num: str) -> Path | None:
+        from gui.upload_status import mp4_path_from_upload_entry
+
+        raw = mp4_path_from_upload_entry(self._uploaded_ids_cfg().get(str(scene_num)))
+        if not raw:
+            return None
+        p = Path(raw)
+        return p.resolve() if p.is_file() else None
+
+    def _resolve_uploaded_mp4_path(
+        self,
+        scene_num: str,
+        *,
+        current: Path | None = None,
+    ) -> Path | None:
+        saved = self._upload_entry_mp4(scene_num)
+        if saved:
+            return saved
+        if current and current.is_file():
+            return current.resolve()
+        for sid, data in self._export_outputs_cfg().items():
+            if self._scene_num(sid) != str(scene_num) or not isinstance(data, dict):
+                continue
+            raw = data.get("mp4")
+            if not raw:
+                continue
+            p = Path(raw)
+            if p.is_file():
+                return p.resolve()
+        return None
+
+    def _maybe_upgrade_uploaded_entry(self, scene_num: str) -> None:
+        """将 uploaded_ids 中 legacy ``true`` 升级为带 mp4 路径的对象。"""
+        ids = self._uploaded_ids_cfg()
+        key = str(scene_num)
+        if ids.get(key) is not True:
+            return
+        mp4 = self._resolve_uploaded_mp4_path(key, current=self._resolve_upload_mp4())
+        if mp4:
+            ids[key] = {"mp4": str(mp4)}
+            self._save_config()
+
+    def _set_video_uploaded(
+        self,
+        scene_num: str,
+        uploaded: bool,
+        *,
+        mp4: Path | None = None,
+        url: str | None = None,
+    ) -> None:
         ids = self._uploaded_ids_cfg()
         key = str(scene_num)
         if uploaded:
-            ids[key] = True
+            entry: dict[str, str] | bool = True
+            resolved = mp4 if mp4 and mp4.is_file() else None
+            if resolved is None:
+                resolved = self._resolve_uploaded_mp4_path(key, current=self._resolve_upload_mp4())
+            if resolved:
+                entry = {"mp4": str(resolved.resolve())}
+                if url:
+                    entry["url"] = url
+            ids[key] = entry
         else:
             ids.pop(key, None)
         self._save_config()
+        if hasattr(self, "lbl_upload"):
+            self._refresh_upload_label()
 
-    def _mark_scene_uploaded(self, scene_id: str | None = None) -> None:
+    def _mark_scene_uploaded(
+        self,
+        scene_id: str | None = None,
+        *,
+        mp4: Path | None = None,
+        url: str | None = None,
+    ) -> None:
         sid = scene_id or self.scene_id
         if not sid:
             return
         num = get_scene_number(sid)
-        self._set_video_uploaded(num, True)
+        self._set_video_uploaded(num, True, mp4=mp4, url=url)
         if hasattr(self, "video_library_tab"):
             self.video_library_tab.mark_uploaded(num, True)
 
@@ -1161,21 +1228,37 @@ class RelaxAsmrApp(tk.Tk):
             return self.upload_mp4_custom.resolve()
         return self._default_upload_mp4()
 
+    def _format_media_rel_path(self, path: Path) -> str:
+        from gui.upload_status import format_media_rel_path
+
+        return format_media_rel_path(path, export_root=export_dir(), base_root=base_url())
+
     def _format_upload_label(self, mp4: Path | None) -> str:
+        from gui.upload_status import format_step5_upload_label
+
         if not mp4 or not mp4.is_file():
             return "待上传：—"
         try:
-            rel = mp4.relative_to(export_dir())
-            prefix = f"待上传：export/{rel}"
+            scene_num = get_scene_number(derive_scene_id(mp4))
         except ValueError:
-            try:
-                rel = mp4.relative_to(base_url())
-                prefix = f"待上传：{rel}"
-            except ValueError:
-                prefix = f"待上传：{mp4}"
-        if self.upload_mp4_custom and mp4.resolve() == self.upload_mp4_custom.resolve():
-            prefix += "（自定义）"
-        return prefix
+            scene_num = None
+        custom = bool(
+            self.upload_mp4_custom
+            and mp4.resolve() == self.upload_mp4_custom.resolve()
+        )
+        if scene_num and self._is_video_uploaded(scene_num):
+            self._maybe_upgrade_uploaded_entry(scene_num)
+            display = self._resolve_uploaded_mp4_path(scene_num, current=mp4) or mp4
+            return format_step5_upload_label(
+                uploaded=True,
+                rel_path=self._format_media_rel_path(display),
+                custom=custom,
+            )
+        return format_step5_upload_label(
+            uploaded=False,
+            rel_path=self._format_media_rel_path(mp4),
+            custom=custom,
+        )
 
     def _refresh_upload_label(self) -> None:
         if hasattr(self, "lbl_upload"):
@@ -2592,9 +2675,8 @@ class RelaxAsmrApp(tk.Tk):
                     stop_upload_progress()
                     url = record["url"]
                     self._cfg["last_upload_url"] = url
-                    self._save_config()
-                    self._mark_scene_uploaded(upload_scene_id)
-                    self.lbl_upload.configure(text=f"上传：{url}")
+                    self._mark_scene_uploaded(upload_scene_id, mp4=upload_mp4, url=url)
+                    self._refresh_upload_label()
                     messagebox.showinfo("上传完成", f"视频已上传：\n{url}\n\n可见性：{privacy}")
 
                 schedule_on_main(self, done_ok)
