@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-# Mux looped 60fps video + audio → MP4 (H.264 constrained VBR 30M + AAC).
-# Output duration follows audio length unless --duration is set.
+# Mux looped 60fps video + audio → MP4 (H.264 + AAC).
+# Default: quality mode (CRF/CQ) — bitrate varies with scene complexity / noise.
+# Fixed bitrate: pass --video-bitrate. Output duration follows audio unless --duration.
 
 set -euo pipefail
 
@@ -8,9 +9,15 @@ VIDEO=""
 AUDIO=""
 OUTPUT=""
 DURATION=""
-VIDEO_BITRATE="30M"
-MAXRATE="38M"
-BUFSIZE="60M"
+ENCODE_MODE="quality"   # quality (CRF/CQ) | bitrate (fixed -b:v)
+VIDEO_CRF=""
+VIDEO_CQ=""
+VIDEO_BITRATE=""
+MAXRATE=""
+BUFSIZE=""
+PROGRESS_ESTIMATE=""
+VIDEO_BITRATE_MANUAL=false
+CRF_MANUAL=false
 AUDIO_BITRATE="192k"
 PRESET="medium"
 ENCODER="auto"  # auto (detect gpu) | cpu = libx264 (multi-thread) | nvenc = h264_nvenc (GPU)
@@ -65,6 +72,67 @@ resolution_suffix_from_width() {
     printf '_720p'
   else
     printf '_%sp' "$w"
+  fi
+}
+
+apply_quality_for_width() {
+  local w="$1"
+  ENCODE_MODE="quality"
+  if [[ "$w" -ge 3840 ]]; then
+    VIDEO_CRF="20"
+    VIDEO_CQ="20"
+    MAXRATE="25M"
+    BUFSIZE="50M"
+    PROGRESS_ESTIMATE="15M"
+  elif [[ "$w" -ge 1920 ]]; then
+    VIDEO_CRF="22"
+    VIDEO_CQ="22"
+    MAXRATE="10M"
+    BUFSIZE="20M"
+    PROGRESS_ESTIMATE="6M"
+  elif [[ "$w" -ge 1280 ]]; then
+    VIDEO_CRF="23"
+    VIDEO_CQ="23"
+    MAXRATE="6M"
+    BUFSIZE="12M"
+    PROGRESS_ESTIMATE="4M"
+  else
+    VIDEO_CRF="24"
+    VIDEO_CQ="24"
+    MAXRATE="4M"
+    BUFSIZE="8M"
+    PROGRESS_ESTIMATE="2M"
+  fi
+}
+
+apply_bitrate_for_width() {
+  local w="$1"
+  ENCODE_MODE="bitrate"
+  if [[ "$w" -ge 3840 ]]; then
+    VIDEO_BITRATE="20M"
+    MAXRATE="25M"
+    BUFSIZE="40M"
+  elif [[ "$w" -ge 1920 ]]; then
+    VIDEO_BITRATE="8M"
+    MAXRATE="10M"
+    BUFSIZE="16M"
+  elif [[ "$w" -ge 1280 ]]; then
+    VIDEO_BITRATE="5M"
+    MAXRATE="6M"
+    BUFSIZE="10M"
+  else
+    VIDEO_BITRATE="3M"
+    MAXRATE="4M"
+    BUFSIZE="6M"
+  fi
+  PROGRESS_ESTIMATE="$VIDEO_BITRATE"
+}
+
+video_encode_summary() {
+  if [[ "$ENCODE_MODE" == "quality" ]]; then
+    printf 'CRF/CQ %s (variable bitrate, max %s)' "$VIDEO_CRF" "$MAXRATE"
+  else
+    printf 'target %s max %s bufsize %s' "$VIDEO_BITRATE" "$MAXRATE" "$BUFSIZE"
   fi
 }
 
@@ -148,8 +216,9 @@ run_ffmpeg_with_progress() {
   progress_file=$(mktemp)
   trap 'rm -f "$progress_file"' RETURN
 
-  local video_bps audio_bps expected_bytes
-  video_bps=$(parse_bitrate_bps "$VIDEO_BITRATE")
+  local video_bps audio_bps expected_bytes estimate_raw
+  estimate_raw="${PROGRESS_ESTIMATE:-$VIDEO_BITRATE}"
+  video_bps=$(parse_bitrate_bps "$estimate_raw")
   audio_bps=$(parse_bitrate_bps "$AUDIO_BITRATE")
   expected_bytes=$(awk -v dur="$target_sec" -v vb="$video_bps" -v ab="$audio_bps" \
     'BEGIN {printf "%.0f", dur * (vb + ab) / 8 * 1.05}')
@@ -262,11 +331,12 @@ Usage: export_mp4.sh -v VIDEO -a AUDIO [-o OUTPUT] [options]
   -o, --output PATH      Output .mp4 (default: <audio_dir>/<stem>_<res>.mp4;
                          res from video width: _4k ≥3840, _fhd ≥1920, _720p ≥1280)
   -d, --duration SEC     Cap output length (default: full audio)
-      --encoder MODE     cpu (libx264, default) | nvenc (GPU h264_nvenc)
+      --encoder MODE     cpu (libx264) | nvenc (GPU h264_nvenc) | auto
       --threads N        libx264 thread count, 0=auto (default: 0)
-      --video-bitrate B   Default: 30M (4K 60fps)
-      --maxrate B         Default: 38M
-      --bufsize B         Default: 60M
+      --crf N            Quality mode: x264 CRF / NVENC CQ (default: 20=4K, 22=FHD)
+      --video-bitrate B  Fixed bitrate mode: 20M (4K) / 8M (FHD) instead of CRF/CQ
+      --maxrate B        Peak VBV cap (auto by resolution in quality mode)
+      --bufsize B        VBV buffer (auto by resolution)
       --audio-bitrate B   Default: 192k
       --preset NAME       cpu: x264 preset (default: medium)
                           nvenc: p1–p7 (default: p5)
@@ -291,7 +361,8 @@ while [[ $# -gt 0 ]]; do
     -d|--duration) DURATION="$2"; shift 2 ;;
     --encoder) ENCODER="$2"; shift 2 ;;
     --threads) THREADS="$2"; shift 2 ;;
-    --video-bitrate) VIDEO_BITRATE="$2"; shift 2 ;;
+    --video-bitrate) VIDEO_BITRATE="$2"; VIDEO_BITRATE_MANUAL=true; ENCODE_MODE="bitrate"; shift 2 ;;
+    --crf) VIDEO_CRF="$2"; VIDEO_CQ="$2"; CRF_MANUAL=true; ENCODE_MODE="quality"; shift 2 ;;
     --maxrate) MAXRATE="$2"; shift 2 ;;
     --bufsize) BUFSIZE="$2"; shift 2 ;;
     --audio-bitrate) AUDIO_BITRATE="$2"; shift 2 ;;
@@ -317,6 +388,33 @@ if [[ ! -f "$AUDIO" ]]; then
   exit 1
 fi
 
+video_w=""
+if ! video_w=$(probe_video_width "$VIDEO" 2>/dev/null); then
+  echo "Warning: could not probe video width; assuming FHD (1920)" >&2
+  video_w=1920
+fi
+
+if [[ "$VIDEO_BITRATE_MANUAL" == true ]]; then
+  user_br="$VIDEO_BITRATE"
+  apply_bitrate_for_width "$video_w"
+  VIDEO_BITRATE="$user_br"
+  PROGRESS_ESTIMATE="$user_br"
+  if [[ -z "$MAXRATE" || -z "$BUFSIZE" ]]; then
+    local_bps=$(parse_bitrate_bps "$VIDEO_BITRATE")
+    if [[ "$local_bps" -gt 0 ]]; then
+      MAXRATE=$(awk -v b="$local_bps" 'BEGIN {printf "%.0fM", b * 1.25 / 1000000}')
+      BUFSIZE=$(awk -v b="$local_bps" 'BEGIN {printf "%.0fM", b * 2 / 1000000}')
+    fi
+  fi
+elif [[ "$CRF_MANUAL" == true ]]; then
+  saved_crf="$VIDEO_CRF"
+  apply_quality_for_width "$video_w"
+  VIDEO_CRF="$saved_crf"
+  VIDEO_CQ="$saved_crf"
+else
+  apply_quality_for_width "$video_w"
+fi
+
 if [[ -z "$OUTPUT" ]]; then
   OUTPUT=$(default_output_path "$AUDIO" "$VIDEO")
 fi
@@ -336,11 +434,11 @@ if [[ "$ENCODER" == "auto" || "$ENCODER" == "nvenc" ]]; then
 fi
 
 echo "==> Video:  $VIDEO (looped)"
-if video_w=$(probe_video_width "$VIDEO" 2>/dev/null); then
-  echo "==> Video size: ${video_w}px wide ($(resolution_suffix_from_width "$video_w" | tr -d '_') suffix)"
-fi
+res_label=$(resolution_suffix_from_width "$video_w" | tr -d '_')
+echo "==> Video size: ${video_w}px wide (${res_label} suffix)"
 echo "==> Audio:  $AUDIO"
 echo "==> Output: $OUTPUT"
+echo "==> Video encode: $(video_encode_summary)"
 echo "==> Audio encode: aac ${AUDIO_BITRATE}"
 if [[ -n "$TARGET_SEC" && "$TARGET_SEC" != "0" ]]; then
   echo "==> Target duration: $(format_elapsed "${TARGET_SEC%.*}") (${TARGET_SEC}s)"
@@ -369,16 +467,28 @@ for current_enc in "${ENCODER_LIST[@]}"; do
 
   case "$current_enc" in
     cpu)
-      ffmpeg_args+=(
-        -c:v libx264 -preset "$PRESET"
-        -threads "$THREADS"
-        -b:v "$VIDEO_BITRATE" -maxrate "$MAXRATE" -bufsize "$BUFSIZE"
-        -pix_fmt yuv420p
-      )
-      if [[ "$THREADS" == "0" ]]; then
-        ENCODE_DESC="libx264 preset=${PRESET} threads=auto ($(nproc) cores)"
+      if [[ "$ENCODE_MODE" == "quality" ]]; then
+        ffmpeg_args+=(
+          -c:v libx264 -preset "$PRESET"
+          -threads "$THREADS"
+          -crf "$VIDEO_CRF"
+          -maxrate "$MAXRATE" -bufsize "$BUFSIZE"
+          -pix_fmt yuv420p
+        )
+        ENCODE_DESC="libx264 preset=${PRESET} crf=${VIDEO_CRF} (quality/VBR)"
       else
-        ENCODE_DESC="libx264 preset=${PRESET} threads=${THREADS}"
+        ffmpeg_args+=(
+          -c:v libx264 -preset "$PRESET"
+          -threads "$THREADS"
+          -b:v "$VIDEO_BITRATE" -maxrate "$MAXRATE" -bufsize "$BUFSIZE"
+          -pix_fmt yuv420p
+        )
+        ENCODE_DESC="libx264 preset=${PRESET} ${VIDEO_BITRATE} (fixed)"
+      fi
+      if [[ "$THREADS" == "0" ]]; then
+        ENCODE_DESC+=" threads=auto ($(nproc) cores)"
+      else
+        ENCODE_DESC+=" threads=${THREADS}"
       fi
       ;;
     nvenc)
@@ -390,14 +500,27 @@ for current_enc in "${ENCODER_LIST[@]}"; do
         slower|veryslow) nvenc_preset="p7" ;;
         p[1-7]) nvenc_preset="$PRESET" ;;
       esac
-      ffmpeg_args+=(
-        -c:v h264_nvenc
-        -preset "$nvenc_preset"
-        -rc:v vbr
-        -b:v "$VIDEO_BITRATE" -maxrate "$MAXRATE" -bufsize "$BUFSIZE"
-        -pix_fmt yuv420p
-      )
-      ENCODE_DESC="h264_nvenc preset=${nvenc_preset} (GPU VBR)"
+      if [[ "$ENCODE_MODE" == "quality" ]]; then
+        ffmpeg_args+=(
+          -c:v h264_nvenc
+          -preset "$nvenc_preset"
+          -rc:v vbr
+          -cq "$VIDEO_CQ"
+          -b:v 0
+          -maxrate "$MAXRATE" -bufsize "$BUFSIZE"
+          -pix_fmt yuv420p
+        )
+        ENCODE_DESC="h264_nvenc preset=${nvenc_preset} cq=${VIDEO_CQ} (quality/VBR)"
+      else
+        ffmpeg_args+=(
+          -c:v h264_nvenc
+          -preset "$nvenc_preset"
+          -rc:v vbr
+          -b:v "$VIDEO_BITRATE" -maxrate "$MAXRATE" -bufsize "$BUFSIZE"
+          -pix_fmt yuv420p
+        )
+        ENCODE_DESC="h264_nvenc preset=${nvenc_preset} ${VIDEO_BITRATE} (fixed)"
+      fi
       ;;
   esac
 
@@ -406,7 +529,7 @@ for current_enc in "${ENCODER_LIST[@]}"; do
     -movflags +faststart
   )
 
-  echo "==> Attempting Video encode: ${ENCODE_DESC} ${VIDEO_BITRATE} max ${MAXRATE} (60fps source)"
+  echo "==> Attempting Video encode: ${ENCODE_DESC} max ${MAXRATE} (60fps source)"
   
   if run_ffmpeg_with_progress "$TARGET_SEC" "$OUTPUT" "${ffmpeg_args[@]}" "$OUTPUT"; then
     success=true

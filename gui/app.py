@@ -33,6 +33,7 @@ from rain_subproject_lib import (  # noqa: E402
 from gui.reaper_launch import (  # noqa: E402
     default_reaper_candidates,
     default_windows_reaper_from_wsl,
+    format_job_progress,
     is_wsl,
     open_reaper_project,
     render_reaper_project,
@@ -50,10 +51,12 @@ from gui.ui_theme import (
     theme_toggle_label,
 )  # noqa: E402
 from gui.export_mix_preview import ExportMixPreviewGrid  # noqa: E402
-from gui.tk_thread import ensure_ui_pump  # noqa: E402
+from gui.tk_thread import bind_ui_root, ensure_ui_pump, schedule_on_main  # noqa: E402
+from gui.job_progress import make_elapsed_ticker, parse_progress_pct  # noqa: E402
 from gui.export_wav import (  # noqa: E402
     expected_export_wav_path,
     format_duration_short,
+    format_mp4_export_stats_suffix,
     wav_duration_seconds,
     wav_matches_target_hours,
 )
@@ -111,6 +114,8 @@ class RelaxAsmrApp(tk.Tk):
         self._theme_mode = normalize_theme(self._cfg.get("theme", "light"))
         self._build_ui()
         ensure_ui_pump(self)
+        bind_ui_root(self)
+        bind_ui_root(self)
 
     def _on_closing(self) -> None:
         self._stop_video_loop()
@@ -384,7 +389,7 @@ class RelaxAsmrApp(tk.Tk):
             style=primary_btn,
         )
         self.btn_export.pack(side=tk.LEFT)
-        self.lbl_export = ttk.Label(row_export, text="待开始", wraplength=360)
+        self.lbl_export = ttk.Label(row_export, text="待开始", wraplength=520)
         self.lbl_export.pack(side=tk.LEFT, padx=(8, 0))
 
         # 5. YouTube 一键上传
@@ -946,13 +951,18 @@ class RelaxAsmrApp(tk.Tk):
         self._update_preview_metadata()
 
     def _log(self, msg: str) -> None:
+        if msg.startswith("PROGRESS ") or (
+            msg.startswith("Elapsed:") and "Remaining:" in msg
+        ):
+            return
+
         def append() -> None:
             self.log_text.configure(state=tk.NORMAL)
             self.log_text.insert(tk.END, msg + "\n")
             self.log_text.see(tk.END)
             self.log_text.configure(state=tk.DISABLED)
 
-        self.after(0, append)
+        schedule_on_main(self, append)
 
     def _export_outputs_cfg(self) -> dict:
         out = self._cfg.get("export_outputs")
@@ -1135,23 +1145,15 @@ class RelaxAsmrApp(tk.Tk):
 
         return format_transfer_progress(elapsed, pct)
 
-    def _make_upload_progress_updater(self) -> tuple[float, Callable[[int], None]]:
-        """上传进度：整段仅当百分比变化 ≥1% 时刷新 UI。"""
-        from gui.upload_progress import should_refresh_upload_progress
-
-        start = time.monotonic()
-        last_shown = [-1]
-
-        def on_progress(pct: int) -> None:
-            if not should_refresh_upload_progress(pct, last_shown[0]):
-                return
-            last_shown[0] = max(0, min(100, int(pct)))
-            elapsed = time.monotonic() - start
-            text = self._format_transfer_progress(elapsed, last_shown[0])
-            if hasattr(self, "lbl_upload"):
-                self.after(0, lambda t=text: self.lbl_upload.configure(text=t))
-
-        return start, on_progress
+    def _make_upload_progress_updater(
+        self,
+    ) -> tuple[Callable[[int], None], Callable[[], None]]:
+        """上传进度：主线程定时刷新 Elapsed/Remaining，后台线程仅更新百分比。"""
+        return make_elapsed_ticker(
+            self,
+            lambda text: self.lbl_upload.configure(text=text),
+            format_status=self._format_transfer_progress,
+        )
 
     def _pick_upload_mp4(self) -> None:
         exp = export_dir()
@@ -1298,13 +1300,14 @@ class RelaxAsmrApp(tk.Tk):
             return "待开始"
         try:
             rel = path.relative_to(export_dir())
-            return f"已完成 · export/{rel}"
+            base = f"已完成 · export/{rel}"
         except ValueError:
             try:
                 rel = path.relative_to(base_url())
-                return f"已完成 · {rel}"
+                base = f"已完成 · {rel}"
             except ValueError:
-                return f"已完成 · {path.name}"
+                base = f"已完成 · {path.name}"
+        return base + format_mp4_export_stats_suffix(path)
 
     def _refresh_step4_outputs(self, scene_id: str | None = None) -> None:
         sid = scene_id or self.scene_id
@@ -2088,20 +2091,35 @@ class RelaxAsmrApp(tk.Tk):
         self._set_render_ui(running=True, status="Elapsed: 00:00:00  Remaining: …")
         self._log(f"—— 开始输出混音: {wav_name} ——")
 
+        render_tail = {"value": False}
+
+        def format_render_status(elapsed: float, pct: int) -> str:
+            return format_job_progress(elapsed, pct, tail=render_tail["value"])
+
+        set_render_pct, stop_render_progress = make_elapsed_ticker(
+            self,
+            lambda text: self._set_render_ui(running=True, status=text),
+            format_status=format_render_status,
+        )
+
         def worker() -> None:
             try:
                 exe = (self._cfg.get("reaper_exe") or "").strip() or None
                 self._log(f"渲染工程: {rpp_path.name}（Entire Project · {duration:g}h）")
 
-                def on_progress(msg: str) -> None:
-                    self.after(0, lambda m=msg: self._set_render_ui(running=True, status=m))
+                def on_pct(pct: int) -> None:
+                    set_render_pct(pct)
+
+                def on_tail(tail: bool) -> None:
+                    render_tail["value"] = tail
 
                 render_reaper_project(
                     rpp_path,
                     reaper_exe=exe,
                     output_wav=wav_path,
                     duration_hours=duration,
-                    on_progress=on_progress,
+                    on_pct=on_pct,
+                    on_tail=on_tail,
                 )
                 if not wav_path.is_file():
                     raise FileNotFoundError(f"渲染结束但未找到输出文件: {wav_path.name}")
@@ -2115,6 +2133,7 @@ class RelaxAsmrApp(tk.Tk):
                 self._log(f"混音完成: {result_wav.name}")
 
                 def done_ok() -> None:
+                    stop_render_progress()
                     if self.scene_id:
                         self._save_scene_export_path(self.scene_id, "wav", result_wav)
                     self._set_render_ui(
@@ -2124,14 +2143,15 @@ class RelaxAsmrApp(tk.Tk):
                     )
                     messagebox.showinfo("成功", f"{result_wav.name} 渲染完成！")
 
-                self.after(0, done_ok)
+                schedule_on_main(self, done_ok)
             except Exception as exc:
                 def done_err(err: BaseException = exc) -> None:
+                    stop_render_progress()
                     self._log(f"渲染失败: {err}")
                     self._set_render_ui(running=False, status="失败")
                     messagebox.showerror("渲染失败", str(err))
 
-                self.after(0, done_err)
+                schedule_on_main(self, done_err)
 
         threading.Thread(target=worker, daemon=True).start()
 
@@ -2289,6 +2309,21 @@ class RelaxAsmrApp(tk.Tk):
         self._log(f"音频：{audio_file.name}")
         self._log(f"视频：{vid_file.name}")
 
+        export_tail = {"value": False}
+
+        def format_export_status(elapsed: float, pct: int) -> str:
+            return format_job_progress(
+                elapsed,
+                pct,
+                tail=export_tail["value"] or pct >= 99,
+            )
+
+        set_export_pct, stop_export_progress = make_elapsed_ticker(
+            self,
+            lambda text: self._set_export_ui(running=True, status=text),
+            format_status=format_export_status,
+        )
+
         def worker() -> None:
             import subprocess
             output_mp4: Path | None = None
@@ -2314,9 +2349,12 @@ class RelaxAsmrApp(tk.Tk):
                         raw = line.split(":", 1)[1].strip()
                         if raw:
                             output_mp4 = Path(raw)
-                    if line.startswith("PROGRESS "):
+                    elif line.startswith("PROGRESS "):
                         status = line.removeprefix("PROGRESS ").strip()
-                        self.after(0, lambda s=status: self._set_export_ui(running=True, status=s))
+                        pct = parse_progress_pct(status)
+                        if pct is not None:
+                            export_tail["value"] = pct >= 99 or "99%+" in status
+                            set_export_pct(pct)
                     else:
                         self._log(line)
                 proc.wait()
@@ -2325,6 +2363,7 @@ class RelaxAsmrApp(tk.Tk):
                         output_mp4 = self._find_latest_mp4_for_scene(self.scene_id)
 
                     def done_ok() -> None:
+                        stop_export_progress()
                         if output_mp4 and output_mp4.is_file() and self.scene_id:
                             self._save_scene_export_path(self.scene_id, "mp4", output_mp4)
                         self._set_export_ui(
@@ -2336,17 +2375,19 @@ class RelaxAsmrApp(tk.Tk):
                             "合成成功",
                             f"长视频已导出：\n{output_mp4}" if output_mp4 else "长视频导出完成！",
                         )
-                    self.after(0, done_ok)
+                    schedule_on_main(self, done_ok)
                 else:
                     def done_err() -> None:
+                        stop_export_progress()
                         self._set_export_ui(running=False, status="失败")
                         messagebox.showerror("合成失败", f"export_mp4.sh 返回错误码 {proc.returncode}")
-                    self.after(0, done_err)
+                    schedule_on_main(self, done_err)
             except Exception as exc:
                 def done_err2(err: BaseException = exc) -> None:
+                    stop_export_progress()
                     self._set_export_ui(running=False, status="失败")
                     messagebox.showerror("运行失败", str(err))
-                self.after(0, done_err2)
+                schedule_on_main(self, done_err2)
 
         threading.Thread(target=worker, daemon=True).start()
 
@@ -2397,13 +2438,13 @@ class RelaxAsmrApp(tk.Tk):
         self._log(f"视频：{upload_mp4}")
         self._log("首次上传需在浏览器完成 OAuth 授权")
         self.lbl_upload.configure(text=self._format_transfer_progress(0.0, 0))
+        on_upload_progress, stop_upload_progress = self._make_upload_progress_updater()
 
         def worker() -> None:
             try:
                 md_path = self._ensure_material_for_upload(upload_scene_id)
                 up_mod = load_scripts_module("video_upload.youtube_upload")
                 self._log(f"物料：{md_path.name}")
-                _, on_upload_progress = self._make_upload_progress_updater()
                 record = up_mod.upload_from_material(
                     md_path,
                     language=language,
@@ -2415,6 +2456,7 @@ class RelaxAsmrApp(tk.Tk):
                 )
 
                 def done_ok() -> None:
+                    stop_upload_progress()
                     url = record["url"]
                     self._cfg["last_upload_url"] = url
                     self._save_config()
@@ -2422,16 +2464,17 @@ class RelaxAsmrApp(tk.Tk):
                     self.lbl_upload.configure(text=f"上传：{url}")
                     messagebox.showinfo("上传完成", f"视频已上传：\n{url}\n\n可见性：{privacy}")
 
-                self.after(0, done_ok)
+                schedule_on_main(self, done_ok)
             except Exception as exc:
                 def done_err(err: BaseException = exc) -> None:
+                    stop_upload_progress()
                     self._log(f"错误：{err}")
                     self._refresh_upload_label()
                     messagebox.showerror("上传失败", str(err))
 
-                self.after(0, done_err)
+                schedule_on_main(self, done_err)
             finally:
-                self.after(0, lambda: self._set_busy(False))
+                schedule_on_main(self, lambda: self._set_busy(False))
 
         threading.Thread(target=worker, daemon=True).start()
 

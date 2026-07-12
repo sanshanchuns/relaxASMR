@@ -51,7 +51,9 @@ def _poll_render_progress(
     *,
     output_wav: Path | None,
     duration_hours: float | None,
-    on_progress: Callable[[str], None] | None,
+    on_progress: Callable[[str], None] | None = None,
+    on_pct: Callable[[int], None] | None = None,
+    on_tail: Callable[[bool], None] | None = None,
 ) -> None:
     start = time.monotonic()
     total_sec = float(duration_hours or 0) * 3600
@@ -68,7 +70,11 @@ def _poll_render_progress(
             tail = raw_pct >= 99
             pct = min(raw_pct, 100)
 
-        if on_progress:
+        if on_tail:
+            on_tail(tail)
+        if on_pct:
+            on_pct(pct)
+        elif on_progress:
             if pct > 0 or (output_wav and output_wav.is_file()):
                 on_progress(format_job_progress(elapsed, pct, tail=tail))
             else:
@@ -275,6 +281,8 @@ def render_reaper_project(
     output_wav: Path | None = None,
     duration_hours: float | None = None,
     on_progress: Callable[[str], None] | None = None,
+    on_pct: Callable[[int], None] | None = None,
+    on_tail: Callable[[bool], None] | None = None,
 ) -> None:
     """Headless 渲染 .rpp（WSL 下调用 Windows Reaper）。"""
     rpp = rpp.resolve()
@@ -305,7 +313,7 @@ def render_reaper_project(
             proc = subprocess.Popen([str(win_exe), "-renderproject", str(rpp)])
 
     assert proc is not None
-    if on_progress:
+    if on_progress or on_pct:
         threading.Thread(
             target=_poll_render_progress,
             args=(proc,),
@@ -313,6 +321,8 @@ def render_reaper_project(
                 "output_wav": output_wav,
                 "duration_hours": duration_hours,
                 "on_progress": on_progress,
+                "on_pct": on_pct,
+                "on_tail": on_tail,
             },
             daemon=True,
         ).start()

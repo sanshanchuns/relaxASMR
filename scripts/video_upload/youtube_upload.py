@@ -406,13 +406,10 @@ def upload_from_material(
 
     log(f"上传视频：{video_path.name}（{privacy_status}）…")
     log(f"  分类：Travel & Events · 语言：English")
-    last_pct = [-1]
+
     def prog(pct: int) -> None:
         if on_progress:
             on_progress(pct)
-        if pct % 10 == 0 and pct != last_pct[0]:
-            log(f"  上传进度 {pct}%")
-            last_pct[0] = pct
 
     video_id = upload_video(
         service,
