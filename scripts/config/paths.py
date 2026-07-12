@@ -413,3 +413,57 @@ def audio_rain_booms_dir() -> Path:
 def audio_booms_dir(layer_id: str) -> Path:
     """Boom 声源目录，如 baseURL/audio/3_random/booms。"""
     return audio_dir() / layer_id / "booms"
+
+
+def _extra_bin_dirs() -> list[Path]:
+    """GUI/.app 启动时常缺失的常用可执行文件目录。"""
+    dirs: list[Path] = []
+    if is_mac():
+        dirs.extend([Path("/opt/homebrew/bin"), Path("/usr/local/bin")])
+    extra = os.environ.get("RELAXASMR_BIN_PATH", "").strip()
+    if extra:
+        for part in extra.split(os.pathsep):
+            if part:
+                dirs.append(Path(part))
+    return dirs
+
+
+def ensure_gui_path() -> None:
+    """补全 PATH，避免 macOS 双击 .app 时找不到 Homebrew 安装的 ffmpeg 等工具。"""
+    existing = os.environ.get("PATH", "")
+    parts = existing.split(os.pathsep) if existing else []
+    seen = set(parts)
+    prepend: list[str] = []
+    for directory in _extra_bin_dirs():
+        text = str(directory)
+        if text not in seen and directory.is_dir():
+            prepend.append(text)
+            seen.add(text)
+    if prepend:
+        os.environ["PATH"] = os.pathsep.join(prepend + parts)
+
+
+def find_executable(name: str) -> Path | None:
+    """查找可执行文件：先 PATH，再常见安装目录。"""
+    found = shutil.which(name)
+    if found:
+        return Path(found)
+    for directory in _extra_bin_dirs():
+        candidate = directory / name
+        if candidate.is_file() and os.access(candidate, os.X_OK):
+            return candidate
+    return None
+
+
+def ffmpeg_exe() -> Path:
+    exe = find_executable("ffmpeg")
+    if exe is not None:
+        return exe
+    raise RuntimeError("ffmpeg 未安装或不在 PATH 中（Mac 可运行: brew install ffmpeg）")
+
+
+def ffprobe_exe() -> Path:
+    exe = find_executable("ffprobe")
+    if exe is not None:
+        return exe
+    raise RuntimeError("ffprobe 未安装或不在 PATH 中（Mac 可运行: brew install ffmpeg）")

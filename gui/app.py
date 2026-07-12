@@ -24,6 +24,10 @@ REAPER_SCRIPTS = REPO_ROOT / "Reaper" / "scripts"
 if str(REAPER_SCRIPTS) not in sys.path:
     sys.path.insert(0, str(REAPER_SCRIPTS))
 
+from scripts.config.paths import ensure_gui_path  # noqa: E402
+
+ensure_gui_path()
+
 from rain_subproject_lib import (  # noqa: E402
     REPO_ROOT as LIB_REPO_ROOT,
     build_scene_config_from_gui,

@@ -21,6 +21,9 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 REPO_ROOT = SCRIPT_DIR.parent.parent
 if str(SCRIPT_DIR.parent) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR.parent))
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+from scripts.config.paths import ffmpeg_exe, ffprobe_exe
 PRESETS_PATH = SCRIPT_DIR / "youtube_presets.json"
 BADGE_4K_PATH = SCRIPT_DIR / "4k.png"
 THUMB_W, THUMB_H = 1280, 720
@@ -78,7 +81,7 @@ def load_font(size: int) -> ImageFont.FreeTypeFont | ImageFont.ImageFont:
 
 def ffprobe_video(path: Path) -> dict:
     cmd = [
-        "ffprobe", "-v", "error",
+        str(ffprobe_exe()), "-v", "error",
         "-select_streams", "v:0",
         "-show_entries", "stream=width,height,r_frame_rate,codec_name",
         "-show_entries", "format=duration,size,bit_rate",
@@ -205,7 +208,7 @@ def resize_badge(badge_path: Path) -> Image.Image:
 def extract_frame(video: Path, out_path: Path, t: float) -> None:
     proc = subprocess.run(
         [
-            "ffmpeg", "-y", "-ss", str(t), "-i", str(video),
+            str(ffmpeg_exe()), "-y", "-ss", str(t), "-i", str(video),
             "-vframes", "1", "-vf", "scale=1280:720", "-q:v", "2", str(out_path),
         ],
         capture_output=True,

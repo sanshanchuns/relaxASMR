@@ -22,6 +22,7 @@ from pathlib import Path
 from typing import Callable
 
 from scripts.config.common_constants import DISTANT_NAMES, SPACE_NAMES, CLOSE_NAMES
+from scripts.config.paths import ffmpeg_exe
 
 
 def _layer_label(l_val: int, names: dict[int, tuple[str, str]]) -> str:
@@ -317,7 +318,7 @@ def extract_first_frame(
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
     cmd = [
-        "ffmpeg", "-i", str(video_path),
+        str(ffmpeg_exe()), "-i", str(video_path),
         "-vf", "select=eq(n\\,0),scale=1280:720",
         "-vframes", "1",
         "-q:v", "2",
@@ -331,7 +332,7 @@ def extract_first_frame(
             timeout=30,
         )
     except FileNotFoundError:
-        raise RuntimeError("ffmpeg 未安装或不在 PATH 中") from None
+        raise RuntimeError("ffmpeg 未安装或不在 PATH 中（Mac 可运行: brew install ffmpeg）") from None
     except subprocess.CalledProcessError as exc:
         raise RuntimeError(
             f"ffmpeg 提取首帧失败: {exc.stderr.decode(errors='replace')}"
