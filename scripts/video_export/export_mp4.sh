@@ -5,6 +5,10 @@
 
 set -euo pipefail
 
+if [[ "$(uname -s)" == "Darwin" ]]; then
+  export PATH="/opt/homebrew/bin:/usr/local/bin:${PATH}"
+fi
+
 VIDEO=""
 AUDIO=""
 OUTPUT=""
@@ -20,8 +24,50 @@ VIDEO_BITRATE_MANUAL=false
 CRF_MANUAL=false
 AUDIO_BITRATE="192k"
 PRESET="medium"
-ENCODER="auto"  # auto (detect gpu) | cpu = libx264 (multi-thread) | nvenc = h264_nvenc (GPU)
+ENCODER="auto"  # auto | cpu (libx264) | nvenc (NVIDIA) | videotoolbox (macOS GPU)
 THREADS="0"     # 0 = libx264 auto (use all cores)
+
+cpu_count() {
+  if command -v nproc >/dev/null 2>&1; then
+    nproc
+  elif [[ "$(uname -s)" == "Darwin" ]]; then
+    sysctl -n hw.ncpu 2>/dev/null || echo 4
+  else
+    getconf _NPROCESSORS_ONLN 2>/dev/null || echo 4
+  fi
+}
+
+ffmpeg_has_encoder() {
+  local name="$1"
+  ffmpeg -hide_banner -encoders 2>/dev/null | grep -q " ${name} "
+}
+
+build_encoder_list() {
+  ENCODER_LIST=()
+  case "$ENCODER" in
+    cpu)
+      ENCODER_LIST=("cpu")
+      ;;
+    nvenc)
+      ENCODER_LIST=("nvenc" "cpu")
+      ;;
+    videotoolbox|vt)
+      ENCODER_LIST=("videotoolbox" "cpu")
+      ;;
+    auto)
+      if [[ "$(uname -s)" == "Darwin" ]] && ffmpeg_has_encoder "h264_videotoolbox"; then
+        ENCODER_LIST=("videotoolbox" "cpu")
+      elif ffmpeg_has_encoder "h264_nvenc"; then
+        ENCODER_LIST=("nvenc" "cpu")
+      else
+        ENCODER_LIST=("cpu")
+      fi
+      ;;
+    *)
+      ENCODER_LIST=("$ENCODER" "cpu")
+      ;;
+  esac
+}
 
 format_elapsed() {
   local s=${1%.*}
@@ -331,7 +377,7 @@ Usage: export_mp4.sh -v VIDEO -a AUDIO [-o OUTPUT] [options]
   -o, --output PATH      Output .mp4 (default: <audio_dir>/<stem>_<res>.mp4;
                          res from video width: _4k ≥3840, _fhd ≥1920, _720p ≥1280)
   -d, --duration SEC     Cap output length (default: full audio)
-      --encoder MODE     cpu (libx264) | nvenc (GPU h264_nvenc) | auto
+      --encoder MODE     cpu (libx264) | nvenc (NVIDIA GPU) | videotoolbox (macOS GPU) | auto
       --threads N        libx264 thread count, 0=auto (default: 0)
       --crf N            Quality mode: x264 CRF / NVENC CQ (default: 20=4K, 22=FHD)
       --video-bitrate B  Fixed bitrate mode: 20M (4K) / 8M (FHD) instead of CRF/CQ
@@ -428,10 +474,8 @@ else
   TARGET_SEC=$(probe_duration_sec "$AUDIO" || echo "0")
 fi
 
-ENCODER_LIST=("$ENCODER")
-if [[ "$ENCODER" == "auto" || "$ENCODER" == "nvenc" ]]; then
-  ENCODER_LIST=("nvenc" "cpu")
-fi
+ENCODER_LIST=()
+build_encoder_list
 
 echo "==> Video:  $VIDEO (looped)"
 res_label=$(resolution_suffix_from_width "$video_w" | tr -d '_')
@@ -486,9 +530,30 @@ for current_enc in "${ENCODER_LIST[@]}"; do
         ENCODE_DESC="libx264 preset=${PRESET} ${VIDEO_BITRATE} (fixed)"
       fi
       if [[ "$THREADS" == "0" ]]; then
-        ENCODE_DESC+=" threads=auto ($(nproc) cores)"
+        ENCODE_DESC+=" threads=auto ($(cpu_count) cores)"
       else
         ENCODE_DESC+=" threads=${THREADS}"
+      fi
+      ;;
+    videotoolbox)
+      vt_target="${PROGRESS_ESTIMATE:-$MAXRATE}"
+      if [[ "$ENCODE_MODE" == "quality" ]]; then
+        ffmpeg_args+=(
+          -c:v h264_videotoolbox
+          -b:v "$vt_target"
+          -maxrate "$MAXRATE" -bufsize "$BUFSIZE"
+          -pix_fmt yuv420p
+          -allow_sw 1
+        )
+        ENCODE_DESC="h264_videotoolbox target=${vt_target} max=${MAXRATE} (quality/VBR)"
+      else
+        ffmpeg_args+=(
+          -c:v h264_videotoolbox
+          -b:v "$VIDEO_BITRATE" -maxrate "$MAXRATE" -bufsize "$BUFSIZE"
+          -pix_fmt yuv420p
+          -allow_sw 1
+        )
+        ENCODE_DESC="h264_videotoolbox ${VIDEO_BITRATE} (fixed)"
       fi
       ;;
     nvenc)
@@ -504,7 +569,7 @@ for current_enc in "${ENCODER_LIST[@]}"; do
         ffmpeg_args+=(
           -c:v h264_nvenc
           -preset "$nvenc_preset"
-          -rc:v vbr
+          -rc vbr
           -cq "$VIDEO_CQ"
           -b:v 0
           -maxrate "$MAXRATE" -bufsize "$BUFSIZE"
@@ -515,7 +580,7 @@ for current_enc in "${ENCODER_LIST[@]}"; do
         ffmpeg_args+=(
           -c:v h264_nvenc
           -preset "$nvenc_preset"
-          -rc:v vbr
+          -rc vbr
           -b:v "$VIDEO_BITRATE" -maxrate "$MAXRATE" -bufsize "$BUFSIZE"
           -pix_fmt yuv420p
         )
