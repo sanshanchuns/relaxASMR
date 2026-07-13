@@ -1,23 +1,21 @@
-"""步骤 4 混音成品预览宫格（悬停试听）。"""
+"""步骤 4 混音成品预览宫格：悬停试听、双击莫兰迪红常驻循环。"""
 
 from __future__ import annotations
 
-import threading
 import tkinter as tk
 from pathlib import Path
 from tkinter import ttk
 from typing import Callable
 
-from gui.tk_thread import bind_ui_root, schedule_on_main
+from gui.tk_thread import bind_ui_root
 from gui.ui_theme import LIGHT, UiTheme, grid_theme, paint_widget_bg
 
 _HOVER_DELAY_MS = 400
-_PREVIEW_CLIP_SEC = 30.0
 _BORDER_THICKNESS = 2
 
 
 class ExportMixPreviewGrid(ttk.Frame):
-    """紧凑混音状态格：完成且有效 WAV 时悬停循环试听开头片段。"""
+    """紧凑混音状态格：悬停循环试听；双击后莫兰迪红常驻，仅再次双击可解除。"""
 
     def __init__(self, parent: tk.Widget, *, log_fn: Callable[[str], None] | None = None):
         super().__init__(parent)
@@ -25,9 +23,10 @@ class ExportMixPreviewGrid(ttk.Frame):
         self._wav_path: Path | None = None
         self._playable = False
         self._hover = False
+        self._pinned = False
         self._play_after_id: str | None = None
-        self._audio_proc = None
-        self._play_thread: threading.Thread | None = None
+        self._hover_proc = None
+        self._pinned_proc = None
         self._grid_theme = grid_theme(LIGHT)
         self._build_ui()
         bind_ui_root(self)
@@ -56,6 +55,7 @@ class ExportMixPreviewGrid(ttk.Frame):
         for widget in (self._border, self._inner, self._lbl):
             widget.bind("<Enter>", self._on_enter)
             widget.bind("<Leave>", self._on_leave)
+            widget.bind("<Double-Button-1>", self._on_double_click)
 
     def set_status(
         self,
@@ -65,11 +65,17 @@ class ExportMixPreviewGrid(ttk.Frame):
         running: bool = False,
     ) -> None:
         self._playable = bool(wav_path and wav_path.is_file() and not running)
-        self._wav_path = wav_path.resolve() if self._playable else None
+        new_path = wav_path.resolve() if self._playable else None
+        if new_path != self._wav_path or running:
+            self._unpin()
+        self._wav_path = new_path
         if running:
-            self._stop_audio()
+            self._stop_hover_audio()
         display = text or "待开始"
         self._lbl.configure(text=display)
+        cursor = "hand2" if self._playable else ""
+        for widget in (self._border, self._inner, self._lbl):
+            widget.configure(cursor=cursor)
         self._refresh_border()
 
     def apply_theme(self, theme: UiTheme) -> None:
@@ -79,7 +85,11 @@ class ExportMixPreviewGrid(ttk.Frame):
 
     def _refresh_border(self) -> None:
         colors = self._grid_theme
-        if self._hover and self._playable:
+        if self._pinned:
+            color = colors.border_pinned
+            fg = colors.fg_pinned
+            font = ("", 9, "bold")
+        elif self._hover and self._playable:
             color = colors.border_hover
             fg = colors.fg_hover
             font = ("", 9, "bold")
@@ -97,66 +107,114 @@ class ExportMixPreviewGrid(ttk.Frame):
         )
         self._lbl.configure(fg=fg, font=font, bg=colors.cell_bg)
 
-    def _on_enter(self, _event=None) -> None:
-        if not self._playable:
-            return
-        self._hover = True
-        self._refresh_border()
-        if self._play_after_id:
-            self.after_cancel(self._play_after_id)
-        self._play_after_id = self.after(_HOVER_DELAY_MS, self._start_playback)
-
-    def _on_leave(self, _event=None) -> None:
+    def _pointer_inside(self) -> bool:
         px, py = self._border.winfo_pointerxy()
         rx = self._border.winfo_rootx()
         ry = self._border.winfo_rooty()
         rw = max(self._border.winfo_width(), 1)
         rh = max(self._border.winfo_height(), 1)
-        if rx <= px <= rx + rw and ry <= py <= ry + rh:
+        return rx <= px <= rx + rw and ry <= py <= ry + rh
+
+    def _on_double_click(self, _event=None) -> None:
+        if not self._playable or not self._wav_path:
             return
-        self._hover = False
-        self._stop_audio()
-        self._refresh_border()
-
-    def _start_playback(self) -> None:
-        self._play_after_id = None
-        if not self._hover or not self._playable or not self._wav_path:
+        if self._pinned:
+            self._unpin(log_cancel=True)
+            if self._pointer_inside():
+                self._hover = True
+                self._refresh_border()
+                self._schedule_hover_playback()
+            else:
+                self._hover = False
+                self._refresh_border()
             return
-        wav = self._wav_path
-        self._stop_audio()
-
-        def worker() -> None:
-            proc = None
-            try:
-                from gui.audio_playback import play_wav_preview
-
-                proc = play_wav_preview(wav, max_seconds=_PREVIEW_CLIP_SEC, loop=True)
-            except Exception as exc:
-                schedule_on_main(self, self._log, f"混音试听失败: {exc}")
-                return
-
-            def attach() -> None:
-                if self._hover and proc is not None:
-                    self._audio_proc = proc
-
-            schedule_on_main(self, attach)
-
-        self._play_thread = threading.Thread(target=worker, daemon=True)
-        self._play_thread.start()
-
-    def _stop_audio(self) -> None:
+        self._stop_hover_audio()
         if self._play_after_id:
             self.after_cancel(self._play_after_id)
             self._play_after_id = None
+        self._hover = False
+        try:
+            from gui.audio_playback import start_wav_loop
+
+            self._pinned_proc = start_wav_loop(self._wav_path)
+            self._pinned = True
+            self._log(f"{self._wav_path.name} 常驻播放")
+            self._refresh_border()
+        except Exception as exc:
+            self._log(f"混音常驻播放失败: {exc}")
+
+    def _on_enter(self, _event=None) -> None:
+        if not self._playable or self._pinned:
+            return
+        self._hover = True
+        self._refresh_border()
+        self._schedule_hover_playback()
+
+    def _schedule_hover_playback(self) -> None:
+        if self._pinned:
+            return
+        if self._play_after_id:
+            self.after_cancel(self._play_after_id)
+        self._play_after_id = self.after(_HOVER_DELAY_MS, self._start_hover_playback)
+
+    def _on_leave(self, _event=None) -> None:
+        if self._pinned:
+            return
+        if self._pointer_inside():
+            return
+        self._hover = False
+        if self._play_after_id:
+            self.after_cancel(self._play_after_id)
+            self._play_after_id = None
+        self._stop_hover_audio()
+        self._refresh_border()
+
+    def _start_hover_playback(self) -> None:
+        self._play_after_id = None
+        if not self._hover or not self._playable or not self._wav_path or self._pinned:
+            return
+        wav = self._wav_path
+        self._stop_hover_audio()
+        try:
+            from gui.audio_playback import start_wav_preview_loop
+
+            self._hover_proc = start_wav_preview_loop(wav)
+        except Exception as exc:
+            self._log(f"混音试听失败: {exc}")
+
+    def _stop_hover_audio(self) -> None:
+        if self._play_after_id:
+            self.after_cancel(self._play_after_id)
+            self._play_after_id = None
+        if not self._hover_proc:
+            return
         try:
             from gui.audio_playback import stop_wav_playback
 
-            stop_wav_playback(self._audio_proc)
-            self._audio_proc = None
+            stop_wav_playback(self._hover_proc)
         except Exception:
             pass
+        self._hover_proc = None
+
+    def _unpin(self, *, log_cancel: bool = False) -> None:
+        if not self._pinned:
+            return
+        wav_name = self._wav_path.name if self._wav_path else ""
+        if self._pinned_proc:
+            try:
+                from gui.audio_playback import stop_wav_playback
+
+                stop_wav_playback(self._pinned_proc)
+            except Exception:
+                pass
+        self._pinned_proc = None
+        self._pinned = False
+        if log_cancel and wav_name:
+            self._log(f"{wav_name} 取消常驻播放")
+        self._refresh_border()
 
     def stop_playback(self) -> None:
         self._hover = False
-        self._stop_audio()
+        self._stop_hover_audio()
+        self._unpin()
         self._refresh_border()

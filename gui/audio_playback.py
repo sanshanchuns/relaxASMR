@@ -287,13 +287,21 @@ def _play_wsl_soundplayer(wav_path: Path, *, loop: bool) -> subprocess.Popen:
     return _spawn_playback([_POWERSHELL, "-NoProfile", "-Command", script])
 
 
+def _is_large_wav(wav_path: Path) -> bool:
+    """超过约 3 分钟 16-bit 立体声体积的 WAV。"""
+    try:
+        return wav_path.stat().st_size > _PREVIEW_CLIP_MIN_BYTES
+    except OSError:
+        return False
+
+
 def _start_ffplay(wav_path: Path, *, loop: bool) -> subprocess.Popen | None:
     if not which("ffplay"):
         return None
     if loop:
-        args = ["ffplay", "-nodisp", "-loglevel", "quiet", "-loop", "0"]
+        args = ["ffplay", "-nodisp", "-loglevel", "quiet", "-infbuf", "-loop", "0"]
     else:
-        args = ["ffplay", "-nodisp", "-loglevel", "quiet", "-autoexit"]
+        args = ["ffplay", "-nodisp", "-loglevel", "quiet", "-infbuf", "-autoexit"]
     args.append(str(wav_path))
     try:
         return _spawn_playback(args, pipe_stdin=True)
@@ -304,6 +312,13 @@ def _start_ffplay(wav_path: Path, *, loop: bool) -> subprocess.Popen | None:
 def _launch_wav(wav_path: Path, *, loop: bool) -> subprocess.Popen | None:
     wav_path = Path(wav_path).resolve()
     from gui.reaper_launch import is_wsl
+
+    # 大体积 WAV 优先 ffplay 边播边解码，避免 SoundPlayer / winsound 整文件读入内存
+    if _is_large_wav(wav_path):
+        proc = _start_ffplay(wav_path, loop=loop)
+        if proc is not None:
+            return proc
+        raise FileNotFoundError("大体积 WAV 需要 ffplay（ffmpeg）流式播放，请安装后重试")
 
     if is_wsl():
         return _play_wsl_soundplayer(wav_path, loop=loop)
