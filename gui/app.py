@@ -93,8 +93,8 @@ class RelaxAsmrApp(tk.Tk):
     def __init__(self) -> None:
         super().__init__()
         self.title("自然之声-自动化界面")
-        self.geometry("1600x900")
-        self.minsize(720, 520)
+        self.geometry("1600x980")
+        self.minsize(720, 600)
 
         self.video_path: Path | None = None
         self.video_rel: str | None = None
@@ -141,6 +141,9 @@ class RelaxAsmrApp(tk.Tk):
             ):
                 return
         self._stop_video_loop()
+        if self._right_pane_resize_after_id:
+            self.after_cancel(self._right_pane_resize_after_id)
+            self._right_pane_resize_after_id = None
         try:
             from gui.audio_library_tab import _unpin_all
             from gui.audio_playback import force_stop_all_playback
@@ -497,6 +500,13 @@ class RelaxAsmrApp(tk.Tk):
         self.right_pane.pack(fill=tk.BOTH, expand=True)
 
         self.cover_frame = ttk.LabelFrame(self.right_pane, text="封面预览", padding=10)
+        self.lbl_cover_video_name = ttk.Label(
+            self.cover_frame,
+            text="—",
+            wraplength=480,
+            foreground="gray",
+        )
+        self.lbl_cover_video_name.pack(anchor=tk.W, pady=(0, 6))
         self.cover_body = ttk.Frame(self.cover_frame)
         self.cover_body.pack(fill=tk.BOTH, expand=True)
         self.cover_body.columnconfigure(0, weight=0, minsize=213)
@@ -540,6 +550,13 @@ class RelaxAsmrApp(tk.Tk):
         self.txt_cover_desc_en.grid(row=1, column=0, sticky="nsew", pady=(8, 0))
 
         self.preview_frame = ttk.LabelFrame(self.right_pane, text="视频预览", padding=10)
+        self.lbl_preview_video_name = ttk.Label(
+            self.preview_frame,
+            text="—",
+            wraplength=480,
+            foreground="gray",
+        )
+        self.lbl_preview_video_name.pack(anchor=tk.W, pady=(0, 6))
         self.preview_body = ttk.Frame(self.preview_frame)
         self.preview_body.pack(fill=tk.BOTH, expand=True)
         self.preview_body.columnconfigure(0, weight=0, minsize=213)
@@ -596,8 +613,10 @@ class RelaxAsmrApp(tk.Tk):
 
         self._cover_img = None
         self._preview_img = None
-        self._right_pane_equalize_pending = False
-        self.after_idle(self._equalize_right_pane)
+        self._right_pane_resize_after_id: str | None = None
+        self._right_pane_last_h = 0
+        self._equalize_retry_count = 0
+        self.after_idle(self._equalize_right_pane_once)
         self.after_idle(self._init_preview_panel)
         self.after_idle(self._restore_audio_library_selections)
 
@@ -976,7 +995,8 @@ class RelaxAsmrApp(tk.Tk):
         frame.update_idletasks()
         frame_h = frame.winfo_height()
         if frame_h > 1:
-            h = max(frame_h - 24, 120)
+            # LabelFrame 标题 + 上方视频文件名标签预留
+            h = max(frame_h - 48, 100)
             return max(int(h * 16 / 9), 160), h
         _, cell_h = self._preview_cell_size()
         h = max(cell_h, 120)
@@ -995,6 +1015,11 @@ class RelaxAsmrApp(tk.Tk):
         return self._cover_thumb_size()
 
     def _apply_cover_slot_geometry(self, slot_w: int, slot_h: int) -> None:
+        if (
+            getattr(self, "_cover_slot_w", None) == slot_w
+            and getattr(self, "_cover_slot_h", None) == slot_h
+        ):
+            return
         self._cover_slot_w = slot_w
         self._cover_slot_h = slot_h
         if hasattr(self, "cover_thumb_canvas"):
@@ -1003,6 +1028,11 @@ class RelaxAsmrApp(tk.Tk):
             self.cover_body.columnconfigure(0, minsize=slot_w)
 
     def _apply_preview_slot_geometry(self, slot_w: int, slot_h: int) -> None:
+        if (
+            getattr(self, "_preview_slot_w", None) == slot_w
+            and getattr(self, "_preview_slot_h", None) == slot_h
+        ):
+            return
         self._preview_slot_w = slot_w
         self._preview_slot_h = slot_h
         if hasattr(self, "preview_video_canvas"):
@@ -1033,13 +1063,16 @@ class RelaxAsmrApp(tk.Tk):
         h = max(self.right_pane.winfo_height() // 3 - 44, 72)
         return (w, h)
 
-    def _equalize_right_pane(self, _event=None) -> None:
+    def _equalize_right_pane_once(self, _event=None) -> None:
+        """启动时均分右侧三区；不在用户拖动窗口时反复强制 sashpos。"""
         if not hasattr(self, "right_pane"):
             return
         self.right_pane.update_idletasks()
         h = self.right_pane.winfo_height()
         if h <= 2:
-            self.after(50, self._equalize_right_pane)
+            if self._equalize_retry_count < 20:
+                self._equalize_retry_count += 1
+                self.after(50, self._equalize_right_pane_once)
             return
         third = max(h // 3, 80)
         try:
@@ -1047,19 +1080,24 @@ class RelaxAsmrApp(tk.Tk):
             self.right_pane.sashpos(1, 2 * third)
         except tk.TclError:
             pass
+        self._right_pane_last_h = h
 
     def _on_right_pane_configure(self, _event=None) -> None:
-        if self._right_pane_equalize_pending:
+        """窗口缩放时防抖刷新预览布局，避免 Configure → sashpos → Configure 死循环。"""
+        if self._right_pane_resize_after_id:
+            self.after_cancel(self._right_pane_resize_after_id)
+        self._right_pane_resize_after_id = self.after(180, self._on_right_pane_resize_settled)
+
+    def _on_right_pane_resize_settled(self) -> None:
+        self._right_pane_resize_after_id = None
+        if not hasattr(self, "right_pane"):
             return
-        self._right_pane_equalize_pending = True
-
-        def _done() -> None:
-            self._right_pane_equalize_pending = False
-            self._equalize_right_pane()
-            self._update_cover_preview()
-            self._refresh_preview_layout()
-
-        self.after_idle(_done)
+        h = self.right_pane.winfo_height()
+        if abs(h - self._right_pane_last_h) < 6:
+            return
+        self._right_pane_last_h = h
+        self._refresh_preview_layout()
+        self._update_cover_preview()
 
     def _init_preview_panel(self) -> None:
         if not self.video_path or not self.video_path.is_file():
@@ -1716,6 +1754,7 @@ class RelaxAsmrApp(tk.Tk):
         self.scene_id = scene
         if prev_scene != scene:
             self.upload_mp4_custom = None
+        self._update_preview_video_names(video)
         self.lbl_video.configure(
             text=self._format_video_label(scene, video, include_resolution=not defer_heavy)
         )
@@ -1811,6 +1850,14 @@ class RelaxAsmrApp(tk.Tk):
                     title_en = f"物料读取失败: {exc}"
         return title_en, desc_en, title_zh, desc_zh
 
+    def _update_preview_video_names(self, video: Path | None = None) -> None:
+        """封面/视频预览上方显示对应视频文件名（非物料标题）。"""
+        name = video.name if video and video.name else "—"
+        if hasattr(self, "lbl_cover_video_name"):
+            self.lbl_cover_video_name.configure(text=name)
+        if hasattr(self, "lbl_preview_video_name"):
+            self.lbl_preview_video_name.configure(text=name)
+
     def _update_cover_metadata(self) -> None:
         if not hasattr(self, "lbl_cover_title_en"):
             return
@@ -1849,6 +1896,7 @@ class RelaxAsmrApp(tk.Tk):
     def _update_cover_preview(self) -> None:
         if not hasattr(self, "cover_thumb_canvas"):
             return
+        self._update_preview_video_names(self.video_path)
         slot_w, slot_h = self._cover_thumb_size()
         self._apply_cover_slot_geometry(slot_w, slot_h)
         self.cover_thumb_canvas.delete("all")
@@ -1939,6 +1987,7 @@ class RelaxAsmrApp(tk.Tk):
             return
 
         self._stop_video_loop()
+        self._update_preview_video_names(video_path)
 
         if not video_path or not video_path.is_file():
             self._preview_img = None
