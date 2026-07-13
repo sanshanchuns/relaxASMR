@@ -20,6 +20,8 @@ from shutil import which
 _PLAY_LOCK = threading.Lock()
 _ACTIVE_PROC: subprocess.Popen | None = None
 _ACTIVE_STDIN = None
+_ACTIVE_PROCS: set[subprocess.Popen] = set()
+_PROC_STDINS: dict[int, object] = {}
 _S16_CACHE: dict[str, Path] = {}
 
 _POWERSHELL = "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe"
@@ -32,8 +34,27 @@ DEFAULT_PREVIEW_CLIP_SEC = 30.0
 _PREVIEW_CLIP_MIN_BYTES = 48_000 * 2 * 2 * 180
 
 
-def _spawn_playback(cmd: list[str], *, pipe_stdin: bool = False) -> subprocess.Popen:
+def _register_proc(proc: subprocess.Popen, *, stdin: object | None = None) -> None:
     global _ACTIVE_PROC, _ACTIVE_STDIN
+    _ACTIVE_PROCS.add(proc)
+    _ACTIVE_PROC = proc
+    if stdin is not None:
+        _PROC_STDINS[proc.pid] = stdin
+        _ACTIVE_STDIN = stdin
+    else:
+        _ACTIVE_STDIN = None
+
+
+def _unregister_proc(proc: subprocess.Popen) -> None:
+    global _ACTIVE_PROC, _ACTIVE_STDIN
+    _ACTIVE_PROCS.discard(proc)
+    _PROC_STDINS.pop(proc.pid, None)
+    if _ACTIVE_PROC is proc:
+        _ACTIVE_PROC = next(iter(_ACTIVE_PROCS), None)
+        _ACTIVE_STDIN = _PROC_STDINS.get(_ACTIVE_PROC.pid) if _ACTIVE_PROC else None
+
+
+def _spawn_playback(cmd: list[str], *, pipe_stdin: bool = False) -> subprocess.Popen:
     kwargs: dict = {
         "stdout": subprocess.DEVNULL,
         "stderr": subprocess.DEVNULL,
@@ -45,8 +66,7 @@ def _spawn_playback(cmd: list[str], *, pipe_stdin: bool = False) -> subprocess.P
     else:
         kwargs["start_new_session"] = True
     proc = subprocess.Popen(cmd, **kwargs)
-    _ACTIVE_PROC = proc
-    _ACTIVE_STDIN = proc.stdin if pipe_stdin else None
+    _register_proc(proc, stdin=proc.stdin if pipe_stdin else None)
     return proc
 
 
@@ -81,27 +101,55 @@ def _wait_proc(proc: subprocess.Popen | None, timeout: float = _PROC_WAIT_S) -> 
             pass
 
 
-def _stop_unlocked(proc: subprocess.Popen | None = None) -> None:
-    """在已持有 _PLAY_LOCK 时调用。"""
-    global _ACTIVE_PROC, _ACTIVE_STDIN
-    target = proc or _ACTIVE_PROC
-    _ACTIVE_PROC = None
-    stdin = _ACTIVE_STDIN
-    _ACTIVE_STDIN = None
-
-    if target is not None and target.poll() is None:
+def _stop_one_unlocked(proc: subprocess.Popen) -> None:
+    """在已持有 _PLAY_LOCK 时停止单路播放。"""
+    stdin = _PROC_STDINS.pop(proc.pid, None)
+    _unregister_proc(proc)
+    if proc.poll() is None:
         if stdin is not None:
             try:
                 stdin.write(b"q")
                 stdin.flush()
             except (OSError, BrokenPipeError, ValueError):
                 pass
-        _wait_proc(target)
+        _wait_proc(proc)
 
+
+def _stop_all_unlocked() -> None:
+    """在已持有 _PLAY_LOCK 时停止全部播放。"""
+    global _ACTIVE_PROC, _ACTIVE_STDIN
+    procs = list(_ACTIVE_PROCS)
+    stdins = dict(_PROC_STDINS)
+    _ACTIVE_PROCS.clear()
+    _PROC_STDINS.clear()
+    _ACTIVE_PROC = None
+    _ACTIVE_STDIN = None
+    for proc in procs:
+        if proc.poll() is None:
+            stdin = stdins.get(proc.pid)
+            if stdin is not None:
+                try:
+                    stdin.write(b"q")
+                    stdin.flush()
+                except (OSError, BrokenPipeError, ValueError):
+                    pass
+            _wait_proc(proc)
     if sys.platform == "win32":
         import winsound
 
         winsound.PlaySound(None, winsound.SND_PURGE)
+
+
+def _stop_unlocked(proc: subprocess.Popen | None = None) -> None:
+    """在已持有 _PLAY_LOCK 时调用。"""
+    if proc is not None:
+        if proc in _ACTIVE_PROCS:
+            _stop_one_unlocked(proc)
+        return
+    if _ACTIVE_PROCS:
+        _stop_all_unlocked()
+        return
+    _stop_all_unlocked()
 
 
 def stop_wav_playback(proc: subprocess.Popen | None = None) -> None:
@@ -111,8 +159,9 @@ def stop_wav_playback(proc: subprocess.Popen | None = None) -> None:
 
 
 def force_stop_all_playback() -> None:
-    """应用退出时强制清理。"""
-    stop_wav_playback()
+    """应用退出时强制清理全部并发播放。"""
+    with _PLAY_LOCK:
+        _stop_all_unlocked()
     if sys.platform == "darwin":
         return
     if which("ffplay") and (
@@ -252,37 +301,50 @@ def _start_ffplay(wav_path: Path, *, loop: bool) -> subprocess.Popen | None:
         return None
 
 
-def _play_locked(wav_path: Path, *, loop: bool) -> subprocess.Popen | None:
+def _launch_wav(wav_path: Path, *, loop: bool) -> subprocess.Popen | None:
     wav_path = Path(wav_path).resolve()
     from gui.reaper_launch import is_wsl
 
-    with _PLAY_LOCK:
-        _stop_unlocked()
+    if is_wsl():
+        return _play_wsl_soundplayer(wav_path, loop=loop)
 
+    proc = _start_ffplay(wav_path, loop=loop)
+    if proc is not None:
+        return proc
+
+    safe = _wav_for_legacy_player(wav_path)
+
+    if sys.platform == "win32":
+        import winsound
+
+        flags = winsound.SND_FILENAME | winsound.SND_ASYNC
+        if loop:
+            flags |= winsound.SND_LOOP
+        winsound.PlaySound(str(safe), flags)
+        return None
+
+    if which("afplay"):
+        return _spawn_playback(["afplay", str(safe)])
+
+    raise FileNotFoundError("未找到 ffplay 或 afplay，无法试听")
+
+
+def _play_locked(wav_path: Path, *, loop: bool) -> subprocess.Popen | None:
+    from gui.reaper_launch import is_wsl
+
+    with _PLAY_LOCK:
+        _stop_all_unlocked()
         if is_wsl():
             time.sleep(_WSL_STOP_GAP_S)
-            return _play_wsl_soundplayer(wav_path, loop=loop)
+        else:
+            time.sleep(_FFPLAY_STOP_GAP_S)
+        return _launch_wav(wav_path, loop=loop)
 
-        time.sleep(_FFPLAY_STOP_GAP_S)
-        proc = _start_ffplay(wav_path, loop=loop)
-        if proc is not None:
-            return proc
 
-        safe = _wav_for_legacy_player(wav_path)
-
-        if sys.platform == "win32":
-            import winsound
-
-            flags = winsound.SND_FILENAME | winsound.SND_ASYNC
-            if loop:
-                flags |= winsound.SND_LOOP
-            winsound.PlaySound(str(safe), flags)
-            return None
-
-        if which("afplay"):
-            return _spawn_playback(["afplay", str(safe)])
-
-        raise FileNotFoundError("未找到 ffplay 或 afplay，无法试听")
+def _start_locked(wav_path: Path, *, loop: bool) -> subprocess.Popen | None:
+    """启动播放，不中断其他正在播放的流。"""
+    with _PLAY_LOCK:
+        return _launch_wav(wav_path, loop=loop)
 
 
 def play_wav_once(wav_path: Path) -> subprocess.Popen | None:
@@ -291,8 +353,13 @@ def play_wav_once(wav_path: Path) -> subprocess.Popen | None:
 
 
 def play_wav_loop(wav_path: Path) -> subprocess.Popen | None:
-    """循环播放 WAV。"""
+    """循环播放 WAV（独占，会先停止其他试听）。"""
     return _play_locked(wav_path, loop=True)
+
+
+def start_wav_loop(wav_path: Path) -> subprocess.Popen | None:
+    """循环播放 WAV，与其他并发流叠加。"""
+    return _start_locked(wav_path, loop=True)
 
 
 def play_wav_preview(
@@ -306,3 +373,15 @@ def play_wav_preview(
     if max_seconds is not None:
         src = wav_preview_clip(wav_path, max_seconds=max_seconds)
     return _play_locked(src, loop=loop)
+
+
+def start_wav_preview_loop(
+    wav_path: Path,
+    *,
+    max_seconds: float | None = None,
+) -> subprocess.Popen | None:
+    """悬停循环试听，与其他并发流叠加。"""
+    src = wav_path
+    if max_seconds is not None:
+        src = wav_preview_clip(wav_path, max_seconds=max_seconds)
+    return _start_locked(src, loop=True)

@@ -10,7 +10,6 @@ import sys
 import threading
 import shutil
 import time
-import cv2
 import tkinter as tk
 from collections.abc import Callable
 from pathlib import Path
@@ -44,7 +43,6 @@ from gui.reaper_launch import (  # noqa: E402
 )
 from gui.folder_open import open_folder  # noqa: E402
 from gui.import_reload import load_module, load_scripts_module  # noqa: E402
-from gui.video_library_tab import VideoLibraryTab, read_video_quality  # noqa: E402
 from gui.audio_library_tab import AudioLibraryTab, wav_display_title  # noqa: E402
 from gui.ui_theme import (
     apply_primary_button_style,
@@ -72,7 +70,6 @@ from gui.youtube_material import (  # noqa: E402
     loop_material_dir,
 )
 from scripts.config.paths import (  # noqa: E402
-    audio_layer_dir,
     base_url,
     ensure_base_url_dirs,
     ensure_rain_fx_png,
@@ -144,6 +141,14 @@ class RelaxAsmrApp(tk.Tk):
             ):
                 return
         self._stop_video_loop()
+        try:
+            from gui.audio_library_tab import _unpin_all
+            from gui.audio_playback import force_stop_all_playback
+
+            _unpin_all()
+            force_stop_all_playback()
+        except Exception:
+            pass
         try:
             if os.path.exists("/tmp/relaxasmr_preview.mp4"):
                 os.remove("/tmp/relaxasmr_preview.mp4")
@@ -264,6 +269,8 @@ class RelaxAsmrApp(tk.Tk):
         self.workflow_tab = ttk.Frame(self.left_notebook)
         self.left_notebook.add(self.workflow_tab, text="工作流")
 
+        from gui.video_library_tab import VideoLibraryTab
+
         self.video_library_tab = VideoLibraryTab(
             self.left_notebook,
             is_uploaded=self._is_video_uploaded,
@@ -286,7 +293,6 @@ class RelaxAsmrApp(tk.Tk):
             self.left_notebook,
             layer_id="2_impact",
             track_id="2_impact",
-            booms_dir=audio_layer_dir("2_impact"),
             on_selection_changed=self._on_audio_library_selection,
             log_fn=self._log,
         )
@@ -593,35 +599,37 @@ class RelaxAsmrApp(tk.Tk):
         self._right_pane_equalize_pending = False
         self.after_idle(self._equalize_right_pane)
         self.after_idle(self._init_preview_panel)
-
-        self._restore_audio_library_selections()
-
-        self.after_idle(self._preload_audio_libraries)
+        self.after_idle(self._restore_audio_library_selections)
 
         self.left_notebook.bind("<<NotebookTabChanged>>", self._on_left_tab_changed)
 
         self.after_idle(self._update_left_scrollbar_visibility)
-
-        last_video = self._cfg.get("last_video")
-        if last_video:
-            p = Path(last_video)
-            if p.is_file():
-                self._set_video(p, from_import=False)
+        self.after_idle(self._restore_last_video_deferred)
+        self.after_idle(self._log_startup_info)
 
         last_material = self._cfg.get("last_material_dir")
         if last_material:
             p = Path(last_material)
             if p.is_dir():
                 self.material_dir = p
-        self._refresh_material_label()
+        self._apply_theme(self._theme_mode)
 
+    def _log_startup_info(self) -> None:
         if is_wsl():
             self._log("WSL 环境：打开/渲染工程将调用 Windows 版 Reaper")
         elif is_mac():
             self._log("macOS 环境：使用本机 Reaper；素材默认挂载于 /Volumes/192.168.3.128/…")
         self._log(f"仓库根目录：{LIB_REPO_ROOT}")
         self._log(f"素材 baseURL：{base_url()}")
-        self._apply_theme(self._theme_mode)
+
+    def _restore_last_video_deferred(self) -> None:
+        last_video = self._cfg.get("last_video")
+        if not last_video:
+            return
+        p = Path(last_video)
+        if not p.is_file():
+            return
+        self._set_video(p, from_import=False, defer_heavy=True)
 
     def _setup_workflow_scroll(self, parent: ttk.Frame) -> None:
         """工作流左侧：内容不足时不显示滚动条；小屏溢出时显示。"""
@@ -929,10 +937,6 @@ class RelaxAsmrApp(tk.Tk):
 
         if self._apply_saved_track_picker_selection(track_id, picker):
             pass
-
-    def _preload_audio_libraries(self) -> None:
-        for tab in self._audio_library_tabs.values():
-            tab.refresh(force=False)
 
     def _on_audio_library_selection(self, track_id: str, wavs: list[Path]) -> None:
         self._save_audio_library_selection(track_id, wavs)
@@ -1690,13 +1694,16 @@ class RelaxAsmrApp(tk.Tk):
         )
 
     def _video_resolution_label(self, video: Path) -> str:
+        from gui.video_library_tab import read_video_quality
+
         quality = read_video_quality(video)
         return f"  {quality}" if quality else ""
 
-    def _format_video_label(self, scene: str, video: Path) -> str:
-        return f"[{scene}] {video}{self._video_resolution_label(video)}"
+    def _format_video_label(self, scene: str, video: Path, *, include_resolution: bool = True) -> str:
+        suffix = self._video_resolution_label(video) if include_resolution else ""
+        return f"[{scene}] {video}{suffix}"
 
-    def _set_video(self, video: Path, *, from_import: bool) -> None:
+    def _set_video(self, video: Path, *, from_import: bool, defer_heavy: bool = False) -> None:
         try:
             scene = derive_scene_id(video)
         except ValueError as exc:
@@ -1709,7 +1716,9 @@ class RelaxAsmrApp(tk.Tk):
         self.scene_id = scene
         if prev_scene != scene:
             self.upload_mp4_custom = None
-        self.lbl_video.configure(text=self._format_video_label(scene, video))
+        self.lbl_video.configure(
+            text=self._format_video_label(scene, video, include_resolution=not defer_heavy)
+        )
         # self.lbl_scene.configure(text=f"场景 ID：{scene}")
         self._cfg["last_video"] = str(video)
         self._cfg["last_video_dir"] = str(video.parent)
@@ -1741,14 +1750,40 @@ class RelaxAsmrApp(tk.Tk):
             self.material_dir = None
         self._refresh_material_label()
 
+        if defer_heavy:
+            self.after(80, self._finish_set_video_heavy)
+            return
+
+        self._finish_set_video_heavy(from_import=from_import)
+
+    def _finish_set_video_heavy(self, from_import: bool = False) -> None:
+        if not self.video_path or not self.scene_id:
+            return
+        scene = self.scene_id
+        video = self.video_path
+
+        def apply_resolution_label(quality: str) -> None:
+            if self.video_path != video or self.scene_id != scene:
+                return
+            suffix = f"  {quality}" if quality else ""
+            self.lbl_video.configure(text=f"[{scene}] {video}{suffix}")
+
+        def load_resolution() -> None:
+            from gui.video_library_tab import read_video_quality
+
+            quality = read_video_quality(video)
+            schedule_on_main(self, lambda q=quality: apply_resolution_label(q))
+
+        threading.Thread(target=load_resolution, daemon=True).start()
+
         # 3. 恢复步骤 4 上次成功的混音 / 合成路径
         self._refresh_step4_outputs(scene)
 
         self._save_config()
         self._update_cover_preview()
-        self._update_preview(self.video_path)
-        scene_id = self.scene_id or getattr(self, 'derive_scene_id', lambda x: x.stem)(self.video_path)
-        self._load_existing_analysis(out_dir, scene_id)
+        self._update_preview(video)
+        out_dir = base_material_dir()
+        self._load_existing_analysis(out_dir, scene)
 
     def _material_dir_for_video(self) -> Path:
         return base_material_dir()
@@ -1926,6 +1961,8 @@ class RelaxAsmrApp(tk.Tk):
         threading.Thread(target=copy_and_play, daemon=True).start()
 
     def _start_video_loop(self, tmp_path: str):
+        import cv2
+
         self._cap = cv2.VideoCapture(tmp_path)
         if not self._cap.isOpened():
             self._show_preview_placeholder("无法打开临时视频文件进行循环播放")
@@ -1936,6 +1973,8 @@ class RelaxAsmrApp(tk.Tk):
     def _play_next_frame(self):
         if self._cap is None:
             return
+
+        import cv2
 
         ret, frame = self._cap.read()
         if not ret:

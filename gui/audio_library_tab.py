@@ -1,4 +1,4 @@
-"""baseURL/audio 下 Boom 声源宫格：悬停循环试听、双击常驻循环、单击多选（最多 9 个）。"""
+"""baseURL/audio 下 Boom 声源宫格：悬停叠加循环试听、双击全局互斥常驻循环、单击多选（最多 9 个）。"""
 
 from __future__ import annotations
 
@@ -20,14 +20,57 @@ _HOVER_DELAY_MS = 400
 _CLICK_DELAY_MS = 250
 _BORDER_THICKNESS = 2
 
-# 全局至多一个常驻循环（跨 rain boom / impact / random / wildlife 各 tab）
+# 双击常驻循环：全局至多一个（同 tab / 跨 tab 互斥）
 _PINNED_TAB: AudioLibraryTab | None = None
 _PINNED_KEY: str | None = None
+_PINNED_PROC: object | None = None
+
+
+def _is_pinned(key: str) -> bool:
+    return _PINNED_KEY == key
+
+
+def _pinned_title(tab: AudioLibraryTab | None, key: str | None) -> str:
+    if not tab or not key:
+        return ""
+    cell = tab._cells.get(key)
+    return str(cell["title"]) if cell else ""
+
+
+def _clear_pin(*, stop_audio: bool = True, log_cancel: bool = True) -> None:
+    global _PINNED_TAB, _PINNED_KEY, _PINNED_PROC
+    old_tab = _PINNED_TAB
+    old_key = _PINNED_KEY
+    proc = _PINNED_PROC
+    _PINNED_TAB = None
+    _PINNED_KEY = None
+    _PINNED_PROC = None
+    if stop_audio and proc is not None:
+        try:
+            from gui.audio_playback import stop_wav_playback
+
+            stop_wav_playback(proc)
+        except Exception:
+            pass
+    if log_cancel and old_tab is not None and old_key:
+        title = _pinned_title(old_tab, old_key)
+        if title:
+            old_tab._log(f"{title} 取消常驻播放")
+    if old_tab is not None:
+        old_tab._refresh_playback_styles()
+
+
+def _unpin_all(*, stop_audio: bool = True) -> None:
+    _clear_pin(stop_audio=stop_audio, log_cancel=False)
 
 
 def resolve_booms_dir(*, layer_id: str = "", booms_dir: Path | None = None) -> Path:
     if booms_dir is not None:
         return booms_dir
+    if layer_id == "2_impact":
+        from scripts.config.paths import audio_layer_dir
+
+        return audio_layer_dir("2_impact")
     return audio_booms_dir(layer_id)
 
 
@@ -45,28 +88,8 @@ def wav_display_title(path: Path) -> str:
     return path.stem
 
 
-def _clear_global_pin(*, stop_audio: bool = True) -> None:
-    global _PINNED_TAB, _PINNED_KEY
-    old_tab = _PINNED_TAB
-    _PINNED_TAB = None
-    _PINNED_KEY = None
-    if stop_audio:
-        try:
-            from gui.audio_playback import stop_wav_playback
-
-            stop_wav_playback()
-        except Exception:
-            pass
-    if old_tab is not None:
-        old_tab._refresh_playback_styles()
-
-
-def _is_globally_pinned(key: str) -> bool:
-    return _PINNED_KEY == key
-
-
 class AudioLibraryTab(ttk.Frame):
-    """宫格展示 booms 声源，支持悬停/双击循环试听与最多 9 项选中。"""
+    """宫格展示 booms 声源：悬停叠加循环试听、双击全局互斥常驻循环、最多 9 项选中。"""
 
     def __init__(
         self,
@@ -87,9 +110,9 @@ class AudioLibraryTab(ttk.Frame):
         self._cells: dict[str, dict] = {}
         self._selected: list[Path] = []
         self._hover_key: str | None = None
+        self._hover_proc = None
         self._play_after_id: str | None = None
         self._click_after_id: str | None = None
-        self._audio_proc = None
         self._loading = False
         self._loaded_once = False
         self._list_signature: str | None = None
@@ -105,7 +128,7 @@ class AudioLibraryTab(ttk.Frame):
         self.lbl_stats.pack(side=tk.LEFT, padx=(12, 0))
         ttk.Label(
             toolbar,
-            text="单击选中/取消 · 悬停循环试听 · 双击常驻循环 · 最多 9 个",
+            text="单击选中/取消 · 悬停叠加循环试听 · 双击常驻循环（再次双击或双击其他格取消）· 最多 9 个",
             foreground="gray",
         ).pack(side=tk.RIGHT)
 
@@ -191,15 +214,20 @@ class AudioLibraryTab(ttk.Frame):
         self.refresh(force=False)
 
     def stop_playback(self) -> None:
-        global _PINNED_TAB
-        if _PINNED_TAB is self:
-            _clear_global_pin(stop_audio=False)
+        """切换 tab 时仅停止悬停试听，双击常驻循环保持播放。"""
+        if self._play_after_id:
+            self.after_cancel(self._play_after_id)
+            self._play_after_id = None
         self._hover_key = None
-        self._stop_audio()
+        self._stop_hover_audio()
+        self._refresh_playback_styles()
 
     def _render_grid(self, items: list[tuple[Path, str]]) -> None:
         self._loading = False
         self._loaded_once = True
+        new_keys = {str(w.resolve()) for w, _ in items}
+        if _PINNED_TAB is self and _PINNED_KEY and _PINNED_KEY not in new_keys:
+            _clear_pin(log_cancel=False)
         self._cells.clear()
         self.stop_playback()
 
@@ -345,12 +373,19 @@ class AudioLibraryTab(ttk.Frame):
     def _apply_cell_style(self, cell: dict) -> None:
         selected = cell.get("selected", False)
         key = cell["key"]
-        playing = self._hover_key == key or _is_globally_pinned(key)
+        pinned = _is_pinned(key)
+        hovering = self._hover_key == key and not pinned
         colors = self._grid_theme
-        if selected:
+        if pinned:
+            cell["border"].configure(
+                highlightbackground=colors.border_pinned,
+                highlightcolor=colors.border_pinned,
+            )
+            cell["lbl"].configure(text=cell["title"], fg=colors.fg_pinned, bg=colors.cell_bg)
+        elif selected:
             cell["border"].configure(highlightbackground=colors.border_selected, highlightcolor=colors.border_selected)
             cell["lbl"].configure(text=cell["title"], fg=colors.fg_selected, bg=colors.cell_bg)
-        elif playing:
+        elif hovering:
             cell["border"].configure(highlightbackground=colors.border_hover, highlightcolor=colors.border_hover)
             cell["lbl"].configure(text=cell["title"], fg=colors.fg_hover, bg=colors.cell_bg)
         else:
@@ -358,68 +393,75 @@ class AudioLibraryTab(ttk.Frame):
             cell["lbl"].configure(text=cell["title"], fg=colors.fg_default, bg=colors.cell_bg)
 
     def _toggle_pin(self, key: str) -> None:
-        global _PINNED_TAB, _PINNED_KEY
-        if _PINNED_TAB is self and _PINNED_KEY == key:
-            _clear_global_pin(stop_audio=True)
-            self._audio_proc = None
+        global _PINNED_TAB, _PINNED_KEY, _PINNED_PROC
+
+        if _PINNED_TAB is not None and _PINNED_KEY == key:
+            _clear_pin(stop_audio=True)
+            if self._hover_key == key:
+                cell = self._cells.get(key)
+                if cell and cell["wav"].is_file():
+                    self._play_hover_loop(cell["wav"], key)
             return
-        _clear_global_pin(stop_audio=True)
+
         cell = self._cells.get(key)
         if not cell:
             return
         wav = cell["wav"]
         if not wav.is_file():
             return
-        _PINNED_TAB = self
-        _PINNED_KEY = key
-        self._hover_key = None
+
+        _clear_pin(stop_audio=True)
+
+        if self._hover_key == key:
+            self._stop_hover_audio()
         if self._play_after_id:
             self.after_cancel(self._play_after_id)
             self._play_after_id = None
-        self._play_pinned_loop(wav, key)
-        self._refresh_playback_styles()
+
+        try:
+            from gui.audio_playback import start_wav_loop
+
+            proc = start_wav_loop(wav)
+            _PINNED_TAB = self
+            _PINNED_KEY = key
+            _PINNED_PROC = proc
+            self._log(f"{cell['title']} 常驻播放")
+            self._refresh_playback_styles()
+        except Exception as exc:
+            self._log(f"常驻播放失败: {exc}")
 
     def _on_cell_enter(self, key: str) -> None:
-        if _PINNED_KEY is not None and key != _PINNED_KEY:
-            _clear_global_pin(stop_audio=True)
-            self._audio_proc = None
-        if _PINNED_KEY == key and _PINNED_TAB is self:
-            if self._play_after_id:
-                self.after_cancel(self._play_after_id)
-                self._play_after_id = None
-            prev_key = self._hover_key
-            self._hover_key = key
-            if prev_key and prev_key != key:
-                prev_cell = self._cells.get(prev_key)
-                if prev_cell:
-                    self._apply_cell_style(prev_cell)
-            cell = self._cells.get(key)
-            if cell:
-                self._apply_cell_style(cell)
-            return
         if self._hover_key == key:
             return
         if self._play_after_id:
             self.after_cancel(self._play_after_id)
             self._play_after_id = None
+
         prev_key = self._hover_key
-        if not (_PINNED_KEY == key and _PINNED_TAB is self):
-            self._stop_audio()
+        if prev_key and prev_key != key and not _is_pinned(prev_key):
+            self._stop_hover_audio()
         if prev_key and prev_key != key:
             prev_cell = self._cells.get(prev_key)
             if prev_cell:
                 self._apply_cell_style(prev_cell)
+
         self._hover_key = key
+        cell = self._cells.get(key)
+        if cell:
+            self._apply_cell_style(cell)
+
+        if _is_pinned(key):
+            return
 
         def start_play() -> None:
-            if self._hover_key != key:
+            if self._hover_key != key or _is_pinned(key):
                 return
             cell = self._cells.get(key)
             if not cell:
                 return
             wav = cell["wav"]
             if wav.is_file():
-                self._play_audio_preview(wav, key, loop=True)
+                self._play_hover_loop(wav, key)
                 if self._hover_key == key:
                     self._apply_cell_style(cell)
 
@@ -436,43 +478,32 @@ class AudioLibraryTab(ttk.Frame):
             self._play_after_id = None
         if self._hover_key == key:
             self._hover_key = None
-            if not _is_globally_pinned(key):
-                self._stop_audio()
+            if not _is_pinned(key):
+                self._stop_hover_audio()
             cell = self._cells.get(key)
             if cell:
                 self._apply_cell_style(cell)
 
-    def _play_pinned_loop(self, wav_path: Path, key: str) -> None:
+    def _play_hover_loop(self, wav_path: Path, key: str) -> None:
         try:
-            from gui.audio_playback import play_wav_loop
+            from gui.audio_playback import start_wav_preview_loop
 
-            if not _is_globally_pinned(key):
+            if self._hover_key != key or _is_pinned(key):
                 return
-            self._audio_proc = play_wav_loop(wav_path)
-        except Exception as exc:
-            self._log(f"常驻播放失败: {exc}")
-
-    def _play_audio_preview(self, wav_path: Path, key: str, *, loop: bool = False) -> None:
-        try:
-            from gui.audio_playback import play_wav_preview
-
-            if self._hover_key != key:
-                return
-            self._audio_proc = play_wav_preview(wav_path, loop=loop)
+            self._hover_proc = start_wav_preview_loop(wav_path)
         except Exception as exc:
             self._log(f"播放失败: {exc}")
 
-    def _stop_audio(self) -> None:
-        if self._play_after_id:
-            self.after_cancel(self._play_after_id)
-            self._play_after_id = None
+    def _stop_hover_audio(self) -> None:
+        if not self._hover_proc:
+            return
         try:
             from gui.audio_playback import stop_wav_playback
 
-            stop_wav_playback(self._audio_proc)
-            self._audio_proc = None
+            stop_wav_playback(self._hover_proc)
         except Exception:
             pass
+        self._hover_proc = None
 
     def _update_stats(self) -> None:
         total = len(self._cells)

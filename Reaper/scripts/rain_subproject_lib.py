@@ -32,7 +32,6 @@ from scripts.config.paths import (
 
 RAIN_ROOT = RAIN_PROJECT_DIR
 SCENES = RAIN_SCENES_DIR
-VIDEO_ROOT = base_url()
 TEMPLATE_DOC = RAIN_ROOT / "scripts" / "scenes" / "_template_video_analysis.md"
 SCAFFOLD_SRC = RAIN_ROOT / "scripts"  # lua + fx 模板
 REAPER_SCRIPTS = Path(__file__).resolve().parent  # Reaper/scripts（共享 ReaScript）

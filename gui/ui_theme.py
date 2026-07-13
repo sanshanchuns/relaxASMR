@@ -31,9 +31,11 @@ class GridTheme:
     fg_muted: str
     fg_hover: str
     fg_selected: str
+    fg_pinned: str
     border_default: str
     border_hover: str
     border_selected: str
+    border_pinned: str
     border_uploaded: str
 
 
@@ -88,9 +90,11 @@ def grid_theme(theme: UiTheme) -> GridTheme:
             fg_muted="#999999",
             fg_hover="#6eb5ff",
             fg_selected="#ffffff",
+            fg_pinned="#D4A8A8",
             border_default="#555555",
             border_hover="#4a90d9",
             border_selected="#e8e8e8",
+            border_pinned="#B07A7A",
             border_uploaded="#666666",
         )
     return GridTheme(
@@ -99,9 +103,11 @@ def grid_theme(theme: UiTheme) -> GridTheme:
         fg_muted="#666666",
         fg_hover="#1a5fb4",
         fg_selected="#000000",
+        fg_pinned="#8B5E5E",
         border_default="#c8c8c8",
         border_hover="#4a90d9",
         border_selected="#000000",
+        border_pinned="#A67B7B",
         border_uploaded="#888888",
     )
 

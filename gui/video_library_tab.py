@@ -9,7 +9,6 @@ from collections.abc import Callable
 from pathlib import Path
 from tkinter import ttk
 
-import cv2
 from PIL import Image, ImageEnhance, ImageTk
 
 from scripts.config.paths import base_url, material_dir
@@ -56,6 +55,8 @@ def _quality_from_size(width: int, height: int) -> str:
 
 
 def read_video_quality(video: Path) -> str:
+    import cv2
+
     cap = cv2.VideoCapture(str(video))
     if not cap.isOpened():
         return ""
@@ -73,6 +74,8 @@ def extract_first_frame(video: Path, out: Path, *, width: int = CELL_W - 4) -> t
         if quality_cache.is_file():
             return True, quality_cache.read_text(encoding="utf-8").strip()
         return True, read_video_quality(video)
+    import cv2
+
     cap = cv2.VideoCapture(str(video))
     if not cap.isOpened():
         return False, ""
