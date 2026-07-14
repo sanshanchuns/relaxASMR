@@ -297,8 +297,6 @@ class TrackPickerUI(ttk.Frame):
         if prev_idx is not None and prev_idx != idx:
             self._stop_audio()
             self._update_cell_visuals(prev_idx)
-        elif prev_idx is None:
-            self._stop_audio()
 
         self._hover_idx = idx
         
@@ -310,9 +308,9 @@ class TrackPickerUI(ttk.Frame):
             wav = cell["wav_path"]
             if wav and wav.is_file():
                 try:
-                    from gui.audio_playback import play_wav_preview
+                    from gui.audio_playback import start_wav_once
 
-                    self._audio_proc = play_wav_preview(wav)
+                    self._audio_proc = start_wav_once(wav)
                 except Exception as e:
                     self._log(f"播放失败: {e}")
                 if getattr(self, "_hover_idx", None) == idx:
@@ -346,11 +344,14 @@ class TrackPickerUI(ttk.Frame):
             self.after_cancel(self._play_after_id)
             self._play_after_id = None
 
+        proc = getattr(self, "_audio_proc", None)
+        self._audio_proc = None
+        if proc is None:
+            return
         try:
             from gui.audio_playback import stop_wav_playback
 
-            stop_wav_playback(getattr(self, "_audio_proc", None))
-            self._audio_proc = None
+            stop_wav_playback(proc)
         except Exception:
             pass
 

@@ -112,6 +112,7 @@ class RelaxAsmrApp(tk.Tk):
         
         self._cap = None
         self._video_loop_id = None
+        self._workflow_restore_after_id: str | None = None
         self.protocol("WM_DELETE_WINDOW", self._on_closing)
 
         self._load_config()
@@ -141,6 +142,9 @@ class RelaxAsmrApp(tk.Tk):
             ):
                 return
         self._stop_video_loop()
+        if self._workflow_restore_after_id:
+            self.after_cancel(self._workflow_restore_after_id)
+            self._workflow_restore_after_id = None
         if self._right_pane_resize_after_id:
             self.after_cancel(self._right_pane_resize_after_id)
             self._right_pane_resize_after_id = None
@@ -197,10 +201,12 @@ class RelaxAsmrApp(tk.Tk):
 
     def _save_config(self) -> None:
         try:
-            CONFIG_PATH.write_text(
+            tmp = CONFIG_PATH.with_suffix(".json.tmp")
+            tmp.write_text(
                 json.dumps(self._cfg, ensure_ascii=False, indent=2) + "\n",
                 encoding="utf-8",
             )
+            tmp.replace(CONFIG_PATH)
         except OSError:
             pass
 
@@ -623,7 +629,7 @@ class RelaxAsmrApp(tk.Tk):
         self.left_notebook.bind("<<NotebookTabChanged>>", self._on_left_tab_changed)
 
         self.after_idle(self._update_left_scrollbar_visibility)
-        self.after_idle(self._restore_last_video_deferred)
+        self.after_idle(self._restore_workflow_state)
         self.after_idle(self._log_startup_info)
 
         last_material = self._cfg.get("last_material_dir")
@@ -641,14 +647,78 @@ class RelaxAsmrApp(tk.Tk):
         self._log(f"仓库根目录：{LIB_REPO_ROOT}")
         self._log(f"素材 baseURL：{base_url()}")
 
-    def _restore_last_video_deferred(self) -> None:
+    def _restore_workflow_state(self, *, retry: int = 0) -> None:
+        """冷启动恢复工作流；NAS 未挂载时重试，并先显示已保存的路径。"""
+        _RETRY_MS = 2000
+        _MAX_RETRIES = 15
+
         last_video = self._cfg.get("last_video")
-        if not last_video:
+        scene = self._cfg.get("last_scene_id")
+
+        if last_video:
+            p = Path(last_video)
+            if not scene:
+                try:
+                    scene = derive_scene_id(p)
+                except ValueError:
+                    scene = p.stem
+            self.scene_id = scene
+            self.video_rel = str(p)
+            self.lbl_video.configure(
+                text=self._format_video_label(scene, p, include_resolution=False)
+            )
+            self._update_preview_video_names(p)
+
+            if p.is_file():
+                self._set_video(p, from_import=False, defer_heavy=True)
+                return
+
+            self.video_path = p
+            if retry == 0:
+                self._restore_workflow_extras(scene)
+                self._log(f"正在等待上次视频可用：{p.name}")
+            if retry < _MAX_RETRIES:
+                if self._workflow_restore_after_id:
+                    self.after_cancel(self._workflow_restore_after_id)
+                self._workflow_restore_after_id = self.after(
+                    _RETRY_MS,
+                    lambda: self._restore_workflow_state(retry=retry + 1),
+                )
+            else:
+                self._log(f"上次视频暂不可访问：{p}")
             return
-        p = Path(last_video)
-        if not p.is_file():
+
+        if scene:
+            self.scene_id = scene
+            self._restore_workflow_extras(scene)
             return
-        self._set_video(p, from_import=False, defer_heavy=True)
+
+        self._restore_workflow_extras(None)
+
+    def _restore_workflow_extras(self, scene: str | None) -> None:
+        """不依赖 loop 视频文件即可恢复的步骤 4 / 5 / 工程 / 分析缓存。"""
+        sid = scene or self.scene_id
+
+        last_rpp = self._cfg.get("last_rpp")
+        if last_rpp:
+            rpp = Path(last_rpp)
+            if rpp.is_file():
+                self.rpp_path = rpp.resolve()
+
+        custom = self._cfg.get("upload_mp4_custom")
+        if custom:
+            cp = Path(custom)
+            if cp.is_file():
+                self.upload_mp4_custom = cp.resolve()
+
+        self._refresh_material_label()
+        if sid:
+            self._refresh_step4_outputs(sid)
+            if not (self.video_path and self.video_path.is_file()):
+                out_dir = base_material_dir()
+                self._load_existing_analysis(out_dir, sid)
+        else:
+            self._refresh_upload_label()
 
     def _setup_workflow_scroll(self, parent: ttk.Frame) -> None:
         """工作流左侧：内容不足时不显示滚动条；小屏溢出时显示。"""
@@ -1339,11 +1409,15 @@ class RelaxAsmrApp(tk.Tk):
                 messagebox.showwarning("提示", f"请选择 export 目录下的 MP4：\n{exp}")
                 return
         self.upload_mp4_custom = picked
+        self._cfg["upload_mp4_custom"] = str(picked)
+        self._save_config()
         self._refresh_upload_label()
         self._log(f"上传视频（自定义）：{picked}")
 
     def _reset_upload_mp4_default(self) -> None:
         self.upload_mp4_custom = None
+        self._cfg.pop("upload_mp4_custom", None)
+        self._save_config()
         self._refresh_upload_label()
         self._log("上传视频已恢复为 export 默认同序号成片")
 
@@ -1761,6 +1835,9 @@ class RelaxAsmrApp(tk.Tk):
         # self.lbl_scene.configure(text=f"场景 ID：{scene}")
         self._cfg["last_video"] = str(video)
         self._cfg["last_video_dir"] = str(video.parent)
+        self._cfg["last_scene_id"] = scene
+        if self.material_dir:
+            self._cfg["last_material_dir"] = str(self.material_dir)
         self._save_config()
         if from_import:
             self._log(f"已选定视频：{video}")
@@ -2764,6 +2841,7 @@ class RelaxAsmrApp(tk.Tk):
                     url = record["url"]
                     self._cfg["last_upload_url"] = url
                     self._mark_scene_uploaded(upload_scene_id, mp4=upload_mp4, url=url)
+                    self._save_config()
                     self._refresh_upload_label()
                     messagebox.showinfo("上传完成", f"视频已上传：\n{url}\n\n可见性：{privacy}")
 

@@ -141,27 +141,28 @@ def _stop_all_unlocked() -> None:
 
 
 def _stop_unlocked(proc: subprocess.Popen | None = None) -> None:
-    """在已持有 _PLAY_LOCK 时调用。"""
-    if proc is not None:
-        if proc in _ACTIVE_PROCS:
-            _stop_one_unlocked(proc)
+    """在已持有 _PLAY_LOCK 时调用。仅停止指定 proc，proc=None 时不做任何事。"""
+    if proc is None:
         return
-    if _ACTIVE_PROCS:
+    if proc in _ACTIVE_PROCS:
+        _stop_one_unlocked(proc)
+
+
+def stop_all_wav_playback() -> None:
+    """停止全部并发试听（应用退出或显式清空时调用）。"""
+    with _PLAY_LOCK:
         _stop_all_unlocked()
-        return
-    _stop_all_unlocked()
 
 
 def stop_wav_playback(proc: subprocess.Popen | None = None) -> None:
-    """停止当前试听。"""
+    """停止指定试听进程。"""
     with _PLAY_LOCK:
         _stop_unlocked(proc)
 
 
 def force_stop_all_playback() -> None:
     """应用退出时强制清理全部并发播放。"""
-    with _PLAY_LOCK:
-        _stop_all_unlocked()
+    stop_all_wav_playback()
     if sys.platform == "darwin":
         return
     if which("ffplay") and (
@@ -360,6 +361,11 @@ def _start_locked(wav_path: Path, *, loop: bool) -> subprocess.Popen | None:
     """启动播放，不中断其他正在播放的流。"""
     with _PLAY_LOCK:
         return _launch_wav(wav_path, loop=loop)
+
+
+def start_wav_once(wav_path: Path) -> subprocess.Popen | None:
+    """单次播放 WAV，与其他并发流叠加。"""
+    return _start_locked(wav_path, loop=False)
 
 
 def play_wav_once(wav_path: Path) -> subprocess.Popen | None:
