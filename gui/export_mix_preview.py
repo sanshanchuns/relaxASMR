@@ -1,4 +1,4 @@
-"""步骤 4 混音成品预览宫格：悬停试听、双击莫兰迪红常驻循环。"""
+"""步骤 4 混音成品预览宫格：悬停试听、双击莫兰迪红常驻循环（前 10 分钟片段）。"""
 
 from __future__ import annotations
 
@@ -11,11 +11,12 @@ from gui.tk_thread import bind_ui_root
 from gui.ui_theme import LIGHT, UiTheme, grid_theme, paint_widget_bg
 
 _HOVER_DELAY_MS = 400
+_PREVIEW_CLIP_SEC = 600.0  # 10 分钟
 _BORDER_THICKNESS = 2
 
 
 class ExportMixPreviewGrid(ttk.Frame):
-    """紧凑混音状态格：悬停循环试听；双击后莫兰迪红常驻，仅再次双击可解除。"""
+    """紧凑混音状态格：悬停/常驻均循环试听开头 10 分钟；双击后莫兰迪红常驻，仅再次双击可解除。"""
 
     def __init__(self, parent: tk.Widget, *, log_fn: Callable[[str], None] | None = None):
         super().__init__(parent)
@@ -134,9 +135,12 @@ class ExportMixPreviewGrid(ttk.Frame):
             self._play_after_id = None
         self._hover = False
         try:
-            from gui.audio_playback import start_wav_loop
+            from gui.audio_playback import start_wav_clip_loop
 
-            self._pinned_proc = start_wav_loop(self._wav_path)
+            self._pinned_proc = start_wav_clip_loop(
+                self._wav_path,
+                max_seconds=_PREVIEW_CLIP_SEC,
+            )
             self._pinned = True
             self._log(f"{self._wav_path.name} 常驻播放")
             self._refresh_border()
@@ -176,9 +180,9 @@ class ExportMixPreviewGrid(ttk.Frame):
         wav = self._wav_path
         self._stop_hover_audio()
         try:
-            from gui.audio_playback import start_wav_preview_loop
+            from gui.audio_playback import start_wav_clip_loop
 
-            self._hover_proc = start_wav_preview_loop(wav)
+            self._hover_proc = start_wav_clip_loop(wav, max_seconds=_PREVIEW_CLIP_SEC)
         except Exception as exc:
             self._log(f"混音试听失败: {exc}")
 

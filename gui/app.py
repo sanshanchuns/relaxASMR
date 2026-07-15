@@ -240,13 +240,13 @@ class RelaxAsmrApp(tk.Tk):
         palette = get_theme(self._theme_mode)
         apply_ttk_theme(ttk.Style(self), palette)
         apply_tk_theme(self, palette, self._theme_tk_widgets())
-        for picker in getattr(self, "track_pickers", {}).values():
+        for picker in list(getattr(self, "track_pickers", {}).values()):
             if hasattr(picker, "apply_theme"):
                 picker.apply_theme(palette)
         mix_preview = getattr(self, "mix_preview_grid", None)
         if mix_preview is not None and hasattr(mix_preview, "apply_theme"):
             mix_preview.apply_theme(palette)
-        for tab in getattr(self, "_audio_library_tabs", {}).values():
+        for tab in list(getattr(self, "_audio_library_tabs", {}).values()):
             if hasattr(tab, "apply_theme"):
                 tab.apply_theme(palette)
         video_tab = getattr(self, "video_library_tab", None)
@@ -622,6 +622,14 @@ class RelaxAsmrApp(tk.Tk):
         self._right_pane_resize_after_id: str | None = None
         self._right_pane_last_h = 0
         self._equalize_retry_count = 0
+
+        last_material = self._cfg.get("last_material_dir")
+        if last_material:
+            p = Path(last_material)
+            if p.is_dir():
+                self.material_dir = p
+        self._apply_theme(self._theme_mode)
+
         self.after_idle(self._equalize_right_pane_once)
         self.after_idle(self._init_preview_panel)
         self.after_idle(self._restore_audio_library_selections)
@@ -631,13 +639,6 @@ class RelaxAsmrApp(tk.Tk):
         self.after_idle(self._update_left_scrollbar_visibility)
         self.after_idle(self._restore_workflow_state)
         self.after_idle(self._log_startup_info)
-
-        last_material = self._cfg.get("last_material_dir")
-        if last_material:
-            p = Path(last_material)
-            if p.is_dir():
-                self.material_dir = p
-        self._apply_theme(self._theme_mode)
 
     def _log_startup_info(self) -> None:
         if is_wsl():

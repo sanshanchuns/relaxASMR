@@ -22,6 +22,7 @@ _ACTIVE_PROC: subprocess.Popen | None = None
 _ACTIVE_STDIN = None
 _ACTIVE_PROCS: set[subprocess.Popen] = set()
 _PROC_STDINS: dict[int, object] = {}
+_FFMPEG_HELPERS: dict[int, subprocess.Popen] = {}
 _S16_CACHE: dict[str, Path] = {}
 
 _POWERSHELL = "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe"
@@ -101,8 +102,16 @@ def _wait_proc(proc: subprocess.Popen | None, timeout: float = _PROC_WAIT_S) -> 
             pass
 
 
+def _stop_pipe_helper(ffplay_proc: subprocess.Popen) -> None:
+    helper = _FFMPEG_HELPERS.pop(ffplay_proc.pid, None)
+    if helper is not None and helper.poll() is None:
+        _kill_proc(helper)
+        _wait_proc(helper, timeout=0.12)
+
+
 def _stop_one_unlocked(proc: subprocess.Popen) -> None:
     """在已持有 _PLAY_LOCK 时停止单路播放。"""
+    _stop_pipe_helper(proc)
     stdin = _PROC_STDINS.pop(proc.pid, None)
     _unregister_proc(proc)
     if proc.poll() is None:
@@ -120,8 +129,10 @@ def _stop_all_unlocked() -> None:
     global _ACTIVE_PROC, _ACTIVE_STDIN
     procs = list(_ACTIVE_PROCS)
     stdins = dict(_PROC_STDINS)
+    helpers = list(_FFMPEG_HELPERS.values())
     _ACTIVE_PROCS.clear()
     _PROC_STDINS.clear()
+    _FFMPEG_HELPERS.clear()
     _ACTIVE_PROC = None
     _ACTIVE_STDIN = None
     for proc in procs:
@@ -134,6 +145,10 @@ def _stop_all_unlocked() -> None:
                 except (OSError, BrokenPipeError, ValueError):
                     pass
             _wait_proc(proc)
+    for helper in helpers:
+        if helper.poll() is None:
+            _kill_proc(helper)
+            _wait_proc(helper, timeout=0.12)
     if sys.platform == "win32":
         import winsound
 
@@ -170,6 +185,12 @@ def force_stop_all_playback() -> None:
     ):
         subprocess.run(
             ["pkill", "-f", "ffplay -nodisp"],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            check=False,
+        )
+        subprocess.run(
+            ["pkill", "-f", "ffmpeg.*stream_loop"],
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
             check=False,
@@ -296,13 +317,121 @@ def _is_large_wav(wav_path: Path) -> bool:
         return False
 
 
+def _probe_wav_pcm(wav_path: Path) -> tuple[int, int]:
+    """读取 WAV 采样率与声道数，供 raw PCM 管道播放使用。"""
+    import wave
+
+    try:
+        with wave.open(str(wav_path), "rb") as wf:
+            return wf.getframerate(), wf.getnchannels()
+    except wave.Error:
+        pass
+    ffprobe = which("ffprobe")
+    if not ffprobe:
+        return 48_000, 2
+    try:
+        out = subprocess.check_output(
+            [
+                ffprobe,
+                "-v",
+                "error",
+                "-select_streams",
+                "a:0",
+                "-show_entries",
+                "stream=sample_rate,channels",
+                "-of",
+                "csv=p=0:s=x",
+                str(wav_path),
+            ],
+            stderr=subprocess.DEVNULL,
+            text=True,
+        ).strip()
+        rate_s, ch_s = out.split("x", 1)
+        return int(rate_s), int(ch_s)
+    except (OSError, subprocess.CalledProcessError, ValueError):
+        return 48_000, 2
+
+
+def _start_ffplay_pipe(
+    wav_path: Path,
+    *,
+    loop: bool,
+) -> subprocess.Popen | None:
+    """大 WAV：ffmpeg 解码 raw PCM → ffplay，读盘与播放解耦，适合 NAS 巨型混音文件。"""
+    ffmpeg_bin = which("ffmpeg")
+    ffplay_bin = which("ffplay")
+    if not ffmpeg_bin or not ffplay_bin:
+        return None
+
+    sample_rate, channels = _probe_wav_pcm(wav_path)
+    ff_cmd = [
+        ffmpeg_bin,
+        "-nostdin",
+        "-hide_banner",
+        "-loglevel",
+        "error",
+        "-thread_queue_size",
+        "8192",
+        "-i",
+        str(wav_path.resolve()),
+        "-f",
+        "s16le",
+        "-acodec",
+        "pcm_s16le",
+        "pipe:1",
+    ]
+    if loop:
+        i_idx = ff_cmd.index("-i")
+        ff_cmd[i_idx:i_idx] = ["-stream_loop", "-1"]
+    play_cmd = [
+        ffplay_bin,
+        "-nodisp",
+        "-loglevel",
+        "quiet",
+        "-f",
+        "s16le",
+        "-ar",
+        str(sample_rate),
+        "-ac",
+        str(channels),
+        "-i",
+        "pipe:0",
+        "-sync",
+        "audio",
+        "-af",
+        "aresample=async=1:first_pts=0",
+    ]
+    if not loop:
+        play_cmd.append("-autoexit")
+    kwargs: dict = {"stderr": subprocess.DEVNULL, "start_new_session": True}
+    if sys.platform == "win32":
+        kwargs["creationflags"] = subprocess.CREATE_NEW_PROCESS_GROUP  # type: ignore[attr-defined]
+
+    ffmpeg_proc = subprocess.Popen(ff_cmd, stdout=subprocess.PIPE, **kwargs)
+    play_kwargs = {
+        "stdin": ffmpeg_proc.stdout,
+        "stdout": subprocess.DEVNULL,
+        "stderr": subprocess.DEVNULL,
+        "start_new_session": True,
+    }
+    if sys.platform == "win32":
+        play_kwargs["creationflags"] = subprocess.CREATE_NEW_PROCESS_GROUP  # type: ignore[attr-defined]
+    ffplay_proc = subprocess.Popen(play_cmd, **play_kwargs)
+    if ffmpeg_proc.stdout is not None:
+        ffmpeg_proc.stdout.close()
+    _register_proc(ffplay_proc)
+    _FFMPEG_HELPERS[ffplay_proc.pid] = ffmpeg_proc
+    return ffplay_proc
+
+
 def _start_ffplay(wav_path: Path, *, loop: bool) -> subprocess.Popen | None:
     if not which("ffplay"):
         return None
+    args = ["ffplay", "-nodisp", "-loglevel", "quiet"]
     if loop:
-        args = ["ffplay", "-nodisp", "-loglevel", "quiet", "-infbuf", "-loop", "0"]
+        args.extend(["-loop", "0", "-sync", "audio"])
     else:
-        args = ["ffplay", "-nodisp", "-loglevel", "quiet", "-infbuf", "-autoexit"]
+        args.extend(["-autoexit", "-sync", "audio"])
     args.append(str(wav_path))
     try:
         return _spawn_playback(args, pipe_stdin=True)
@@ -310,13 +439,51 @@ def _start_ffplay(wav_path: Path, *, loop: bool) -> subprocess.Popen | None:
         return None
 
 
+def _start_large_wav(wav_path: Path, *, loop: bool) -> subprocess.Popen | None:
+    """大 WAV：优先 ffmpeg 管道流式（NAS 友好），失败时回退 ffplay 直读。"""
+    proc = _start_ffplay_pipe(wav_path, loop=loop)
+    if proc is not None:
+        return proc
+    return _start_ffplay(wav_path, loop=loop)
+
+
+def _launch_wav_legacy(wav_path: Path, *, loop: bool) -> subprocess.Popen | None:
+    """WSL SoundPlayer / winsound / afplay，不经过 ffplay（混音片段循环试听）。"""
+    wav_path = Path(wav_path).resolve()
+    from gui.reaper_launch import is_wsl
+
+    if is_wsl():
+        return _play_wsl_soundplayer(wav_path, loop=loop)
+
+    safe = _wav_for_legacy_player(wav_path)
+
+    if sys.platform == "win32":
+        import winsound
+
+        flags = winsound.SND_FILENAME | winsound.SND_ASYNC
+        if loop:
+            flags |= winsound.SND_LOOP
+        winsound.PlaySound(str(safe), flags)
+        return None
+
+    if which("afplay"):
+        return _spawn_playback(["afplay", str(safe)])
+
+    raise FileNotFoundError("未找到 SoundPlayer / winsound / afplay，无法试听混音片段")
+
+
+def _start_locked_legacy(wav_path: Path, *, loop: bool) -> subprocess.Popen | None:
+    with _PLAY_LOCK:
+        return _launch_wav_legacy(wav_path, loop=loop)
+
+
 def _launch_wav(wav_path: Path, *, loop: bool) -> subprocess.Popen | None:
     wav_path = Path(wav_path).resolve()
     from gui.reaper_launch import is_wsl
 
-    # 大体积 WAV 优先 ffplay 边播边解码，避免 SoundPlayer / winsound 整文件读入内存
+    # 大体积 WAV 走 ffmpeg→ffplay 管道，避免 ffplay 直读 NAS 巨型文件约 1min 后卡顿
     if _is_large_wav(wav_path):
-        proc = _start_ffplay(wav_path, loop=loop)
+        proc = _start_large_wav(wav_path, loop=loop)
         if proc is not None:
             return proc
         raise FileNotFoundError("大体积 WAV 需要 ffplay（ffmpeg）流式播放，请安装后重试")
@@ -381,6 +548,16 @@ def play_wav_loop(wav_path: Path) -> subprocess.Popen | None:
 def start_wav_loop(wav_path: Path) -> subprocess.Popen | None:
     """循环播放 WAV，与其他并发流叠加。"""
     return _start_locked(wav_path, loop=True)
+
+
+def start_wav_clip_loop(
+    wav_path: Path,
+    *,
+    max_seconds: float,
+) -> subprocess.Popen | None:
+    """截取开头片段并循环播放（SoundPlayer 路径，不走 ffplay）。"""
+    src = wav_preview_clip(wav_path, max_seconds=max_seconds)
+    return _start_locked_legacy(src, loop=True)
 
 
 def play_wav_preview(

@@ -1,0 +1,1447 @@
+<REAPER_PROJECT 0.1 "7.73/win64" 0 0
+  <NOTES 0 2
+    Rain · MVI_6958 · 3.0h · sleep series
+  >
+  RIPPLE 0 0
+  GROUPOVERRIDE 0 0 0 0
+  AUTOXFADE 128
+  ENVATTACH 3
+  POOLEDENVATTACH 0
+  TCPUIFLAGS 0
+  MIXERUIFLAGS 11 48
+  ENVFADESZ10 40
+  PEAKGAIN 1
+  FEEDBACK 0
+  PANLAW 1
+  PROJOFFS 0 0 0
+  MAXPROJLEN 1 10800
+  GRID 3199 8 1 8 1 0 0 0
+  TIMEMODE 5 9 -1 60 0 0 -1 0
+  VIDEO_CONFIG 0 0 65792
+  PANMODE 3
+  PANLAWFLAGS 3
+  CURSOR 0
+  ZOOM 100 0 0
+  VZOOMEX 6 0
+  USE_REC_CFG 0
+  RECMODE 1
+  SMPTESYNC 0 30 100 40 1000 300 0 0 1 0 0
+  LOOP 0
+  LOOPGRAN 0 4
+  RECORD_PATH "Audio Files" ""
+  <RECORD_CFG
+    ZXZhdxgAAQ==
+  >
+  <APPLYFX_CFG
+  >
+  RENDER_FILE E:\自然之声\to_youtube\export
+  RENDER_PATTERN $project_3h
+  RENDER_FMT 0 2 0
+  RENDER_1X 0
+  RENDER_RANGE 2 0 0 0 1000
+  RENDER_RESAMPLE 3 0 1
+  RENDER_ADDTOPROJ 0
+  RENDER_STEMS 0
+  RENDER_DITHER 0
+  RENDER_TRIM 0.000001 0.000001 0 0
+  TIMELOCKMODE 0
+  TEMPOENVLOCKMODE 1
+  ITEMMIX 1
+  DEFPITCHMODE 589824 0
+  TAKELANE 1
+  SAMPLERATE 48000 1 0
+  <RENDER_CFG
+    ZXZhdxgAAQ==
+  >
+  LOCK 1
+  <METRONOME 6 2
+    VOL 0.25 0.125
+    BEATLEN 4
+    FREQ 1760 880 1
+    SAMPLES "" "" "" ""
+    SPLIGNORE 0 0
+    SPLDEF 2 660 "" 0 ""
+    SPLDEF 3 440 "" 0 ""
+    PATTERN 0 169
+    PATTERNSTR ABBB
+    MULT 1
+  >
+  GLOBAL_AUTO -1
+  TEMPO 60 4 4 1
+  PLAYRATE 1 0 0.25 4
+  SELECTION 10800 0
+  SELECTION2 10800 0
+  MASTERAUTOMODE 0
+  MASTERTRACKHEIGHT 0 0
+  MASTERPEAKCOL 16576
+  MASTERMUTESOLO 0
+  MASTERTRACKVIEW 1 0.6667 0.5 0.5 0 0 0 0 0 0 0 0 0 0 1
+  MASTERHWOUT 0 0 1 0 0 0 0 -1
+  MASTER_NCH 2 2
+  MASTER_VOLUME 1 0 -1 -1 1
+  MASTER_PANMODE 3
+  MASTER_PANLAWFLAGS 3
+  MASTER_FX 0
+  MASTER_SEL 0
+  <MASTERPLAYSPEEDENV
+    EGUID {9803FC77-4787-4218-9C71-A57DA34F2F8C}
+    ACT 0 -1
+    VIS 0 1 1
+    LANEHEIGHT 0 0
+    ARM 0
+    DEFSHAPE 0 -1 -1
+  >
+  <TEMPOENVEX
+    EGUID {63E74D85-0E6A-48A5-9090-8BD519357BB8}
+    ACT 0 -1
+    VIS 1 0 1
+    LANEHEIGHT 0 0
+    ARM 0
+    DEFSHAPE 1 -1 -1
+  >
+  RULERHEIGHT 86 86
+  RULERLANE 1 4 "" 0 -1 0
+  RULERLANE 2 8 "" 0 -1 0
+  <PROJBAY
+  >
+  <TRACK {39D59B9E-2E71-41A5-BF67-B2DE9B3D6B4A}
+    NAME Group
+    PEAKCOL 16576
+    BEAT -1
+    AUTOMODE 0
+    PANLAWFLAGS 3
+    VOLPAN 1 0 -1 -1 1
+    MUTESOLO 0 0 0
+    IPHASE 0
+    PLAYOFFS 0 1
+    ISBUS 1 1
+    BUSCOMP 0 0 0 0 0
+    SHOWINMIX 1 0.6667 0.5 1 0.5 0 0 0 0
+    FIXEDLANES 9 0 0 0 0
+    LANEREC -1 -1 -1 0
+    SEL 0
+    REC 0 0 1 0 0 0 0 0
+    VU 64
+    TRACKHEIGHT 0 0 0 0 0 0 0
+    INQ 0 0 0 0.5 100 0 0 100
+    NCHAN 2
+    FX 1
+    TRACKID {39D59B9E-2E71-41A5-BF67-B2DE9B3D6B4A}
+    PERF 0
+    MIDIOUT -1
+    MAINSEND 1 0
+    <VOLENV2
+      ACT 1 -1
+      VIS 1 1 1
+      LANEHEIGHT 0 0
+      ARM 1
+      DEFSHAPE 0 -1 -1
+      PT 0 0 0
+      PT 5 1 0
+      PT 10800 1 0
+    >
+    <FXCHAIN
+      SHOW 0
+      LASTSEL 0
+      DOCKED 0
+      BYPASS 0 0 0
+      <VST "VST: ReaLimit (Cockos)" realimit.dll 0 "" 1919708532<565354726C6D747265616C696D697400> ""
+        dG1scu5e7f4CAAAAAQAAAAAAAAACAAAAAAAAAAIAAAABAAAAAAAAAAIAAAAAAAAAMAAAAAEAAAAAABAA
+        AwAAAAEAAAAAAAAAAAAAAAAAAAAAAPC/AgAAAAAAAAAAAAAAAAAAAD+fduMQw8Y/
+        AAAQAAAA
+      >
+      FLOATPOS 0 0 0 0
+      FXID {39F0F290-6DA1-468A-A510-360B633BA511}
+      WAK 0 0
+    >
+  >
+  <TRACK {D3F16977-1E34-4C42-8CBF-81E9F47C3877}
+    NAME 1_rain
+    PEAKCOL 16576
+    BEAT -1
+    AUTOMODE 0
+    PANLAWFLAGS 3
+    VOLPAN 17.6401 0 -1 -1 1
+    MUTESOLO 0 0 0
+    IPHASE 0
+    PLAYOFFS 0 1
+    ISBUS 0 0
+    BUSCOMP 0 0 0 0 0
+    SHOWINMIX 1 0.6667 0.5 1 0.5 0 0 0 0
+    FIXEDLANES 9 0 0 0 0
+    LANEREC -1 -1 -1 0
+    SEL 0
+    REC 0 0 1 0 0 0 0 0
+    VU 64
+    TRACKHEIGHT 0 0 0 0 0 0 0
+    INQ 0 0 0 0.5 100 0 0 100
+    NCHAN 2
+    FX 1
+    TRACKID {D3F16977-1E34-4C42-8CBF-81E9F47C3877}
+    PERF 0
+    MIDIOUT -1
+    MAINSEND 1 0
+    <FXCHAIN
+      SHOW 0
+      LASTSEL 0
+      DOCKED 0
+      BYPASS 1 0 0
+      <VST "VST: ReaEQ (Cockos)" reaeq.dll 0 "" 1919247729<56535472656571726561657100000000> ""
+        cWVlcu5e7f4CAAAAAQAAAAAAAAACAAAAAAAAAAIAAAABAAAAAAAAAAIAAAAAAAAAzQAAAAEAAAAAABAA
+        IQAAAAUAAAAAAAAAAQAAAAAAAAAAAFlAAAAAAAAA8D+amZmZmZnpPwEIAAAAAQAAAAAAAAAAwHJAAAAAAAAA8D8AAAAAAAAAQAEIAAAAAQAAAAAAAAAAQI9AAAAAAAAA
+        8D8AAAAAAAAAQAEBAAAAAQAAAJ/vruhzybNAMIH/8g6n2z+amZmZmZnpPwEEAAAAAQAAAAAAAAAAAFlAAAAAAAAA8D8AAAAAAAAAQAEBAAAAAQAAAAAAAAAAAPA/AAAA
+        AP0BAABcAQAAAgABAA==
+        AAAQAAAA
+      >
+      FLOATPOS 0 0 0 0
+      FXID {1662EAFA-B502-4DE3-8F0A-31219007F268}
+      WAK 0 0
+    >
+    <ITEM
+      POSITION 0
+      SNAPOFFS 0
+      LENGTH 10800.0
+      LOOP 1
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {FA5F7E02-A74A-4971-8D39-30C157DCF309}
+      IID 51
+      NAME 14_GentleSwish_FoliageCanopy_WoodRoof_C6_中雨极湿_远方.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {AA9810B5-9523-4B7B-9679-37AB408E2CC4}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\1_rain\sounds\14_GentleSwish_FoliageCanopy_WoodRoof_C6_中雨极湿_远方.wav"
+      >
+    >
+  >
+  <TRACK {C8E978D3-0B01-4753-9B95-BE2185B88966}
+    NAME 2_impact
+    PEAKCOL 16576
+    BEAT -1
+    AUTOMODE 0
+    PANLAWFLAGS 3
+    VOLPAN 0.5 0 -1 -1 1
+    MUTESOLO 0 0 0
+    IPHASE 0
+    PLAYOFFS 0 1
+    ISBUS 0 0
+    BUSCOMP 0 0 0 0 0
+    SHOWINMIX 1 0.6667 0.5 1 0.5 0 0 0 0
+    FIXEDLANES 9 0 0 0 0
+    LANEREC -1 -1 -1 0
+    SEL 0
+    REC 0 0 1 0 0 0 0 0
+    VU 64
+    TRACKHEIGHT 0 0 0 0 0 0 0
+    INQ 0 0 0 0.5 100 0 0 100
+    NCHAN 2
+    FX 0
+    TRACKID {C8E978D3-0B01-4753-9B95-BE2185B88966}
+    PERF 0
+    MIDIOUT -1
+    MAINSEND 1 0
+    <ITEM
+      POSITION 318.3390048275406
+      SNAPOFFS 0
+      LENGTH 29.735292
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {E1CA92F2-D422-4956-A656-AA294FE11A02}
+      IID 2
+      NAME 小雨_木栈道.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {3DAF8D3E-D770-4B0D-B76D-1938A3A4E8B1}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+      >
+    >
+    <ITEM
+      POSITION 561.0308223830475
+      SNAPOFFS 0
+      LENGTH 29.735292
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {7BF44E63-A927-4ADA-9537-0883BF1DCD87}
+      IID 3
+      NAME 小雨_木栈道.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {08C7375E-352A-439D-9438-307B508B83DF}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+      >
+    >
+    <ITEM
+      POSITION 878.219402522576
+      SNAPOFFS 0
+      LENGTH 29.735292
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {607FC44B-FC40-4490-A122-C68B5EFE0A49}
+      IID 4
+      NAME 小雨_木栈道.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E7B52DE7-17AB-4F91-84A0-DA438B5FFAA4}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+      >
+    >
+    <ITEM
+      POSITION 1046.6138114433745
+      SNAPOFFS 0
+      LENGTH 29.735292
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {81DA7F6D-D451-4E59-9BB4-E81266539F93}
+      IID 5
+      NAME 小雨_木栈道.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E77FCA69-CB93-4562-A7E6-FEED31FACD36}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+      >
+    >
+    <ITEM
+      POSITION 1283.5691923438076
+      SNAPOFFS 0
+      LENGTH 29.735292
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {E34925B9-542A-469D-B271-4855AAB22CF0}
+      IID 6
+      NAME 小雨_木栈道.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {0C1D3CF7-C511-431E-B7AD-E17FC13DC572}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+      >
+    >
+    <ITEM
+      POSITION 2164.6933920560455
+      SNAPOFFS 0
+      LENGTH 29.735292
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {D3A47D15-D5C5-4BBC-A037-A1EDCB1FCC1A}
+      IID 7
+      NAME 小雨_木栈道.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {B908BD3A-8B2B-4A18-98B3-36FC98FAC166}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+      >
+    >
+    <ITEM
+      POSITION 2399.5092880763523
+      SNAPOFFS 0
+      LENGTH 29.735292
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {AF63868D-91CA-4DC3-B965-360289B12797}
+      IID 8
+      NAME 小雨_木栈道.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1492A990-E6F6-44DA-B687-F82713772DC3}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+      >
+    >
+    <ITEM
+      POSITION 2404.269106732022
+      SNAPOFFS 0
+      LENGTH 29.735292
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {709FB7E7-AF72-4CCE-89A1-99022A320D99}
+      IID 9
+      NAME 小雨_木栈道.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {67B268BB-9633-4E42-B1F6-507C01706AD7}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+      >
+    >
+    <ITEM
+      POSITION 3502.362775346962
+      SNAPOFFS 0
+      LENGTH 29.735292
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {0420377C-23C6-4F9A-BC9A-D4EE1835E026}
+      IID 10
+      NAME 小雨_木栈道.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {0A818F7C-E973-42F0-9F94-9AB7C46CF63D}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+      >
+    >
+    <ITEM
+      POSITION 2545.8455412306575
+      SNAPOFFS 0
+      LENGTH 29.735292
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {D92636CB-9BC6-4B4F-8BD9-1EA5A8B0E550}
+      IID 11
+      NAME 小雨_木栈道.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1EE9D7C2-72F1-45C9-B384-988D29E14F13}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+      >
+    >
+    <ITEM
+      POSITION 3771.4069482208924
+      SNAPOFFS 0
+      LENGTH 29.735292
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {56C4D93E-095A-4525-A4B7-E39F12FA749E}
+      IID 12
+      NAME 小雨_木栈道.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {CD08D84C-EBD7-407B-928E-3D02CEFD99A5}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+      >
+    >
+    <ITEM
+      POSITION 4945.308874142223
+      SNAPOFFS 0
+      LENGTH 29.735292
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {E3EDF146-0D35-44FA-9AC5-CC34A8B582F9}
+      IID 13
+      NAME 小雨_木栈道.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {28427B6A-45F2-45ED-B619-6400B339B8C5}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+      >
+    >
+    <ITEM
+      POSITION 5323.01959822474
+      SNAPOFFS 0
+      LENGTH 29.735292
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {C7604E69-17D1-4713-B314-D6E4AAF154D1}
+      IID 14
+      NAME 小雨_木栈道.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {C9BCB554-E1FE-4027-B328-49C2F4088195}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+      >
+    >
+    <ITEM
+      POSITION 3344.624282065558
+      SNAPOFFS 0
+      LENGTH 29.735292
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {CA85DC87-D01F-4A8F-8DCB-08DA88970EDF}
+      IID 15
+      NAME 小雨_木栈道.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9B195135-2925-436B-A472-FBA7A10655DE}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+      >
+    >
+    <ITEM
+      POSITION 3751.990248640539
+      SNAPOFFS 0
+      LENGTH 29.735292
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {9DB30060-3CC1-40A6-ADC9-64F32F13A06F}
+      IID 16
+      NAME 小雨_木栈道.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {F469F9FF-D8C9-4392-B7D1-A0AAB06037A4}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+      >
+    >
+    <ITEM
+      POSITION 6483.107144559243
+      SNAPOFFS 0
+      LENGTH 29.735292
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {0EBD894A-454F-4092-8940-3EEC7A6C068B}
+      IID 17
+      NAME 小雨_木栈道.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {DE980B9D-501E-4257-8EA5-1FB2DFC98102}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+      >
+    >
+    <ITEM
+      POSITION 4429.134970288889
+      SNAPOFFS 0
+      LENGTH 29.735292
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {2D98777E-1707-4D7C-8D6E-108E37F3D92B}
+      IID 18
+      NAME 小雨_木栈道.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {CD84A257-2F1D-4688-9F28-6C225D4F5B1D}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+      >
+    >
+    <ITEM
+      POSITION 6657.175078082532
+      SNAPOFFS 0
+      LENGTH 29.735292
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {847F855C-22D6-4291-A299-1383487E64DD}
+      IID 19
+      NAME 小雨_木栈道.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {38BB5A06-FB6C-40DE-A04A-84426B7B589D}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+      >
+    >
+    <ITEM
+      POSITION 6658.548554144793
+      SNAPOFFS 0
+      LENGTH 29.735292
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {18EF7A17-E02F-47A6-BC6F-ED84098DFD0B}
+      IID 20
+      NAME 小雨_木栈道.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {926305A1-3597-4D8D-8E30-FF69A158129D}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+      >
+    >
+    <ITEM
+      POSITION 7039.012933772862
+      SNAPOFFS 0
+      LENGTH 29.735292
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {50BFF65C-AD46-4A92-A05A-A1788BB0D1C1}
+      IID 21
+      NAME 小雨_木栈道.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {01424BAE-3360-4FF5-9AE4-4DCFE9284F1C}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+      >
+    >
+    <ITEM
+      POSITION 6561.271629386822
+      SNAPOFFS 0
+      LENGTH 29.735292
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {8466FC4A-2EB7-48BC-BF05-22BECC372260}
+      IID 22
+      NAME 小雨_木栈道.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {5C3F27F8-AC56-4D2A-813F-BE133C8C13A1}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+      >
+    >
+    <ITEM
+      POSITION 7447.305468444634
+      SNAPOFFS 0
+      LENGTH 29.735292
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {2DA8C002-6C66-4BC2-B575-A9B68CD495C4}
+      IID 23
+      NAME 小雨_木栈道.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {8674B4A6-995F-4D6F-B444-AAD8CA6C2F1F}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+      >
+    >
+    <ITEM
+      POSITION 7013.020554285797
+      SNAPOFFS 0
+      LENGTH 29.735292
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {EA207A41-08FD-47F0-BD36-790C7A8138DF}
+      IID 24
+      NAME 小雨_木栈道.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {4EB557F0-1141-4350-AE70-4317F0CAC5F3}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+      >
+    >
+    <ITEM
+      POSITION 8649.386764749897
+      SNAPOFFS 0
+      LENGTH 29.735292
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {57ADBC9F-4480-402B-9E82-0BBE573370E5}
+      IID 25
+      NAME 小雨_木栈道.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {EA97422A-4BF3-40DD-887F-221DB54D5CFB}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+      >
+    >
+    <ITEM
+      POSITION 8328.855176988436
+      SNAPOFFS 0
+      LENGTH 29.735292
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {EA0AEFDA-E060-4982-A8BC-25AD4D53B21E}
+      IID 26
+      NAME 小雨_木栈道.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E0021E9A-FC83-4403-9480-50A15EABC3DA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+      >
+    >
+    <ITEM
+      POSITION 8205.29172506659
+      SNAPOFFS 0
+      LENGTH 29.735292
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {09346F04-3027-4890-B0BE-8E738C458082}
+      IID 27
+      NAME 小雨_木栈道.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {7C25A072-AE96-4A3D-A6BC-283B1B3B422F}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+      >
+    >
+    <ITEM
+      POSITION 8516.64925543041
+      SNAPOFFS 0
+      LENGTH 29.735292
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {99B2A184-B931-4BB8-8DB5-9908D5006A5D}
+      IID 28
+      NAME 小雨_木栈道.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {0B6AD0C9-1304-4EA2-B235-75994DA603BE}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+      >
+    >
+    <ITEM
+      POSITION 9208.128798594515
+      SNAPOFFS 0
+      LENGTH 29.735292
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {3234D0BA-D958-47D3-A0ED-0B95510BCF24}
+      IID 29
+      NAME 小雨_木栈道.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {FB8A2E25-14CD-4C66-8D35-12711F600431}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+      >
+    >
+    <ITEM
+      POSITION 9798.821708039473
+      SNAPOFFS 0
+      LENGTH 29.735292
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {1312DA6F-B456-405D-AD2A-6E8FC4AF4966}
+      IID 30
+      NAME 小雨_木栈道.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {B7415B30-6EC6-455E-AD46-BAB299DEBDBC}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+      >
+    >
+    <ITEM
+      POSITION 9821.585628403529
+      SNAPOFFS 0
+      LENGTH 29.735292
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {8EF8E3F6-5A20-47A2-9D25-306E9BA87B7C}
+      IID 31
+      NAME 小雨_木栈道.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {60D6104D-9222-4DC2-9CD5-ECC6F8A91C30}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+      >
+    >
+    <ITEM
+      POSITION 10007.330366649247
+      SNAPOFFS 0
+      LENGTH 29.735292
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {3D5FBF0F-B3BF-4CA5-9DDC-F906FD772040}
+      IID 32
+      NAME 小雨_木栈道.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {64648A1B-CBC9-4E46-AA7A-051816B7F62D}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+      >
+    >
+    <ITEM
+      POSITION 10409.847650401149
+      SNAPOFFS 0
+      LENGTH 29.735292
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {BAA12C36-8D5D-4D54-8A10-2A0558EA23FD}
+      IID 33
+      NAME 小雨_木栈道.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {C01705BC-7B45-4F7D-8CE2-69768ED443BF}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+      >
+    >
+  >
+  <TRACK {A2D919BE-C539-4EBD-AA92-AA2966776E38}
+    NAME 3_random
+    PEAKCOL 16576
+    BEAT -1
+    AUTOMODE 0
+    PANLAWFLAGS 3
+    VOLPAN 0.1685 0 -1 -1 1
+    MUTESOLO 0 0 0
+    IPHASE 0
+    PLAYOFFS 0 1
+    ISBUS 0 0
+    BUSCOMP 0 0 0 0 0
+    SHOWINMIX 1 0.6667 0.5 1 0.5 0 0 0 0
+    FIXEDLANES 9 0 0 0 0
+    LANEREC -1 -1 -1 0
+    SEL 0
+    REC 0 0 1 0 0 0 0 0
+    VU 64
+    TRACKHEIGHT 0 0 0 0 0 0 0
+    INQ 0 0 0 0.5 100 0 0 100
+    NCHAN 2
+    FX 0
+    TRACKID {A2D919BE-C539-4EBD-AA92-AA2966776E38}
+    PERF 0
+    MIDIOUT -1
+    MAINSEND 1 0
+    <ITEM
+      POSITION 557.8898084844366
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {C91C360B-46F5-49D5-8A7A-487D6C5FDE6A}
+      IID 34
+      NAME QP03 0289 Thunder very distant booming.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {DD1AC6BB-501F-4044-8C9C-2D791F1178AD}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1067.0619096427442
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {10998A83-DA42-48CB-AAD9-01E883A5DB78}
+      IID 35
+      NAME QP03 0289 Thunder very distant booming.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1DB4ACE8-0D3F-4A25-9F4F-5E744FBA5E55}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1651.5707511922897
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {17C23B1D-2DF1-425A-90F8-07090B80BEED}
+      IID 36
+      NAME QP03 0289 Thunder very distant booming.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {740F47FE-E48E-43EB-BB3F-29F54F09D0A1}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2375.352639863426
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {9C74B52D-549D-4381-81FD-17D74E4E2B82}
+      IID 37
+      NAME QP03 0289 Thunder very distant booming.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {25CED417-28D5-4635-A5B8-84FB0E5F2EB1}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2644.555039142098
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {8BEA7864-2CF9-47F5-B515-F1DF614AF734}
+      IID 38
+      NAME QP03 0289 Thunder very distant booming.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {19AAD02A-A02F-404A-84F8-D7C64098FE97}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4494.267469389963
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {F092E575-A0A1-4B19-A144-05723BB66160}
+      IID 39
+      NAME QP03 0289 Thunder very distant booming.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {BCAD9C58-8384-458B-AC29-69AC17C9204E}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 5123.426942750367
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {37759D85-FC54-4D38-BF45-551812E9BCEE}
+      IID 40
+      NAME QP03 0289 Thunder very distant booming.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {D956505F-5F54-45D3-B4FD-B72D9ECEF92C}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3806.945489272833
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {FD0799AA-644D-4AD1-9126-DA47FB98F567}
+      IID 41
+      NAME QP03 0289 Thunder very distant booming.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {5594B43C-C7DC-43C7-AEE4-502EAA4EC701}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4506.660603207931
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {09B341A6-1728-492D-B99C-64E2D31032EA}
+      IID 42
+      NAME QP03 0289 Thunder very distant booming.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {F07EACDF-1489-4C69-91D9-E5EFF61C0A1D}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4842.706048970468
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {35C1726E-6D91-45B2-AF5F-AF319E8DEF25}
+      IID 43
+      NAME QP03 0289 Thunder very distant booming.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {4983C913-0975-4606-9677-5EFF7CEBEBC6}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 5752.632828006842
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {D53D84BF-68C1-4E3C-85C1-A333E9540E11}
+      IID 44
+      NAME QP03 0289 Thunder very distant booming.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {ED89408E-F3C1-4BB3-A66F-125FA9388691}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 8021.041898062119
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {B1C9E95D-FB82-4EF7-A940-8BEE56D2CBD4}
+      IID 45
+      NAME QP03 0289 Thunder very distant booming.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {71C46476-E526-42C9-B3B0-7EBF6639BD69}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 7494.352496076242
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {00EF7DAA-300E-4241-98AE-CF58CC03FCAF}
+      IID 46
+      NAME QP03 0289 Thunder very distant booming.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {3EF7052D-AA6E-4C3B-8BC3-4580B97BA330}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 8728.820816344125
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {04E4CEDE-CC27-4A3D-95F8-B3C6BCAFC961}
+      IID 47
+      NAME QP03 0289 Thunder very distant booming.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {7F9C92AF-F926-4307-88E2-D0358C225DE3}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 8617.057997471555
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {2E6C0F59-5ACC-4520-AABC-6CB8CF99C01D}
+      IID 48
+      NAME QP03 0289 Thunder very distant booming.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {60E3BFFB-456D-461F-B005-ECC6007745AE}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 9322.740609356948
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {050950BB-CF13-4CC2-B3AA-D657CED1F3E1}
+      IID 49
+      NAME QP03 0289 Thunder very distant booming.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {07A0404E-F12E-4DE5-963C-4E9ED825CA81}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 10146.554711482564
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {5D86A4F9-66FA-4C41-9A10-4D84197ED585}
+      IID 50
+      NAME QP03 0289 Thunder very distant booming.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {4BABBA64-2362-4BA7-B62C-0B9EF65841CF}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+  >
+  <TRACK {298B3570-4388-4805-959D-C02904856813}
+    NAME 4_wildlife
+    PEAKCOL 16576
+    BEAT -1
+    AUTOMODE 0
+    PANLAWFLAGS 3
+    VOLPAN 1.0 0 -1 -1 1
+    MUTESOLO 0 0 0
+    IPHASE 0
+    PLAYOFFS 0 1
+    ISBUS 0 0
+    BUSCOMP 0 0 0 0 0
+    SHOWINMIX 1 0.6667 0.5 1 0.5 0 0 0 0
+    FIXEDLANES 9 0 0 0 0
+    LANEREC -1 -1 -1 0
+    SEL 0
+    REC 0 0 1 0 0 0 0 0
+    VU 64
+    TRACKHEIGHT 0 0 0 0 0 0 0
+    INQ 0 0 0 0.5 100 0 0 100
+    NCHAN 2
+    FX 1
+    TRACKID {298B3570-4388-4805-959D-C02904856813}
+    PERF 0
+    MIDIOUT -1
+    MAINSEND 1 0
+    <FXCHAIN
+      SHOW 0
+      LASTSEL 0
+      DOCKED 0
+      BYPASS 1 0 0
+      <VST "VST: ReaVerbate (Cockos)" reaverbate.dll 0 "" 1920361016<56535472766238726561766572626174> ""
+        OGJ2cu9e7f4CAAAAAQAAAAAAAAACAAAAAAAAAAIAAAABAAAAAAAAAAIAAAAAAAAAKAAAAAAAAAAAABAA
+        776t3g3wrd5DAgA/AACAP9oEPD817P8+AACAPwAAAAAAAIA/AAAAAA==
+        AAAQAAAA
+      >
+      FLOATPOS 0 0 0 0
+      FXID {9D639E95-386B-496D-8D32-858A618C4A75}
+      WAK 0 0
+    >
+  >
+  <TRACK {C73F9C98-EAB1-4EDB-BC44-CBB9511CB28E}
+    NAME video
+    PEAKCOL 16576
+    BEAT -1
+    AUTOMODE 0
+    PANLAWFLAGS 3
+    VOLPAN 0.0 0 -1 -1 1
+    MUTESOLO 1 0 0
+    IPHASE 0
+    PLAYOFFS 0 1
+    ISBUS 2 -1
+    BUSCOMP 0 0 0 0 0
+    SHOWINMIX 1 0.6667 0.5 1 0.5 0 0 0 0
+    FIXEDLANES 9 0 0 0 0
+    LANEREC -1 -1 -1 0
+    SEL 0
+    REC 0 0 1 0 0 0 0 0
+    VU 64
+    TRACKHEIGHT 0 0 0 0 0 0 0
+    INQ 0 0 0 0.5 100 0 0 100
+    NCHAN 2
+    FX 0
+    TRACKID {C73F9C98-EAB1-4EDB-BC44-CBB9511CB28E}
+    PERF 0
+    MIDIOUT -1
+    MAINSEND 1 0
+    <ITEM
+      POSITION 0
+      SNAPOFFS 0
+      LENGTH 10.459
+      LOOP 1
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {370AAFF9-6358-495A-B4A8-8A37577CFF62}
+      IID 1
+      NAME MVI_6958_loop_0.99_dur_11_fhd_01轻雨.mp4
+      VOLPAN 0.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {35BFD662-65D4-482B-8A96-2A9EC6C92F05}
+      <SOURCE VIDEO
+        FILE "E:\自然之声\to_youtube\MVI_6958_loop_0.99_dur_11_fhd_01轻雨.mp4"
+      >
+    >
+  >
+  <EXTENSIONS
+  >
+>
