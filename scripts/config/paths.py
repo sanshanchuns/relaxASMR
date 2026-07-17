@@ -1,7 +1,7 @@
 """统一路径管理器（Path Manager）。
 
 代码仓库（REPO_ROOT）仅含脚本与 Reaper 工程模板；
-所有媒体素材位于 baseURL（WSL 默认 /mnt/e/...，Mac 默认 /Volumes/192.168.3.128/...）。
+所有媒体素材位于 baseURL（同一 NAS 共享，WSL 可为 /mnt/z 或 /mnt/e，Mac 为 /Volumes/192.168.3.128/...）。
 """
 
 from __future__ import annotations
@@ -16,14 +16,17 @@ from typing import Callable
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
-# 各平台默认 baseURL（局域网 NAS 同一共享目录）
-DEFAULT_BASE_URL_WSL = Path("/mnt/e/自然之声/to_youtube")
-DEFAULT_BASE_URL_MAC = Path("/Volumes/192.168.3.128/自然之声/to_youtube")
-
-# WSL ↔ Mac 路径互转（相对 baseURL 的同一素材树）
-_CROSS_BASE_PREFIXES: tuple[tuple[str, str], ...] = (
-    ("/mnt/e/自然之声/to_youtube", "/Volumes/192.168.3.128/自然之声/to_youtube"),
+# 同一 NAS 共享目录在各平台的挂载路径（运行时选用第一个存在的）
+_BASE_SUFFIX = "/自然之声/to_youtube"
+BASE_URL_VARIANTS: tuple[str, ...] = (
+    f"/mnt/z{_BASE_SUFFIX}",
+    f"/mnt/e{_BASE_SUFFIX}",
+    f"/Volumes/192.168.3.128{_BASE_SUFFIX}",
 )
+
+# 各平台首选默认（无挂载命中时的回退值）
+DEFAULT_BASE_URL_WSL = Path(BASE_URL_VARIANTS[0])
+DEFAULT_BASE_URL_MAC = Path(BASE_URL_VARIANTS[2])
 
 RAIN_FX_FILENAME = "footagecrate-real-medium-rain-1.mp4"
 RAIN_FX_PNG = "rain_fx.png"
@@ -40,31 +43,45 @@ def default_base_url_for_platform() -> Path:
 
 
 def alternate_base_url() -> Path:
+    """本机另一平台的默认 baseURL（供 base_url 候选列表使用）。"""
     if is_mac():
         return DEFAULT_BASE_URL_WSL
     return DEFAULT_BASE_URL_MAC
 
 
+def _base_url_suffix_for(raw: str) -> str | None:
+    for prefix in BASE_URL_VARIANTS:
+        if raw.startswith(prefix):
+            return raw[len(prefix) :]
+    return None
+
+
 def remap_storage_path(path: Path | str) -> Path:
-    """将另一台机器上的 baseURL 绝对路径映射到本机可用路径。"""
+    """将另一台机器上的 baseURL 绝对路径映射到本机可用路径（e/z/Mac 互认）。"""
     p = Path(path)
     if not p.is_absolute():
         return p
     raw = p.as_posix()
-    for src_prefix, dst_prefix in _CROSS_BASE_PREFIXES:
-        if raw.startswith(src_prefix):
-            alt = Path(dst_prefix + raw[len(src_prefix) :])
+    suffix = _base_url_suffix_for(raw)
+    if suffix is None:
+        return p
+
+    current = base_url().as_posix()
+    if raw.startswith(current):
+        return p
+
+    for prefix in (current, *BASE_URL_VARIANTS):
+        alt = Path(prefix + suffix)
+        try:
             if alt.exists():
                 return alt.resolve()
-        if raw.startswith(dst_prefix):
-            alt = Path(src_prefix + raw[len(dst_prefix) :])
-            if alt.exists():
-                return alt.resolve()
+        except OSError:
+            continue
     return p
 
 
 def base_url() -> Path:
-    """素材根目录 baseURL，优先级：环境变量 > user_config > 本机默认 > 对端默认。"""
+    """素材根目录 baseURL，优先级：环境变量 > user_config > 平台默认 > 其他已知挂载点。"""
     candidates: list[Path] = []
     seen: set[str] = set()
 
@@ -88,6 +105,8 @@ def base_url() -> Path:
             pass
     add(default_base_url_for_platform())
     add(alternate_base_url())
+    for variant in BASE_URL_VARIANTS:
+        add(variant)
 
     for c in candidates:
         try:
