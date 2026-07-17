@@ -34,7 +34,7 @@
   >
   <APPLYFX_CFG
   >
-  RENDER_FILE E:\自然之声\to_youtube\export
+  RENDER_FILE \\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\export
   RENDER_PATTERN $project_3h
   RENDER_FMT 0 2 0
   RENDER_1X 0
@@ -216,7 +216,7 @@
       CHANMODE 0
       GUID {AA9810B5-9523-4B7B-9679-37AB408E2CC4}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\1_rain\sounds\14_GentleSwish_FoliageCanopy_WoodRoof_C6_中雨极湿_远方.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\1_rain\sounds\14_GentleSwish_FoliageCanopy_WoodRoof_C6_中雨极湿_远方.wav"
       >
     >
   >
@@ -265,7 +265,7 @@
       CHANMODE 0
       GUID {3DAF8D3E-D770-4B0D-B76D-1938A3A4E8B1}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
       >
     >
     <ITEM
@@ -287,7 +287,7 @@
       CHANMODE 0
       GUID {08C7375E-352A-439D-9438-307B508B83DF}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
       >
     >
     <ITEM
@@ -309,7 +309,7 @@
       CHANMODE 0
       GUID {E7B52DE7-17AB-4F91-84A0-DA438B5FFAA4}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
       >
     >
     <ITEM
@@ -331,7 +331,7 @@
       CHANMODE 0
       GUID {E77FCA69-CB93-4562-A7E6-FEED31FACD36}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
       >
     >
     <ITEM
@@ -353,7 +353,7 @@
       CHANMODE 0
       GUID {0C1D3CF7-C511-431E-B7AD-E17FC13DC572}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
       >
     >
     <ITEM
@@ -375,7 +375,7 @@
       CHANMODE 0
       GUID {B908BD3A-8B2B-4A18-98B3-36FC98FAC166}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
       >
     >
     <ITEM
@@ -397,7 +397,7 @@
       CHANMODE 0
       GUID {1492A990-E6F6-44DA-B687-F82713772DC3}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
       >
     >
     <ITEM
@@ -419,7 +419,7 @@
       CHANMODE 0
       GUID {67B268BB-9633-4E42-B1F6-507C01706AD7}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
       >
     >
     <ITEM
@@ -441,7 +441,7 @@
       CHANMODE 0
       GUID {0A818F7C-E973-42F0-9F94-9AB7C46CF63D}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
       >
     >
     <ITEM
@@ -463,7 +463,7 @@
       CHANMODE 0
       GUID {1EE9D7C2-72F1-45C9-B384-988D29E14F13}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
       >
     >
     <ITEM
@@ -485,7 +485,7 @@
       CHANMODE 0
       GUID {CD08D84C-EBD7-407B-928E-3D02CEFD99A5}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
       >
     >
     <ITEM
@@ -507,7 +507,7 @@
       CHANMODE 0
       GUID {28427B6A-45F2-45ED-B619-6400B339B8C5}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
       >
     >
     <ITEM
@@ -529,7 +529,7 @@
       CHANMODE 0
       GUID {C9BCB554-E1FE-4027-B328-49C2F4088195}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
       >
     >
     <ITEM
@@ -551,7 +551,7 @@
       CHANMODE 0
       GUID {9B195135-2925-436B-A472-FBA7A10655DE}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
       >
     >
     <ITEM
@@ -573,7 +573,7 @@
       CHANMODE 0
       GUID {F469F9FF-D8C9-4392-B7D1-A0AAB06037A4}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
       >
     >
     <ITEM
@@ -595,7 +595,7 @@
       CHANMODE 0
       GUID {DE980B9D-501E-4257-8EA5-1FB2DFC98102}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
       >
     >
     <ITEM
@@ -617,7 +617,7 @@
       CHANMODE 0
       GUID {CD84A257-2F1D-4688-9F28-6C225D4F5B1D}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
       >
     >
     <ITEM
@@ -639,7 +639,7 @@
       CHANMODE 0
       GUID {38BB5A06-FB6C-40DE-A04A-84426B7B589D}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
       >
     >
     <ITEM
@@ -661,7 +661,7 @@
       CHANMODE 0
       GUID {926305A1-3597-4D8D-8E30-FF69A158129D}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
       >
     >
     <ITEM
@@ -683,7 +683,7 @@
       CHANMODE 0
       GUID {01424BAE-3360-4FF5-9AE4-4DCFE9284F1C}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
       >
     >
     <ITEM
@@ -705,7 +705,7 @@
       CHANMODE 0
       GUID {5C3F27F8-AC56-4D2A-813F-BE133C8C13A1}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
       >
     >
     <ITEM
@@ -727,7 +727,7 @@
       CHANMODE 0
       GUID {8674B4A6-995F-4D6F-B444-AAD8CA6C2F1F}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
       >
     >
     <ITEM
@@ -749,7 +749,7 @@
       CHANMODE 0
       GUID {4EB557F0-1141-4350-AE70-4317F0CAC5F3}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
       >
     >
     <ITEM
@@ -771,7 +771,7 @@
       CHANMODE 0
       GUID {EA97422A-4BF3-40DD-887F-221DB54D5CFB}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
       >
     >
     <ITEM
@@ -793,7 +793,7 @@
       CHANMODE 0
       GUID {E0021E9A-FC83-4403-9480-50A15EABC3DA}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
       >
     >
     <ITEM
@@ -815,7 +815,7 @@
       CHANMODE 0
       GUID {7C25A072-AE96-4A3D-A6BC-283B1B3B422F}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
       >
     >
     <ITEM
@@ -837,7 +837,7 @@
       CHANMODE 0
       GUID {0B6AD0C9-1304-4EA2-B235-75994DA603BE}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
       >
     >
     <ITEM
@@ -859,7 +859,7 @@
       CHANMODE 0
       GUID {FB8A2E25-14CD-4C66-8D35-12711F600431}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
       >
     >
     <ITEM
@@ -881,7 +881,7 @@
       CHANMODE 0
       GUID {B7415B30-6EC6-455E-AD46-BAB299DEBDBC}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
       >
     >
     <ITEM
@@ -903,7 +903,7 @@
       CHANMODE 0
       GUID {60D6104D-9222-4DC2-9CD5-ECC6F8A91C30}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
       >
     >
     <ITEM
@@ -925,7 +925,7 @@
       CHANMODE 0
       GUID {64648A1B-CBC9-4E46-AA7A-051816B7F62D}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
       >
     >
     <ITEM
@@ -947,7 +947,7 @@
       CHANMODE 0
       GUID {C01705BC-7B45-4F7D-8CE2-69768ED443BF}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\2_impact\sounds\小雨_木栈道.wav"
       >
     >
   >
@@ -996,7 +996,7 @@
       CHANMODE 0
       GUID {DD1AC6BB-501F-4044-8C9C-2D791F1178AD}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
       >
     >
     <ITEM
@@ -1018,7 +1018,7 @@
       CHANMODE 0
       GUID {1DB4ACE8-0D3F-4A25-9F4F-5E744FBA5E55}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
       >
     >
     <ITEM
@@ -1040,7 +1040,7 @@
       CHANMODE 0
       GUID {740F47FE-E48E-43EB-BB3F-29F54F09D0A1}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
       >
     >
     <ITEM
@@ -1062,7 +1062,7 @@
       CHANMODE 0
       GUID {25CED417-28D5-4635-A5B8-84FB0E5F2EB1}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
       >
     >
     <ITEM
@@ -1084,7 +1084,7 @@
       CHANMODE 0
       GUID {19AAD02A-A02F-404A-84F8-D7C64098FE97}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
       >
     >
     <ITEM
@@ -1106,7 +1106,7 @@
       CHANMODE 0
       GUID {BCAD9C58-8384-458B-AC29-69AC17C9204E}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
       >
     >
     <ITEM
@@ -1128,7 +1128,7 @@
       CHANMODE 0
       GUID {D956505F-5F54-45D3-B4FD-B72D9ECEF92C}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
       >
     >
     <ITEM
@@ -1150,7 +1150,7 @@
       CHANMODE 0
       GUID {5594B43C-C7DC-43C7-AEE4-502EAA4EC701}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
       >
     >
     <ITEM
@@ -1172,7 +1172,7 @@
       CHANMODE 0
       GUID {F07EACDF-1489-4C69-91D9-E5EFF61C0A1D}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
       >
     >
     <ITEM
@@ -1194,7 +1194,7 @@
       CHANMODE 0
       GUID {4983C913-0975-4606-9677-5EFF7CEBEBC6}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
       >
     >
     <ITEM
@@ -1216,7 +1216,7 @@
       CHANMODE 0
       GUID {ED89408E-F3C1-4BB3-A66F-125FA9388691}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
       >
     >
     <ITEM
@@ -1238,7 +1238,7 @@
       CHANMODE 0
       GUID {71C46476-E526-42C9-B3B0-7EBF6639BD69}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
       >
     >
     <ITEM
@@ -1260,7 +1260,7 @@
       CHANMODE 0
       GUID {3EF7052D-AA6E-4C3B-8BC3-4580B97BA330}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
       >
     >
     <ITEM
@@ -1282,7 +1282,7 @@
       CHANMODE 0
       GUID {7F9C92AF-F926-4307-88E2-D0358C225DE3}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
       >
     >
     <ITEM
@@ -1304,7 +1304,7 @@
       CHANMODE 0
       GUID {60E3BFFB-456D-461F-B005-ECC6007745AE}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
       >
     >
     <ITEM
@@ -1326,7 +1326,7 @@
       CHANMODE 0
       GUID {07A0404E-F12E-4DE5-963C-4E9ED825CA81}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
       >
     >
     <ITEM
@@ -1348,7 +1348,7 @@
       CHANMODE 0
       GUID {4BABBA64-2362-4BA7-B62C-0B9EF65841CF}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
       >
     >
   >
@@ -1438,7 +1438,7 @@
       CHANMODE 0
       GUID {35BFD662-65D4-482B-8A96-2A9EC6C92F05}
       <SOURCE VIDEO
-        FILE "E:\自然之声\to_youtube\MVI_6958_loop_0.99_dur_11_fhd_01轻雨.mp4"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\MVI_6958_loop_0.99_dur_11_fhd_01轻雨.mp4"
       >
     >
   >

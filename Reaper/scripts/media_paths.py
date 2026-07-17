@@ -42,16 +42,25 @@ def resolve_media_mode(media_mode: str, repo_root: Path | None = None) -> str:
 
 
 def wsl_unc_path(path: Path) -> str:
+    """WSL 绝对路径 → Windows Reaper 可读的 UNC。
+
+    默认使用 ``\\\\wsl.localhost\\<distro>\\...``，避免假设 Windows 已映射 Z: 等盘符。
+    若本机 Windows 确实映射了 /mnt/x 到 x:，可设 ``RELAXASMR_MEDIA_WIN_DRIVE=1`` 启用盘符路径。
+    """
     distro = os.environ.get("WSL_DISTRO_NAME", "Ubuntu")
     posix = path.resolve().as_posix()
-    
-    import re
+
+    use_drive = os.environ.get("RELAXASMR_MEDIA_WIN_DRIVE", "").strip().lower() in {
+        "1",
+        "true",
+        "yes",
+    }
     m = re.match(r"^/mnt/([a-zA-Z])/(.*)", posix)
-    if m:
+    if use_drive and m:
         drive = m.group(1).upper()
         rest = m.group(2).replace("/", "\\")
         return f"{drive}:\\{rest}"
-        
+
     if posix.startswith("/"):
         rest = posix[1:].replace("/", "\\")
         return f"\\\\wsl.localhost\\{distro}\\{rest}"

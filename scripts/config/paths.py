@@ -1,7 +1,7 @@
 """统一路径管理器（Path Manager）。
 
 代码仓库（REPO_ROOT）仅含脚本与 Reaper 工程模板；
-所有媒体素材位于 baseURL（同一 NAS 共享，WSL 可为 /mnt/z 或 /mnt/e，Mac 为 /Volumes/192.168.3.128/...）。
+所有媒体素材位于 baseURL（同一 NAS 共享，WSL 默认 /mnt/e，亦兼容 /mnt/z，Mac 为 /Volumes/192.168.3.128/...）。
 """
 
 from __future__ import annotations
@@ -19,8 +19,8 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 # 同一 NAS 共享目录在各平台的挂载路径（运行时选用第一个存在的）
 _BASE_SUFFIX = "/自然之声/to_youtube"
 BASE_URL_VARIANTS: tuple[str, ...] = (
-    f"/mnt/z{_BASE_SUFFIX}",
     f"/mnt/e{_BASE_SUFFIX}",
+    f"/mnt/z{_BASE_SUFFIX}",
     f"/Volumes/192.168.3.128{_BASE_SUFFIX}",
 )
 
@@ -78,6 +78,29 @@ def remap_storage_path(path: Path | str) -> Path:
         except OSError:
             continue
     return p
+
+
+def _posix_from_any_stored(raw: str) -> Path:
+    """user_config / RPP 中可能出现的 Windows、WSL UNC、posix 路径 → posix Path。"""
+    text = raw.strip()
+    if not text:
+        return Path(text)
+    normalized = text.replace("\\", "/")
+    m = re.match(r"^([A-Za-z]):/(.*)$", normalized)
+    if m:
+        return Path(f"/mnt/{m.group(1).lower()}/{m.group(2)}")
+    m = re.match(r"^//wsl\.localhost/[^/]+/(.+)$", normalized, re.I)
+    if m:
+        return Path("/" + m.group(1))
+    return Path(text)
+
+
+def migrate_stored_path(path: Path | str) -> Path:
+    """将历史 z/e/盘符/WSL UNC 路径统一到当前 baseURL 下可用路径。"""
+    p = _posix_from_any_stored(str(path))
+    if not str(path).strip():
+        return p
+    return remap_storage_path(p)
 
 
 def base_url() -> Path:

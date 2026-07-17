@@ -34,7 +34,7 @@
   >
   <APPLYFX_CFG
   >
-  RENDER_FILE E:\自然之声\to_youtube\export
+  RENDER_FILE \\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\export
   RENDER_PATTERN $project_3h
   RENDER_FMT 0 2 0
   RENDER_1X 0
@@ -216,7 +216,7 @@
       CHANMODE 0
       GUID {61F26982-6212-4D82-A9BF-DC974EDFD6ED}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\1_rain\booms\QP01 0011 Rain soft.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\1_rain\booms\QP01 0011 Rain soft.wav"
       >
     >
   >
@@ -292,7 +292,7 @@
       CHANMODE 0
       GUID {D36E27A8-1719-431D-A421-DCAAAD095204}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0290 Thunder distant faint.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0290 Thunder distant faint.wav"
       >
     >
     <ITEM
@@ -314,7 +314,7 @@
       CHANMODE 0
       GUID {555F3FD1-3F6A-4EF4-A1EA-8BC25000296C}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0290 Thunder distant faint.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0290 Thunder distant faint.wav"
       >
     >
     <ITEM
@@ -336,7 +336,7 @@
       CHANMODE 0
       GUID {B2088BE3-5592-4843-89BA-03D70E055735}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0290 Thunder distant faint.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0290 Thunder distant faint.wav"
       >
     >
     <ITEM
@@ -358,7 +358,7 @@
       CHANMODE 0
       GUID {E9E81B58-E3BA-4D44-9AFD-7799C781D8F7}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0290 Thunder distant faint.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0290 Thunder distant faint.wav"
       >
     >
     <ITEM
@@ -380,7 +380,7 @@
       CHANMODE 0
       GUID {688600A9-8EF3-4F17-9439-C7878C6A58CD}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0290 Thunder distant faint.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0290 Thunder distant faint.wav"
       >
     >
     <ITEM
@@ -402,7 +402,7 @@
       CHANMODE 0
       GUID {7B15ABB2-866A-4A64-A066-A93EBD2654F1}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0290 Thunder distant faint.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0290 Thunder distant faint.wav"
       >
     >
     <ITEM
@@ -424,7 +424,7 @@
       CHANMODE 0
       GUID {529BEBF8-A514-4215-A021-CB03DA226C0A}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0290 Thunder distant faint.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0290 Thunder distant faint.wav"
       >
     >
     <ITEM
@@ -446,7 +446,7 @@
       CHANMODE 0
       GUID {469B3BF3-0137-4F67-B29D-73E8B999C1D5}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0290 Thunder distant faint.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0290 Thunder distant faint.wav"
       >
     >
     <ITEM
@@ -468,7 +468,7 @@
       CHANMODE 0
       GUID {B63020B9-BA34-4156-9474-D053F79CE7F4}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0290 Thunder distant faint.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0290 Thunder distant faint.wav"
       >
     >
     <ITEM
@@ -490,7 +490,7 @@
       CHANMODE 0
       GUID {673074A6-29C5-4780-B892-072C6F24537C}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0290 Thunder distant faint.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0290 Thunder distant faint.wav"
       >
     >
     <ITEM
@@ -512,7 +512,7 @@
       CHANMODE 0
       GUID {39335BC8-027E-46C7-8AA1-E0331A7A123D}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0290 Thunder distant faint.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0290 Thunder distant faint.wav"
       >
     >
     <ITEM
@@ -534,7 +534,7 @@
       CHANMODE 0
       GUID {042C73EB-B95A-408B-B9A5-275E0643B19E}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0290 Thunder distant faint.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0290 Thunder distant faint.wav"
       >
     >
     <ITEM
@@ -556,7 +556,7 @@
       CHANMODE 0
       GUID {6F6E5ECE-C64B-4071-980C-BA0AE3D9DE03}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0290 Thunder distant faint.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0290 Thunder distant faint.wav"
       >
     >
     <ITEM
@@ -578,7 +578,7 @@
       CHANMODE 0
       GUID {14832AC0-9E7B-460F-BA73-822BD221AB73}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0290 Thunder distant faint.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0290 Thunder distant faint.wav"
       >
     >
     <ITEM
@@ -600,7 +600,7 @@
       CHANMODE 0
       GUID {37D7FDD5-671C-4D84-B54C-E64E1030FC05}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0290 Thunder distant faint.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0290 Thunder distant faint.wav"
       >
     >
     <ITEM
@@ -622,7 +622,7 @@
       CHANMODE 0
       GUID {CD1A553B-8E12-4903-833D-8C32C8BD7D60}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0290 Thunder distant faint.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0290 Thunder distant faint.wav"
       >
     >
     <ITEM
@@ -644,7 +644,7 @@
       CHANMODE 0
       GUID {97A488DD-B539-41CE-AB11-6AC9B4BDA2E0}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0290 Thunder distant faint.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0290 Thunder distant faint.wav"
       >
     >
   >
@@ -734,7 +734,7 @@
       CHANMODE 0
       GUID {EEDC1CFC-96F9-4BF4-8FFC-04E965FC86BA}
       <SOURCE VIDEO
-        FILE "E:\自然之声\to_youtube\MVI_6972_loop_0.98_dur_6_fhd_01轻雨.mp4"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\MVI_6972_loop_0.98_dur_6_fhd_01轻雨.mp4"
       >
     >
   >

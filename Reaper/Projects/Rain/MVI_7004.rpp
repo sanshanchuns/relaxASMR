@@ -34,7 +34,7 @@
   >
   <APPLYFX_CFG
   >
-  RENDER_FILE E:\自然之声\to_youtube\export
+  RENDER_FILE \\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\export
   RENDER_PATTERN $project_3h
   RENDER_FMT 0 2 0
   RENDER_1X 0
@@ -216,7 +216,7 @@
       CHANMODE 0
       GUID {73FDD0FB-F054-4CEB-94AA-060DE5831B8B}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\1_rain\booms\QP01 0011 Rain soft.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\1_rain\booms\QP01 0011 Rain soft.wav"
       >
     >
   >
@@ -292,7 +292,7 @@
       CHANMODE 0
       GUID {7F3EC291-579D-473F-AB5E-D790A2EF09CE}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP01 0010 Thunder very distant rolling.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP01 0010 Thunder very distant rolling.wav"
       >
     >
     <ITEM
@@ -314,7 +314,7 @@
       CHANMODE 0
       GUID {8F09199C-B86E-4346-A06D-BD928B4820E3}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP01 0010 Thunder very distant rolling.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP01 0010 Thunder very distant rolling.wav"
       >
     >
     <ITEM
@@ -336,7 +336,7 @@
       CHANMODE 0
       GUID {6CB959B9-69A6-41E6-B913-C0243CE6B9E6}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP01 0010 Thunder very distant rolling.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP01 0010 Thunder very distant rolling.wav"
       >
     >
     <ITEM
@@ -358,7 +358,7 @@
       CHANMODE 0
       GUID {D884EC49-54EA-41E0-B99C-AEC0C163B107}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP01 0010 Thunder very distant rolling.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP01 0010 Thunder very distant rolling.wav"
       >
     >
     <ITEM
@@ -380,7 +380,7 @@
       CHANMODE 0
       GUID {A5A8A078-5277-47AF-BD58-4517E4E77BAD}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP01 0010 Thunder very distant rolling.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP01 0010 Thunder very distant rolling.wav"
       >
     >
     <ITEM
@@ -402,7 +402,7 @@
       CHANMODE 0
       GUID {841FF9BC-384B-4678-A42A-65D1AEAE5F0D}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP01 0010 Thunder very distant rolling.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP01 0010 Thunder very distant rolling.wav"
       >
     >
     <ITEM
@@ -424,7 +424,7 @@
       CHANMODE 0
       GUID {86475144-2529-4974-A902-670213C30F6D}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP01 0010 Thunder very distant rolling.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP01 0010 Thunder very distant rolling.wav"
       >
     >
     <ITEM
@@ -446,7 +446,7 @@
       CHANMODE 0
       GUID {9B225300-C2E4-4B50-A3D9-7542F3C2E188}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP01 0010 Thunder very distant rolling.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP01 0010 Thunder very distant rolling.wav"
       >
     >
     <ITEM
@@ -468,7 +468,7 @@
       CHANMODE 0
       GUID {9D46F727-C54D-46A9-B802-B0C102D43D73}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP01 0010 Thunder very distant rolling.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP01 0010 Thunder very distant rolling.wav"
       >
     >
     <ITEM
@@ -490,7 +490,7 @@
       CHANMODE 0
       GUID {6CD34ECD-3CBE-48BA-B245-91CFD297FB03}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP01 0010 Thunder very distant rolling.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP01 0010 Thunder very distant rolling.wav"
       >
     >
     <ITEM
@@ -512,7 +512,7 @@
       CHANMODE 0
       GUID {F7826161-1183-4BAF-883D-DD92FDDAE299}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP01 0010 Thunder very distant rolling.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP01 0010 Thunder very distant rolling.wav"
       >
     >
     <ITEM
@@ -534,7 +534,7 @@
       CHANMODE 0
       GUID {E5C31C5A-2FDD-43D9-BFFC-6E68E9C0BF73}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP01 0010 Thunder very distant rolling.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP01 0010 Thunder very distant rolling.wav"
       >
     >
     <ITEM
@@ -556,7 +556,7 @@
       CHANMODE 0
       GUID {14E2652D-8CDD-498A-85F4-0245518627A9}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP01 0010 Thunder very distant rolling.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP01 0010 Thunder very distant rolling.wav"
       >
     >
     <ITEM
@@ -578,7 +578,7 @@
       CHANMODE 0
       GUID {71BBE94B-BF8D-4896-AF04-880E5D85975E}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP01 0010 Thunder very distant rolling.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP01 0010 Thunder very distant rolling.wav"
       >
     >
     <ITEM
@@ -600,7 +600,7 @@
       CHANMODE 0
       GUID {FA45DEA9-F1A9-4C82-9215-4C066122222A}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP01 0010 Thunder very distant rolling.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP01 0010 Thunder very distant rolling.wav"
       >
     >
     <ITEM
@@ -622,7 +622,7 @@
       CHANMODE 0
       GUID {6E92C107-17F4-4FD1-BDB8-BC121D69CE0D}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP01 0010 Thunder very distant rolling.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP01 0010 Thunder very distant rolling.wav"
       >
     >
     <ITEM
@@ -644,7 +644,7 @@
       CHANMODE 0
       GUID {E1131FD1-0A82-4A93-A70F-5146976F4084}
       <SOURCE WAVE
-        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP01 0010 Thunder very distant rolling.wav"
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP01 0010 Thunder very distant rolling.wav"
       >
     >
   >

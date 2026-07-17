@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"  # Suppress TensorFlow warnings
 
 import sys
@@ -70,6 +71,7 @@ from gui.youtube_material import (  # noqa: E402
     loop_material_dir,
 )
 from scripts.config.paths import (  # noqa: E402
+    DEFAULT_BASE_URL_WSL,
     base_url,
     ensure_base_url_dirs,
     ensure_rain_fx_png,
@@ -83,6 +85,7 @@ from scripts.config.paths import (  # noqa: E402
     material_dir as base_material_dir,
     material_json_path,
     material_metadata_path,
+    migrate_stored_path,
 )
 
 CONFIG_PATH = Path(__file__).resolve().parent / "user_config.json"
@@ -198,8 +201,82 @@ class RelaxAsmrApp(tk.Tk):
                 self._cfg = json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
             except (json.JSONDecodeError, OSError):
                 self._cfg = {}
+        self._cfg.setdefault("base_url", str(DEFAULT_BASE_URL_WSL))
+        if self._migrate_config_paths():
+            self._save_config()
+
+    def _looks_like_stored_media_path(self, text: str) -> bool:
+        text = text.strip()
+        if not text:
+            return False
+        if text.startswith("/mnt/") or text.startswith("\\\\wsl"):
+            return True
+        return bool(re.match(r"^[A-Za-z]:\\", text))
+
+    def _migrate_config_path_value(self, value: object) -> object:
+        if isinstance(value, str) and self._looks_like_stored_media_path(value):
+            return str(migrate_stored_path(value))
+        return value
+
+    def _migrate_config_paths(self) -> bool:
+        changed = False
+        target_base = str(DEFAULT_BASE_URL_WSL)
+        if self._cfg.get("base_url") != target_base:
+            self._cfg["base_url"] = target_base
+            changed = True
+
+        for key in ("last_video", "last_video_dir", "last_material_dir", "last_export_mp4"):
+            if key not in self._cfg:
+                continue
+            new_val = self._migrate_config_path_value(self._cfg[key])
+            if new_val != self._cfg[key]:
+                self._cfg[key] = new_val
+                changed = True
+
+        picker = self._cfg.get("track_picker_selection")
+        if isinstance(picker, dict):
+            for track_id, path in list(picker.items()):
+                new_val = self._migrate_config_path_value(path)
+                if new_val != path:
+                    picker[track_id] = new_val
+                    changed = True
+
+        library = self._cfg.get("audio_library_selection")
+        if isinstance(library, dict):
+            for layer_id, paths in list(library.items()):
+                if not isinstance(paths, list):
+                    continue
+                new_paths = [self._migrate_config_path_value(p) for p in paths]
+                if new_paths != paths:
+                    library[layer_id] = new_paths
+                    changed = True
+
+        uploads = self._cfg.get("uploaded_ids")
+        if isinstance(uploads, dict):
+            for scene_id, entry in list(uploads.items()):
+                if isinstance(entry, dict) and "mp4" in entry:
+                    new_val = self._migrate_config_path_value(entry["mp4"])
+                    if new_val != entry["mp4"]:
+                        entry["mp4"] = new_val
+                        changed = True
+
+        exports = self._cfg.get("export_outputs")
+        if isinstance(exports, dict):
+            for scene_id, outputs in list(exports.items()):
+                if not isinstance(outputs, dict):
+                    continue
+                for kind in ("wav", "mp4"):
+                    if kind not in outputs:
+                        continue
+                    new_val = self._migrate_config_path_value(outputs[kind])
+                    if new_val != outputs[kind]:
+                        outputs[kind] = new_val
+                        changed = True
+
+        return changed
 
     def _save_config(self) -> None:
+        self._cfg["base_url"] = str(base_url())
         try:
             tmp = CONFIG_PATH.with_suffix(".json.tmp")
             tmp.write_text(
