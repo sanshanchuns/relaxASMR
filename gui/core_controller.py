@@ -21,8 +21,9 @@ from scripts.config.common_constants import (
 )
 from scripts.config.paths import audio_layer_dir, clip_matches_path, vlm_matches_path
 
-# 步骤 2 稀疏层（散布轨）：选中后写入 Reaper 轨 2–4
-SCATTER_LAYER_IDS = ("2_impact", "3_random", "4_wildlife")
+# 步骤 2 稀疏层（散布轨）：选中后写入 Reaper 轨 3–4
+SCATTER_LAYER_IDS = ("3_random", "4_wildlife")
+IMPACT_LOOP_LAYER_ID = "2_impact"
 
 # 步骤 2 中竞争 Reaper 1_rain loop 层的三个 tab（track_name）
 RAIN_LOOP_EXCLUSIVE_TRACK_NAMES = frozenset({
@@ -90,8 +91,12 @@ def collect_selected_tracks_for_reaper(
         sel = picker.get_selected()
         if sel:
             selected[tid] = Path(sel)
-            if tid in SCATTER_LAYER_IDS:
+            if tid == IMPACT_LOOP_LAYER_ID:
+                log(f"2_impact 循环层：{Path(sel).name}")
+            elif tid in SCATTER_LAYER_IDS:
                 log(f"{tid} 散布层：{Path(sel).name}")
+        elif tid == IMPACT_LOOP_LAYER_ID:
+            log(f"2_impact 循环层：未选中，生成工程时将留空")
         elif tid in SCATTER_LAYER_IDS:
             log(f"{tid} 散布层：未选中，生成工程时将留空")
     return selected

@@ -26,6 +26,7 @@ AUDIO_BITRATE="192k"
 PRESET="medium"
 ENCODER="auto"  # auto | cpu (libx264) | nvenc (NVIDIA) | videotoolbox (macOS GPU)
 THREADS="0"     # 0 = libx264 auto (use all cores)
+VIDEO_FADE_IN="5"  # seconds; 0 = off. Matches Reaper Group 5s fade-in.
 
 cpu_count() {
   if command -v nproc >/dev/null 2>&1; then
@@ -386,6 +387,8 @@ Usage: export_mp4.sh -v VIDEO -a AUDIO [-o OUTPUT] [options]
       --audio-bitrate B   Default: 192k
       --preset NAME       cpu: x264 preset (default: medium)
                           nvenc: p1–p7 (default: p5)
+      --video-fade-in SEC  Fade video from black at start (default: 5, matches audio)
+      --no-video-fade-in   Disable video fade-in
   -h, --help
 
 Example:
@@ -412,6 +415,8 @@ while [[ $# -gt 0 ]]; do
     --maxrate) MAXRATE="$2"; shift 2 ;;
     --bufsize) BUFSIZE="$2"; shift 2 ;;
     --audio-bitrate) AUDIO_BITRATE="$2"; shift 2 ;;
+    --video-fade-in) VIDEO_FADE_IN="$2"; shift 2 ;;
+    --no-video-fade-in) VIDEO_FADE_IN="0"; shift ;;
     --preset) PRESET="$2"; shift 2 ;;
     -h|--help) usage; exit 0 ;;
     *) echo "Unknown option: $1" >&2; usage >&2; exit 1 ;;
@@ -484,6 +489,14 @@ echo "==> Audio:  $AUDIO"
 echo "==> Output: $OUTPUT"
 echo "==> Video encode: $(video_encode_summary)"
 echo "==> Audio encode: aac ${AUDIO_BITRATE}"
+if awk -v f="$VIDEO_FADE_IN" 'BEGIN {exit (f+0 > 0) ? 0 : 1}'; then
+  fade_d="$VIDEO_FADE_IN"
+  if [[ -n "$TARGET_SEC" && "$TARGET_SEC" != "0" ]]; then
+    fade_d=$(awk -v f="$VIDEO_FADE_IN" -v t="$TARGET_SEC" \
+      'BEGIN {printf "%.3f", (f+0 < t+0 ? f+0 : t+0)}')
+  fi
+  echo "==> Video fade-in: ${fade_d}s (black → content)"
+fi
 if [[ -n "$TARGET_SEC" && "$TARGET_SEC" != "0" ]]; then
   echo "==> Target duration: $(format_elapsed "${TARGET_SEC%.*}") (${TARGET_SEC}s)"
 fi
@@ -508,6 +521,15 @@ for current_enc in "${ENCODER_LIST[@]}"; do
   fi
 
   ffmpeg_args+=(-map 0:v:0 -map 1:a:0)
+
+  if awk -v f="$VIDEO_FADE_IN" 'BEGIN {exit (f+0 > 0) ? 0 : 1}'; then
+    fade_d="$VIDEO_FADE_IN"
+    if [[ -n "$TARGET_SEC" && "$TARGET_SEC" != "0" ]]; then
+      fade_d=$(awk -v f="$VIDEO_FADE_IN" -v t="$TARGET_SEC" \
+        'BEGIN {printf "%.3f", (f+0 < t+0 ? f+0 : t+0)}')
+    fi
+    ffmpeg_args+=(-vf "fade=t=in:st=0:d=${fade_d}")
+  fi
 
   case "$current_enc" in
     cpu)

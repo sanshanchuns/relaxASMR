@@ -197,23 +197,21 @@ def build_asmr_config(
                 "vol": 1.0,
                 "paths": [],
             },
-        ],
-        "scatter_layers": [
             {
                 "track": 2,
                 "id": "2_impact",
                 "name": "雨打树叶",
+                "vol": 0.5,
                 "paths": [],
-                "min_gap_min": 3,
-                "max_gap_min": 8,
-                "randomness": 0.6,
-                "clear_existing": True,
             },
+        ],
+        "scatter_layers": [
             {
                 "track": 3,
                 "id": "3_random",
-                "name": "随机散音",
+                "name": "远处雷声",
                 "paths": [],
+                "count": 100,
                 "min_gap_min": 5,
                 "max_gap_min": 15,
                 "randomness": 0.6,
@@ -292,7 +290,7 @@ def recipe_section_md(cfg: dict, rationales: dict[str, str] | None = None) -> st
     lines = [
         "# 三、四层配方（自动初版）",
         "> 架构：[rain_sound_design.md](../../../../design/rain_series/rain_sound_design.md)",
-        "> 轨 1 = 循环素材层 · 轨 2–4 = 散布层 · 轨 5 = 视频 · `1_rain` 长时包络请手动运行 `asmr_vol_envelope.lua`",
+        "> 轨 1–2 = 循环素材层 · 轨 3–4 = 散布层 · 轨 5 = 视频 · `1_rain` 长时包络请手动运行 `asmr_vol_envelope.lua`",
         "",
         "## 3.1 配方总览",
         "",
@@ -332,7 +330,7 @@ def recipe_section_md(cfg: dict, rationales: dict[str, str] | None = None) -> st
             lines.append(f"| `{lid}` | {short} | {reason} |")
         lines.append("")
     lines.extend([
-        "打开工程后：`asmr_loop_track.lua` 铺循环 → `asmr_vol_envelope.lua` 写 **`1_rain` 包络** → 逐轨 **`asmr_scatter_track.lua`** 散布稀疏层。",
+        "打开工程后：`asmr_loop_track.lua` 铺循环（`1_rain` / 已选 `2_impact`）→ `asmr_vol_envelope.lua` 写 **`1_rain` 包络** → 逐轨 **`asmr_scatter_track.lua`** 散布 `3_random` / `4_wildlife`。",
         "",
     ])
     return "\n".join(lines)

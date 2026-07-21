@@ -46,9 +46,43 @@ def test_build_scene_config_only_uses_grid_selection(tmp_path: Path, monkeypatch
 
     random_layer = next(l for l in cfg["scatter_layers"] if l["id"] == "3_random")
     assert random_layer["paths"] == []
+    assert random_layer["count"] == 100
 
     wild_layer = next(l for l in cfg["scatter_layers"] if l["id"] == "4_wildlife")
     assert Path(wild_layer["paths"][0]).name == "wild.wav"
+
+    impact_layer = next(l for l in cfg["loop_layers"] if l["id"] == "2_impact")
+    assert impact_layer["paths"] == []
+
+
+def test_build_scene_config_2_impact_in_loop_layers(tmp_path: Path, monkeypatch) -> None:
+    video = tmp_path / "MVI_9999_loop.mp4"
+    video.write_bytes(b"v")
+    impact = tmp_path / "hit.wav"
+    impact.write_bytes(b"x")
+
+    monkeypatch.setattr(
+        "rain_subproject_lib.ensure_video_in_assets",
+        lambda _v, _s: (video, "assets/video/MVI_9999_loop.mp4"),
+    )
+    monkeypatch.setattr(
+        "scripts.new_reaper_project.audio_loudness.adjust_1_rain_layer_vol",
+        lambda cfg, **_: None,
+    )
+    monkeypatch.setattr(
+        "scripts.new_reaper_project.audio_loudness.apply_scatter_layer_vols",
+        lambda cfg, **_: None,
+    )
+
+    cfg = build_scene_config_from_gui(
+        video,
+        scene_id="MVI_9999",
+        selected_tracks={"2_impact": impact},
+    )
+
+    impact_layer = next(l for l in cfg["loop_layers"] if l["id"] == "2_impact")
+    assert Path(impact_layer["paths"][0]).name == "hit.wav"
+    assert all(l["id"] != "2_impact" for l in cfg["scatter_layers"])
 
 
 def test_build_scene_config_empty_layers_when_unselected(tmp_path: Path, monkeypatch) -> None:

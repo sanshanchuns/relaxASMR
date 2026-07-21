@@ -1,29 +1,121 @@
 # relaxASMR 工程化工作流
 
-本项目是一套高度自动化的 ASMR 视频工作流，由底层 Python 脚本与 Reaper 脚本配合，并封装为易用的 GUI 界面 (`python -m gui`)。目前已升级至 **5 步一键式全自动工作流**。
+本项目是一套高度自动化的 ASMR 视频工作流，由底层 Python 脚本与 Reaper 脚本配合，并封装为易用的 GUI 界面 (`python -m gui`)。
 
-## 5 步工作流指南
+---
 
-### 1. 导入视频
-- **操作**: 点击【选择 MP4…】，导入一小段由相机构建或下载的 Loop 视频。
-- **效果**: 自动拷贝该视频至规范目录 `assets/loop_video/rain_video/MVI_XXXX/` 下。
+## 5 步工作流（GUI）
 
-### 2. 新建 Reaper 工程 (自动分析 + 物料 + 建轨)
-- **操作**: 设定最终期望输出时长（默认 3 小时），点击【一键分析并生成】。
-- **效果**: 
-  1. 触发 AI 视觉引擎分析视频第一帧，识别其**多维度空间属性**及**雨势**，并在 `vst_params/` 下生成精确匹配名称的 `.rain` VST 配置文件及分析报告。
-  2. 根据目标时长，一键生成配套 YouTube 标题、简介描述 (`youtube.md`) 及优化过排版的缩略图 (`thumbnail.jpg`) 到对应的 `material/` 目录下。
-  3. 基于视频与场景 ID，在 `Reaper/Projects/Rain/subprojects/` 目录下生成同名的 `.rpp` Reaper 工程，内建规范的 7 条分层轨道结构（全部留白待填）。
+| 步骤 | 操作 | 效果 |
+|------|------|------|
+| **1** | 选择 MP4 | 拷贝至 `assets/loop_video/rain_video/MVI_XXXX/` |
+| **2** | 宫格选声源 + 分析 | CLIP/VLM 匹配 `1_rain` 等；生成物料（标题、缩略图等） |
+| **3** | 新建 Reaper 工程 | 按下方「工程生成规则」生成 `.rpp`（可勾选覆盖已有工程） |
+| **4** | 混音 + 合成 MP4 | Headless 渲染 WAV → FFmpeg 合成；默认片头 5 秒 fade-in |
+| **5** | 上传 YouTube | 读取物料 + 成片自动上传 |
 
-### 3. 打开 Reaper 工程
-- **操作**: 点击【在 Reaper 中打开】。
-- **效果**: 一键拉起系统中的 Reaper（对于 WSL，会自动寻找 Windows 版 Reaper 的路径）并加载刚创建的子工程。
-- **人工干预**: 在工程中加载上一步生成的 VST `.rain` 预设，搭配其他素材生成对应时长的环境音效混音，并执行工程的 Render 导出，例如导出成 `MVI_XXXX_3h.wav` 置于 `material/`。
+数据根目录（baseURL）默认：`/mnt/e/自然之声/to_youtube/`（见 `scripts/config/paths.py`）。
 
-### 阶段三: 自动合并视频与音频
-- **原理**: 用 FFmpeg 或无损拼接工具循环 Loop 视频以匹配 3 小时的长音频。
-- **效果**: 脚本会自动定位该场景 `material/` 文件夹内刚刚生成的混音文件，并将其与原始的 Loop 视频进行合并计算。根据视频宽度的不同，将智能打上 `_4k` 或 `_fhd` 等后缀输出。一切在后台运行，并在日志输出框报告进度，不会卡死主界面。
+---
 
-### 5. 一键上传 YouTube
-- **操作**: 配置可见性及账户等，点击【上传到 YouTube】。
-- **效果**: 读取第 2 步准备好的封面、文案，获取第 4 步合成的长视频，自动完成上传！
+## Reaper 工程生成规则（步骤 3）
+
+本节是**人类可读规范**；实现以代码为准（见文末「规则存放位置」）。用户可在 `gui/user_config.json` 覆盖部分响度参数。
+
+### 轨道结构（Rain 四层 + 视频）
+
+| 轨号 | layer_id | 名称 | 模式 | 选中声源时 |
+|------|----------|------|------|------------|
+| 1 | `1_rain` | 主雨势 | 循环 `LOOP 1` 铺满成片时长 | 写循环 item |
+| 2 | `2_impact` | 雨打树叶 | 循环 `LOOP 1` 铺满成片时长 | 写循环 item |
+| 3 | `3_random` | 远处雷声 | 稀疏散布（oneshot） | 随机 **100** 个 item |
+| 4 | `4_wildlife` | 野生生态 | 稀疏散布（oneshot） | 按间隔公式自动算个数 |
+| 5 | video | 循环视频 | 仅渲染用 | 轨道静音 `vol=0` |
+
+未选声源的轨：**留空**，不写入 item。
+
+### 稀疏散布（`3_random` / `4_wildlife`）
+
+| 层 | 个数 | 间隔（分钟） | 随机度 | 说明 |
+|----|------|--------------|--------|------|
+| `3_random` | **固定 100** | min 5 / max 15（用于位置 jitter） | 0.6 | 素材均为**远处雷声** |
+| `4_wildlife` | 按 `(成片时长 − 素材长) ÷ 平均间隔` 估算 | min 12 / max 28 | 0.55 | — |
+
+- 散布 item 的 `VOLPAN` **固定 1.0**；只调**轨道推子**。
+- 位置：在 `[0, 成片时长 − 素材长]` 内均匀分段 + 随机 jitter。
+
+### 轨道音量 / 响度归一
+
+生成工程时（`build_scene_config_from_gui`）用 **ffmpeg loudnorm** 测 LUFS-I（integrated），最长分析 180 秒；多文件时取**最响**一条。
+
+| 层 | 机制 | 默认目标 / 推子 |
+|----|------|-----------------|
+| **`1_rain`** | 动态 LUFS → 轨道推子 | 目标 **−28 LUFS-I**（`lufs_target_min/max`） |
+| **`3_random`** | 动态 LUFS → 轨道推子 | 目标 = 主 bed **+3 LU**（即 **−25 LUFS-I**）；`random_lufs_offset_db` 默认 `3` |
+| **`2_impact`** | legacy 固定推子 | **0.5** |
+| **`4_wildlife`** | legacy 固定推子 | **0.28** |
+
+推子换算：`gain_db = target_lufs − measured_lufs + lufs_fx_compensation_db`，`vol = 10^(gain_db/20)`，限制在 `[0.01, 128]`。
+
+- **`3_random` 测量失败**：推子 fallback **0.35**。
+- **`1_rain` 测量失败**：保持模板默认 vol（1.0）。
+- 主 bed 与 `3_random` **各自**归一化到不同 LUFS 目标，不是「主轨推子 × 比例」。
+
+### Group 总线与 FX
+
+- **Group**：开头 **5 秒** fade-in（`GROUP_FADE_IN_SEC`）；**ReaLimit**（Ceiling −1 dB）。
+- **轨级 FX（生成时写入，默认旁路）**：`1_rain` ReaEQ；`4_wildlife` ReaVerbate。
+- **`1_rain` 长时包络**：`.rpp` 内为平直推子；打开工程后手动运行 `asmr_vol_envelope.lua`。
+
+### Reaper 渲染 / 时间选区（`.rpp` 默认值）
+
+- **Render bounds**：**Entire Project**（`RENDER_RANGE 1 …`，bounds=1）；Headless 渲染（`-renderproject`）据此输出完整成片。
+- **Time selection**：默认选中**前 5 分钟**（`SELECTION` / `SELECTION2` = 300 s），便于在 Reaper 内试听；与 Render bounds 独立（bounds=2 才是 Time selection）。
+- **工程长度**：`MAXPROJLEN` 仍为成片时长（如 3 h = 10800 s）。
+
+### 视频导出（步骤 4）
+
+- 默认 **片头 5 秒** fade-in（`VIDEO_FADE_IN=5`），与 Group 5 秒 fade-in 对齐。
+- 可选：`--no-video-fade-in`、`--video-fade-in SEC`。
+
+---
+
+## 用户可配置项（`gui/user_config.json`）
+
+| 键 | 默认 | 作用 |
+|----|------|------|
+| `lufs_target_min` / `lufs_target_max` | −28 | 主 bed `1_rain` 的 LUFS 目标 |
+| `random_lufs_offset_db` | **+3** | `3_random` 相对主 bed 的 LU 偏移 |
+| `lufs_fx_compensation_db` | 0 | EQ 链响度补偿（dB） |
+| `duration_hours` | 3 | 默认成片时长 |
+| `theme` | — | GUI 浅/深色 |
+
+---
+
+## 规则存放位置（实现源码）
+
+此前规则**分散在代码中**，没有单独设计文档；**本 README 为汇总说明**，修改默认值时请同步改代码常量。
+
+| 内容 | 文件 |
+|------|------|
+| LUFS 目标、偏移、legacy 推子、`3_random` fallback | `scripts/new_reaper_project/audio_loudness.py` |
+| 层配方（轨号、散布 count/gap、时长） | `Reaper/scripts/rain_subproject_lib.py` → `build_asmr_config()` |
+| GUI 步骤 3 选源 + 响度写入 | `Reaper/scripts/rain_subproject_lib.py` → `build_scene_config_from_gui()` |
+| `.rpp` 生成（散布 item、Group fade、FX） | `Reaper/scripts/generate_subproject.py` |
+| baseURL、素材路径 | `scripts/config/paths.py` |
+| 视频 fade-in | `scripts/video_export/export_mp4.sh` |
+| Reaper 内手动散布脚本 | `Reaper/scripts/asmr_scatter_track.lua` |
+| 系列设计背景（非生成默认值） | `design/rain_series/rain_sound_design.md` |
+
+场景 JSON（若存在）：`Reaper/Projects/Rain/scripts/scenes/<scene_id>.json`（由 `create_rain_subproject.py` 写入；GUI 步骤 3 可直接 `build_rpp` 不写 JSON）。
+
+---
+
+## 快速启动
+
+```bash
+cd /path/to/relaxASMR
+python -m gui
+```
+
+WSL 下 Reaper 媒体路径默认使用 `\\wsl.localhost\Ubuntu\mnt\e\...` UNC（见 `Reaper/scripts/media_paths.py`）。

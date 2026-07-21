@@ -25,7 +25,10 @@ def test_apply_scatter_legacy_vol_for_2_and_4(tmp_path: Path) -> None:
     wild = tmp_path / "bird.wav"
     impact.write_bytes(b"x")
     wild.write_bytes(b"y")
-    cfg = _cfg_with_scatter({"2_impact": impact, "4_wildlife": wild})
+    cfg = {
+        "loop_layers": [{"track": 2, "id": "2_impact", "paths": [str(impact)]}],
+        "scatter_layers": [{"track": 4, "id": "4_wildlife", "paths": [str(wild)]}],
+    }
 
     with patch(
         "scripts.new_reaper_project.audio_loudness.adjust_3_random_layer_vol",
@@ -33,13 +36,13 @@ def test_apply_scatter_legacy_vol_for_2_and_4(tmp_path: Path) -> None:
     ):
         apply_scatter_layer_vols(cfg)
 
-    impact_layer = next(l for l in cfg["scatter_layers"] if l["id"] == "2_impact")
+    impact_layer = next(l for l in cfg["loop_layers"] if l["id"] == "2_impact")
     wild_layer = next(l for l in cfg["scatter_layers"] if l["id"] == "4_wildlife")
     assert impact_layer["vol"] == SCATTER_LEGACY_TRACK_VOL["2_impact"]
     assert wild_layer["vol"] == SCATTER_LEGACY_TRACK_VOL["4_wildlife"]
 
 
-def test_adjust_3_random_uses_offset_below_rain_target(tmp_path: Path) -> None:
+def test_adjust_3_random_uses_offset_above_rain_target(tmp_path: Path) -> None:
     boom = tmp_path / "boom.wav"
     boom.write_bytes(b"x")
     cfg = _cfg_with_scatter({"3_random": boom})
@@ -54,12 +57,12 @@ def test_adjust_3_random_uses_offset_below_rain_target(tmp_path: Path) -> None:
         ):
             with patch(
                 "scripts.new_reaper_project.audio_loudness.resolve_3_random_lufs_offset_db",
-                return_value=-10.0,
+                return_value=3.0,
             ):
                 info = adjust_3_random_layer_vol(cfg)
 
     assert info is not None
-    assert info["target_lufs"] == -38.0
+    assert info["target_lufs"] == -25.0
     random_layer = next(l for l in cfg["scatter_layers"] if l["id"] == "3_random")
     expected = round(vol_for_target_lufs(-20.0, -38.0), 4)
     assert random_layer["vol"] == expected

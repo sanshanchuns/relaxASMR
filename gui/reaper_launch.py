@@ -264,7 +264,7 @@ def run_reaper_lua(
 
 
 def _ensure_rpp_full_project_render(rpp: Path, duration_hours: float | None) -> None:
-    """渲染前写入 Entire Project，避免工程内 10s Time Selection 被 -renderproject 采用。"""
+    """渲染前写入 Entire Project，避免工程内 Time Selection 被 -renderproject 采用。"""
     repo = Path(__file__).resolve().parents[1]
     scripts = repo / "Reaper" / "scripts"
     if str(scripts) not in sys.path:

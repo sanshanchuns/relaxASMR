@@ -25,8 +25,8 @@ SCATTER_LEGACY_TRACK_VOL: dict[str, float] = {
     "2_impact": 0.5,
     "4_wildlife": 0.28,
 }
-# 3_random 目标 = 1_rain LUFS 目标 + 此偏移（负值 = 低于主 bed，保留存在感）
-DEFAULT_3_RANDOM_LUFS_OFFSET_DB = -10.0
+# 3_random 目标 = 1_rain LUFS 目标 + 此偏移（正值 = 高于主 bed；远处雷声需更响才听得到）
+DEFAULT_3_RANDOM_LUFS_OFFSET_DB = 3.0
 VOL_FALLBACK_3_RANDOM = 0.35
 
 
@@ -144,7 +144,7 @@ def adjust_3_random_layer_vol(
     *,
     log: Callable[[str], None] | None = None,
 ) -> dict | None:
-    """3_random：按 booms 实测 LUFS 写轨道推子（item 保持 1.0），低于主 bed 约 10 LU。"""
+    """3_random：按 booms 实测 LUFS 写轨道推子（item 保持 1.0），高于主 bed 约 3 LU（远处雷声）。"""
     layer = _find_scatter_layer(cfg, "3_random")
     if not layer:
         return None
@@ -198,8 +198,19 @@ def apply_scatter_layer_vols(
     *,
     log: Callable[[str], None] | None = None,
 ) -> None:
-    """稀疏层推子：3_random 动态 LUFS；2/4 有素材时用 legacy 固定推子；item 均为 1.0。"""
+    """稀疏层推子：3_random 动态 LUFS；4_wildlife legacy 固定；2_impact 循环层 legacy 固定；item 均为 1.0。"""
     adjust_3_random_layer_vol(cfg, log=log)
+
+    for layer in cfg.get("loop_layers", []):
+        lid = layer.get("id", "")
+        if lid != "2_impact" or not _scatter_paths(layer):
+            continue
+        legacy = SCATTER_LEGACY_TRACK_VOL.get(lid)
+        if legacy is None:
+            continue
+        layer["vol"] = legacy
+        if log:
+            log(f"2_impact 推子 vol → {legacy:.2f}（legacy 固定，循环层）")
 
     for layer in cfg.get("scatter_layers", []):
         lid = layer.get("id", "")

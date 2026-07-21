@@ -78,10 +78,17 @@ SCATTER_ITEM_VOL = 1.0
 # Group 总线开头淡入（秒）；统一在生成/渲染前写入 Group VOLENV2
 GROUP_FADE_IN_SEC = 5.0
 
+# 工程时间选区（秒）：Reaper 界面默认选中前 5 分钟（与渲染 bounds 无关）
+RPP_TIME_SELECTION_SEC = 5 * 60
+
+# RENDER_RANGE bounds：0=自定义 1=Entire Project 2=Time selection（Reaper 工程 chunk 文档）
+RPP_RENDER_BOUNDS_ENTIRE_PROJECT = 1
+RPP_RENDER_RANGE_LINE = f"RENDER_RANGE {RPP_RENDER_BOUNDS_ENTIRE_PROJECT} 0 0 0 1000"
+
 VOLENV2_BLOCK_RE = re.compile(r"    <VOLENV2\n(?:.*\n)*?    >\n")
 
 
-# Headless 渲染：RENDER_RANGE 2 = Entire project（-renderproject 不读 GUI，只读工程内设置）
+# Headless 渲染：-renderproject 读 RENDER_RANGE bounds，须为 1（Entire Project）
 
 
 def _project_length_sec_from_rpp(text: str, duration_hours: float | None) -> float:
@@ -98,13 +105,14 @@ def ensure_rpp_full_project_render(
     *,
     duration_hours: float | None = None,
 ) -> bool:
-    """将 RPP 渲染边界设为 Entire Project；时长来自调用方传入的成片时长（小时）。"""
+    """将 RPP 渲染边界设为 Entire Project；时间选区设为前 5 分钟。"""
     text = rpp_path.read_text(encoding="utf-8")
     total_sec = _project_length_sec_from_rpp(text, duration_hours)
     if total_sec <= 0:
         return False
 
     sel_end = int(total_sec) if total_sec == int(total_sec) else total_sec
+    time_selection = RPP_TIME_SELECTION_SEC
     render_range_re = re.compile(r"^(\s*)RENDER_RANGE\s+\d+\s+.*$")
     selection_re = re.compile(r"^(\s*)(SELECTION2?)\s+[\d.]+\s+\S+.*$")
     maxprojlen_re = re.compile(r"^(\s*)MAXPROJLEN\s+\d+\s+[\d.]+\s*$")
@@ -117,14 +125,14 @@ def ensure_rpp_full_project_render(
         stripped = line.rstrip("\r\n")
         m = render_range_re.match(stripped)
         if m:
-            new = f"{m.group(1)}RENDER_RANGE 2 0 0 0 1000"
+            new = f"{m.group(1)}{RPP_RENDER_RANGE_LINE}"
             if new != stripped:
                 changed = True
             out_lines.append(new + "\n")
             continue
         m = selection_re.match(stripped)
         if m:
-            new = f"{m.group(1)}{m.group(2)} {sel_end} 0"
+            new = f"{m.group(1)}{m.group(2)} {time_selection} 0"
             if new != stripped:
                 changed = True
             out_lines.append(new + "\n")
@@ -525,8 +533,7 @@ def build_rpp(cfg: dict, repo_root: Path, rpp_dir: Path, media_mode: str = "auto
     total_sec = hours * 3600
     maxprojlen = int(total_sec)
     render_dir = render_output_dir_for_rpp(repo_root, media_mode)
-    sel_end = int(total_sec) if total_sec == int(total_sec) else total_sec
-    sel_str = str(sel_end)
+    sel_str = str(RPP_TIME_SELECTION_SEC)
 
     header = [
         '<REAPER_PROJECT 0.1 "7.73/win64" 0 0',
@@ -569,7 +576,7 @@ def build_rpp(cfg: dict, repo_root: Path, rpp_dir: Path, media_mode: str = "auto
         f"  RENDER_PATTERN $project_{duration_render_suffix(hours)}",
         "  RENDER_FMT 0 2 0",
         "  RENDER_1X 0",
-        "  RENDER_RANGE 2 0 0 0 1000",
+        f"  {RPP_RENDER_RANGE_LINE}",
         "  RENDER_RESAMPLE 3 0 1",
         "  RENDER_ADDTOPROJ 0",
         "  RENDER_STEMS 0",
@@ -687,44 +694,32 @@ def build_rpp(cfg: dict, repo_root: Path, rpp_dir: Path, media_mode: str = "auto
         max_gap = float(layer.get("max_gap_min", 0)) * 60
         randomness = float(layer.get("randomness", 0))
 
-        if min_gap > 0 and max_gap > 0 and cfg_dur_s > 0:
-            span = cfg_dur_s - ap_len
-            count = math.floor(span / ((min_gap + max_gap) / 2)) if span > 0 else 0
+        fixed_count = layer.get("count")
+        span = cfg_dur_s - ap_len if cfg_dur_s > 0 else 0
+        if fixed_count is not None and int(fixed_count) > 0:
+            count = int(fixed_count)
+        elif min_gap > 0 and max_gap > 0 and span > 0:
+            count = math.floor(span / ((min_gap + max_gap) / 2))
+        else:
+            count = 0
 
+        if span > 0 and count >= 1:
             random.seed(t + 42)
+            for i in range(1, count + 1):
+                progress = i / (count + 1)
+                ideal_pos = progress * span
+                max_jitter = min(ideal_pos - min_gap, span - ideal_pos - min_gap) / 2
+                max_jitter = max(0, max_jitter)
+                jitter = (random.random() * 2 - 1) * randomness * max_jitter
+                pos = ideal_pos + jitter
 
-            if count >= 1:
-                for i in range(1, count + 1):
-                    progress = i / (count + 1)
-                    ideal_pos = progress * span
-                    max_jitter = min(ideal_pos - min_gap, span - ideal_pos - min_gap) / 2
-                    max_jitter = max(0, max_jitter)
-                    jitter = (random.random() * 2 - 1) * randomness * max_jitter
-                    pos = ideal_pos + jitter
-
-                    ap, file_ref, src_type, file_suffix, item_len = random.choice(
-                        media_entries
-                    )
-                    tracks_by_num[t].append(
-                        make_item(
-                            ap.name,
-                            pos,
-                            item_len,
-                            False,
-                            file_ref,
-                            src_type,
-                            SCATTER_ITEM_VOL,
-                            iid,
-                            file_suffix,
-                        )
-                    )
-                    iid += 1
-            else:
-                ap, file_ref, src_type, file_suffix, item_len = random.choice(media_entries)
+                ap, file_ref, src_type, file_suffix, item_len = random.choice(
+                    media_entries
+                )
                 tracks_by_num[t].append(
                     make_item(
                         ap.name,
-                        0,
+                        pos,
                         item_len,
                         False,
                         file_ref,
