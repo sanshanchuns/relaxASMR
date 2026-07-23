@@ -41,5 +41,4 @@ def test_format_step5_upload_label() -> None:
     assert format_step5_upload_label(
         uploaded=False,
         rel_path="export/MVI_7004_3h_fhd.mp4",
-        custom=True,
-    ) == "待上传：export/MVI_7004_3h_fhd.mp4（自定义）"
+    ) == "待上传：export/MVI_7004_3h_fhd.mp4"

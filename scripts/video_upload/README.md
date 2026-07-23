@@ -23,7 +23,7 @@ pip install -r scripts/video_upload/requirements.txt
 
 OAuth 测试用户需在 Cloud Console 的「OAuth 同意屏幕」中添加对应 Google 账号。
 
-**WSL**：首次授权用 **Windows 浏览器**打开 Google 登录页（`explorer.exe` 传完整 URL，避免 `cmd start` 截断 `&` 参数）。授权回调走 `localhost`，WSL2 会自动转发。
+**WSL**：首次授权用 **Windows 默认浏览器**打开 Google 登录页（`rundll32 url.dll,FileProtocolHandler`，避免 `explorer.exe` 误开文件资源管理器、`cmd start` 截断 `&` 参数）。若未自动弹出，终端会打印完整授权链接，手动复制到浏览器即可。授权回调走 `localhost`，WSL2 会自动转发。
 
 ## CLI
 

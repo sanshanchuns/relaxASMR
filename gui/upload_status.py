@@ -30,7 +30,6 @@ def format_media_rel_path(path: Path, *, export_root: Path, base_root: Path) -> 
             return str(path)
 
 
-def format_step5_upload_label(*, uploaded: bool, rel_path: str, custom: bool = False) -> str:
+def format_step5_upload_label(*, uploaded: bool, rel_path: str) -> str:
     state = "已上传" if uploaded else "待上传"
-    suffix = "（自定义）" if custom else ""
-    return f"{state}：{rel_path}{suffix}"
+    return f"{state}：{rel_path}"

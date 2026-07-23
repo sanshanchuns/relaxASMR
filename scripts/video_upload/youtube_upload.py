@@ -152,24 +152,26 @@ def is_wsl() -> bool:
 def open_browser_url(url: str) -> None:
     """WSL 下用 Windows 默认浏览器打开 URL，避免 xdg-open / cmd 截断 & 参数。"""
     if is_wsl():
-        # 勿用 cmd.exe /c start：OAuth URL 含 &，cmd 会截断，导致缺 client_id/redirect_uri
-        explorer = Path("/mnt/c/Windows/explorer.exe")
-        if explorer.is_file():
+        win_sys = Path("/mnt/c/Windows/System32")
+        # explorer.exe 传 URL 在 WSL 常会打开「文件资源管理器」而非浏览器
+        rundll32 = win_sys / "rundll32.exe"
+        if rundll32.is_file():
             subprocess.Popen(
-                ["/init", str(explorer), url],
+                ["/init", str(rundll32), "url.dll,FileProtocolHandler", url],
                 start_new_session=True,
                 cwd="/mnt/c",
             )
             return
-        ps = Path("/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe")
+        ps = win_sys / "WindowsPowerShell" / "v1.0" / "powershell.exe"
         if ps.is_file():
+            ps_url = url.replace("'", "''")
             subprocess.Popen(
-                ["/init", str(ps), "-NoProfile", "-Command", f"Start-Process '{url}'"],
+                ["/init", str(ps), "-NoProfile", "-Command", f"Start-Process '{ps_url}'"],
                 start_new_session=True,
                 cwd="/mnt/c",
             )
             return
-        raise FileNotFoundError("WSL 下找不到 explorer.exe / PowerShell，无法打开浏览器")
+        raise FileNotFoundError("WSL 下找不到 rundll32 / PowerShell，无法打开浏览器")
     import webbrowser
 
     webbrowser.open(url, new=1)
@@ -190,6 +192,8 @@ def run_oauth_local_server(flow, *, on_log: Callable[[str], None] | None = None)
 
         class _WslBrowser:
             def open(self, url: str, new: int = 0, autoraise: bool = True) -> bool:
+                log("若未自动弹出浏览器，请复制以下链接到 Windows 浏览器打开：")
+                log(url)
                 open_browser_url(url)
                 return True
 

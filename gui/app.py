@@ -105,7 +105,6 @@ class RelaxAsmrApp(tk.Tk):
         self.subproject_dir: Path | None = None
         self.rpp_path: Path | None = None
         self.material_dir: Path | None = None
-        self.upload_mp4_custom: Path | None = None
         self._busy = False
         self._render_running = False
         self._export_running = False
@@ -562,19 +561,6 @@ class RelaxAsmrApp(tk.Tk):
             side=tk.LEFT
         )
 
-        row_upload_pick = ttk.Frame(sec4)
-        row_upload_pick.pack(fill=tk.X, pady=(8, 0))
-        ttk.Button(
-            row_upload_pick,
-            text="上传自定义视频",
-            command=self._pick_upload_mp4,
-        ).pack(side=tk.LEFT)
-        ttk.Button(
-            row_upload_pick,
-            text="恢复默认",
-            command=self._reset_upload_mp4_default,
-        ).pack(side=tk.LEFT, padx=(8, 0))
-
         self.lbl_upload = ttk.Label(sec4, text="待上传：—", wraplength=400)
         self.lbl_upload.pack(anchor=tk.W, pady=(8, 0))
         
@@ -782,12 +768,6 @@ class RelaxAsmrApp(tk.Tk):
             rpp = Path(last_rpp)
             if rpp.is_file():
                 self.rpp_path = rpp.resolve()
-
-        custom = self._cfg.get("upload_mp4_custom")
-        if custom:
-            cp = Path(custom)
-            if cp.is_file():
-                self.upload_mp4_custom = cp.resolve()
 
         self._refresh_material_label()
         if sid:
@@ -1407,16 +1387,11 @@ class RelaxAsmrApp(tk.Tk):
     def _find_latest_mp4_for_scene(self, scene_id: str) -> Path | None:
         return find_export_mp4_for_scene(scene_id, hours=self._target_duration_hours())
 
-    def _default_upload_mp4(self) -> Path | None:
-        """步骤 5 默认上传：baseURL/export 下与步骤 1 同序号的成片 mp4。"""
+    def _resolve_upload_mp4(self) -> Path | None:
+        """步骤 5 上传：baseURL/export 下与步骤 1 同序号的成片 mp4。"""
         if not self.scene_id:
             return None
         return self._resolve_valid_export_mp4(self.scene_id)
-
-    def _resolve_upload_mp4(self) -> Path | None:
-        if self.upload_mp4_custom and self.upload_mp4_custom.is_file():
-            return self.upload_mp4_custom.resolve()
-        return self._default_upload_mp4()
 
     def _format_media_rel_path(self, path: Path) -> str:
         from gui.upload_status import format_media_rel_path
@@ -1432,22 +1407,16 @@ class RelaxAsmrApp(tk.Tk):
             scene_num = get_scene_number(derive_scene_id(mp4))
         except ValueError:
             scene_num = None
-        custom = bool(
-            self.upload_mp4_custom
-            and mp4.resolve() == self.upload_mp4_custom.resolve()
-        )
         if scene_num and self._is_video_uploaded(scene_num):
             self._maybe_upgrade_uploaded_entry(scene_num)
             display = self._resolve_uploaded_mp4_path(scene_num, current=mp4) or mp4
             return format_step5_upload_label(
                 uploaded=True,
                 rel_path=self._format_media_rel_path(display),
-                custom=custom,
             )
         return format_step5_upload_label(
             uploaded=False,
             rel_path=self._format_media_rel_path(mp4),
-            custom=custom,
         )
 
     def _refresh_upload_label(self) -> None:
@@ -1468,36 +1437,6 @@ class RelaxAsmrApp(tk.Tk):
             lambda text: self.lbl_upload.configure(text=text),
             format_status=self._format_transfer_progress,
         )
-
-    def _pick_upload_mp4(self) -> None:
-        exp = export_dir()
-        initial = str(exp) if exp.is_dir() else self._video_dialog_initialdir()
-        path = filedialog.askopenfilename(
-            title="选择 export 目录下的上传视频",
-            initialdir=initial,
-            filetypes=[("MP4 视频", "*.mp4"), ("所有文件", "*.*")],
-        )
-        if not path:
-            return
-        picked = Path(path).resolve()
-        if exp.is_dir():
-            try:
-                picked.relative_to(exp.resolve())
-            except ValueError:
-                messagebox.showwarning("提示", f"请选择 export 目录下的 MP4：\n{exp}")
-                return
-        self.upload_mp4_custom = picked
-        self._cfg["upload_mp4_custom"] = str(picked)
-        self._save_config()
-        self._refresh_upload_label()
-        self._log(f"上传视频（自定义）：{picked}")
-
-    def _reset_upload_mp4_default(self) -> None:
-        self.upload_mp4_custom = None
-        self._cfg.pop("upload_mp4_custom", None)
-        self._save_config()
-        self._refresh_upload_label()
-        self._log("上传视频已恢复为 export 默认同序号成片")
 
     def _find_loop_video_for_scene(self, scene_id: str) -> Path | None:
         if self.video_path and self.scene_id == scene_id and self.video_path.is_file():
@@ -1904,8 +1843,6 @@ class RelaxAsmrApp(tk.Tk):
         self.video_rel = str(video)
         prev_scene = self.scene_id
         self.scene_id = scene
-        if prev_scene != scene:
-            self.upload_mp4_custom = None
         self._update_preview_video_names(video)
         self.lbl_video.configure(
             text=self._format_video_label(scene, video, include_resolution=not defer_heavy)
@@ -2844,7 +2781,7 @@ class RelaxAsmrApp(tk.Tk):
         if not upload_mp4 or not upload_mp4.is_file():
             messagebox.showwarning(
                 "提示",
-                "未找到待上传视频。\n请先完成步骤 4 合成 export 成片，或点击「上传自定义视频」选择 export 目录下的 MP4。",
+                "未找到待上传视频。\n请先完成步骤 4 合成 export 成片。",
             )
             return
 
