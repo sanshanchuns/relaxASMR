@@ -87,6 +87,13 @@ from scripts.config.paths import (  # noqa: E402
     material_metadata_path,
     migrate_stored_path,
 )
+from scripts.config.staging_export import (  # noqa: E402
+    finalize_export,
+    local_staging_dir,
+    rpp_staging_for_render,
+    staged_mp4_inputs,
+    use_export_staging,
+)
 
 CONFIG_PATH = Path(__file__).resolve().parent / "user_config.json"
 YT_MATERIAL_SCRIPT = LIB_REPO_ROOT / "scripts" / "video_export" / "generate_youtube_material.py"
@@ -201,6 +208,10 @@ class RelaxAsmrApp(tk.Tk):
             except (json.JSONDecodeError, OSError):
                 self._cfg = {}
         self._cfg.setdefault("base_url", str(DEFAULT_BASE_URL_WSL))
+        self._cfg.setdefault(
+            "collaboration_machine",
+            bool(self._cfg.get("render_to_staging")),
+        )
         if self._migrate_config_paths():
             self._save_config()
 
@@ -276,6 +287,8 @@ class RelaxAsmrApp(tk.Tk):
 
     def _save_config(self) -> None:
         self._cfg["base_url"] = str(base_url())
+        if hasattr(self, "collaboration_machine_var"):
+            self._cfg["collaboration_machine"] = bool(self.collaboration_machine_var.get())
         try:
             tmp = CONFIG_PATH.with_suffix(".json.tmp")
             tmp.write_text(
@@ -337,8 +350,24 @@ class RelaxAsmrApp(tk.Tk):
         next_mode = "light" if self._theme_mode == "dark" else "dark"
         self._apply_theme(next_mode)
 
+    def _on_collaboration_machine_toggle(self) -> None:
+        self._cfg["collaboration_machine"] = self.collaboration_machine_var.get()
+        self._save_config()
+
     def _build_ui(self) -> None:
         primary_btn = self._setup_primary_button_style()
+
+        top_bar = ttk.Frame(self)
+        top_bar.pack(fill=tk.X, padx=10, pady=(10, 0))
+        self.collaboration_machine_var = tk.BooleanVar(
+            value=bool(self._cfg.get("collaboration_machine")),
+        )
+        ttk.Checkbutton(
+            top_bar,
+            text="协作机器",
+            variable=self.collaboration_machine_var,
+            command=self._on_collaboration_machine_toggle,
+        ).pack(side=tk.LEFT)
 
         self.main_pane = ttk.PanedWindow(self, orient=tk.HORIZONTAL)
         self.main_pane.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
@@ -2456,7 +2485,9 @@ class RelaxAsmrApp(tk.Tk):
 
         self._persist_duration_hours(duration)
         wav_name = export_wav_name(self.scene_id, duration)
-        wav_path = export_dir() / wav_name
+        final_wav = export_dir() / wav_name
+        use_staging = use_export_staging()
+        render_wav = (local_staging_dir() / wav_name) if use_staging else final_wav
         existing_wav = self._resolve_valid_export_wav(self.scene_id, duration)
         if existing_wav:
             if not self._confirm_overwrite(
@@ -2464,12 +2495,15 @@ class RelaxAsmrApp(tk.Tk):
                 f"已存在合格混音（约 {duration:g}h）：\n{existing_wav}\n\n重新输出将覆盖该文件。是否继续？",
             ):
                 return
-        elif wav_path.is_file():
-            actual = wav_duration_seconds(wav_path)
+        elif final_wav.is_file():
+            actual = wav_duration_seconds(final_wav)
             hint = format_duration_short(actual) if actual is not None else "未知"
             self._log(
                 f"将覆盖不合格成品: {wav_name}（当前约 {hint}，目标 {duration:g}h）"
             )
+        if use_staging:
+            local_staging_dir().mkdir(parents=True, exist_ok=True)
+            self._log(f"协作机器模式：混音先写入本地 {render_wav.parent}")
         self._set_render_ui(running=True, status="Elapsed: 00:00:00  Remaining: …")
         self._log(f"—— 开始输出混音: {wav_name} ——")
 
@@ -2495,23 +2529,43 @@ class RelaxAsmrApp(tk.Tk):
                 def on_tail(tail: bool) -> None:
                     render_tail["value"] = tail
 
-                render_reaper_project(
-                    rpp_path,
-                    reaper_exe=exe,
-                    output_wav=wav_path,
-                    duration_hours=duration,
-                    on_pct=on_pct,
-                    on_tail=on_tail,
-                )
-                if not wav_path.is_file():
-                    raise FileNotFoundError(f"渲染结束但未找到输出文件: {wav_path.name}")
-                if not wav_matches_target_hours(wav_path, duration):
-                    actual = wav_duration_seconds(wav_path)
+                if use_staging:
+                    from scripts.config.staging_export import unique_wav_paths_from_rpp
+
+                    rpp_text = rpp_path.read_text(encoding="utf-8")
+                    wav_count = len(unique_wav_paths_from_rpp(rpp_text))
+                    self._log(f"协作机器模式：复制 {wav_count} 个素材到本地并改写工程路径")
+                    with rpp_staging_for_render(rpp_path, LIB_REPO_ROOT):
+                        render_reaper_project(
+                            rpp_path,
+                            reaper_exe=exe,
+                            output_wav=render_wav,
+                            duration_hours=duration,
+                            on_pct=on_pct,
+                            on_tail=on_tail,
+                        )
+                else:
+                    render_reaper_project(
+                        rpp_path,
+                        reaper_exe=exe,
+                        output_wav=render_wav,
+                        duration_hours=duration,
+                        on_pct=on_pct,
+                        on_tail=on_tail,
+                    )
+                if not render_wav.is_file():
+                    raise FileNotFoundError(f"渲染结束但未找到输出文件: {render_wav.name}")
+                if not wav_matches_target_hours(render_wav, duration):
+                    actual = wav_duration_seconds(render_wav)
                     hint = format_duration_short(actual) if actual is not None else "未知"
                     raise RuntimeError(
-                        f"输出时长不符：{wav_path.name} 约 {hint}，期望 {duration:g} 小时"
+                        f"输出时长不符：{render_wav.name} 约 {hint}，期望 {duration:g} 小时"
                     )
-                result_wav = wav_path
+                if use_staging:
+                    self._log(f"搬运混音到: {final_wav}")
+                    result_wav = finalize_export(render_wav, final_wav)
+                else:
+                    result_wav = render_wav
                 self._log(f"混音完成: {result_wav.name}")
 
                 def done_ok() -> None:
@@ -2652,6 +2706,14 @@ class RelaxAsmrApp(tk.Tk):
 
         script = LIB_REPO_ROOT / "scripts" / "video_export" / "export_mp4.sh"
         import sys
+        import subprocess
+
+        use_staging = use_export_staging()
+        staging_mp4: Path | None = None
+        final_mp4: Path | None = None
+        if use_staging:
+            local_staging_dir().mkdir(parents=True, exist_ok=True)
+            self._log(f"协作机器模式：视频先写入本地 {local_staging_dir()}")
 
         def _line_buffered_bash(script_path: str, args: list[str]) -> list[str]:
             cmd = ["bash", script_path, *args]
@@ -2659,32 +2721,72 @@ class RelaxAsmrApp(tk.Tk):
                 cmd = ["stdbuf", "-oL", "-eL", *cmd]
             return cmd
 
+        def _to_wsl_path(p: Path) -> str:
+            s = str(p).replace("\\", "/")
+            if s.startswith("//wsl.localhost/Ubuntu"):
+                return s.replace("//wsl.localhost/Ubuntu", "")
+            if s.startswith("//wsl$/Ubuntu"):
+                return s.replace("//wsl$/Ubuntu", "")
+            if sys.platform == "win32" and ":" in s:
+                d, r = s.split(":", 1)
+                return f"/mnt/{d.lower()}{r}"
+            return str(p.resolve())
+
+        def _shell_path(p: Path) -> str:
+            if sys.platform == "win32":
+                return _to_wsl_path(p)
+            return str(p.resolve())
+
         encoder = "auto" if sys.platform == "darwin" else "nvenc"
         export_args = ["--encoder", encoder]
-        if sys.platform == "win32":
-            def to_wsl(p: Path) -> str:
-                s = str(p).replace("\\", "/")
-                if s.startswith("//wsl.localhost/Ubuntu"):
-                    return s.replace("//wsl.localhost/Ubuntu", "")
-                if s.startswith("//wsl$/Ubuntu"):
-                    return s.replace("//wsl$/Ubuntu", "")
-                if ":" in s:
-                    d, r = s.split(":", 1)
-                    return f"/mnt/{d.lower()}{r}"
-                return s
 
-            cmd = [
-                "wsl",
-                *_line_buffered_bash(
-                    to_wsl(script),
-                    ["-v", to_wsl(vid_file), "-a", to_wsl(audio_file), *export_args],
-                ),
+        def _predict_final_mp4() -> Path:
+            predict_args = [
+                "-v",
+                _shell_path(vid_file),
+                "-a",
+                _shell_path(audio_file),
+                "--print-output",
             ]
-        else:
-            cmd = _line_buffered_bash(
-                str(script),
-                ["-v", str(vid_file.resolve()), "-a", str(audio_file.resolve()), *export_args],
+            predict_cmd = _line_buffered_bash(_shell_path(script), predict_args)
+            if sys.platform == "win32":
+                predict_cmd = ["wsl", *predict_cmd]
+            proc = subprocess.run(
+                predict_cmd,
+                capture_output=True,
+                text=True,
+                check=False,
             )
+            if proc.returncode != 0:
+                raise RuntimeError(
+                    proc.stderr.strip() or proc.stdout.strip() or "无法预测 MP4 输出路径"
+                )
+            line = proc.stdout.strip().splitlines()[-1].strip()
+            return Path(line)
+
+        if use_staging:
+            final_mp4 = _predict_final_mp4()
+            staging_mp4 = local_staging_dir() / final_mp4.name
+            export_args_with_output = [*export_args, "-o", _shell_path(staging_mp4)]
+        else:
+            export_args_with_output = list(export_args)
+
+        def _build_export_cmd(run_audio: Path, run_video: Path) -> list[str]:
+            bash_args = [
+                "-v",
+                _shell_path(run_video),
+                "-a",
+                _shell_path(run_audio),
+                *export_args_with_output,
+            ]
+            if sys.platform == "win32":
+                return [
+                    "wsl",
+                    *_line_buffered_bash(_shell_path(script), bash_args),
+                ]
+            return _line_buffered_bash(_shell_path(script), bash_args)
+
+        cmd = _build_export_cmd(audio_file, vid_file)
 
         self._set_export_ui(running=True, status="Elapsed: 00:00:00  Remaining: …")
         self._log("—— 开始合成视频 (export_mp4) ——")
@@ -2707,11 +2809,12 @@ class RelaxAsmrApp(tk.Tk):
         )
 
         def worker() -> None:
-            import subprocess
             output_mp4: Path | None = None
-            try:
+
+            def _run_export(run_cmd: list[str]) -> None:
+                nonlocal output_mp4
                 proc = subprocess.Popen(
-                    cmd,
+                    run_cmd,
                     stdout=subprocess.PIPE,
                     stderr=subprocess.STDOUT,
                     text=True,
@@ -2740,35 +2843,51 @@ class RelaxAsmrApp(tk.Tk):
                     else:
                         self._log(line)
                 proc.wait()
-                if proc.returncode == 0:
-                    if (not output_mp4 or not output_mp4.is_file()) and self.scene_id:
-                        output_mp4 = self._find_latest_mp4_for_scene(self.scene_id)
+                if proc.returncode != 0:
+                    raise subprocess.CalledProcessError(proc.returncode, run_cmd)
 
-                    def done_ok() -> None:
-                        stop_export_progress()
-                        if output_mp4 and output_mp4.is_file() and self.scene_id:
-                            self._save_scene_export_path(self.scene_id, "mp4", output_mp4)
-                        self._set_export_ui(
-                            running=False,
-                            status=self._format_export_status(output_mp4),
-                        )
-                        self._set_video(self.video_path, from_import=False)
-                        messagebox.showinfo(
-                            "合成成功",
-                            f"长视频已导出：\n{output_mp4}" if output_mp4 else "长视频导出完成！",
-                        )
-                    schedule_on_main(self, done_ok)
+            try:
+                if use_staging:
+                    self._log("复制混音与 loop 视频到本地…")
+                    with staged_mp4_inputs(audio_file, vid_file) as (local_audio, local_video):
+                        _run_export(_build_export_cmd(local_audio, local_video))
                 else:
-                    def done_err() -> None:
-                        stop_export_progress()
-                        self._set_export_ui(running=False, status="失败")
-                        messagebox.showerror("合成失败", f"export_mp4.sh 返回错误码 {proc.returncode}")
-                    schedule_on_main(self, done_err)
+                    _run_export(cmd)
+
+                if (not output_mp4 or not output_mp4.is_file()) and self.scene_id:
+                    output_mp4 = self._find_latest_mp4_for_scene(self.scene_id)
+                if use_staging and output_mp4 and final_mp4:
+                    self._log(f"搬运成片到: {final_mp4}")
+                    output_mp4 = finalize_export(output_mp4, final_mp4)
+
+                def done_ok() -> None:
+                    stop_export_progress()
+                    if output_mp4 and output_mp4.is_file() and self.scene_id:
+                        self._save_scene_export_path(self.scene_id, "mp4", output_mp4)
+                    self._set_export_ui(
+                        running=False,
+                        status=self._format_export_status(output_mp4),
+                    )
+                    self._set_video(self.video_path, from_import=False)
+                    messagebox.showinfo(
+                        "合成成功",
+                        f"长视频已导出：\n{output_mp4}" if output_mp4 else "长视频导出完成！",
+                    )
+
+                schedule_on_main(self, done_ok)
+            except subprocess.CalledProcessError as exc:
+                def done_err(code: int = exc.returncode) -> None:
+                    stop_export_progress()
+                    self._set_export_ui(running=False, status="失败")
+                    messagebox.showerror("合成失败", f"export_mp4.sh 返回错误码 {code}")
+
+                schedule_on_main(self, done_err)
             except Exception as exc:
                 def done_err2(err: BaseException = exc) -> None:
                     stop_export_progress()
                     self._set_export_ui(running=False, status="失败")
                     messagebox.showerror("运行失败", str(err))
+
                 schedule_on_main(self, done_err2)
 
         threading.Thread(target=worker, daemon=True).start()

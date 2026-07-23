@@ -389,6 +389,7 @@ Usage: export_mp4.sh -v VIDEO -a AUDIO [-o OUTPUT] [options]
                           nvenc: p1–p7 (default: p5)
       --video-fade-in SEC  Fade video from black at start (default: 5, matches audio)
       --no-video-fade-in   Disable video fade-in
+      --print-output       Print default output path and exit (no encode)
   -h, --help
 
 Example:
@@ -418,10 +419,13 @@ while [[ $# -gt 0 ]]; do
     --video-fade-in) VIDEO_FADE_IN="$2"; shift 2 ;;
     --no-video-fade-in) VIDEO_FADE_IN="0"; shift ;;
     --preset) PRESET="$2"; shift 2 ;;
+    --print-output) PRINT_OUTPUT_ONLY=1; shift ;;
     -h|--help) usage; exit 0 ;;
     *) echo "Unknown option: $1" >&2; usage >&2; exit 1 ;;
   esac
 done
+
+PRINT_OUTPUT_ONLY="${PRINT_OUTPUT_ONLY:-0}"
 
 if [[ -z "$VIDEO" || -z "$AUDIO" ]]; then
   echo "Error: -v and -a are required." >&2
@@ -468,6 +472,11 @@ fi
 
 if [[ -z "$OUTPUT" ]]; then
   OUTPUT=$(default_output_path "$AUDIO" "$VIDEO")
+fi
+
+if [[ "$PRINT_OUTPUT_ONLY" == "1" ]]; then
+  printf '%s\n' "$OUTPUT"
+  exit 0
 fi
 
 mkdir -p "$(dirname "$OUTPUT")"
