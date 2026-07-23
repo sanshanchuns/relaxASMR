@@ -7,8 +7,19 @@ Tkinter 图形界面，用于 Rain 睡眠系列 loop 视频 → Reaper 子工程
 - Python 3.10+
 - `python3-tk`（Ubuntu/Debian: `sudo apt install python3-tk`）
 - `ffmpeg` / `ffprobe`（画面与内嵌音轨分析、缩略图截帧）
+- **画面 CLIP 分析**（步骤 1 九宫格推荐）：
+  ```bash
+  pip install transformers Pillow
+  # 按 GPU 选 torch（勿把主机 venv 整包拷到协作机）：
+  # RTX 50 系 Blackwell（5060 等）— 必须 cu128+：
+  pip install torch torchvision --index-url https://download.pytorch.org/whl/cu128
+  # RTX 40 系（4060 等）：
+  pip install torch torchvision
+  ```
+  详见 [`scripts/video_analysis/requirements.txt`](../scripts/video_analysis/requirements.txt)
+- **VLM（Gemini）**：`pip install google-genai`；并配置 `GEMINI_API_KEY`（或写入 `~/.zshrc` 的 `export GEMINI_API_KEY=...`）
 - `numpy`（`analyze_video_audio.py`）
-- `Pillow`（YouTube 缩略图合成：`pip install pillow`）
+- `Pillow`（已含于上一行 requirements；YouTube 缩略图合成亦需）
 - **YouTube 上传**：`pip install -r scripts/video_upload/requirements.txt`
 - Reaper（打开 `.rpp`；可选填写可执行文件路径）
 

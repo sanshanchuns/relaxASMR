@@ -65,7 +65,10 @@ def call_gemini_vision_json(
         from google import genai
         from PIL import Image
     except ImportError as e:
-        raise RuntimeError(f"VLM 依赖缺失: {e}") from e
+        raise RuntimeError(
+            f"VLM 依赖缺失: {e}\n"
+            "请安装: pip install google-genai Pillow"
+        ) from e
 
     available_keys = load_gemini_api_keys()
     if not available_keys:

@@ -1,0 +1,23 @@
+# 步骤 1 画面分析（CLIP 首帧分类 → 1_rain 宫格推荐）
+transformers>=4.30
+Pillow>=9.0
+
+# PyTorch（按 GPU 选 ONE 种安装方式，不要直接 pip install -r 本文件装 torch）
+#
+# RTX 50 系（5060/5070… Blackwell, sm_120）— 协作机常见：
+#   必须 CUDA 12.8+ 构建，cu124/cu126 会报 "no kernel image" / sm_120 not supported
+#   pip install torch torchvision --index-url https://download.pytorch.org/whl/cu128
+#
+# RTX 40 系及以下（4060 等 Ada/Ampere）— 主机常见：
+#   pip install torch torchvision
+#   或 cu124: --index-url https://download.pytorch.org/whl/cu124
+#
+# 无 GPU / 仅 CPU：
+#   pip install torch --index-url https://download.pytorch.org/whl/cpu
+#
+# 驱动：Blackwell 建议 NVIDIA 驱动 >= 560（Linux）/ >= 561（Windows）
+# 验证：python -c "import torch; print(torch.__version__, torch.cuda.is_available(), torch.cuda.get_device_name(0) if torch.cuda.is_available() else 'cpu')"
+
+# VLM（Gemini 视觉 + 文案差异化）
+google-genai>=1.0
+# 环境变量 GEMINI_API_KEY（或 ~/.zshrc 中 export），见 vlm_engine.py
