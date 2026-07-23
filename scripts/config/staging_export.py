@@ -9,7 +9,7 @@ import shutil
 import sys
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Iterator
+from typing import Callable, Iterator
 
 from scripts.config.paths import REPO_ROOT, base_url
 
@@ -364,3 +364,73 @@ def staged_mp4_inputs(audio: Path, video: Path) -> Iterator[tuple[Path, Path]]:
                     path.unlink()
             except OSError:
                 pass
+
+
+def _local_upload_dir() -> Path:
+    return local_staging_dir() / "upload"
+
+
+    return flow.run_local_server(port=0, open_browser=True)
+
+
+def _format_staging_size(num_bytes: int) -> str:
+    if num_bytes >= 1024**3:
+        return f"{num_bytes / 1024**3:.1f} GB"
+    if num_bytes >= 1024**2:
+        return f"{num_bytes / 1024**2:.0f} MB"
+    return f"{num_bytes / 1024:.0f} KB"
+
+
+def stage_upload_mp4(
+    src: Path,
+    *,
+    on_log: Callable[[str], None] | None = None,
+) -> Path:
+    """复制/硬链 export 成片到 staging/upload/，供 YouTube 从本地盘读取。"""
+    src = src.resolve()
+    if not src.is_file():
+        raise FileNotFoundError(f"上传文件不存在: {src}")
+
+    def log(msg: str) -> None:
+        if on_log:
+            on_log(msg)
+
+    staging = _local_upload_dir()
+    staging.mkdir(parents=True, exist_ok=True)
+    dest = staging / src.name
+    if dest.is_file():
+        try:
+            if dest.stat().st_size == src.stat().st_size:
+                log(f"本地 staging 已存在同尺寸副本，跳过复制：{dest.name}")
+                return dest
+        except OSError:
+            pass
+        dest.unlink()
+
+    size_label = _format_staging_size(src.stat().st_size)
+    log(f"正在复制 {src.name}（{size_label}）到本地 staging…")
+    try:
+        os.link(src, dest)
+        log(f"已硬链到本地（无需数据复制）：{dest}")
+    except OSError:
+        shutil.copy2(src, dest)
+        log(f"复制完成：{dest.name}（{size_label}）")
+    return dest
+
+
+@contextmanager
+def staged_upload_mp4(
+    mp4: Path,
+    *,
+    on_log: Callable[[str], None] | None = None,
+) -> Iterator[Path]:
+    """协作机器：成片先复制到本地，上传完成后删除临时文件。"""
+    local = stage_upload_mp4(mp4, on_log=on_log)
+    try:
+        yield local
+    finally:
+        try:
+            if local.is_file():
+                local.unlink()
+        except OSError:
+            pass

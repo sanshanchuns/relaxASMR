@@ -112,6 +112,26 @@ def test_patch_rpp_for_local_render() -> None:
     assert "\\\\nas\\audio\\rain.wav" not in patched
 
 
+def test_stage_upload_mp4(tmp_path: Path) -> None:
+    src = tmp_path / "MVI_1000_3h_fhd.mp4"
+    src.write_bytes(b"mp4-data")
+    with patch("scripts.config.staging_export.local_staging_dir", return_value=tmp_path / "staging"):
+        local = se.stage_upload_mp4(src)
+    assert local.is_file()
+    assert local.read_bytes() == b"mp4-data"
+    assert local.parent.name == "upload"
+
+
+def test_stage_upload_mp4_with_log(tmp_path: Path) -> None:
+    src = tmp_path / "a.mp4"
+    src.write_bytes(b"x" * 1024)
+    logs: list[str] = []
+    with patch("scripts.config.staging_export.local_staging_dir", return_value=tmp_path / "staging"):
+        se.stage_upload_mp4(src, on_log=logs.append)
+    assert any("正在复制" in line for line in logs)
+    assert any("复制完成" in line or "硬链" in line for line in logs)
+
+
 def test_rpp_staging_for_render_restores_rpp(tmp_path: Path) -> None:
     repo = tmp_path / "repo"
     reaper_scripts = repo / "Reaper" / "scripts"

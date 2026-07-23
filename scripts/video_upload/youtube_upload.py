@@ -192,8 +192,9 @@ def run_oauth_local_server(flow, *, on_log: Callable[[str], None] | None = None)
 
         class _WslBrowser:
             def open(self, url: str, new: int = 0, autoraise: bool = True) -> bool:
-                log("若未自动弹出浏览器，请复制以下链接到 Windows 浏览器打开：")
+                log("—— Google OAuth 授权链接（可复制到 Windows 浏览器）——")
                 log(url)
+                log("正在尝试打开 Windows 默认浏览器…")
                 open_browser_url(url)
                 return True
 
@@ -263,10 +264,16 @@ def get_youtube_service(
     account: str | None = None,
     on_log: Callable[[str], None] | None = None,
 ):
-    from google.auth.transport.requests import Request
-    from google.oauth2.credentials import Credentials
-    from google_auth_oauthlib.flow import InstalledAppFlow
-    from googleapiclient.discovery import build
+    try:
+        from google.auth.transport.requests import Request
+        from google.oauth2.credentials import Credentials
+        from google_auth_oauthlib.flow import InstalledAppFlow
+        from googleapiclient.discovery import build
+    except ImportError as e:
+        raise RuntimeError(
+            f"YouTube 上传依赖缺失: {e}\n"
+            "请安装: pip install -r scripts/video_upload/requirements.txt"
+        ) from e
 
     credentials_path = (credentials_path or DEFAULT_CREDENTIALS).resolve()
     token_path = (token_path or DEFAULT_TOKEN).resolve()
@@ -379,6 +386,7 @@ def upload_from_material(
     credentials_path: Path | None = None,
     token_path: Path | None = None,
     override_video_path: Path | None = None,
+    service: object | None = None,
     on_log: Callable[[str], None] | None = None,
     on_progress: Callable[[int], None] | None = None,
 ) -> dict:
@@ -430,8 +438,11 @@ def upload_from_material(
 
     log(f"账号：{account_label(account_name)}")
     log(f"凭据：{creds_path.name}  Token：{tok_path.name}")
-    log("连接 YouTube API（OAuth）…")
-    service = get_youtube_service(creds_path, tok_path, account=account_name, on_log=on_log)
+    if service is None:
+        log("连接 YouTube API（OAuth）…")
+        service = get_youtube_service(creds_path, tok_path, account=account_name, on_log=on_log)
+    else:
+        log("YouTube API 已连接")
 
     log(f"上传视频：{video_path.name}（{privacy_status}）…")
     log(f"  分类：Travel & Events · 语言：{lang_label}")

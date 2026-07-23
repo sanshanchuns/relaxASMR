@@ -92,6 +92,7 @@ from scripts.config.staging_export import (  # noqa: E402
     local_staging_dir,
     rpp_staging_for_render,
     staged_mp4_inputs,
+    staged_upload_mp4,
     use_export_staging,
 )
 
@@ -345,6 +346,10 @@ class RelaxAsmrApp(tk.Tk):
             self.btn_theme_toggle.configure(text=theme_toggle_label(self._theme_mode))
         self._cfg["theme"] = self._theme_mode
         self._save_config()
+
+    def _apply_picker_theme(self, picker) -> None:
+        if hasattr(picker, "apply_theme"):
+            picker.apply_theme(get_theme(self._theme_mode))
 
     def _toggle_theme(self) -> None:
         next_mode = "light" if self._theme_mode == "dark" else "dark"
@@ -1062,6 +1067,7 @@ class RelaxAsmrApp(tk.Tk):
             boom.on_select_callback = self._on_grid_select
             boom.pack()
             self.track_pickers["1_rain_boom"] = boom
+            self._apply_picker_theme(boom)
         else:
             frame = boom.master
 
@@ -1779,6 +1785,7 @@ class RelaxAsmrApp(tk.Tk):
         picker.on_select_callback = self._on_grid_select
         picker.pack()
         self.track_pickers[track_name] = picker
+        self._apply_picker_theme(picker)
         picker.load_candidates_from_data(matches, out_dir)
         return picker
 
@@ -1803,6 +1810,7 @@ class RelaxAsmrApp(tk.Tk):
         vlm_picker.on_select_callback = self._on_grid_select
         vlm_picker.pack()
         self.track_pickers["1_rain_vlm"] = vlm_picker
+        self._apply_picker_theme(vlm_picker)
         return vlm_picker
 
     def _apply_rain_tabs(self, result: dict) -> None:
@@ -2951,24 +2959,43 @@ class RelaxAsmrApp(tk.Tk):
         self._log(f"账号：{account}")
         self._log(f"场景：{upload_scene_id}")
         self._log(f"视频：{upload_mp4}")
-        self._log("首次上传需在浏览器完成 OAuth 授权")
         self.lbl_upload.configure(text=self._format_transfer_progress(0.0, 0))
         on_upload_progress, stop_upload_progress = self._make_upload_progress_updater()
+        use_staging = use_export_staging()
 
         def worker() -> None:
             try:
                 md_path = self._ensure_material_for_upload(upload_scene_id)
                 self._ensure_thumbnail_for_upload(upload_scene_id)
                 up_mod = load_scripts_module("video_upload.youtube_upload")
-                record = up_mod.upload_from_material(
-                    md_path,
-                    language=language,
-                    privacy_status=privacy,
-                    account=account,
-                    override_video_path=upload_mp4,
+                creds_path, tok_path, account_name = up_mod.resolve_account_paths(account)
+
+                self._log("连接 YouTube API（首次需浏览器 OAuth 授权）…")
+                service = up_mod.get_youtube_service(
+                    creds_path,
+                    tok_path,
+                    account=account_name,
                     on_log=self._log,
-                    on_progress=on_upload_progress,
                 )
+
+                def _do_upload(video_path: Path) -> dict:
+                    return up_mod.upload_from_material(
+                        md_path,
+                        language=language,
+                        privacy_status=privacy,
+                        account=account,
+                        override_video_path=video_path,
+                        service=service,
+                        on_log=self._log,
+                        on_progress=on_upload_progress,
+                    )
+
+                if use_staging:
+                    self._log(f"协作机器模式：成片将复制到 {local_staging_dir() / 'upload'}")
+                    with staged_upload_mp4(upload_mp4, on_log=self._log) as local_mp4:
+                        record = _do_upload(local_mp4)
+                else:
+                    record = _do_upload(upload_mp4)
 
                 def done_ok() -> None:
                     stop_upload_progress()
