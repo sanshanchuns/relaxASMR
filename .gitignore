@@ -40,3 +40,6 @@ scripts/cloak_browser/.profiles/
 # config
 gui/user_config.json
 scripts/video_upload/config/
+
+# remotion
+remotion/
