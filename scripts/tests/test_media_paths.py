@@ -12,20 +12,22 @@ if str(REAPER_SCRIPTS) not in sys.path:
 from media_paths import wsl_unc_path  # noqa: E402
 
 
-def test_wsl_unc_path_uses_unc_for_mnt_by_default(monkeypatch) -> None:
+def test_wsl_unc_path_uses_drive_for_mnt_by_default(monkeypatch) -> None:
     monkeypatch.setenv("WSL_DISTRO_NAME", "Ubuntu")
     monkeypatch.delenv("RELAXASMR_MEDIA_WIN_DRIVE", raising=False)
     p = Path("/mnt/e/自然之声/to_youtube/audio/1_rain/booms/test.wav")
     assert wsl_unc_path(p) == (
-        "\\\\wsl.localhost\\Ubuntu\\mnt\\e\\自然之声\\to_youtube\\audio\\1_rain\\booms\\test.wav"
+        "E:\\自然之声\\to_youtube\\audio\\1_rain\\booms\\test.wav"
     )
 
 
-def test_wsl_unc_path_can_opt_into_drive_letter(monkeypatch) -> None:
+def test_wsl_unc_path_can_force_unc_for_mnt(monkeypatch) -> None:
     monkeypatch.setenv("WSL_DISTRO_NAME", "Ubuntu")
-    monkeypatch.setenv("RELAXASMR_MEDIA_WIN_DRIVE", "1")
+    monkeypatch.setenv("RELAXASMR_MEDIA_WIN_DRIVE", "0")
     p = Path("/mnt/e/自然之声/to_youtube/test.mp4")
-    assert wsl_unc_path(p) == "E:\\自然之声\\to_youtube\\test.mp4"
+    assert wsl_unc_path(p) == (
+        "\\\\wsl.localhost\\Ubuntu\\mnt\\e\\自然之声\\to_youtube\\test.mp4"
+    )
 
 
 def test_wsl_unc_path_home_uses_unc(monkeypatch) -> None:

@@ -118,4 +118,4 @@ cd /path/to/relaxASMR
 python -m gui
 ```
 
-WSL 下 Reaper 媒体路径默认使用 `\\wsl.localhost\Ubuntu\mnt\e\...` UNC（见 `Reaper/scripts/media_paths.py`）。
+WSL 下 Reaper 媒体路径：`/mnt/e/...` → `E:\...` 盘符；`/home/...` 仓库 → `\\wsl.localhost\Ubuntu\...` UNC（见 `Reaper/scripts/media_paths.py`）。

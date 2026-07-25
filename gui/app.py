@@ -5,6 +5,9 @@ from __future__ import annotations
 import json
 import os
 import re
+os.environ.setdefault("USE_TF", "0")
+os.environ.setdefault("USE_TORCH", "1")
+os.environ.setdefault("TRANSFORMERS_NO_TF", "1")
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"  # Suppress TensorFlow warnings
 
 import sys
@@ -379,8 +382,8 @@ class RelaxAsmrApp(tk.Tk):
 
         self.left_frame = ttk.Frame(self.main_pane)
         self.right_frame = ttk.Frame(self.main_pane)
-        self.main_pane.add(self.left_frame, weight=3)
-        self.main_pane.add(self.right_frame, weight=2)
+        self.main_pane.add(self.left_frame, weight=1)
+        self.main_pane.add(self.right_frame, weight=1)
 
         self.left_notebook = ttk.Notebook(self.left_frame)
         self.left_notebook.pack(fill=tk.BOTH, expand=True)
@@ -719,6 +722,8 @@ class RelaxAsmrApp(tk.Tk):
         self._right_pane_resize_after_id: str | None = None
         self._right_pane_last_h = 0
         self._equalize_retry_count = 0
+        self._main_pane_last_w = 0
+        self._main_pane_equalize_attempts = 0
 
         last_material = self._cfg.get("last_material_dir")
         if last_material:
@@ -735,6 +740,10 @@ class RelaxAsmrApp(tk.Tk):
 
         self.after_idle(self._update_left_scrollbar_visibility)
         self.after_idle(self._restore_workflow_state)
+        self.after_idle(self._equalize_main_pane_once)
+        self.after(120, self._equalize_main_pane_once)
+        self.after(350, self._equalize_main_pane_once)
+        self.main_pane.bind("<Map>", self._equalize_main_pane_once, add="+")
         self.after_idle(self._log_startup_info)
 
     def _log_startup_info(self) -> None:
@@ -1225,6 +1234,29 @@ class RelaxAsmrApp(tk.Tk):
         w = max(self.right_pane.winfo_width() - 32, 160)
         h = max(self.right_pane.winfo_height() // 3 - 44, 72)
         return (w, h)
+
+    def _equalize_main_pane_once(self, _event=None) -> None:
+        """启动时左右栏 5:5；左栏内容较宽时 PanedWindow 默认会偏左，需多次设 sashpos。"""
+        if not hasattr(self, "main_pane"):
+            return
+        if self._main_pane_equalize_attempts >= 8:
+            return
+        self._main_pane_equalize_attempts += 1
+        self.update_idletasks()
+        w = self.main_pane.winfo_width()
+        if w <= 100:
+            w = max(self.winfo_width() - 20, 0)
+        if w <= 100:
+            self.after(50, self._equalize_main_pane_once)
+            return
+        half = w // 2
+        try:
+            if abs(self.main_pane.sashpos(0) - half) > max(w // 20, 8):
+                self.main_pane.sashpos(0, half)
+        except tk.TclError:
+            self.after(50, self._equalize_main_pane_once)
+            return
+        self._main_pane_last_w = w
 
     def _equalize_right_pane_once(self, _event=None) -> None:
         """启动时均分右侧三区；不在用户拖动窗口时反复强制 sashpos。"""

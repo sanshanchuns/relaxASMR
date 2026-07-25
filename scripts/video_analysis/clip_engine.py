@@ -5,6 +5,7 @@ from typing import Any, Callable, Tuple
 from PIL import Image
 
 from scripts.video_analysis.analyze import CLOSE_NAMES, DISTANT_NAMES, SPACE_NAMES, VSTParams
+from scripts.video_analysis.torch_runtime import require_torch, resolve_clip_device
 
 logging.getLogger("transformers").setLevel(logging.ERROR)
 
@@ -14,25 +15,13 @@ _clip_processor = None
 _device = None
 
 
-def _require_torch():
-    try:
-        import torch
-    except ImportError as exc:
-        raise RuntimeError(
-            "CLIP 分析需要 PyTorch。请在仓库根目录执行：\n"
-            "  pip install -r scripts/video_analysis/requirements.txt\n"
-            "（WSL/无 GPU 可用 CPU 版；首次会下载 openai/clip-vit-base-patch32 模型）"
-        ) from exc
-    return torch
-
-
 def get_clip_components():
     global _clip_model, _clip_processor, _device
-    torch = _require_torch()
+    require_torch()
     from transformers import CLIPModel, CLIPProcessor
 
     if _clip_model is None:
-        _device = "cuda" if torch.cuda.is_available() else "cpu"
+        _device = resolve_clip_device()
         _clip_model = CLIPModel.from_pretrained(CLIP_MODEL_NAME).to(_device)
         _clip_processor = CLIPProcessor.from_pretrained(CLIP_MODEL_NAME)
     return _clip_model, _clip_processor, _device
@@ -78,7 +67,7 @@ def analyze_dimension(image, candidates: dict, model, processor, device):
     keys = list(candidates.keys())
     texts = list(candidates.values())
     inputs = processor(text=texts, images=image, return_tensors="pt", padding=True).to(device)
-    torch = _require_torch()
+    torch = require_torch()
     with torch.no_grad():
         outputs = model(**inputs)
         probs = outputs.logits_per_image.softmax(dim=1).cpu().numpy()[0]
