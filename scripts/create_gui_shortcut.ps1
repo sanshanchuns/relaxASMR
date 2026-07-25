@@ -1,6 +1,7 @@
 # Create relaxASMR GUI desktop shortcut.
 # Primary: direct wsl.exe (most reliable for WSLg GUI).
 # Backup:  launch_gui.vbs (silent, no console flash).
+# Always runs ensure_nas_mount.sh first (desktop uses bash, not zsh — so ~/.zshrc mount is skipped).
 
 $ErrorActionPreference = "Stop"
 
@@ -9,7 +10,7 @@ $LocalVbs = Join-Path $LocalDir "launch_gui.vbs"
 $LocalBat = Join-Path $LocalDir "launch_gui.bat"
 $ShortcutPath = Join-Path ([Environment]::GetFolderPath("Desktop")) "relaxASMR GUI.lnk"
 $Wsl = Join-Path $env:SystemRoot "System32\wsl.exe"
-$BashCmd = "cd /home/acele/workspace/relaxASMR && /home/acele/.pyenv/shims/python -m gui"
+$BashCmd = "/home/acele/workspace/relaxASMR/scripts/ensure_nas_mount.sh; cd /home/acele/workspace/relaxASMR && /home/acele/.pyenv/shims/python -m gui"
 
 $VbsContent = @"
 Set shell = CreateObject("WScript.Shell")
@@ -42,3 +43,6 @@ Write-Host "Shortcut -> VBS (silent)"
 Write-Host "VBS: $LocalVbs"
 Write-Host "BAT debug: $LocalBat"
 Write-Host "Or double-click VBS directly if LNK fails"
+Write-Host ""
+Write-Host "If NAS still missing on cold start, run once in WSL:"
+Write-Host "  bash /home/acele/workspace/relaxASMR/scripts/setup_nas_mount_sudoers.sh"

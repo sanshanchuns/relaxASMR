@@ -106,6 +106,12 @@ YT_MATERIAL_SCRIPT = LIB_REPO_ROOT / "scripts" / "video_export" / "generate_yout
 class RelaxAsmrApp(tk.Tk):
     def __init__(self) -> None:
         super().__init__()
+        # 先透明/隐藏：等映射后拿到真实宽度再 sashpos，避免首帧比例错乱。
+        self.withdraw()
+        try:
+            self.attributes("-alpha", 0.0)
+        except tk.TclError:
+            pass
         self.title("自然之声-自动化界面")
         self.geometry("1600x980")
         self.minsize(720, 600)
@@ -134,6 +140,11 @@ class RelaxAsmrApp(tk.Tk):
         ensure_ui_pump(self)
         bind_ui_root(self)
         bind_ui_root(self)
+
+        # 先映射（仍透明）→ 用真实宽度设 1:1 → 再显现
+        self.deiconify()
+        self.update_idletasks()
+        self.after_idle(self._reveal_when_layout_ready)
 
     def _step45_task_running(self) -> bool:
         return self._render_running or self._export_running or self._upload_running
@@ -382,9 +393,12 @@ class RelaxAsmrApp(tk.Tk):
 
         self.left_frame = ttk.Frame(self.main_pane)
         self.right_frame = ttk.Frame(self.main_pane)
+        # weight 只影响之后缩放余量；首帧 sash 必须等窗口映射后用 sashpos 设。
         self.main_pane.add(self.left_frame, weight=1)
         self.main_pane.add(self.right_frame, weight=1)
-
+        self._main_pane_equalize_retries = 0
+        self._main_pane_ratio_locked = False
+        self._layout_reveal_attempts = 0
         self.left_notebook = ttk.Notebook(self.left_frame)
         self.left_notebook.pack(fill=tk.BOTH, expand=True)
 
@@ -732,7 +746,6 @@ class RelaxAsmrApp(tk.Tk):
                 self.material_dir = p
         self._apply_theme(self._theme_mode)
 
-        self.after_idle(self._equalize_right_pane_once)
         self.after_idle(self._init_preview_panel)
         self.after_idle(self._restore_audio_library_selections)
 
@@ -752,7 +765,17 @@ class RelaxAsmrApp(tk.Tk):
         elif is_mac():
             self._log("macOS 环境：使用本机 Reaper；素材默认挂载于 /Volumes/192.168.3.128/…")
         self._log(f"仓库根目录：{LIB_REPO_ROOT}")
-        self._log(f"素材 baseURL：{base_url()}")
+        bu = base_url()
+        self._log(f"素材 baseURL：{bu}")
+        try:
+            ok = bu.is_dir()
+        except OSError:
+            ok = False
+        if not ok:
+            self._log(
+                "警告：baseURL 不可用（常见于桌面快捷方式未挂载 NAS）。"
+                "可先开终端执行 ~/mount_e.sh，或运行 scripts/setup_nas_mount_sudoers.sh"
+            )
 
     def _restore_workflow_state(self, *, retry: int = 0) -> None:
         """冷启动恢复工作流；NAS 未挂载时重试，并先显示已保存的路径。"""
@@ -1235,28 +1258,44 @@ class RelaxAsmrApp(tk.Tk):
         h = max(self.right_pane.winfo_height() // 3 - 44, 72)
         return (w, h)
 
-    def _equalize_main_pane_once(self, _event=None) -> None:
-        """启动时左右栏 5:5；左栏内容较宽时 PanedWindow 默认会偏左，需多次设 sashpos。"""
+    def _reveal_when_layout_ready(self) -> None:
+        """窗口已映射后再设 1:1，最后取消透明。withdraw 阶段 sashpos 会在映射时被重置。"""
         if not hasattr(self, "main_pane"):
             return
-        if self._main_pane_equalize_attempts >= 8:
-            return
-        self._main_pane_equalize_attempts += 1
         self.update_idletasks()
         w = self.main_pane.winfo_width()
         if w <= 100:
-            w = max(self.winfo_width() - 20, 0)
-        if w <= 100:
-            self.after(50, self._equalize_main_pane_once)
-            return
-        half = w // 2
+            self._layout_reveal_attempts += 1
+            if self._layout_reveal_attempts < 40:
+                self.after(25, self._reveal_when_layout_ready)
+                return
+            w = max(int(self.winfo_width()) - 20, 1580)
+
         try:
-            if abs(self.main_pane.sashpos(0) - half) > max(w // 20, 8):
-                self.main_pane.sashpos(0, half)
+            target = max(w // 2, 200)
+            self.main_pane.sashpos(0, target)
+            # 校验：若仍贴边则再设一次
+            pos = int(self.main_pane.sashpos(0))
+            if pos < w * 0.25 or pos > w * 0.75:
+                self.main_pane.sashpos(0, target)
         except tk.TclError:
-            self.after(50, self._equalize_main_pane_once)
+            self._layout_reveal_attempts += 1
+            if self._layout_reveal_attempts < 40:
+                self.after(25, self._reveal_when_layout_ready)
+                return
+
+        self._main_pane_ratio_locked = True
+        self._equalize_right_pane_once()
+        try:
+            self.attributes("-alpha", 1.0)
+        except tk.TclError:
+            pass
+
+    def _equalize_main_pane_once(self, _event=None) -> None:
+        """兼容旧调用；实际启动路径走 _reveal_when_layout_ready。"""
+        if self._main_pane_ratio_locked:
             return
-        self._main_pane_last_w = w
+        self._reveal_when_layout_ready()
 
     def _equalize_right_pane_once(self, _event=None) -> None:
         """启动时均分右侧三区；不在用户拖动窗口时反复强制 sashpos。"""
