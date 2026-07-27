@@ -2520,6 +2520,12 @@ class RelaxAsmrApp(tk.Tk):
 
                 ensure_shared_scripts()
                 gen_sub.stage_rain_fx_assets(rain_dir)
+                from media_paths import describe_media_mode, wsl_unc_path
+
+                self._log(f"媒体路径模式：{describe_media_mode('auto', LIB_REPO_ROOT)}")
+                if bool(self._cfg.get("collaboration_machine")):
+                    probe = base_url() / "audio"
+                    self._log(f"协作机器：媒体 Windows 路径示例 → {wsl_unc_path(probe)}")
                 rpp_path.write_text(
                     gen_sub.build_rpp(cfg, LIB_REPO_ROOT, rain_dir, "auto"),
                     encoding="utf-8",

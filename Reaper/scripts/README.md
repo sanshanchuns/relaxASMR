@@ -72,12 +72,13 @@ python3 Reaper/scripts/generate_subproject.py --scene MVI_6918
 | 运行环境 | 自动选择 | RPP 内路径示例 |
 |----------|----------|----------------|
 | macOS | `absolute` | `/Users/.../assets/...` |
-| WSL + baseURL 在 `/mnt/e` | `wsl_unc` | `E:\自然之声\to_youtube\audio\...` |
+| WSL + `/mnt/e` 为本机盘（drvfs） | `wsl_unc` | `E:\自然之声\to_youtube\audio\...` |
+| WSL + `/mnt/e` 为 NAS（cifs） | `wsl_unc` | `\\192.168.3.128\e\自然之声\to_youtube\...` |
 | WSL + 仓库在 `/home/...` | `wsl_unc` | `\\wsl.localhost\Ubuntu\home\...` |
 | Windows + 仓库在本机盘 | `absolute` | `C:\...\assets\...` |
 | Linux 原生 | `absolute` | `/home/.../assets/...` |
 
-强制覆盖：`RELAXASMR_MEDIA_MODE=absolute` 或 `--media-mode wsl_unc`。`/mnt/x` 若必须走 UNC：`RELAXASMR_MEDIA_WIN_DRIVE=0`。
+强制覆盖：`RELAXASMR_MEDIA_MODE=absolute` 或 `--media-mode wsl_unc`。`/mnt/x` 强制走 WSL UNC：`RELAXASMR_MEDIA_WIN_DRIVE=0`。
 
 打开 `.rpp` → **`asmr_loop_track`** → **`asmr_vol_envelope`**（`1_rain`）→ **`asmr_scatter_track`** → 手调 Group / Master 限幅 → 渲染 wav → [`scripts/video_export/export_mp4.sh`](../../../scripts/video_export/export_mp4.sh) 合成 mp4。
 
