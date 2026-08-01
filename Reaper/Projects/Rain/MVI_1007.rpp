@@ -1,0 +1,2591 @@
+<REAPER_PROJECT 0.1 "7.73/win64" 0 0
+  <NOTES 0 2
+    Rain · MVI_1007 · 3.0h · sleep series
+  >
+  RIPPLE 0 0
+  GROUPOVERRIDE 0 0 0 0
+  AUTOXFADE 128
+  ENVATTACH 3
+  POOLEDENVATTACH 0
+  TCPUIFLAGS 0
+  MIXERUIFLAGS 11 48
+  ENVFADESZ10 40
+  PEAKGAIN 1
+  FEEDBACK 0
+  PANLAW 1
+  PROJOFFS 0 0 0
+  MAXPROJLEN 1 10800
+  GRID 3199 8 1 8 1 0 0 0
+  TIMEMODE 5 9 -1 60 0 0 -1 0
+  VIDEO_CONFIG 0 0 65792
+  PANMODE 3
+  PANLAWFLAGS 3
+  CURSOR 0
+  ZOOM 100 0 0
+  VZOOMEX 6 0
+  USE_REC_CFG 0
+  RECMODE 1
+  SMPTESYNC 0 30 100 40 1000 300 0 0 1 0 0
+  LOOP 0
+  LOOPGRAN 0 4
+  RECORD_PATH "Audio Files" ""
+  <RECORD_CFG
+    ZXZhdxgAAQ==
+  >
+  <APPLYFX_CFG
+  >
+  RENDER_FILE \\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\export
+  RENDER_PATTERN $project_3h
+  RENDER_FMT 0 2 0
+  RENDER_1X 0
+  RENDER_RANGE 1 0 0 0 1000
+  RENDER_RESAMPLE 3 0 1
+  RENDER_ADDTOPROJ 0
+  RENDER_STEMS 0
+  RENDER_DITHER 0
+  RENDER_TRIM 0.000001 0.000001 0 0
+  TIMELOCKMODE 0
+  TEMPOENVLOCKMODE 1
+  ITEMMIX 1
+  DEFPITCHMODE 589824 0
+  TAKELANE 1
+  SAMPLERATE 48000 1 0
+  <RENDER_CFG
+    ZXZhdxgAAQ==
+  >
+  LOCK 1
+  <METRONOME 6 2
+    VOL 0.25 0.125
+    BEATLEN 4
+    FREQ 1760 880 1
+    SAMPLES "" "" "" ""
+    SPLIGNORE 0 0
+    SPLDEF 2 660 "" 0 ""
+    SPLDEF 3 440 "" 0 ""
+    PATTERN 0 169
+    PATTERNSTR ABBB
+    MULT 1
+  >
+  GLOBAL_AUTO -1
+  TEMPO 60 4 4 1
+  PLAYRATE 1 0 0.25 4
+  SELECTION 300 0
+  SELECTION2 300 0
+  MASTERAUTOMODE 0
+  MASTERTRACKHEIGHT 0 0
+  MASTERPEAKCOL 16576
+  MASTERMUTESOLO 0
+  MASTERTRACKVIEW 1 0.6667 0.5 0.5 0 0 0 0 0 0 0 0 0 0 1
+  MASTERHWOUT 0 0 1 0 0 0 0 -1
+  MASTER_NCH 2 2
+  MASTER_VOLUME 1 0 -1 -1 1
+  MASTER_PANMODE 3
+  MASTER_PANLAWFLAGS 3
+  MASTER_FX 0
+  MASTER_SEL 0
+  <MASTERPLAYSPEEDENV
+    EGUID {9803FC77-4787-4218-9C71-A57DA34F2F8C}
+    ACT 0 -1
+    VIS 0 1 1
+    LANEHEIGHT 0 0
+    ARM 0
+    DEFSHAPE 0 -1 -1
+  >
+  <TEMPOENVEX
+    EGUID {63E74D85-0E6A-48A5-9090-8BD519357BB8}
+    ACT 0 -1
+    VIS 1 0 1
+    LANEHEIGHT 0 0
+    ARM 0
+    DEFSHAPE 1 -1 -1
+  >
+  RULERHEIGHT 86 86
+  RULERLANE 1 4 "" 0 -1 0
+  RULERLANE 2 8 "" 0 -1 0
+  <PROJBAY
+  >
+  <TRACK {DD4354A1-0027-470C-80EB-D562DEC3203C}
+    NAME Group
+    PEAKCOL 16576
+    BEAT -1
+    AUTOMODE 0
+    PANLAWFLAGS 3
+    VOLPAN 1 0 -1 -1 1
+    MUTESOLO 0 0 0
+    IPHASE 0
+    PLAYOFFS 0 1
+    ISBUS 1 1
+    BUSCOMP 0 0 0 0 0
+    SHOWINMIX 1 0.6667 0.5 1 0.5 0 0 0 0
+    FIXEDLANES 9 0 0 0 0
+    LANEREC -1 -1 -1 0
+    SEL 0
+    REC 0 0 1 0 0 0 0 0
+    VU 64
+    TRACKHEIGHT 0 0 0 0 0 0 0
+    INQ 0 0 0 0.5 100 0 0 100
+    NCHAN 2
+    FX 1
+    TRACKID {DD4354A1-0027-470C-80EB-D562DEC3203C}
+    PERF 0
+    MIDIOUT -1
+    MAINSEND 1 0
+    <VOLENV2
+      ACT 1 -1
+      VIS 1 1 1
+      LANEHEIGHT 0 0
+      ARM 1
+      DEFSHAPE 0 -1 -1
+      PT 0 0 0
+      PT 5 1 0
+      PT 10800 1 0
+    >
+    <FXCHAIN
+      SHOW 0
+      LASTSEL 0
+      DOCKED 0
+      BYPASS 0 0 0
+      <VST "VST: ReaLimit (Cockos)" realimit.dll 0 "" 1919708532<565354726C6D747265616C696D697400> ""
+        dG1scu5e7f4CAAAAAQAAAAAAAAACAAAAAAAAAAIAAAABAAAAAAAAAAIAAAAAAAAAMAAAAAEAAAAAABAA
+        AwAAAAEAAAAAAAAAAAAAAAAAAAAAAPC/AgAAAAAAAAAAAAAAAAAAAD+fduMQw8Y/
+        AAAQAAAA
+      >
+      FLOATPOS 0 0 0 0
+      FXID {FB4FF622-B5EE-4038-A475-25365C210B3B}
+      WAK 0 0
+    >
+  >
+  <TRACK {BB50034F-B5D2-4F3F-9437-0A3C21327C19}
+    NAME 1_rain
+    PEAKCOL 16576
+    BEAT -1
+    AUTOMODE 0
+    PANLAWFLAGS 3
+    VOLPAN 4.4208 0 -1 -1 1
+    MUTESOLO 0 0 0
+    IPHASE 0
+    PLAYOFFS 0 1
+    ISBUS 0 0
+    BUSCOMP 0 0 0 0 0
+    SHOWINMIX 1 0.6667 0.5 1 0.5 0 0 0 0
+    FIXEDLANES 9 0 0 0 0
+    LANEREC -1 -1 -1 0
+    SEL 0
+    REC 0 0 1 0 0 0 0 0
+    VU 64
+    TRACKHEIGHT 0 0 0 0 0 0 0
+    INQ 0 0 0 0.5 100 0 0 100
+    NCHAN 2
+    FX 1
+    TRACKID {BB50034F-B5D2-4F3F-9437-0A3C21327C19}
+    PERF 0
+    MIDIOUT -1
+    MAINSEND 1 0
+    <FXCHAIN
+      SHOW 0
+      LASTSEL 0
+      DOCKED 0
+      BYPASS 1 0 0
+      <VST "VST: ReaEQ (Cockos)" reaeq.dll 0 "" 1919247729<56535472656571726561657100000000> ""
+        cWVlcu5e7f4CAAAAAQAAAAAAAAACAAAAAAAAAAIAAAABAAAAAAAAAAIAAAAAAAAAzQAAAAEAAAAAABAA
+        IQAAAAUAAAAAAAAAAQAAAAAAAAAAAFlAAAAAAAAA8D+amZmZmZnpPwEIAAAAAQAAAAAAAAAAwHJAAAAAAAAA8D8AAAAAAAAAQAEIAAAAAQAAAAAAAAAAQI9AAAAAAAAA
+        8D8AAAAAAAAAQAEBAAAAAQAAAJ/vruhzybNAMIH/8g6n2z+amZmZmZnpPwEEAAAAAQAAAAAAAAAAAFlAAAAAAAAA8D8AAAAAAAAAQAEBAAAAAQAAAAAAAAAAAPA/AAAA
+        AP0BAABcAQAAAgABAA==
+        AAAQAAAA
+      >
+      FLOATPOS 0 0 0 0
+      FXID {C4C9AFCA-F360-48DA-AFBA-BB6C1BBB4127}
+      WAK 0 0
+    >
+    <ITEM
+      POSITION 0
+      SNAPOFFS 0
+      LENGTH 10800.0
+      LOOP 1
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {DA150D18-9C69-42C4-B273-643EC37199B2}
+      IID 102
+      NAME BI15.森林叶雨.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {259E2C8F-8BC8-4AB5-9617-A424D340266F}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\1_rain\booms\BI15.森林叶雨.wav"
+      >
+    >
+  >
+  <TRACK {6AC1C6A4-5FF7-45C5-836B-38D7A95664A2}
+    NAME 2_impact
+    PEAKCOL 16576
+    BEAT -1
+    AUTOMODE 0
+    PANLAWFLAGS 3
+    VOLPAN 0.5 0 -1 -1 1
+    MUTESOLO 0 0 0
+    IPHASE 0
+    PLAYOFFS 0 1
+    ISBUS 0 0
+    BUSCOMP 0 0 0 0 0
+    SHOWINMIX 1 0.6667 0.5 1 0.5 0 0 0 0
+    FIXEDLANES 9 0 0 0 0
+    LANEREC -1 -1 -1 0
+    SEL 0
+    REC 0 0 1 0 0 0 0 0
+    VU 64
+    TRACKHEIGHT 0 0 0 0 0 0 0
+    INQ 0 0 0 0.5 100 0 0 100
+    NCHAN 2
+    FX 0
+    TRACKID {6AC1C6A4-5FF7-45C5-836B-38D7A95664A2}
+    PERF 0
+    MIDIOUT -1
+    MAINSEND 1 0
+    <ITEM
+      POSITION 0
+      SNAPOFFS 0
+      LENGTH 10800.0
+      LOOP 1
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {14D6AA55-D5C0-40E8-A844-B73507AD120A}
+      IID 103
+      NAME 中雨_雨伞.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {792E3808-A666-428B-9833-DCD9637D42E2}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\2_impact\sounds\中雨_雨伞.wav"
+      >
+    >
+  >
+  <TRACK {436EC5FA-FE6A-439B-8DCF-469AE8134E14}
+    NAME 3_random
+    PEAKCOL 16576
+    BEAT -1
+    AUTOMODE 0
+    PANLAWFLAGS 3
+    VOLPAN 1.4471 0 -1 -1 1
+    MUTESOLO 0 0 0
+    IPHASE 0
+    PLAYOFFS 0 1
+    ISBUS 0 0
+    BUSCOMP 0 0 0 0 0
+    SHOWINMIX 1 0.6667 0.5 1 0.5 0 0 0 0
+    FIXEDLANES 9 0 0 0 0
+    LANEREC -1 -1 -1 0
+    SEL 0
+    REC 0 0 1 0 0 0 0 0
+    VU 64
+    TRACKHEIGHT 0 0 0 0 0 0 0
+    INQ 0 0 0 0.5 100 0 0 100
+    NCHAN 2
+    FX 0
+    TRACKID {436EC5FA-FE6A-439B-8DCF-469AE8134E14}
+    PERF 0
+    MIDIOUT -1
+    MAINSEND 1 0
+    <ITEM
+      POSITION 106.38777888118811
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {7A0C65A8-2B92-4512-9C32-55FA4B311C39}
+      IID 2
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {2992268A-08C1-4F42-94F7-DCB3B3905F0D}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 212.77555776237622
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {08D8C1E4-12A9-467B-BFC0-700CF6805A70}
+      IID 3
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {DB9EB6B7-70EA-4AFC-9E90-8955470FC15A}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 317.3090939567015
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {214FA149-740B-4D51-B971-414A0A16079F}
+      IID 4
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {07FA1745-5196-4A71-9761-A59F6BF1D77F}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 424.36510324870454
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {52F34EBA-AAA9-4156-B0A5-279ED4A9C509}
+      IID 5
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {5C94FC41-669A-4FAC-91D3-F0E02B32CF84}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 501.8587803686941
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {DBF469DD-A163-48BB-8E33-2592B27005A8}
+      IID 6
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {6FC7E100-1C58-419B-8AA6-E9F8BFF77F1E}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 730.9610535004716
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {FD86A050-5D70-4115-81C6-B401471F7360}
+      IID 7
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {72D32BC2-34BC-4721-98BD-4F489C230EE8}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 851.2132247831348
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6BFA8331-8DC3-43D9-9563-6930635FA3DC}
+      IID 8
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {B01DACB9-F80F-46FE-AB0E-8687BA3B686D}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 730.4145329301256
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {27E7227F-38BC-4DBF-980A-FB6E17032688}
+      IID 9
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {B138B328-3A61-4E43-8376-3930D6DC0A57}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 843.48530532645
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {FCC80D2B-3B11-42D2-86F3-A4AB47BA97FA}
+      IID 10
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {A9B98A47-933D-4D5B-BD1B-3C5836A9474A}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 869.066643821745
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {4BB5B372-38DA-4473-BDC6-58E4AC2ADD0E}
+      IID 11
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {248A92FB-F937-4136-9CA5-F6762233A092}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 983.7531112145598
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {4B752170-5EE7-4BA7-8427-0F93A6E167ED}
+      IID 12
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {2AB30D73-92C6-4FD5-A4A3-2DBF27F2E2E6}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 1524.503499363988
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {AC301D5B-13EA-49BA-831B-2639654DE8D1}
+      IID 13
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {7F3C9762-33CF-4B2B-851B-602722389DEF}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 1266.506054350015
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {48F23B0A-18A8-4377-9FD2-32AB4A438CD5}
+      IID 14
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E5DB86AD-A021-412A-B9F4-EEEA6DB0B41E}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 1685.751039838014
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {FAD5A7A8-3D29-4232-BBBB-A5263F392120}
+      IID 15
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {841E1135-CCD8-437F-8839-BA97861F2D93}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 1279.964948987318
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {BFD4AEA3-0BCF-40BD-8C55-F29A547B4F46}
+      IID 16
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {7EC0BD00-59C0-49AE-8354-4388F9BA0133}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 1299.4070954443666
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6450FC6F-5712-4CB6-A19D-73537F420F7D}
+      IID 17
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {C1C97AD9-7985-4D02-A418-80FC07E4CD7D}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 1642.9391421740463
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {1FE0A3C9-5585-4091-A6A3-99A3B871D6F4}
+      IID 18
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {8B8E972A-4C31-40F1-9E7A-A80487E99D2E}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 2107.9857941458845
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {324E7409-1A0E-48BB-A5D9-F64BEC2A49D4}
+      IID 19
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {568BBACA-9F79-468E-B499-FC53080A1DA4}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 2117.583604289582
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {09F5323C-6AF4-4513-99E0-4151FE839CAD}
+      IID 20
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {0C8F5A74-CD3B-42EF-9A81-EE1E4FA8E76B}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 2119.7283503044832
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {21E81AD2-4836-451F-A19D-5BFBCAED2D3C}
+      IID 21
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {076CA58E-1000-4E22-B809-97E04F4D933E}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 2711.990148886867
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {A3065AC1-39EF-4A9E-A08A-08F97B1E684D}
+      IID 22
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {AFFF6658-30F4-4030-9B9C-D13F78822B13}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 1919.3091636909564
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {68E7FD2C-551D-4F7B-BDB3-151DE6CC2A9F}
+      IID 23
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {90F18D92-9D34-48E1-8EC6-6861ED7DB89F}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 2124.457372579786
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {4F13EE0B-5BAB-4A56-837A-14F9162195BF}
+      IID 24
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {5EA66E85-717F-49C8-A384-9FD0D718E093}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 2274.5063623373453
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {F91E1F11-3F08-4CE3-8D63-01F1B03F5711}
+      IID 25
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {0C6B4298-2F5C-45D1-ACEE-3108993EBF11}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 2497.1031782246546
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {A087D4F8-35E0-4DC8-874C-F57C182F68EA}
+      IID 26
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {8DEABDFA-DB31-4C93-B2C8-139928BFA8E3}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 2238.488685421576
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {3CEB62F9-3074-41FB-8F80-5FB4390A3039}
+      IID 27
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {484159CD-F909-43F3-9044-A488BDACF59C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 2956.3981999484163
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6C52F457-91AC-400E-A652-AB80585096B8}
+      IID 28
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {B78D8202-DB91-4716-BB62-4E76349CF383}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 2274.6200814418617
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6B1E0F9A-82FB-4285-A9F5-BB6E29D8D465}
+      IID 29
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {F0D96609-28F9-4D06-8302-EC7D3751FE24}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 3292.890541282247
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {EFE4B70E-8B5D-4582-AF4D-E21A4FC1ABF4}
+      IID 30
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {4DAD1A77-6E7F-4862-9574-C0789C4F8CC6}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 2876.2917814757698
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {0E2C53A0-5F9C-4A5E-B37A-C19C2BAF8F75}
+      IID 31
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {53C0B15A-B2BA-4FFA-BC07-78FF19B4EF76}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 2727.5631965643593
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {0F0527D7-D917-4F21-A6D4-EA91E9918AF3}
+      IID 32
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {76D81C5B-A2D8-4474-B3EC-476B9E64FFD9}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 2565.774772367725
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {95A9EDCC-A414-4732-A9F1-686D99B58CAE}
+      IID 33
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {55D21BA1-0A20-4ADA-825E-EC409B5F085E}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 2553.2382808111083
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {458E3F7C-80A8-4DFE-9D48-971A25A0C38C}
+      IID 34
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {EED49F9F-E697-48DC-BC32-98E971F1CE39}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 3854.6034910827416
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {C1F6F303-B500-48C6-8DAE-3FC28FEDCB89}
+      IID 35
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {D6918D3D-5534-4DC8-9283-9C23984346F2}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 3598.529151974014
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {CC4A29F4-FF0D-4F24-AED5-EFD7B0428F73}
+      IID 36
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {23BC1B93-EA61-4DE1-B535-A3242E8C436E}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 3344.326600265914
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {024B309A-7123-44B1-B242-F37E46A19D8F}
+      IID 37
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {F9C11E9B-0EAA-4820-B267-4CF747B8F407}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 4252.6435289150495
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {37F6DE90-639D-4D4E-A384-91C6C8A05B2E}
+      IID 38
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {45EAB157-79C8-4D18-AAEA-D3E6D8326CFF}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 4028.7856659038785
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {2F97BA53-E900-4ED4-B182-96C10A795E42}
+      IID 39
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {EC29A808-5140-4FD0-92F9-40F2A76C804B}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 5285.778718988668
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {144E842B-9108-45A4-8383-C0EF487E2BD1}
+      IID 40
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {05424584-FB9D-46B6-A084-0E224140AE09}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 5072.658557295568
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {91EAE747-9CAB-4BEB-AAA3-0C08595E4F5B}
+      IID 41
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {DF9E8E53-CD22-4D69-866D-6AA6B3158EE2}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 3569.4705135290415
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {D6DE141C-667D-4872-9EF4-31128FAF81AF}
+      IID 42
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {0EDA5C9F-2982-420F-AC7C-04D957E7629D}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 5181.253610503591
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {A7682987-98C6-475C-81CE-0F909E729995}
+      IID 43
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {6EE27A58-000B-401C-A38A-867410D20DC2}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 3458.133481985985
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {C3942EEB-FA6E-4AE5-BDDC-2BFBF02AFB8E}
+      IID 44
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {5A50210A-DBE4-4EE1-A3BE-B518EA4566E8}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 5937.60928136584
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {D99C34F5-2AE5-4AF2-AB89-8EDFF0D3E798}
+      IID 45
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {AAE0BA2A-1536-488B-BB7D-61710AF309F2}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 3663.89995059144
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {A2EDB71D-223B-436C-9756-BFC3BF5D9798}
+      IID 46
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {D674112B-FF9D-4AB9-8F62-845890B762E9}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 5875.334483681357
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {5B93CDBA-7E6D-49D9-A3F6-85983CF03368}
+      IID 47
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {641D51B1-32AD-4E07-8B29-2113CD9CF646}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 5422.320677568286
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {7AE96E41-C212-4F7C-91F6-584B46FA5F94}
+      IID 48
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {255E956D-E3C7-42C0-A62E-94293F4D2738}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 4766.801119855705
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {071C9F50-0321-492E-A072-A2EDC1164F45}
+      IID 49
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1457CF0B-A161-4BAE-8654-ADB856ED049C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 6346.748686639605
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {D3A29C01-8D29-4636-AC4B-87706251F9CB}
+      IID 50
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {A0F1A753-9E18-458C-8B00-37ED4ABCB963}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 5951.405052171158
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {FCF78C85-3B02-47DB-BD1B-674CFFAD4085}
+      IID 51
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {272DD9AF-6B03-43F0-892B-110DCB19D2EF}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 4137.516095655287
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {13204E9C-E1CE-4FA4-8855-75CB7C10276B}
+      IID 52
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {4BA85358-03EF-4E5E-892B-390C38397CC1}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 4748.206659211406
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {5C1FF44C-7197-44A3-B72F-B9FAC6EABD10}
+      IID 53
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {DCEE9B73-B15B-4A1E-BE88-A49B31E2C0B0}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 5459.48020825069
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6421B9C3-721B-4C5B-946A-3F8B623D8325}
+      IID 54
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {EA14B0B7-3125-41F3-A218-F77050FC2E48}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 6627.441538200699
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {E68BC7A1-5864-4EF8-BEEA-90B4CFC3AB34}
+      IID 55
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1D73DE54-7270-40F7-A7A7-2C4D7A6E7719}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 7015.559729279011
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {F1F6ED82-CFE5-4D18-9147-37F5D7DBFFCC}
+      IID 56
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {D7C36913-C23C-45E8-BB8C-FF46F5F1AED0}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 6445.491367859384
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {D33DBB0F-8A51-4E77-BB11-A9AAA10428E8}
+      IID 57
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {F49E116E-1D45-4E13-AA15-755553496CEA}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 7030.28622150391
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {B7B6F22E-E6AA-4861-A173-A3B292B7E539}
+      IID 58
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {30082269-9B2E-4F63-A6AA-3C81F60E00AC}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 6559.345018893912
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {734951A8-E1BF-471F-8C8D-856D956DEFF8}
+      IID 59
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {C1E98643-8884-4419-8632-D664D0EBFCA7}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 5609.036433398828
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {618BDBF1-842C-452C-88E7-F5733C35D85B}
+      IID 60
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {A20E92E5-1C18-410F-A923-AED12C4E2F1A}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 7346.722620578748
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {33702E76-91CA-4A77-AFB2-B67A83E5D835}
+      IID 61
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {B8319207-8A7B-428F-A3BB-F888A1C316D5}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 5419.83897121042
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {D04A08A2-4A9B-4EAF-AC05-C1113440D1E9}
+      IID 62
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {5343010A-2E00-4F86-86B4-D17FB6DDE171}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 6758.0922271444915
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {1E75F00A-AF06-4FD4-837E-574C1EBDC4E9}
+      IID 63
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {10AF8E28-01B4-4C13-95A7-441A4BE1BA48}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 7406.315017406081
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {ACA3E4B5-4E80-4388-B16B-DF217BA405E3}
+      IID 64
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {B93EA1FE-BA4A-4E24-8497-6CEA2DB2C4BA}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 7470.127316591021
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {46F9864C-3237-4194-BB71-69CEFCEE579C}
+      IID 65
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {73BBA1E2-B939-4CBA-A644-89E9AA5A3181}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 7113.642590030437
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {42A36238-BDA5-4533-9325-3FED67A30728}
+      IID 66
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {42816747-5B8F-45A1-A955-DB6E84E7267F}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 8038.636536274753
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {D7A48153-C4F6-4352-A7F0-EE1D9B0B7935}
+      IID 67
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {211C3BAA-34AE-49C0-90A3-3A34CBC91E7D}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 7613.441525958049
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {D4AB00B0-511B-4537-8EF7-C1C2B8C1E9EB}
+      IID 68
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {A10865FA-7895-4B05-BFC5-D87E2FB592DF}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 7360.999447145493
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {A75CC055-D79B-41C0-A0F3-8F73372F13FC}
+      IID 69
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {8C802BFC-48A4-44CC-9A12-832DBF8409A3}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 6867.806703614584
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {0723EFEE-1E0F-4A66-822F-92028CBAE5D0}
+      IID 70
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {3CD07DB5-58DE-406A-9B4A-7ED9C77EFD50}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 6659.916004669584
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {A24129FD-A0AA-4AD0-B16D-61FBE8AE9CDE}
+      IID 71
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {98F55111-B632-48A4-A78D-E2B28A48397D}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 8340.57512285733
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {1AA6E095-AF87-4507-84CA-0D64F8CFA31C}
+      IID 72
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {55D9DD76-5C92-4E84-8C3C-95E8D939B6D2}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 6960.924506665534
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {7EA212C9-BBB0-4FC9-9AA6-B69591D9EB0C}
+      IID 73
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {A24246EA-D2D0-4BFB-BCB7-00CF91844227}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 7587.42884031729
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {64C4E34F-BA92-4896-A3C6-4C777B1458DC}
+      IID 74
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {2A4B2A23-830B-4A28-982B-CE149B4F2C21}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 7114.239003349344
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {541F632F-FEBE-4A37-B3A2-F80B55B02C58}
+      IID 75
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {F426236B-8A80-4E73-AA55-81EB1282EB40}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 8339.328769620892
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {89349429-2398-45B1-A078-2C7F09EBFE5D}
+      IID 76
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {5D33EDF5-B941-48B4-B9FE-7620901A3BA5}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 8214.917212430779
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {08368C8A-B3E7-4D39-A776-054D10052432}
+      IID 77
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {593212AA-12A2-4CCE-A7CA-A6F6523BD110}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 8337.777351541352
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {621C87E7-56A2-4595-8160-543E785A34B8}
+      IID 78
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {8F8F7DF6-F554-43DD-8AB9-8BCAA70AC0A0}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 8743.151947110919
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {CAE05662-8B8C-42D4-B62C-D925A6960053}
+      IID 79
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {ABA4D54C-2F81-466F-A8CB-9F9EA17E0CC8}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 8559.212323446713
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {A3AD52F6-94F1-4F18-BE04-FC0A3078917F}
+      IID 80
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {6B4AB82F-6EBF-445C-9696-40DE06579A44}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 9073.658098988697
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {F805261A-8D46-43C1-AAFC-6FD085DD45C0}
+      IID 81
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {B6F1D7C9-3E3E-499F-827D-5BC9D81FC81D}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 9137.94684260332
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {F1D49D5B-8835-4D20-97DB-9D4F537C48DA}
+      IID 82
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {BF1929FC-DBEC-406C-9F97-9F37694C25A3}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 8494.273130935828
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {4960D43B-1A3A-4652-8CD8-9A02B16B534F}
+      IID 83
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {2739F604-CEB8-45BE-B1FD-AA7187D3FDED}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 8949.977215638857
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {D4FA81C1-0FD4-48CD-80D2-6C1748A74AB0}
+      IID 84
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {487D8DE3-6365-4F56-BC46-C0C2F6DABFA9}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 8845.536196941897
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {0096AC59-0668-4651-8C97-912EC5770475}
+      IID 85
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {39BE3EED-CB62-4414-8FDB-12783F05AD44}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 8943.346595426829
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {055F99AE-5F28-4560-A312-A339F2A856CB}
+      IID 86
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {6974C1A5-22BA-469C-B1E0-7D0A6C469108}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 8922.958192388953
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {ABEE6A3A-EEA4-4C72-8125-2CBDFEAE9A9F}
+      IID 87
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {49CE67FE-DCD6-4696-8F67-E7062F178640}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 9283.257008628294
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {FC07CB44-AC02-4843-9880-FA8E22285D8B}
+      IID 88
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {C4D80975-E679-430A-A936-5D87082E1AC2}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 9068.939017568515
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {D565EDE3-C8CC-4F14-AAF0-B5EEA39A17E7}
+      IID 89
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {F504B778-68BB-43CD-8D6C-FE04065B03B6}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 9499.59542803184
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {8656143F-4DC3-4403-8DE2-43D74B5DEC6B}
+      IID 90
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {6D00D75D-BE63-4D95-ADCF-ACB791A4519D}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 9544.261093219284
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {84AB5CBD-ECDF-46CC-AC1B-8483525F909B}
+      IID 91
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {6087BB32-09FF-4B6B-B0C3-3C31A0D858F7}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 9576.572735335012
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {E43153F7-B44D-413B-93AE-7CF08EECA508}
+      IID 92
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {0EA1B90A-FA6C-4C8F-B6C7-4A51A0474526}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 9909.87894062556
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {D25433C6-EC31-4DD1-BC80-E294300673F9}
+      IID 93
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {B53EF937-905D-49E3-8B67-85E056EE8744}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 9770.343774825682
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {E9C05C11-1AAB-46E1-8B98-C7C83F9AC334}
+      IID 94
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {827D69CC-C3F3-4C73-98A4-92A97534243B}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 9930.031051337264
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {0AD7592E-AC34-4391-9A59-4DAD550C721A}
+      IID 95
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {4EDB6A58-CBA5-4B33-A8FE-6B571B590159}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 10164.659268808482
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {EB94925B-556E-44C0-836B-503A031567FE}
+      IID 96
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {C5A0C784-2968-4D7D-93D5-D1F8758C4DD2}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 10235.426828287136
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {AB3B83EC-C62C-45BC-967E-461EFCB95858}
+      IID 97
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9214A6EB-57C6-4122-8566-1CE830BC2D84}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 10321.878005749926
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {463FD63F-93D2-4740-98D8-45B9A8D340EF}
+      IID 98
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {CD06CD76-9E36-4ED7-BD9F-2E2829375E9A}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 10431.251574432963
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {E8FD8A76-D75E-4BB4-920A-AFFFD4F824A2}
+      IID 99
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {69C6C754-F18B-4069-822B-833598BEC961}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 10532.390109237624
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {AE2D86E4-166F-44CF-AC95-3F874B18C914}
+      IID 100
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {D375B245-3779-4351-BA2D-43AC17818277}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+    <ITEM
+      POSITION 10638.777888118811
+      SNAPOFFS 0
+      LENGTH 54.834333
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {F414ADF5-D5F4-4D56-824D-0F755214B87E}
+      IID 101
+      NAME QP03 0284 Thunder distant very slow long.wav
+      VOLPAN 1.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1E7E2181-B75E-429B-AE2C-4034EDBACD7E}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0284 Thunder distant very slow long.wav"
+      >
+    >
+  >
+  <TRACK {67401C7D-5516-42F1-90E3-00E85B06BF19}
+    NAME 4_wildlife
+    PEAKCOL 16576
+    BEAT -1
+    AUTOMODE 0
+    PANLAWFLAGS 3
+    VOLPAN 1.0 0 -1 -1 1
+    MUTESOLO 0 0 0
+    IPHASE 0
+    PLAYOFFS 0 1
+    ISBUS 0 0
+    BUSCOMP 0 0 0 0 0
+    SHOWINMIX 1 0.6667 0.5 1 0.5 0 0 0 0
+    FIXEDLANES 9 0 0 0 0
+    LANEREC -1 -1 -1 0
+    SEL 0
+    REC 0 0 1 0 0 0 0 0
+    VU 64
+    TRACKHEIGHT 0 0 0 0 0 0 0
+    INQ 0 0 0 0.5 100 0 0 100
+    NCHAN 2
+    FX 1
+    TRACKID {67401C7D-5516-42F1-90E3-00E85B06BF19}
+    PERF 0
+    MIDIOUT -1
+    MAINSEND 1 0
+    <FXCHAIN
+      SHOW 0
+      LASTSEL 0
+      DOCKED 0
+      BYPASS 1 0 0
+      <VST "VST: ReaVerbate (Cockos)" reaverbate.dll 0 "" 1920361016<56535472766238726561766572626174> ""
+        OGJ2cu9e7f4CAAAAAQAAAAAAAAACAAAAAAAAAAIAAAABAAAAAAAAAAIAAAAAAAAAKAAAAAAAAAAAABAA
+        776t3g3wrd5DAgA/AACAP9oEPD817P8+AACAPwAAAAAAAIA/AAAAAA==
+        AAAQAAAA
+      >
+      FLOATPOS 0 0 0 0
+      FXID {E57D587B-B4E7-455D-875A-A48E8FF7FCB9}
+      WAK 0 0
+    >
+  >
+  <TRACK {6D25CA75-8879-4BB6-8F38-270062E6EBBB}
+    NAME video
+    PEAKCOL 16576
+    BEAT -1
+    AUTOMODE 0
+    PANLAWFLAGS 3
+    VOLPAN 0.0 0 -1 -1 1
+    MUTESOLO 1 0 0
+    IPHASE 0
+    PLAYOFFS 0 1
+    ISBUS 2 -1
+    BUSCOMP 0 0 0 0 0
+    SHOWINMIX 1 0.6667 0.5 1 0.5 0 0 0 0
+    FIXEDLANES 9 0 0 0 0
+    LANEREC -1 -1 -1 0
+    SEL 0
+    REC 0 0 1 0 0 0 0 0
+    VU 64
+    TRACKHEIGHT 0 0 0 0 0 0 0
+    INQ 0 0 0 0.5 100 0 0 100
+    NCHAN 2
+    FX 0
+    TRACKID {6D25CA75-8879-4BB6-8F38-270062E6EBBB}
+    PERF 0
+    MIDIOUT -1
+    MAINSEND 1 0
+    <ITEM
+      POSITION 0
+      SNAPOFFS 0
+      LENGTH 4.499
+      LOOP 1
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {78C7D1E1-CD35-4069-8FBD-C3EBA72BBED2}
+      IID 1
+      NAME MVI_1007_FHD_loop_0.96_dur_5_03中雨.mp4
+      VOLPAN 0.0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {131DD944-0E74-4CAB-9244-143A1A24AC76}
+      <SOURCE VIDEO
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\MVI_1007_FHD_loop_0.96_dur_5_03中雨.mp4"
+      >
+    >
+  >
+  <EXTENSIONS
+  >
+>

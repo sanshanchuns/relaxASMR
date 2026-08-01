@@ -937,19 +937,51 @@ class RelaxAsmrApp(tk.Tk):
             self._cfg["uploaded_ids"] = ids
         return ids
 
+    def _mp4_matches_scene_num(self, mp4: Path, scene_num: str) -> bool:
+        """uploaded_ids 里的 mp4 必须与场景序号一致，防止串号。"""
+        try:
+            return get_scene_number(derive_scene_id(mp4)) == str(scene_num)
+        except ValueError:
+            return False
+
     def _is_video_uploaded(self, scene_num: str) -> bool:
         from gui.upload_status import is_uploaded_cfg_entry
 
+        self._heal_uploaded_entry_if_needed(str(scene_num))
         return is_uploaded_cfg_entry(self._uploaded_ids_cfg().get(str(scene_num)))
 
     def _upload_entry_mp4(self, scene_num: str) -> Path | None:
         from gui.upload_status import mp4_path_from_upload_entry
 
-        raw = mp4_path_from_upload_entry(self._uploaded_ids_cfg().get(str(scene_num)))
+        key = str(scene_num)
+        raw = mp4_path_from_upload_entry(self._uploaded_ids_cfg().get(key))
         if not raw:
             return None
         p = Path(raw)
-        return p.resolve() if p.is_file() else None
+        if not p.is_file():
+            return None
+        if not self._mp4_matches_scene_num(p, key):
+            return None
+        return p.resolve()
+
+    def _heal_uploaded_entry_if_needed(self, scene_num: str) -> None:
+        """清掉串号的 uploaded_ids（例如 1005 误存成 MVI_6978 成片）。"""
+        from gui.upload_status import mp4_path_from_upload_entry
+
+        ids = self._uploaded_ids_cfg()
+        key = str(scene_num)
+        entry = ids.get(key)
+        if entry is None or entry is True:
+            return
+        raw = mp4_path_from_upload_entry(entry)
+        if not raw:
+            return
+        p = Path(raw)
+        if self._mp4_matches_scene_num(p, key):
+            return
+        ids.pop(key, None)
+        self._save_config()
+        self._log(f"已清除串号上传记录：MVI_{key} ← {p.name}")
 
     def _resolve_uploaded_mp4_path(
         self,
@@ -960,7 +992,7 @@ class RelaxAsmrApp(tk.Tk):
         saved = self._upload_entry_mp4(scene_num)
         if saved:
             return saved
-        if current and current.is_file():
+        if current and current.is_file() and self._mp4_matches_scene_num(current, scene_num):
             return current.resolve()
         for sid, data in self._export_outputs_cfg().items():
             if self._scene_num(sid) != str(scene_num) or not isinstance(data, dict):
@@ -969,7 +1001,7 @@ class RelaxAsmrApp(tk.Tk):
             if not raw:
                 continue
             p = Path(raw)
-            if p.is_file():
+            if p.is_file() and self._mp4_matches_scene_num(p, scene_num):
                 return p.resolve()
         return None
 
@@ -980,7 +1012,7 @@ class RelaxAsmrApp(tk.Tk):
         if ids.get(key) is not True:
             return
         mp4 = self._resolve_uploaded_mp4_path(key, current=self._resolve_upload_mp4())
-        if mp4:
+        if mp4 and self._mp4_matches_scene_num(mp4, key):
             ids[key] = {"mp4": str(mp4)}
             self._save_config()
 
@@ -995,14 +1027,17 @@ class RelaxAsmrApp(tk.Tk):
         ids = self._uploaded_ids_cfg()
         key = str(scene_num)
         if uploaded:
-            entry: dict[str, str] | bool = True
             resolved = mp4 if mp4 and mp4.is_file() else None
-            if resolved is None:
+            if resolved is None or not self._mp4_matches_scene_num(resolved, key):
                 resolved = self._resolve_uploaded_mp4_path(key, current=self._resolve_upload_mp4())
+            if resolved is not None and not self._mp4_matches_scene_num(resolved, key):
+                resolved = None
             if resolved:
-                entry = {"mp4": str(resolved.resolve())}
+                entry: dict[str, str] | bool = {"mp4": str(resolved.resolve())}
                 if url:
                     entry["url"] = url
+            else:
+                entry = True
             ids[key] = entry
         else:
             ids.pop(key, None)
@@ -1507,23 +1542,39 @@ class RelaxAsmrApp(tk.Tk):
     def _format_upload_label(self, mp4: Path | None) -> str:
         from gui.upload_status import format_step5_upload_label
 
-        if not mp4 or not mp4.is_file():
+        sid = self.scene_id
+        if not sid:
             return "待上传：—"
-        try:
-            scene_num = get_scene_number(derive_scene_id(mp4))
-        except ValueError:
-            scene_num = None
-        if scene_num and self._is_video_uploaded(scene_num):
+        scene_num = get_scene_number(sid)
+        self._heal_uploaded_entry_if_needed(scene_num)
+
+        current = mp4 if mp4 and mp4.is_file() else self._resolve_valid_export_mp4(sid)
+        if current and not self._mp4_matches_scene_num(current, scene_num):
+            current = self._resolve_valid_export_mp4(sid)
+
+        uploaded = self._is_video_uploaded(scene_num)
+        if uploaded:
             self._maybe_upgrade_uploaded_entry(scene_num)
-            display = self._resolve_uploaded_mp4_path(scene_num, current=mp4) or mp4
+            display = self._resolve_uploaded_mp4_path(scene_num, current=current)
+            if display and self._mp4_matches_scene_num(display, scene_num):
+                return format_step5_upload_label(
+                    uploaded=True,
+                    rel_path=self._format_media_rel_path(display),
+                )
+            # 仅有标记、无匹配成片：仍显示已上传，路径用当前成片或 —
+            if current and current.is_file():
+                return format_step5_upload_label(
+                    uploaded=True,
+                    rel_path=self._format_media_rel_path(current),
+                )
+            return "已上传：—"
+
+        if current and current.is_file():
             return format_step5_upload_label(
-                uploaded=True,
-                rel_path=self._format_media_rel_path(display),
+                uploaded=False,
+                rel_path=self._format_media_rel_path(current),
             )
-        return format_step5_upload_label(
-            uploaded=False,
-            rel_path=self._format_media_rel_path(mp4),
-        )
+        return "待上传：—"
 
     def _refresh_upload_label(self) -> None:
         if hasattr(self, "lbl_upload"):
@@ -2525,7 +2576,8 @@ class RelaxAsmrApp(tk.Tk):
                 self._log(f"媒体路径模式：{describe_media_mode('auto', LIB_REPO_ROOT)}")
                 if bool(self._cfg.get("collaboration_machine")):
                     probe = base_url() / "audio"
-                    self._log(f"协作机器：媒体 Windows 路径示例 → {wsl_unc_path(probe)}")
+                    win = wsl_unc_path(probe)
+                    self._log(f"协作机器：baseURL={probe} → Reaper 侧 {win}")
                 rpp_path.write_text(
                     gen_sub.build_rpp(cfg, LIB_REPO_ROOT, rain_dir, "auto"),
                     encoding="utf-8",
