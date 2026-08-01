@@ -149,9 +149,93 @@ def is_wsl() -> bool:
     return bool(os.environ.get("WSL_DISTRO_NAME"))
 
 
+# 系统级安装路径 + 常见的按用户安装路径（`/mnt/c/Users/*/AppData/Local/...`），
+# 按优先级从上到下尝试，找到第一个存在的就用它。
+_WSL_BROWSER_CANDIDATES: tuple[str, ...] = (
+    "/mnt/c/Program Files/Google/Chrome/Application/chrome.exe",
+    "/mnt/c/Program Files (x86)/Google/Chrome/Application/chrome.exe",
+    "/mnt/c/Program Files/Microsoft/Edge/Application/msedge.exe",
+    "/mnt/c/Program Files (x86)/Microsoft/Edge/Application/msedge.exe",
+)
+_WSL_BROWSER_USER_GLOBS: tuple[str, ...] = (
+    "*/AppData/Local/Google/Chrome/Application/chrome.exe",
+    "*/AppData/Local/Microsoft/Edge/Application/msedge.exe",
+)
+
+
+def _find_wsl_browser_exe() -> Path | None:
+    """定位 WSL 宿主机上已安装的 Chrome/Edge 可执行文件（系统级优先）。"""
+    for candidate in _WSL_BROWSER_CANDIDATES:
+        p = Path(candidate)
+        if p.is_file():
+            return p
+    users_dir = Path("/mnt/c/Users")
+    if users_dir.is_dir():
+        for pattern in _WSL_BROWSER_USER_GLOBS:
+            for p in sorted(users_dir.glob(pattern)):
+                if p.is_file():
+                    return p
+    return None
+
+
+# 本项目跟 ace.leo.zhu@gmail.com 这个 YouTube 账号绑定（见
+# ``gui/youtube_api.py`` 的 ``OWN_ACCOUNT_EMAIL``），优先用登录了这个邮箱的
+# Chrome 个人资料打开链接，跟 YouTube 上下文对得上。
+_OWN_CHROME_ACCOUNT_EMAIL = "ace.leo.zhu@gmail.com"
+
+
+def _find_wsl_chrome_profile_dir(target_email: str) -> str | None:
+    """按 Chrome 的 ``Local State``（``profile.info_cache``）找登录邮箱匹配的
+    本地 profile 文件夹名（如 ``"Default"``/``"Profile 1"``），用来直接指定
+    ``--profile-directory`` 跳过多账号机器上的「谁在使用 Chrome？」选择页
+    ——不指定的话，只要开了「在 Chrome 启动时显示」这个选项，每次冷启动一个
+    全新 chrome.exe 进程都会先卡在这一页，看起来就像「点了没反应」。
+    """
+    candidates = sorted(
+        Path("/mnt/c/Users").glob("*/AppData/Local/Google/Chrome/User Data/Local State"),
+        key=lambda p: p.stat().st_mtime if p.is_file() else 0.0,
+        reverse=True,
+    )
+    for path in candidates:
+        try:
+            data = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        info_cache = (data.get("profile") or {}).get("info_cache") or {}
+        for folder, meta in info_cache.items():
+            if isinstance(meta, dict) and meta.get("user_name") == target_email:
+                return str(folder)
+    return None
+
+
 def open_browser_url(url: str) -> None:
-    """WSL 下用 Windows 默认浏览器打开 URL，避免 xdg-open / cmd 截断 & 参数。"""
+    """WSL 下用 Windows 浏览器打开 URL，避免 xdg-open / cmd 截断 & 参数。
+
+    优先直接调起 chrome.exe/msedge.exe 并把 URL 当参数传入——浏览器自带的单
+    实例机制会把这个 URL 转发给已经在跑的窗口开新标签页，比
+    ``rundll32 url.dll,FileProtocolHandler`` 更可靠：后者走的是 Shell 协议
+    关联，在 WSL interop 这种跨 window station 的场景下经常出现「进程起来了
+    但没有真正打开新标签页」的情况（哪怕浏览器本身已经在运行）。
+
+    是 Chrome 的话额外带上 ``--profile-directory``：多账号机器上如果开了
+    「在 Chrome 启动时显示个人资料选择器」，裸调 ``chrome.exe <url>`` 冷启动
+    时会先卡在选择页而不会真正打开链接，必须显式指定 profile 才能跳过。
+    """
     if is_wsl():
+        browser = _find_wsl_browser_exe()
+        if browser is not None:
+            args = ["/init", str(browser)]
+            if browser.name.lower() == "chrome.exe":
+                profile_dir = _find_wsl_chrome_profile_dir(_OWN_CHROME_ACCOUNT_EMAIL)
+                if profile_dir:
+                    args.append(f"--profile-directory={profile_dir}")
+            args.append(url)
+            try:
+                subprocess.Popen(args, start_new_session=True, cwd="/mnt/c")
+                return
+            except OSError:
+                pass
+
         win_sys = Path("/mnt/c/Windows/System32")
         # explorer.exe 传 URL 在 WSL 常会打开「文件资源管理器」而非浏览器
         rundll32 = win_sys / "rundll32.exe"
@@ -171,7 +255,7 @@ def open_browser_url(url: str) -> None:
                 cwd="/mnt/c",
             )
             return
-        raise FileNotFoundError("WSL 下找不到 rundll32 / PowerShell，无法打开浏览器")
+        raise FileNotFoundError("WSL 下找不到 Chrome/Edge/rundll32/PowerShell，无法打开浏览器")
     import webbrowser
 
     webbrowser.open(url, new=1)

@@ -165,6 +165,11 @@ class RelaxAsmrApp(tk.Tk):
                 icon="warning",
             ):
                 return
+        if hasattr(self, "competitor_tab"):
+            try:
+                self.competitor_tab._persist_keywords_text()
+            except Exception:
+                pass
         self._stop_video_loop()
         if self._workflow_restore_after_id:
             self.after_cancel(self._workflow_restore_after_id)
@@ -356,6 +361,9 @@ class RelaxAsmrApp(tk.Tk):
         video_tab = getattr(self, "video_library_tab", None)
         if video_tab is not None and hasattr(video_tab, "apply_theme"):
             video_tab.apply_theme(palette)
+        for tab in getattr(self, "_youtube_insight_tabs", ()):
+            if hasattr(tab, "apply_theme"):
+                tab.apply_theme(palette)
         if hasattr(self, "btn_theme_toggle"):
             self.btn_theme_toggle.configure(text=theme_toggle_label(self._theme_mode))
         self._cfg["theme"] = self._theme_mode
@@ -399,11 +407,66 @@ class RelaxAsmrApp(tk.Tk):
         self._main_pane_equalize_retries = 0
         self._main_pane_ratio_locked = False
         self._layout_reveal_attempts = 0
+
+        # right_pane 提前在这里创建（而不是等到下方「封面预览/视频预览/日志」
+        # 那段代码才创建），是因为 ttk.PanedWindow 的 pane 必须是它自己的直接
+        # 子控件——「我的数据」「爆款分析」用到的 YoutubePreviewPanel 需要以
+        # right_pane 为 parent 才能正常被 add/insert 进去显示，而这两个 Tab
+        # 在下面很快就会构造。cover_frame/preview_frame/日志区仍在原来的位置
+        # 创建并 add 进 right_pane，不受影响。
+        self.right_pane = ttk.PanedWindow(self.right_frame, orient=tk.VERTICAL)
+        self.right_pane.pack(fill=tk.BOTH, expand=True)
+
         self.left_notebook = ttk.Notebook(self.left_frame)
         self.left_notebook.pack(fill=tk.BOTH, expand=True)
 
         self.workflow_tab = ttk.Frame(self.left_notebook)
         self.left_notebook.add(self.workflow_tab, text="工作流")
+
+        # 「我的数据」「爆款分析」的预览/LLM分析/浏览器打开 UI 挂载在应用最外层的
+        # 右半边（self.right_frame），而不是各自 Tab 内部再分栏——这样这两个 Tab
+        # 才能用整个左半边展示宫格，跟工作流等其它 Tab 共用同一个右侧预览区域。
+        # 具体显示哪一个由 `_on_left_tab_changed` 根据当前选中的左侧 Tab 切换。
+        from gui.video_insight import analyze_own_video, cached_own_insight
+        from gui.youtube_preview_panel import YoutubePreviewPanel
+
+        self._my_channel_preview = YoutubePreviewPanel(
+            self.right_pane,
+            enable_analysis=True,
+            analysis_button_label="LLM 分析优劣",
+            analysis_heading="LLM 视频优劣分析：",
+            analyze_fn=analyze_own_video,
+            get_cached_fn=cached_own_insight,
+            log_fn=self._log,
+        )
+        self._competitor_preview = YoutubePreviewPanel(
+            self.right_pane, enable_analysis=True, log_fn=self._log
+        )
+        self._active_youtube_preview: ttk.Frame | None = None
+
+        from gui.my_channel_tab import MyChannelTab
+
+        self.my_channel_tab = MyChannelTab(
+            self.left_notebook, preview=self._my_channel_preview, log_fn=self._log
+        )
+        self.left_notebook.add(self.my_channel_tab, text="我的数据")
+
+        from gui.competitor_tab import CompetitorTab
+
+        self.competitor_tab = CompetitorTab(
+            self.left_notebook,
+            preview=self._competitor_preview,
+            log_fn=self._log,
+            initial_keywords=self._cfg.get("competitor_keywords"),
+            on_keywords_changed=self._save_competitor_keywords,
+        )
+        self.left_notebook.add(self.competitor_tab, text="爆款分析")
+
+        # on_analyzed 回调要等对应 Tab 建好（拥有 _cells 映射）之后才能绑定。
+        self._my_channel_preview.set_on_analyzed(self.my_channel_tab._on_video_analyzed)
+        self._competitor_preview.set_on_analyzed(self.competitor_tab._on_video_analyzed)
+
+        self._youtube_insight_tabs = [self.my_channel_tab, self.competitor_tab]
 
         from gui.video_library_tab import VideoLibraryTab
 
@@ -616,9 +679,7 @@ class RelaxAsmrApp(tk.Tk):
         self.lbl_upload.pack(anchor=tk.W, pady=(8, 0))
         
         # === 右侧：封面预览 + 视频预览 + 日志（三等分）===
-        self.right_pane = ttk.PanedWindow(self.right_frame, orient=tk.VERTICAL)
-        self.right_pane.pack(fill=tk.BOTH, expand=True)
-
+        # self.right_pane 已在 _build_ui 开头（构造 right_frame 之后）创建。
         self.cover_frame = ttk.LabelFrame(self.right_pane, text="封面预览", padding=10)
         self.lbl_cover_video_name = ttk.Label(
             self.cover_frame,
@@ -1191,6 +1252,13 @@ class RelaxAsmrApp(tk.Tk):
         self._save_audio_library_selection(track_id, wavs)
         self._sync_track_picker_from_library(track_id, wavs)
 
+    def _save_competitor_keywords(self, text: str) -> None:
+        text = (text or "").strip()
+        if self._cfg.get("competitor_keywords") == text:
+            return
+        self._cfg["competitor_keywords"] = text
+        self._save_config()
+
     def _on_left_tab_changed(self, _event=None) -> None:
         self._unbind_left_scroll_wheel()
         if hasattr(self, "mix_preview_grid"):
@@ -1201,12 +1269,54 @@ class RelaxAsmrApp(tk.Tk):
             tab = self.left_notebook.nametowidget(self.left_notebook.select())
         except tk.TclError:
             return
-        if tab is self.video_library_tab:
-            self.video_library_tab.on_tab_selected()
-        elif tab in self._audio_library_tabs.values():
+        if tab is self.my_channel_tab:
+            self._show_youtube_preview_panel(self._my_channel_preview)
             tab.on_tab_selected()
-        elif tab is self.workflow_tab:
-            self.after_idle(self._update_left_scrollbar_visibility)
+        elif tab is self.competitor_tab:
+            self._show_youtube_preview_panel(self._competitor_preview)
+            tab.on_tab_selected()
+        else:
+            self._show_default_right_panels()
+            if tab is self.video_library_tab:
+                self.video_library_tab.on_tab_selected()
+            elif tab in self._audio_library_tabs.values():
+                tab.on_tab_selected()
+            elif tab is self.workflow_tab:
+                self.after_idle(self._update_left_scrollbar_visibility)
+
+    def _show_youtube_preview_panel(self, panel: ttk.Frame) -> None:
+        """把「我的数据/爆款分析」的预览+LLM分析 UI 换到右侧面板的上 2/3 区域，
+        日志区（下 1/3）始终保留，这样切到这两个 Tab 时依旧能看到 LLM 分析日志。"""
+        if not hasattr(self, "right_pane"):
+            return
+        if self._active_youtube_preview is panel:
+            return
+        for w in (self.cover_frame, self.preview_frame):
+            if str(w) in self.right_pane.panes():
+                self.right_pane.forget(w)
+        active = self._active_youtube_preview
+        if active is not None and str(active) in self.right_pane.panes():
+            self.right_pane.forget(active)
+        if str(panel) not in self.right_pane.panes():
+            self.right_pane.insert(0, panel, weight=2)
+        self._active_youtube_preview = panel
+        self.after_idle(self._equalize_right_pane_once)
+
+    def _show_default_right_panels(self) -> None:
+        """从「我的数据/爆款分析」切回其它 Tab 时，恢复默认的封面预览/视频预览。"""
+        if not hasattr(self, "right_pane"):
+            return
+        if self._active_youtube_preview is None:
+            return
+        if str(self._active_youtube_preview) in self.right_pane.panes():
+            self.right_pane.forget(self._active_youtube_preview)
+        self._active_youtube_preview = None
+        panes = self.right_pane.panes()
+        if str(self.cover_frame) not in panes:
+            self.right_pane.insert(0, self.cover_frame, weight=1)
+        if str(self.preview_frame) not in panes:
+            self.right_pane.insert(1, self.preview_frame, weight=1)
+        self.after_idle(self._equalize_right_pane_once)
 
     def _subproject_rpp_path(self, scene_id: str | None = None) -> Path | None:
         sid = scene_id or self.scene_id
@@ -1333,7 +1443,12 @@ class RelaxAsmrApp(tk.Tk):
         self._reveal_when_layout_ready()
 
     def _equalize_right_pane_once(self, _event=None) -> None:
-        """启动时均分右侧三区；不在用户拖动窗口时反复强制 sashpos。"""
+        """启动时均分右侧分区；不在用户拖动窗口时反复强制 sashpos。
+
+        默认是「封面预览/视频预览/日志」三等分；切到「我的数据/爆款分析」后
+        右侧只剩「YouTube 预览区/日志」两个分区，此时按 2/3 : 1/3 分配，
+        给内容更丰富的 YouTube 预览区多留一些空间。
+        """
         if not hasattr(self, "right_pane"):
             return
         self.right_pane.update_idletasks()
@@ -1343,10 +1458,14 @@ class RelaxAsmrApp(tk.Tk):
                 self._equalize_retry_count += 1
                 self.after(50, self._equalize_right_pane_once)
             return
-        third = max(h // 3, 80)
+        pane_count = len(self.right_pane.panes())
         try:
-            self.right_pane.sashpos(0, third)
-            self.right_pane.sashpos(1, 2 * third)
+            if pane_count >= 3:
+                third = max(h // 3, 80)
+                self.right_pane.sashpos(0, third)
+                self.right_pane.sashpos(1, 2 * third)
+            elif pane_count == 2:
+                self.right_pane.sashpos(0, max(int(h * 2 / 3), 80))
         except tk.TclError:
             pass
         self._right_pane_last_h = h

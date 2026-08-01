@@ -22,6 +22,11 @@ Tkinter 图形界面，用于 Rain 睡眠系列 loop 视频 → Reaper 子工程
 - `Pillow`（已含于上一行 requirements；YouTube 缩略图合成亦需）
 - **YouTube 上传**：`pip install -r scripts/video_upload/requirements.txt`
 - Reaper（打开 `.rpp`；可选填写可执行文件路径）
+- **「我的数据」/「爆款分析」两个分析 Tab**：
+  - `pip install google-api-python-client requests`（`google-api-python-client` 已随「YouTube 上传」依赖装好）
+  - 环境变量 `YOUTUBE_DATA_API_KEY`（YouTube Data API v3 key，用于频道/播放列表/视频/搜索等公开数据查询）
+  - 「我的数据」解析自己频道 ID 时复用 `scripts/video_upload/config/token_leo.json`（即 leo / ace.leo.zhu@gmail.com 账号的已授权 OAuth token；若订阅数被频道设置隐藏，也会用它兜底读取真实订阅数）——需先在「上传 YouTube」步骤完成过一次授权
+  - 「爆款分析」的 LLM 优点分析复用 `agy/`（Antigravity Cloud Code Gemini，方案同 `../economist/agy`）：需要 `agy/credentials.json`（Google OAuth refresh token，**不要提交到 git**）
 
 ## 启动
 
@@ -44,6 +49,15 @@ python3 gui/app.py
 3. **新建 Reaper 工程** — GUI 选音 → 内存构建配置 → 直接生成 `.rpp`（不写配置文件）
 4. **导出音频与合成视频** — 一键混音、合成 MP4
 5. **上传到 YouTube** — 从物料目录读取元数据并上传成片
+
+### 分析 Tab（工作流之后，第 2 / 3 个 Tab）
+
+| Tab | 数据来源 | 功能 |
+|-----|----------|------|
+| **我的数据** | `YOUTUBE_DATA_API_KEY` + `agy`（LLM） | 展示自有频道（ace.leo.zhu@gmail.com）订阅人数、总视频数；视频按 YouTube 播放列表（系列）分组，每组内按播放量降序排列，宫格展示封面+标题（超长标题省略号），未加入任何播放列表的视频归入「未分类」；可对单个视频发起 LLM「优劣分析」（同时指出优点和不足，给改进建议） |
+| **爆款分析** | `YOUTUBE_DATA_API_KEY` + `agy`（LLM） | 关键词默认「leaf rain」，可在输入框自定义（逗号分隔可搜多个），围绕关键词搜索同类高赞/高评论/高观看的爆款视频，按作者分组宫格展示，组内按「日均播放量」（归一化，识别快速增长的黑马）排序展示 Top 10；点击视频预览+可发起 LLM（Gemini，含封面图）分析爆款优点；点击作者查看其订阅人数/注册时间/总观看次数；每个分组标题栏右上角「✕」可删除该分组，删除后自动从预备池里补一个新分组（优先选「总播放量不高但增速很快」的黑马作者） |
+
+两个 Tab 只负责左侧宫格；预览缩略图、LLM 分析结果、「在浏览器中播放」按钮统一渲染在应用最外层的**右半边**（与工作流的封面/视频预览共用同一个竖向三等分区域，切到这两个 Tab 时会临时让出上 2/3 空间，日志区始终保留在底部，方便随时看到 LLM 分析进度）。两个 Tab 都是**单击宫格预览、双击（或右侧「播放」按钮）在系统默认浏览器打开播放**（Tkinter 无法内嵌 YouTube 播放器）。「爆款分析」的 `search.list` 配额较贵（单次 100 配额，每个关键词会各查一次「按播放量」+一次「按最新发布」共 200 配额），搜索结果本地缓存 24 小时，工具栏可选「刷新（重新抓取）」或「使用缓存加载」。
 
 **上传前置**：
 
