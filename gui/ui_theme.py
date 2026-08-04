@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 from dataclasses import dataclass
 
 import tkinter as tk
@@ -124,6 +125,65 @@ def paint_widget_bg(bg: str, *widgets: tk.Widget | None) -> None:
 
 def theme_toggle_label(mode: str) -> str:
     return "浅色模式" if normalize_theme(mode) == "dark" else "深色模式"
+
+
+def _ime_entry_font(parent: tk.Misc) -> tuple[str, int]:
+    """WSLg 优先用 Windows 同步的中文字体，便于微信输入法候选与上屏。"""
+    for family in (
+        "Microsoft YaHei UI",
+        "Microsoft YaHei",
+        "SimHei",
+        "PingFang SC",
+        "WenQuanYi Micro Hei",
+        "Noto Sans CJK SC",
+    ):
+        try:
+            probe = f"_ime_font_{family.replace(' ', '_')}"
+            parent.tk.call("font", "create", probe, "-family", family, "-size", 10)
+            parent.tk.call("font", "delete", probe)
+            return (family, 10)
+        except tk.TclError:
+            continue
+    return ("", 10)
+
+
+def make_ime_entry(
+    parent: tk.Misc,
+    textvariable: tk.StringVar | None = None,
+    *,
+    width: int = 16,
+    theme: UiTheme | None = None,
+) -> tk.Entry:
+    """单行输入框。Linux/WSL 下 ``ttk.Entry`` 常无法输入中文，故用 ``tk.Entry``。"""
+    palette = theme or LIGHT
+    kwargs: dict = {
+        "width": width,
+        "font": _ime_entry_font(parent) if os.environ.get("WSL_DISTRO_NAME") else ("", 10),
+        "bg": palette.entry_bg,
+        "fg": palette.entry_fg,
+        "insertbackground": palette.entry_fg,
+        "selectbackground": palette.select_bg,
+        "selectforeground": palette.select_fg,
+        "relief": tk.FLAT,
+        "highlightthickness": 1,
+        "highlightbackground": palette.trough,
+        "highlightcolor": palette.trough,
+    }
+    if textvariable is not None:
+        kwargs["textvariable"] = textvariable
+    return tk.Entry(parent, **kwargs)
+
+
+def style_ime_entry(entry: tk.Entry, theme: UiTheme) -> None:
+    entry.configure(
+        bg=theme.entry_bg,
+        fg=theme.entry_fg,
+        insertbackground=theme.entry_fg,
+        selectbackground=theme.select_bg,
+        selectforeground=theme.select_fg,
+        highlightbackground=theme.trough,
+        highlightcolor=theme.trough,
+    )
 
 
 def ensure_clam_style(style: ttk.Style) -> None:

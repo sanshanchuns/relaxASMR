@@ -37,13 +37,31 @@ __pycache__/
 # cloak browser
 scripts/cloak_browser/.profiles/
 
+# 系列视频产物（图片/视频/json，体积大）
+aigc/
+
 # config
 gui/user_config.json
 scripts/video_upload/config/
 
+# 系列视频：含火山方舟 ARK API Key，禁止提交
+scripts/config/series_video.json
+
 # agy（Google OAuth 凭据，含 refresh_token，禁止提交）
-agy/credentials.json
-agy/
+cli/agy/
+
+# ElevenLabs 网页会话凭据（Cookie / Firebase Bearer / refresh / hCaptcha）
+cli/elevenlabs_web/cookie.md
+cli/elevenlabs_web/bearer.md
+cli/elevenlabs_web/refresh_token.md
+cli/elevenlabs_web/hcaptcha_token.md
+cli/elevenlabs_web/.profile/
+cli/elevenlabs_http/.profile/
+
+# 即梦 CLI 本地 OAuth（~/.dreamina_cli/，勿提交）
+cli/jimeng_web/debug/
+cli/jimeng_web/.profile/
+
 
 # YouTube 数据/缩略图/LLM 分析结果本地缓存
 gui/.cache/

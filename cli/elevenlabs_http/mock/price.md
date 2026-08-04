@@ -1,0 +1,15 @@
+curl 'https://api.us.elevenlabs.io/v1/content/generations/price' \
+  -X 'OPTIONS' \
+  -H 'accept: */*' \
+  -H 'accept-language: zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7' \
+  -H 'access-control-request-headers: authorization,content-type,x-generation-actor,x-generation-surface,x-posthog-session-id' \
+  -H 'access-control-request-method: POST' \
+  -H 'cache-control: no-cache' \
+  -H 'origin: https://elevenlabs.io' \
+  -H 'pragma: no-cache' \
+  -H 'priority: u=1, i' \
+  -H 'referer: https://elevenlabs.io/' \
+  -H 'sec-fetch-dest: empty' \
+  -H 'sec-fetch-mode: cors' \
+  -H 'sec-fetch-site: same-site' \
+  -H 'user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36'

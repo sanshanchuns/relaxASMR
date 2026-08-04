@@ -109,11 +109,14 @@ def _run_analysis(
         if cached:
             return cached
 
+    from scripts.config.paths import ensure_cli_path
+
+    ensure_cli_path()
     from agy import AgyDirectError, generate_text_via_agy_accounts, has_agy_credentials
 
     if not has_agy_credentials():
         return (
-            "⚠️ 未配置 agy 凭据（agy/credentials.json），无法调用 LLM 分析。\n"
+            "⚠️ 未配置 agy 凭据（cli/agy/credentials.json），无法调用 LLM 分析。\n"
             "请参考 economist/agy 方案放置凭据后重试。"
         )
 

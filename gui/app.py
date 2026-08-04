@@ -11,6 +11,10 @@ os.environ.setdefault("TRANSFORMERS_NO_TF", "1")
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"  # Suppress TensorFlow warnings
 
 import sys
+
+from gui.ime_bootstrap import bootstrap_ime
+
+bootstrap_ime()
 import threading
 import shutil
 import time
@@ -23,13 +27,18 @@ from PIL import Image, ImageTk
 REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
+# agy / elevenlabs 等 CLI 包在 cli/ 下
+CLI_ROOT = REPO_ROOT / "cli"
+if str(CLI_ROOT) not in sys.path:
+    sys.path.insert(0, str(CLI_ROOT))
 REAPER_SCRIPTS = REPO_ROOT / "Reaper" / "scripts"
 if str(REAPER_SCRIPTS) not in sys.path:
     sys.path.insert(0, str(REAPER_SCRIPTS))
 
-from scripts.config.paths import ensure_gui_path  # noqa: E402
+from scripts.config.paths import ensure_cli_path, ensure_gui_path  # noqa: E402
 
 ensure_gui_path()
+ensure_cli_path()
 
 from rain_subproject_lib import (  # noqa: E402
     REPO_ROOT as LIB_REPO_ROOT,
@@ -102,6 +111,9 @@ from scripts.config.staging_export import (  # noqa: E402
 CONFIG_PATH = Path(__file__).resolve().parent / "user_config.json"
 YT_MATERIAL_SCRIPT = LIB_REPO_ROOT / "scripts" / "video_export" / "generate_youtube_material.py"
 
+# 视频预览临时文件前缀；每次预览一个独立文件，避免读到正在被覆盖的半截文件。
+PREVIEW_TMP_PREFIX = "relaxasmr_preview_"
+
 
 class RelaxAsmrApp(tk.Tk):
     def __init__(self) -> None:
@@ -131,6 +143,7 @@ class RelaxAsmrApp(tk.Tk):
         
         self._cap = None
         self._video_loop_id = None
+        self._preview_token = 0
         self._workflow_restore_after_id: str | None = None
         self.protocol("WM_DELETE_WINDOW", self._on_closing)
 
@@ -186,8 +199,7 @@ class RelaxAsmrApp(tk.Tk):
         except Exception:
             pass
         try:
-            if os.path.exists("/tmp/relaxasmr_preview.mp4"):
-                os.remove("/tmp/relaxasmr_preview.mp4")
+            self._cleanup_preview_tmp()
         except Exception:
             pass
         self.destroy()
@@ -361,6 +373,9 @@ class RelaxAsmrApp(tk.Tk):
         video_tab = getattr(self, "video_library_tab", None)
         if video_tab is not None and hasattr(video_tab, "apply_theme"):
             video_tab.apply_theme(palette)
+        series_video_tab = getattr(self, "series_video_tab", None)
+        if series_video_tab is not None and hasattr(series_video_tab, "apply_theme"):
+            series_video_tab.apply_theme(palette)
         for tab in getattr(self, "_youtube_insight_tabs", ()):
             if hasattr(tab, "apply_theme"):
                 tab.apply_theme(palette)
@@ -442,25 +457,38 @@ class RelaxAsmrApp(tk.Tk):
         self._competitor_preview = YoutubePreviewPanel(
             self.right_pane, enable_analysis=True, log_fn=self._log
         )
-        self._active_youtube_preview: ttk.Frame | None = None
+        self._active_side_preview: ttk.Frame | None = None
+        self._series_last_video_path: Path | None = None
+        self._series_last_video_prompt: str = ""
+        self._series_last_cover_path: Path | None = None
+        self._series_last_cover_name: str = ""
+        self._series_last_cover_title: str = ""
+        self._series_last_cover_prompt: str = ""
+
+        # --- 数据分析（我的数据 + 爆款分析）---
+        self.data_analysis_tab = ttk.Frame(self.left_notebook)
+        self.left_notebook.add(self.data_analysis_tab, text="数据分析")
+
+        self.data_analysis_notebook = ttk.Notebook(self.data_analysis_tab)
+        self.data_analysis_notebook.pack(fill=tk.BOTH, expand=True)
 
         from gui.my_channel_tab import MyChannelTab
 
         self.my_channel_tab = MyChannelTab(
-            self.left_notebook, preview=self._my_channel_preview, log_fn=self._log
+            self.data_analysis_notebook, preview=self._my_channel_preview, log_fn=self._log
         )
-        self.left_notebook.add(self.my_channel_tab, text="我的数据")
+        self.data_analysis_notebook.add(self.my_channel_tab, text="我的数据")
 
         from gui.competitor_tab import CompetitorTab
 
         self.competitor_tab = CompetitorTab(
-            self.left_notebook,
+            self.data_analysis_notebook,
             preview=self._competitor_preview,
             log_fn=self._log,
             initial_keywords=self._cfg.get("competitor_keywords"),
             on_keywords_changed=self._save_competitor_keywords,
         )
-        self.left_notebook.add(self.competitor_tab, text="爆款分析")
+        self.data_analysis_notebook.add(self.competitor_tab, text="爆款分析")
 
         # on_analyzed 回调要等对应 Tab 建好（拥有 _cells 映射）之后才能绑定。
         self._my_channel_preview.set_on_analyzed(self.my_channel_tab._on_video_analyzed)
@@ -468,52 +496,59 @@ class RelaxAsmrApp(tk.Tk):
 
         self._youtube_insight_tabs = [self.my_channel_tab, self.competitor_tab]
 
+        # --- 素材库（视频 + 四轨音频）---
+        self.material_library_tab = ttk.Frame(self.left_notebook)
+        self.left_notebook.add(self.material_library_tab, text="素材库")
+
+        self.material_library_notebook = ttk.Notebook(self.material_library_tab)
+        self.material_library_notebook.pack(fill=tk.BOTH, expand=True)
+
         from gui.video_library_tab import VideoLibraryTab
 
         self.video_library_tab = VideoLibraryTab(
-            self.left_notebook,
+            self.material_library_notebook,
             is_uploaded=self._is_video_uploaded,
             toggle_uploaded=self._set_video_uploaded,
             on_video_select=self._select_video_from_library,
             log_fn=self._log,
         )
-        self.left_notebook.add(self.video_library_tab, text="视频素材库")
+        self.material_library_notebook.add(self.video_library_tab, text="视频")
 
         self.rain_boom_library_tab = AudioLibraryTab(
-            self.left_notebook,
+            self.material_library_notebook,
             layer_id="1_rain",
             track_id="1_rain_boom",
             on_selection_changed=self._on_audio_library_selection,
             log_fn=self._log,
         )
-        self.left_notebook.add(self.rain_boom_library_tab, text="rain boom 素材库")
+        self.material_library_notebook.add(self.rain_boom_library_tab, text="rain boom")
 
         self.impact_library_tab = AudioLibraryTab(
-            self.left_notebook,
+            self.material_library_notebook,
             layer_id="2_impact",
             track_id="2_impact",
             on_selection_changed=self._on_audio_library_selection,
             log_fn=self._log,
         )
-        self.left_notebook.add(self.impact_library_tab, text="impact 素材库")
+        self.material_library_notebook.add(self.impact_library_tab, text="impact")
 
         self.random_library_tab = AudioLibraryTab(
-            self.left_notebook,
+            self.material_library_notebook,
             layer_id="3_random",
             track_id="3_random",
             on_selection_changed=self._on_audio_library_selection,
             log_fn=self._log,
         )
-        self.left_notebook.add(self.random_library_tab, text="random 素材库")
+        self.material_library_notebook.add(self.random_library_tab, text="random")
 
         self.wildlife_library_tab = AudioLibraryTab(
-            self.left_notebook,
+            self.material_library_notebook,
             layer_id="4_wildlife",
             track_id="4_wildlife",
             on_selection_changed=self._on_audio_library_selection,
             log_fn=self._log,
         )
-        self.left_notebook.add(self.wildlife_library_tab, text="wildlife 素材库")
+        self.material_library_notebook.add(self.wildlife_library_tab, text="wildlife")
 
         self._audio_library_tabs = {
             "1_rain_boom": self.rain_boom_library_tab,
@@ -521,6 +556,20 @@ class RelaxAsmrApp(tk.Tk):
             "3_random": self.random_library_tab,
             "4_wildlife": self.wildlife_library_tab,
         }
+
+        # --- 系列视频：种子图 → 系列图 → 5s loop 视频 ---
+        from gui.series_video_tab import SeriesVideoTab
+
+        self.series_video_tab = SeriesVideoTab(
+            self.left_notebook,
+            log_fn=self._log,
+            on_preview_image=self._series_preview_image,
+            on_preview_series=self._series_preview_series,
+            on_preview_video=self._series_preview_video,
+            on_preview_empty=self._series_preview_empty,
+            on_stop_playback=self._stop_video_loop,
+        )
+        self.left_notebook.add(self.series_video_tab, text="系列视频")
 
         # === 左侧工作流：步骤 1–5（小屏溢出时可垂直滚动）===
         self._setup_workflow_scroll(self.workflow_tab)
@@ -811,6 +860,12 @@ class RelaxAsmrApp(tk.Tk):
         self.after_idle(self._restore_audio_library_selections)
 
         self.left_notebook.bind("<<NotebookTabChanged>>", self._on_left_tab_changed)
+        self.data_analysis_notebook.bind(
+            "<<NotebookTabChanged>>", self._on_data_analysis_subtab_changed
+        )
+        self.material_library_notebook.bind(
+            "<<NotebookTabChanged>>", self._on_material_library_subtab_changed
+        )
 
         self.after_idle(self._update_left_scrollbar_visibility)
         self.after_idle(self._restore_workflow_state)
@@ -823,6 +878,7 @@ class RelaxAsmrApp(tk.Tk):
     def _log_startup_info(self) -> None:
         if is_wsl():
             self._log("WSL 环境：打开/渲染工程将调用 Windows 版 Reaper")
+            self._log("WSL 输入法：使用 Windows 系统输入法（如微信输入法），请先点进输入框再切换中文")
         elif is_mac():
             self._log("macOS 环境：使用本机 Reaper；素材默认挂载于 /Volumes/192.168.3.128/…")
         self._log(f"仓库根目录：{LIB_REPO_ROOT}")
@@ -1265,52 +1321,87 @@ class RelaxAsmrApp(tk.Tk):
             self.mix_preview_grid.stop_playback()
         for tab in self._audio_library_tabs.values():
             tab.stop_playback()
+        self.series_video_tab.stop_playback()
         try:
             tab = self.left_notebook.nametowidget(self.left_notebook.select())
         except tk.TclError:
             return
-        if tab is self.my_channel_tab:
-            self._show_youtube_preview_panel(self._my_channel_preview)
-            tab.on_tab_selected()
-        elif tab is self.competitor_tab:
-            self._show_youtube_preview_panel(self._competitor_preview)
-            tab.on_tab_selected()
-        else:
+        if tab is self.data_analysis_tab:
+            self._on_data_analysis_subtab_changed()
+        elif tab is self.material_library_tab:
+            self._on_material_library_subtab_changed()
+        elif tab is self.series_video_tab:
             self._show_default_right_panels()
-            if tab is self.video_library_tab:
-                self.video_library_tab.on_tab_selected()
-            elif tab in self._audio_library_tabs.values():
-                tab.on_tab_selected()
-            elif tab is self.workflow_tab:
-                self.after_idle(self._update_left_scrollbar_visibility)
+            if hasattr(self, "cover_frame"):
+                self.cover_frame.configure(text="图片预览")
+            if hasattr(self, "preview_frame"):
+                self.preview_frame.configure(text="系列视频")
+            self.series_video_tab.on_tab_selected()
+            self._series_refresh_right_panels()
+        elif tab is self.workflow_tab:
+            self._show_default_right_panels()
+            if hasattr(self, "cover_frame"):
+                self.cover_frame.configure(text="封面预览")
+            if hasattr(self, "preview_frame"):
+                self.preview_frame.configure(text="视频预览")
+            self.after_idle(self._update_left_scrollbar_visibility)
+            self._update_cover_preview()
+            self._update_preview(self.video_path)
 
-    def _show_youtube_preview_panel(self, panel: ttk.Frame) -> None:
-        """把「我的数据/爆款分析」的预览+LLM分析 UI 换到右侧面板的上 2/3 区域，
-        日志区（下 1/3）始终保留，这样切到这两个 Tab 时依旧能看到 LLM 分析日志。"""
+    def _on_data_analysis_subtab_changed(self, _event=None) -> None:
+        try:
+            sub = self.data_analysis_notebook.nametowidget(self.data_analysis_notebook.select())
+        except tk.TclError:
+            return
+        if sub is self.my_channel_tab:
+            self._show_side_preview_panel(self._my_channel_preview)
+            sub.on_tab_selected()
+        elif sub is self.competitor_tab:
+            self._show_side_preview_panel(self._competitor_preview)
+            sub.on_tab_selected()
+
+    def _on_material_library_subtab_changed(self, _event=None) -> None:
+        self._show_default_right_panels()
+        try:
+            sub = self.material_library_notebook.nametowidget(
+                self.material_library_notebook.select()
+            )
+        except tk.TclError:
+            return
+        if sub is self.video_library_tab:
+            self.video_library_tab.on_tab_selected()
+        elif sub in self._audio_library_tabs.values():
+            sub.on_tab_selected()
+
+    def _show_side_preview_panel(self, panel: ttk.Frame) -> None:
+        """把某个 Tab 专属的预览面板换到右侧面板的上 2/3 区域。
+
+        「我的数据」「爆款分析」用 YoutubePreviewPanel；「系列视频」复用下方
+        工作流同款封面/视频预览区。日志区（下 1/3）始终保留。"""
         if not hasattr(self, "right_pane"):
             return
-        if self._active_youtube_preview is panel:
+        if self._active_side_preview is panel:
             return
         for w in (self.cover_frame, self.preview_frame):
             if str(w) in self.right_pane.panes():
                 self.right_pane.forget(w)
-        active = self._active_youtube_preview
+        active = self._active_side_preview
         if active is not None and str(active) in self.right_pane.panes():
             self.right_pane.forget(active)
         if str(panel) not in self.right_pane.panes():
             self.right_pane.insert(0, panel, weight=2)
-        self._active_youtube_preview = panel
+        self._active_side_preview = panel
         self.after_idle(self._equalize_right_pane_once)
 
     def _show_default_right_panels(self) -> None:
-        """从「我的数据/爆款分析」切回其它 Tab 时，恢复默认的封面预览/视频预览。"""
+        """切回工作流 / 素材库时，恢复默认的封面预览 + 视频预览。"""
         if not hasattr(self, "right_pane"):
             return
-        if self._active_youtube_preview is None:
+        if self._active_side_preview is None:
             return
-        if str(self._active_youtube_preview) in self.right_pane.panes():
-            self.right_pane.forget(self._active_youtube_preview)
-        self._active_youtube_preview = None
+        if str(self._active_side_preview) in self.right_pane.panes():
+            self.right_pane.forget(self._active_side_preview)
+        self._active_side_preview = None
         panes = self.right_pane.panes()
         if str(self.cover_frame) not in panes:
             self.right_pane.insert(0, self.cover_frame, weight=1)
@@ -2336,12 +2427,85 @@ class RelaxAsmrApp(tk.Tk):
         self._update_cover_preview()
 
     def _stop_video_loop(self):
+        # 递增世代号：正在后台拷贝的旧预览请求完成后会发现自己已过期而直接丢弃，
+        # 避免它把 cv2 指向一个正在被新请求覆盖的临时文件（partial file / NAL 报错）。
+        self._preview_token += 1
         if self._video_loop_id is not None:
             self.after_cancel(self._video_loop_id)
             self._video_loop_id = None
         if self._cap is not None:
             self._cap.release()
             self._cap = None
+
+    def _preview_tmp_path(self, token: int) -> str:
+        import tempfile
+
+        name = f"{PREVIEW_TMP_PREFIX}{os.getpid()}_{token}.mp4"
+        return os.path.join(tempfile.gettempdir(), name)
+
+    def _cleanup_preview_tmp(self, *, keep: str | None = None) -> None:
+        import tempfile
+
+        tmp_dir = tempfile.gettempdir()
+        prefix = f"{PREVIEW_TMP_PREFIX}{os.getpid()}_"
+        keep_abs = os.path.abspath(keep) if keep else None
+        try:
+            names = os.listdir(tmp_dir)
+        except OSError:
+            return
+        for name in names:
+            if not name.startswith(prefix):
+                continue
+            path = os.path.join(tmp_dir, name)
+            if keep_abs is not None and os.path.abspath(path) == keep_abs:
+                continue
+            try:
+                os.remove(path)
+            except OSError:
+                pass
+
+    def _load_preview_video(self, video_path: Path) -> None:
+        """把 *video_path* 拷到独占临时文件后循环播放。
+
+        每次请求用自己的临时文件名，加上 ``_preview_token`` 世代校验，
+        这样快速连点不同视频时不会出现「一边写一边读」的半截文件。
+        """
+        self._show_preview_placeholder("加载视频预览中...")
+        token = self._preview_token
+        tmp_path = self._preview_tmp_path(token)
+
+        def copy_and_play() -> None:
+            error: Exception | None = None
+            try:
+                shutil.copy2(video_path, tmp_path)
+            except Exception as exc:  # noqa: BLE001
+                error = exc
+            self._post_to_ui(lambda: self._on_preview_copy_done(token, tmp_path, error))
+
+        threading.Thread(target=copy_and_play, daemon=True).start()
+
+    def _post_to_ui(self, fn: Callable[[], None]) -> None:
+        """从后台线程把回调排到主线程；窗口已销毁时静默丢弃。"""
+        try:
+            self.after(0, fn)
+        except (RuntimeError, tk.TclError):
+            pass
+
+    def _on_preview_copy_done(
+        self, token: int, tmp_path: str, error: Exception | None
+    ) -> None:
+        if token != self._preview_token:
+            # 期间用户已切到别的视频/别的 Tab，这份拷贝作废。
+            try:
+                os.remove(tmp_path)
+            except OSError:
+                pass
+            return
+        if error is not None:
+            self._show_preview_placeholder(f"视频复制失败: {error}")
+            return
+        self._start_video_loop(tmp_path)
+        self._cleanup_preview_tmp(keep=tmp_path)
 
     def _refresh_preview_layout(self) -> None:
         if self._cap is None:
@@ -2365,19 +2529,8 @@ class RelaxAsmrApp(tk.Tk):
             self._update_preview_metadata()
             return
 
-        self._show_preview_placeholder("加载视频预览中...")
         self._update_preview_metadata()
-
-        def copy_and_play() -> None:
-            try:
-                import tempfile
-                tmp_path = os.path.join(tempfile.gettempdir(), "relaxasmr_preview.mp4")
-                shutil.copy2(video_path, tmp_path)
-                self.after(0, lambda: self._start_video_loop(tmp_path))
-            except Exception as exc:
-                self.after(0, lambda: self._show_preview_placeholder(f"视频复制失败: {exc}"))
-
-        threading.Thread(target=copy_and_play, daemon=True).start()
+        self._load_preview_video(video_path)
 
     def _start_video_loop(self, tmp_path: str):
         import cv2
@@ -2419,6 +2572,218 @@ class RelaxAsmrApp(tk.Tk):
                 pass
 
         self._video_loop_id = self.after(33, self._play_next_frame)
+
+    def _show_cover_image_file(
+        self,
+        path: Path | None,
+        *,
+        name: str = "—",
+        title: str = "",
+        description: str = "",
+    ) -> None:
+        """在「封面预览」区显示任意静态图（系列视频 Tab 用）。"""
+        if not hasattr(self, "cover_thumb_canvas"):
+            return
+        if hasattr(self, "lbl_cover_video_name"):
+            self.lbl_cover_video_name.configure(text=name)
+        slot_w, slot_h = self._cover_thumb_size()
+        self._apply_cover_slot_geometry(slot_w, slot_h)
+        self.cover_thumb_canvas.delete("all")
+        if path is not None and path.is_file():
+            try:
+                img = Image.open(path)
+                img.thumbnail((slot_w, slot_h), Image.Resampling.LANCZOS)
+                self._cover_img = ImageTk.PhotoImage(img)
+                self.cover_thumb_canvas.create_image(
+                    slot_w // 2,
+                    slot_h // 2,
+                    anchor=tk.CENTER,
+                    image=self._cover_img,
+                )
+            except Exception as exc:
+                self.cover_thumb_canvas.create_text(
+                    slot_w // 2,
+                    slot_h // 2,
+                    text=f"封面加载失败: {exc}",
+                    anchor=tk.CENTER,
+                    width=slot_w - 8,
+                )
+                self._cover_img = None
+        else:
+            self.cover_thumb_canvas.create_text(
+                slot_w // 2,
+                slot_h // 2,
+                text="无预览",
+                anchor=tk.CENTER,
+            )
+            self._cover_img = None
+        if hasattr(self, "lbl_cover_title_en"):
+            wrap = max(
+                getattr(self, "cover_body", self).winfo_width()
+                - getattr(self, "_cover_slot_w", 213)
+                - 24,
+                160,
+            )
+            self.lbl_cover_title_en.configure(text=title or "—", wraplength=wrap)
+            self.txt_cover_desc_en.configure(state=tk.NORMAL)
+            self.txt_cover_desc_en.delete("1.0", tk.END)
+            if description:
+                self.txt_cover_desc_en.insert("1.0", description)
+            self.txt_cover_desc_en.configure(state=tk.DISABLED)
+
+    def _set_preview_panel_metadata(self, *, title: str, description: str) -> None:
+        if not hasattr(self, "lbl_preview_title_zh"):
+            return
+        wrap = max(
+            getattr(self, "preview_body", self).winfo_width()
+            - getattr(self, "_preview_slot_w", 213)
+            - 24,
+            160,
+        )
+        self.lbl_preview_title_zh.configure(text=title or "—", wraplength=wrap)
+        self.txt_preview_desc_zh.configure(state=tk.NORMAL)
+        self.txt_preview_desc_zh.delete("1.0", tk.END)
+        if description:
+            self.txt_preview_desc_zh.insert("1.0", description)
+        self.txt_preview_desc_zh.configure(state=tk.DISABLED)
+
+    def _update_preview_file(self, video_path: Path | None) -> None:
+        """在「视频预览」区循环播放任意本地 mp4（与工作流 `_update_preview` 相同逻辑）。"""
+        if not hasattr(self, "preview_video_canvas"):
+            return
+        self._stop_video_loop()
+        if not video_path or not video_path.is_file():
+            self._preview_img = None
+            self._show_preview_placeholder("无预览")
+            return
+        self._load_preview_video(video_path)
+
+    def _series_remember_cover(
+        self,
+        path: Path | None,
+        *,
+        name: str,
+        title: str,
+        description: str,
+    ) -> None:
+        if path is not None and path.is_file():
+            self._series_last_cover_path = path.resolve()
+            self._series_last_cover_name = name
+            self._series_last_cover_title = title
+            self._series_last_cover_prompt = description
+        else:
+            self._series_last_cover_path = None
+            self._series_last_cover_name = ""
+            self._series_last_cover_title = ""
+            self._series_last_cover_prompt = ""
+
+    def _series_refresh_cover_preview(self) -> None:
+        """系列视频 Tab：图片区显示上次点击的静帧，否则空白。"""
+        path = self._series_last_cover_path
+        if path is not None and path.is_file():
+            self._show_cover_image_file(
+                path,
+                name=self._series_last_cover_name or path.name,
+                title=self._series_last_cover_title,
+                description=self._series_last_cover_prompt,
+            )
+            return
+        self._show_cover_image_file(None, name="—", title="", description="")
+
+    def _series_refresh_right_panels(self) -> None:
+        """切到系列视频 Tab 时，整段右侧预览区恢复上次点击状态或空白。"""
+        self._series_refresh_cover_preview()
+        self._series_refresh_video_preview()
+
+    def _series_refresh_video_prompt_panel(self) -> None:
+        """系列视频 Tab：右侧文案区只显示上次点击的第三列视频 prompt，否则留空。"""
+        if not hasattr(self, "txt_preview_desc_zh"):
+            return
+        prompt = (self._series_last_video_prompt or "").strip()
+        wrap = max(
+            getattr(self, "preview_body", self).winfo_width()
+            - getattr(self, "_preview_slot_w", 213)
+            - 24,
+            160,
+        )
+        self.lbl_preview_title_zh.configure(text="", wraplength=wrap)
+        self.txt_preview_desc_zh.configure(state=tk.NORMAL)
+        self.txt_preview_desc_zh.delete("1.0", tk.END)
+        if prompt:
+            self.txt_preview_desc_zh.insert("1.0", prompt)
+        self.txt_preview_desc_zh.configure(state=tk.DISABLED)
+
+    def _series_refresh_video_preview(self) -> None:
+        """系列视频 Tab：视频区显示上次点击的第三列视频，否则「无预览」。"""
+        path = self._series_last_video_path
+        if path is not None and path.is_file():
+            if hasattr(self, "lbl_preview_video_name"):
+                self.lbl_preview_video_name.configure(text=path.name)
+            self._update_preview_file(path)
+            self._series_refresh_video_prompt_panel()
+            return
+        if hasattr(self, "lbl_preview_video_name"):
+            self.lbl_preview_video_name.configure(text="—")
+        self._stop_video_loop()
+        self._preview_img = None
+        self._show_preview_placeholder("无预览")
+        self._series_refresh_video_prompt_panel()
+
+    def _series_preview_image(self, path: Path, *, title: str = "", prompt: str = "") -> None:
+        self._series_remember_cover(
+            path,
+            name=path.name,
+            title=title or path.name,
+            description=prompt,
+        )
+        self._series_refresh_right_panels()
+
+    def _series_preview_series(
+        self,
+        image_path: Path,
+        *,
+        title: str = "",
+        image_prompt: str = "",
+        video_prompt: str = "",
+        generating: bool = False,
+    ) -> None:
+        del generating, video_prompt
+        self._series_remember_cover(
+            image_path,
+            name=image_path.name,
+            title=title or image_path.name,
+            description=image_prompt,
+        )
+        self._series_refresh_right_panels()
+
+    def _series_preview_video(
+        self,
+        image_path: Path,
+        video_path: Path,
+        *,
+        title: str = "",
+        image_prompt: str = "",
+        video_prompt: str = "",
+    ) -> None:
+        del title
+        self._series_last_video_path = video_path.resolve()
+        self._series_last_video_prompt = (video_prompt or "").strip()
+        self._series_remember_cover(
+            image_path,
+            name=image_path.name,
+            title=image_path.name,
+            description=image_prompt,
+        )
+        self._series_refresh_right_panels()
+
+    def _series_preview_empty(self, message: str) -> None:
+        self._show_cover_image_file(
+            None,
+            name="—",
+            title="—",
+            description=message,
+        )
+        self._series_refresh_video_preview()
 
     def _video_dialog_initialdir(self) -> str:
         saved = self._cfg.get("last_video_dir")

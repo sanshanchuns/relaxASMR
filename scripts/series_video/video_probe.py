@@ -1,0 +1,175 @@
+"""视频产物的客观验收：抽帧 + 运动量测量。
+
+慢镜头这件事不需要问大模型 —— 它有客观定义：**相邻帧之间变化小**。用 ffmpeg 抽一段
+连续帧，算相邻帧的平均绝对差，就能把慢放和实时区分开，成本几乎为零。所以验收分两层：
+
+1. 本模块（免费、确定性）：运动量落在子系列的 ``frame_motion`` 区间内才放行；
+   区间下界拦慢镜头和死画面，上界拦抖动 / 转场。
+2. :mod:`review`（花钱）：把均匀抽出的几帧交给 Gemini，判断画面意图对不对。
+
+先跑第一层，过了再送第二层。
+"""
+
+from __future__ import annotations
+
+import shutil
+import subprocess
+import tempfile
+from collections.abc import Callable
+from dataclasses import dataclass, field
+from pathlib import Path
+
+LogFn = Callable[[str], None]
+
+#: 测运动量用的连续帧数量。8 帧够稳，再多只是变慢。
+_MOTION_FRAMES = 8
+
+#: 送去评审的均匀抽帧数量。5s 视频取 4 张足够看出意图，多了浪费 token。
+_REVIEW_FRAMES = 4
+
+#: 帧差 → 0–100 分的缩放系数。用 ``to_youtube/`` 下的真实素材标定过（详见
+#: ``instructions/rain_asmr_series.md``）：无雨空镜 0.5–1.3、轻雨 2.7–5.1、
+#: 小雨 4.8–9.1、中雨 8–12、大雨 16.8–19.1。改这个系数会让所有区间失效。
+_MOTION_SCALE = 5.0
+
+#: 比较前把帧缩到这个尺寸：压掉传感器噪点和压缩块效应，只留下真正的运动。
+_COMPARE_SIZE = (160, 90)
+
+
+class VideoProbeError(RuntimeError):
+    pass
+
+
+@dataclass
+class VideoProbe:
+    """一次视频验收的结果。"""
+
+    motion_score: float
+    frames: list[Path] = field(default_factory=list)
+    duration_sec: float = 0.0
+    ok: bool = True
+    issues: list[str] = field(default_factory=list)
+
+    @property
+    def summary(self) -> str:
+        state = "通过" if self.ok else "不通过"
+        return f"运动量 {self.motion_score:.1f}/100 · {state}"
+
+
+def _ffmpeg() -> str:
+    exe = shutil.which("ffmpeg")
+    if exe is None:
+        raise VideoProbeError("未找到 ffmpeg，无法做视频验收")
+    return exe
+
+
+def _ffprobe_duration(video: Path) -> float:
+    exe = shutil.which("ffprobe")
+    if exe is None:
+        return 0.0
+    proc = subprocess.run(
+        [
+            exe, "-v", "error",
+            "-show_entries", "format=duration",
+            "-of", "default=noprint_wrappers=1:nokey=1",
+            str(video),
+        ],
+        capture_output=True,
+        text=True,
+    )
+    try:
+        return float((proc.stdout or "0").strip())
+    except ValueError:
+        return 0.0
+
+
+def _extract(video: Path, out_dir: Path, *, args: list[str]) -> list[Path]:
+    pattern = out_dir / "f_%03d.png"
+    cmd = [_ffmpeg(), "-y", "-loglevel", "error", *args, str(pattern)]
+    proc = subprocess.run(cmd, capture_output=True, text=True)
+    if proc.returncode != 0:
+        raise VideoProbeError(f"抽帧失败：{(proc.stderr or '').strip()[:300]}")
+    return sorted(out_dir.glob("f_*.png"))
+
+
+def extract_review_frames(video: Path, out_dir: Path, *, count: int = _REVIEW_FRAMES) -> list[Path]:
+    """全片均匀抽 *count* 帧，用于送 Gemini 评审。"""
+    duration = _ffprobe_duration(video) or 5.0
+    frames: list[Path] = []
+    for i in range(count):
+        # 避开首尾各 10%：首帧就是原图，尾帧常带压缩尾巴。
+        at = duration * (0.1 + 0.8 * (i / max(1, count - 1)))
+        sub = out_dir / f"r{i:02d}"
+        sub.mkdir(parents=True, exist_ok=True)
+        got = _extract(video, sub, args=["-ss", f"{at:.2f}", "-i", str(video), "-frames:v", "1"])
+        frames.extend(got)
+    return frames
+
+
+def measure_motion(video: Path) -> float:
+    """取中段连续帧，算相邻帧平均绝对差，映射成 0–100 的运动量。"""
+    from PIL import Image, ImageChops, ImageStat
+
+    duration = _ffprobe_duration(video) or 5.0
+    start = max(0.0, duration * 0.35)
+    with tempfile.TemporaryDirectory(prefix="probe_motion_") as tmp:
+        frames = _extract(
+            video,
+            Path(tmp),
+            args=["-ss", f"{start:.2f}", "-i", str(video), "-frames:v", str(_MOTION_FRAMES)],
+        )
+        if len(frames) < 2:
+            raise VideoProbeError(f"抽帧不足（{len(frames)} 帧），无法测运动量")
+        grays = [
+            Image.open(p).convert("L").resize(_COMPARE_SIZE, Image.BILINEAR)
+            for p in frames
+        ]
+        diffs = [
+            ImageStat.Stat(ImageChops.difference(a, b)).mean[0]
+            for a, b in zip(grays, grays[1:])
+        ]
+    return min(100.0, (sum(diffs) / len(diffs)) * _MOTION_SCALE)
+
+
+def probe_video(
+    video: Path,
+    *,
+    motion_range: tuple[float, float] = (0.0, 100.0),
+    frames_dir: Path | None = None,
+    log_fn: LogFn | None = None,
+) -> VideoProbe:
+    """测运动量并按子系列区间判定；``frames_dir`` 非空时顺便抽出评审用帧。"""
+    log = log_fn or (lambda _m: None)
+    if not video.is_file():
+        raise VideoProbeError(f"视频不存在：{video}")
+
+    duration = _ffprobe_duration(video)
+    score = measure_motion(video)
+    lo, hi = motion_range
+    issues: list[str] = []
+    if score < lo:
+        issues.append(
+            f"运动量 {score:.1f} 低于本系列下限 {lo:.0f}：画面偏慢或近乎静止，"
+            "多半又出了慢镜头"
+        )
+    elif score > hi:
+        issues.append(
+            f"运动量 {score:.1f} 高于本系列上限 {hi:.0f}：可能有抖动、转场或镜头运动"
+        )
+
+    frames: list[Path] = []
+    if frames_dir is not None:
+        frames_dir.mkdir(parents=True, exist_ok=True)
+        frames = extract_review_frames(video, frames_dir)
+
+    probe = VideoProbe(
+        motion_score=score,
+        frames=frames,
+        duration_sec=duration,
+        ok=not issues,
+        issues=issues,
+    )
+    log(f"[视频验收] {video.name} · {probe.summary}")
+    for msg in issues:
+        log(f"[视频验收] {msg}")
+    return probe
