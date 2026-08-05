@@ -10,17 +10,17 @@ from gui.export_wav import (
     find_export_mp4_for_scene,
     format_mp4_export_stats_suffix,
     format_size_compact_bytes,
-    wav_matches_target_hours,
+    wav_matches_target_minutes,
 )
 
 
-def test_wav_matches_target_hours(tmp_path: Path) -> None:
+def test_wav_matches_target_minutes(tmp_path: Path) -> None:
     fake = tmp_path / "x.wav"
     fake.write_bytes(b"x")
-    with patch("gui.export_wav.wav_duration_seconds", return_value=3 * 3600 + 5):
-        assert wav_matches_target_hours(fake, 3.0)
+    with patch("gui.export_wav.wav_duration_seconds", return_value=180 * 60 + 5):
+        assert wav_matches_target_minutes(fake, 180.0)
     with patch("gui.export_wav.wav_duration_seconds", return_value=3600.0):
-        assert not wav_matches_target_hours(fake, 3.0)
+        assert not wav_matches_target_minutes(fake, 180.0)
 
 
 def test_format_size_compact_bytes() -> None:
@@ -39,19 +39,19 @@ def test_format_mp4_export_stats_suffix(tmp_path: Path) -> None:
 
 
 def test_export_mp4_belongs_to_scene(tmp_path: Path) -> None:
-    own = tmp_path / "MVI_7004_3h_fhd.mp4"
-    other = tmp_path / "MVI_6989_3h_fhd.mp4"
+    own = tmp_path / "MVI_7004_180min_fhd.mp4"
+    other = tmp_path / "MVI_6989_180min_fhd.mp4"
     own.write_bytes(b"x")
     other.write_bytes(b"x")
-    assert export_mp4_belongs_to_scene(own, "MVI_7004", hours=3.0)
-    assert not export_mp4_belongs_to_scene(other, "MVI_7004", hours=3.0)
-    assert not export_mp4_belongs_to_scene(own, "MVI_7004", hours=2.0)
+    assert export_mp4_belongs_to_scene(own, "MVI_7004", minutes=180.0)
+    assert not export_mp4_belongs_to_scene(other, "MVI_7004", minutes=180.0)
+    assert not export_mp4_belongs_to_scene(own, "MVI_7004", minutes=120.0)
 
 
 def test_find_export_mp4_for_scene(tmp_path: Path) -> None:
-    old = tmp_path / "MVI_7004_3h_fhd.mp4"
-    newer = tmp_path / "MVI_7004_3h_4k.mp4"
-    wrong = tmp_path / "MVI_6989_3h_fhd.mp4"
+    old = tmp_path / "MVI_7004_180min_fhd.mp4"
+    newer = tmp_path / "MVI_7004_180min_4k.mp4"
+    wrong = tmp_path / "MVI_6989_180min_fhd.mp4"
     old.write_bytes(b"old")
     newer.write_bytes(b"newer")
     wrong.write_bytes(b"wrong")
@@ -63,5 +63,5 @@ def test_find_export_mp4_for_scene(tmp_path: Path) -> None:
 
     os.utime(old, (old_ts, old_ts))
     os.utime(newer, (newer_ts, newer_ts))
-    found = find_export_mp4_for_scene("MVI_7004", hours=3.0, export_root=tmp_path)
+    found = find_export_mp4_for_scene("MVI_7004", minutes=180.0, export_root=tmp_path)
     assert found == newer

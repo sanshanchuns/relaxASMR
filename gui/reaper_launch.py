@@ -50,13 +50,13 @@ def _poll_render_progress(
     proc: subprocess.Popen,
     *,
     output_wav: Path | None,
-    duration_hours: float | None,
+    duration_minutes: float | None,
     on_progress: Callable[[str], None] | None = None,
     on_pct: Callable[[int], None] | None = None,
     on_tail: Callable[[bool], None] | None = None,
 ) -> None:
     start = time.monotonic()
-    total_sec = float(duration_hours or 0) * 3600
+    total_sec = float(duration_minutes or 0) * 60
     expected_data = _estimate_wav_data_bytes(total_sec) if total_sec > 0 else 0
 
     while proc.poll() is None:
@@ -263,7 +263,7 @@ def run_reaper_lua(
         raise subprocess.CalledProcessError(rc, proc.args)
 
 
-def _ensure_rpp_full_project_render(rpp: Path, duration_hours: float | None) -> None:
+def _ensure_rpp_full_project_render(rpp: Path, duration_minutes: float | None) -> None:
     """渲染前写入 Entire Project，避免工程内 Time Selection 被 -renderproject 采用。"""
     repo = Path(__file__).resolve().parents[1]
     scripts = repo / "Reaper" / "scripts"
@@ -271,7 +271,7 @@ def _ensure_rpp_full_project_render(rpp: Path, duration_hours: float | None) -> 
         sys.path.insert(0, str(scripts))
     from generate_subproject import ensure_rpp_full_project_render
 
-    ensure_rpp_full_project_render(rpp, duration_hours=duration_hours)
+    ensure_rpp_full_project_render(rpp, duration_minutes=duration_minutes)
 
 
 def render_reaper_project(
@@ -279,7 +279,7 @@ def render_reaper_project(
     *,
     reaper_exe: str | None = None,
     output_wav: Path | None = None,
-    duration_hours: float | None = None,
+    duration_minutes: float | None = None,
     on_progress: Callable[[str], None] | None = None,
     on_pct: Callable[[int], None] | None = None,
     on_tail: Callable[[bool], None] | None = None,
@@ -289,7 +289,7 @@ def render_reaper_project(
     if not rpp.is_file():
         raise FileNotFoundError(f"找不到工程文件：{rpp}")
 
-    _ensure_rpp_full_project_render(rpp, duration_hours)
+    _ensure_rpp_full_project_render(rpp, duration_minutes)
 
     proc: subprocess.Popen | None = None
 
@@ -319,7 +319,7 @@ def render_reaper_project(
             args=(proc,),
             kwargs={
                 "output_wav": output_wav,
-                "duration_hours": duration_hours,
+                "duration_minutes": duration_minutes,
                 "on_progress": on_progress,
                 "on_pct": on_pct,
                 "on_tail": on_tail,

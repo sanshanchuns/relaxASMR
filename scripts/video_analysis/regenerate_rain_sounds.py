@@ -416,7 +416,7 @@ def cmd_render(args: argparse.Namespace) -> int:
                     rpp,
                     reaper_exe=reaper_exe,
                     output_wav=out_wav,
-                    duration_hours=render_s / 3600.0,
+                    duration_minutes=render_s / 60.0,
                 )
                 if out_wav.is_file() and out_wav.stat().st_size > 0:
                     ok += 1

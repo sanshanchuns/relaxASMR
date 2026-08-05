@@ -75,7 +75,7 @@ from gui.export_wav import (  # noqa: E402
     format_duration_short,
     format_mp4_export_stats_suffix,
     wav_duration_seconds,
-    wav_matches_target_hours,
+    wav_matches_target_minutes,
 )
 from gui.youtube_material import (  # noqa: E402
     RAIN_THUMB_TITLE,
@@ -204,32 +204,43 @@ class RelaxAsmrApp(tk.Tk):
             pass
         self.destroy()
 
-    def _format_duration_hours(self, hours: float | int | str) -> str:
-        h = float(hours)
-        return str(int(h)) if h == int(h) else f"{h:g}"
+    def _format_duration_minutes(self, minutes: float | int | str) -> str:
+        m = float(minutes)
+        return str(int(m)) if m == int(m) else f"{m:g}"
 
     def _initial_duration_str(self) -> str:
-        for key in ("duration_hours", "target_duration"):
-            raw = self._cfg.get(key)
-            if raw is None or str(raw).strip() == "":
-                continue
+        raw = self._cfg.get("duration_minutes")
+        if raw is not None and str(raw).strip() != "":
             try:
-                return self._format_duration_hours(raw)
+                return self._format_duration_minutes(raw)
             except (TypeError, ValueError):
-                continue
-        return "3"
+                pass
+        raw = self._cfg.get("duration_hours")
+        if raw is not None and str(raw).strip() != "":
+            try:
+                return self._format_duration_minutes(float(raw) * 60)
+            except (TypeError, ValueError):
+                pass
+        raw = self._cfg.get("target_duration")
+        if raw is not None and str(raw).strip() != "":
+            try:
+                return self._format_duration_minutes(float(raw) * 60)
+            except (TypeError, ValueError):
+                pass
+        return "100"
 
-    def _parse_duration_hours(self) -> float:
+    def _parse_duration_minutes(self) -> float:
         try:
             return float(self.duration_var.get())
         except (ValueError, tk.TclError) as exc:
             raise ValueError("成片时长必须是数字。") from exc
 
-    def _persist_duration_hours(self, hours: float) -> None:
-        h = float(hours)
-        stored = int(h) if h == int(h) else h
-        self._cfg["duration_hours"] = stored
-        self._cfg["target_duration"] = self._format_duration_hours(h)
+    def _persist_duration_minutes(self, minutes: float) -> None:
+        m = float(minutes)
+        stored = int(m) if m == int(m) else m
+        self._cfg["duration_minutes"] = stored
+        self._cfg.pop("duration_hours", None)
+        self._cfg["target_duration"] = self._format_duration_minutes(m)
         self._save_config()
 
     def _load_config(self) -> None:
@@ -647,7 +658,7 @@ class RelaxAsmrApp(tk.Tk):
         )
         self.btn_open_reaper.pack(side=tk.LEFT, padx=(8, 0))
 
-        ttk.Label(row_gen, text="成片时长(小时)").pack(side=tk.LEFT, padx=(8, 0))
+        ttk.Label(row_gen, text="成片时长(分钟)").pack(side=tk.LEFT, padx=(8, 0))
         self.duration_var = tk.StringVar(value=self._initial_duration_str())
         ttk.Entry(row_gen, textvariable=self.duration_var, width=5).pack(side=tk.LEFT, padx=(8, 0))
         
@@ -1629,33 +1640,31 @@ class RelaxAsmrApp(tk.Tk):
                     p = Path(raw)
                     if p.is_file():
                         if kind == "mp4" and not export_mp4_belongs_to_scene(
-                            p, scene_id, hours=self._target_duration_hours()
+                            p, scene_id, minutes=self._target_duration_minutes()
                         ):
                             return None
                         return p.resolve()
         return None
 
-    def _target_duration_hours(self) -> float:
+    def _target_duration_minutes(self) -> float:
         try:
-            return self._parse_duration_hours()
+            return self._parse_duration_minutes()
         except ValueError:
-            raw = self._cfg.get("duration_hours", self._cfg.get("target_duration", 3))
-            try:
-                return float(raw)
-            except (TypeError, ValueError):
-                return 3.0
+            from scripts.config.paths import DEFAULT_DURATION_MINUTES, cfg_duration_minutes
+
+            return cfg_duration_minutes(self._cfg)
 
     def _resolve_valid_export_mp4(
-        self, scene_id: str, hours: float | None = None
+        self, scene_id: str, minutes: float | None = None
     ) -> Path | None:
         """仅当 export 下存在同序号、时长符合目标的成片 MP4 时视为有效。"""
-        h = self._target_duration_hours() if hours is None else float(hours)
+        m = self._target_duration_minutes() if minutes is None else float(minutes)
         saved = self._get_scene_export_path(scene_id, "mp4")
-        if saved and export_mp4_belongs_to_scene(saved, scene_id, hours=h):
-            if wav_matches_target_hours(saved, h):
+        if saved and export_mp4_belongs_to_scene(saved, scene_id, minutes=m):
+            if wav_matches_target_minutes(saved, m):
                 return saved.resolve()
-        latest = find_export_mp4_for_scene(scene_id, hours=h)
-        if latest and wav_matches_target_hours(latest, h):
+        latest = find_export_mp4_for_scene(scene_id, minutes=m)
+        if latest and wav_matches_target_minutes(latest, m):
             return latest.resolve()
         return None
 
@@ -1663,31 +1672,31 @@ class RelaxAsmrApp(tk.Tk):
         return messagebox.askyesno(title, message, icon="warning")
 
     def _resolve_valid_export_wav(
-        self, scene_id: str, hours: float | None = None
+        self, scene_id: str, minutes: float | None = None
     ) -> Path | None:
         """仅当 WAV 实际时长接近目标成片时长时视为有效成品。"""
-        h = self._target_duration_hours() if hours is None else float(hours)
-        expected = expected_export_wav_path(scene_id, h)
-        if wav_matches_target_hours(expected, h):
+        m = self._target_duration_minutes() if minutes is None else float(minutes)
+        expected = expected_export_wav_path(scene_id, m)
+        if wav_matches_target_minutes(expected, m):
             return expected.resolve()
 
         saved = self._get_scene_export_path(scene_id, "wav")
-        if saved and wav_matches_target_hours(saved, h):
+        if saved and wav_matches_target_minutes(saved, m):
             return saved.resolve()
         return None
 
     def _format_export_wav_status(
-        self, path: Path | None, hours: float | None = None
+        self, path: Path | None, minutes: float | None = None
     ) -> str:
         if not path or not path.is_file():
             return "待开始"
-        h = self._target_duration_hours() if hours is None else float(hours)
-        if not wav_matches_target_hours(path, h):
+        m = self._target_duration_minutes() if minutes is None else float(minutes)
+        if not wav_matches_target_minutes(path, m):
             return "待开始"
         return self._format_export_status(path)
 
-    def _clear_invalid_export_wav(self, scene_id: str, hours: float | None = None) -> None:
-        h = self._target_duration_hours() if hours is None else float(hours)
+    def _clear_invalid_export_wav(self, scene_id: str, minutes: float | None = None) -> None:
+        m = self._target_duration_minutes() if minutes is None else float(minutes)
         outputs = self._export_outputs_cfg()
         scene = outputs.get(scene_id)
         if not isinstance(scene, dict):
@@ -1696,7 +1705,7 @@ class RelaxAsmrApp(tk.Tk):
         if not raw:
             return
         p = Path(raw)
-        if not p.is_file() or not wav_matches_target_hours(p, h):
+        if not p.is_file() or not wav_matches_target_minutes(p, m):
             scene.pop("wav", None)
             self._save_config()
 
@@ -1715,8 +1724,8 @@ class RelaxAsmrApp(tk.Tk):
             return None
         return max(candidates, key=lambda p: p.stat().st_mtime)
 
-    def _clear_invalid_export_mp4(self, scene_id: str, hours: float | None = None) -> None:
-        h = self._target_duration_hours() if hours is None else float(hours)
+    def _clear_invalid_export_mp4(self, scene_id: str, minutes: float | None = None) -> None:
+        m = self._target_duration_minutes() if minutes is None else float(minutes)
         outputs = self._export_outputs_cfg()
         scene = outputs.get(scene_id)
         if not isinstance(scene, dict):
@@ -1727,8 +1736,8 @@ class RelaxAsmrApp(tk.Tk):
         p = Path(raw)
         if (
             not p.is_file()
-            or not export_mp4_belongs_to_scene(p, scene_id, hours=h)
-            or not wav_matches_target_hours(p, h)
+            or not export_mp4_belongs_to_scene(p, scene_id, minutes=m)
+            or not wav_matches_target_minutes(p, m)
         ):
             scene.pop("mp4", None)
             if self._cfg.get("last_export_mp4") == raw:
@@ -1736,7 +1745,7 @@ class RelaxAsmrApp(tk.Tk):
             self._save_config()
 
     def _find_latest_mp4_for_scene(self, scene_id: str) -> Path | None:
-        return find_export_mp4_for_scene(scene_id, hours=self._target_duration_hours())
+        return find_export_mp4_for_scene(scene_id, minutes=self._target_duration_minutes())
 
     def _resolve_upload_mp4(self) -> Path | None:
         """步骤 5 上传：baseURL/export 下与步骤 1 同序号的成片 mp4。"""
@@ -1940,7 +1949,7 @@ class RelaxAsmrApp(tk.Tk):
                 copy_style="forest_rain",
                 thumb_title=RAIN_THUMB_TITLE,
                 thumb_subtitle_place_only=True,
-                duration_override_s=float(self.duration_var.get()) * 3600,
+                duration_override_s=float(self.duration_var.get()) * 60,
                 scene_id=scene_id,
                 force_refresh_visual=force_refresh,
                 on_progress=self._log,
@@ -1989,15 +1998,15 @@ class RelaxAsmrApp(tk.Tk):
         path: Path | None,
         *,
         scene_id: str | None = None,
-        hours: float | None = None,
+        minutes: float | None = None,
     ) -> str:
         if not path or not path.is_file():
             return "待开始"
         sid = scene_id or self.scene_id
-        h = self._target_duration_hours() if hours is None else float(hours)
-        if not sid or not export_mp4_belongs_to_scene(path, sid, hours=h):
+        m = self._target_duration_minutes() if minutes is None else float(minutes)
+        if not sid or not export_mp4_belongs_to_scene(path, sid, minutes=m):
             return "待开始"
-        if not wav_matches_target_hours(path, h):
+        if not wav_matches_target_minutes(path, m):
             return "待开始"
         return self._format_export_status(path)
 
@@ -2173,7 +2182,7 @@ class RelaxAsmrApp(tk.Tk):
             self._sync_track_picker_from_library("1_rain_boom", boom_tab.get_selected())
         self._select_rain_boom_tab()
 
-    def _generate_loop_material(self, loop_video: Path, sub_dir: Path, scene: str, duration_hours: float) -> Path:
+    def _generate_loop_material(self, loop_video: Path, sub_dir: Path, scene: str, duration_minutes: float) -> Path:
         """根据 loop 视频生成 YouTube 物料（缩略图 + *_material.json）。"""
         yt_mod = load_module(YT_MATERIAL_SCRIPT, "relaxasmr_generate_youtube_material")
         out_dir = loop_material_dir(sub_dir, loop_video)
@@ -2186,7 +2195,7 @@ class RelaxAsmrApp(tk.Tk):
             copy_style="forest_rain",
             thumb_title=RAIN_THUMB_TITLE,
             thumb_subtitle_place_only=True,
-            duration_override_s=duration_hours * 3600,
+            duration_override_s=duration_minutes * 60,
             scene_id=scene,
             on_progress=self._log,
         )
@@ -2972,7 +2981,7 @@ class RelaxAsmrApp(tk.Tk):
                         copy_style="forest_rain",
                         thumb_title=RAIN_THUMB_TITLE,
                         thumb_subtitle_place_only=True,
-                        duration_override_s=float(self.duration_var.get()) * 3600,
+                        duration_override_s=float(self.duration_var.get()) * 60,
                         scene_id=scene_id,
                         force_refresh_visual=force_refresh,
                         on_progress=self._log,
@@ -2999,13 +3008,13 @@ class RelaxAsmrApp(tk.Tk):
             return
             
         try:
-            duration = self._parse_duration_hours()
+            duration = self._parse_duration_minutes()
         except ValueError as exc:
             from tkinter import messagebox
             messagebox.showerror("参数错误", str(exc))
             return
 
-        self._persist_duration_hours(duration)
+        self._persist_duration_minutes(duration)
         from gui.core_controller import collect_selected_tracks_for_reaper
 
         self._prepare_scatter_pickers_for_project()
@@ -3048,7 +3057,7 @@ class RelaxAsmrApp(tk.Tk):
                 cfg = build_scene_config_from_gui(
                     loop_video,
                     scene_id=scene_id,
-                    duration_hours=duration,
+                    duration_minutes=duration,
                     selected_tracks=selected_tracks,
                     log_fn=self._log,
                 )
@@ -3099,12 +3108,12 @@ class RelaxAsmrApp(tk.Tk):
             return
 
         try:
-            duration = self._parse_duration_hours()
+            duration = self._parse_duration_minutes()
         except ValueError as exc:
             messagebox.showerror("参数错误", str(exc))
             return
 
-        self._persist_duration_hours(duration)
+        self._persist_duration_minutes(duration)
         wav_name = export_wav_name(self.scene_id, duration)
         final_wav = export_dir() / wav_name
         use_staging = use_export_staging()
@@ -3113,14 +3122,14 @@ class RelaxAsmrApp(tk.Tk):
         if existing_wav:
             if not self._confirm_overwrite(
                 "确认覆盖混音",
-                f"已存在合格混音（约 {duration:g}h）：\n{existing_wav}\n\n重新输出将覆盖该文件。是否继续？",
+                f"已存在合格混音（约 {duration:g} 分钟）：\n{existing_wav}\n\n重新输出将覆盖该文件。是否继续？",
             ):
                 return
         elif final_wav.is_file():
             actual = wav_duration_seconds(final_wav)
             hint = format_duration_short(actual) if actual is not None else "未知"
             self._log(
-                f"将覆盖不合格成品: {wav_name}（当前约 {hint}，目标 {duration:g}h）"
+                f"将覆盖不合格成品: {wav_name}（当前约 {hint}，目标 {duration:g} 分钟）"
             )
         if use_staging:
             local_staging_dir().mkdir(parents=True, exist_ok=True)
@@ -3142,7 +3151,7 @@ class RelaxAsmrApp(tk.Tk):
         def worker() -> None:
             try:
                 exe = (self._cfg.get("reaper_exe") or "").strip() or None
-                self._log(f"渲染工程: {rpp_path.name}（Entire Project · {duration:g}h）")
+                self._log(f"渲染工程: {rpp_path.name}（Entire Project · {duration:g} 分钟）")
 
                 def on_pct(pct: int) -> None:
                     set_render_pct(pct)
@@ -3161,7 +3170,7 @@ class RelaxAsmrApp(tk.Tk):
                             rpp_path,
                             reaper_exe=exe,
                             output_wav=render_wav,
-                            duration_hours=duration,
+                            duration_minutes=duration,
                             on_pct=on_pct,
                             on_tail=on_tail,
                         )
@@ -3170,17 +3179,17 @@ class RelaxAsmrApp(tk.Tk):
                         rpp_path,
                         reaper_exe=exe,
                         output_wav=render_wav,
-                        duration_hours=duration,
+                        duration_minutes=duration,
                         on_pct=on_pct,
                         on_tail=on_tail,
                     )
                 if not render_wav.is_file():
                     raise FileNotFoundError(f"渲染结束但未找到输出文件: {render_wav.name}")
-                if not wav_matches_target_hours(render_wav, duration):
+                if not wav_matches_target_minutes(render_wav, duration):
                     actual = wav_duration_seconds(render_wav)
                     hint = format_duration_short(actual) if actual is not None else "未知"
                     raise RuntimeError(
-                        f"输出时长不符：{render_wav.name} 约 {hint}，期望 {duration:g} 小时"
+                        f"输出时长不符：{render_wav.name} 约 {hint}，期望 {duration:g} 分钟"
                     )
                 if use_staging:
                     self._log(f"搬运混音到: {final_wav}")
@@ -3299,7 +3308,7 @@ class RelaxAsmrApp(tk.Tk):
         num = match.group() if match else self.scene_id
 
         try:
-            duration = self._parse_duration_hours()
+            duration = self._parse_duration_minutes()
         except ValueError as exc:
             messagebox.showerror("参数错误", str(exc))
             return
@@ -3310,7 +3319,7 @@ class RelaxAsmrApp(tk.Tk):
         else:
             messagebox.showwarning(
                 "提示",
-                f"未找到时长符合 {duration:g}h 的混音文件。\n"
+                f"未找到时长符合 {duration:g} 分钟的混音文件。\n"
                 f"请先「一键输出混音」生成 {export_wav_name(self.scene_id, duration)}。",
             )
             return
@@ -3319,7 +3328,7 @@ class RelaxAsmrApp(tk.Tk):
         if existing_mp4:
             if not self._confirm_overwrite(
                 "确认覆盖视频",
-                f"已存在合格成片（约 {duration:g}h）：\n{existing_mp4}\n\n重新合成将覆盖该文件。是否继续？",
+                f"已存在合格成片（约 {duration:g} 分钟）：\n{existing_mp4}\n\n重新合成将覆盖该文件。是否继续？",
             ):
                 return
 

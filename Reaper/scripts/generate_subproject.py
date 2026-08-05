@@ -26,7 +26,7 @@ from media_paths import (
 REPO_ROOT = Path(__file__).resolve().parents[2]
 if str(REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(REPO_ROOT))
-from scripts.config.paths import export_dir, duration_render_suffix, resolve_media_asset
+from scripts.config.paths import cfg_duration_minutes, export_dir, duration_render_suffix, resolve_media_asset
 SCRIPTS_DIR = Path(__file__).resolve().parent
 LAYER_TEMPLATE_PATH = REPO_ROOT / "Reaper" / "Projects" / "Rain" / "scripts" / "layer_template.lua"
 RAIN_FX_SRC = REPO_ROOT / "Reaper" / "Projects" / "Rain" / "scripts" / "fx" / "asmr_sleep_hf_eq.jsfx"
@@ -91,9 +91,9 @@ VOLENV2_BLOCK_RE = re.compile(r"    <VOLENV2\n(?:.*\n)*?    >\n")
 # Headless 渲染：-renderproject 读 RENDER_RANGE bounds，须为 1（Entire Project）
 
 
-def _project_length_sec_from_rpp(text: str, duration_hours: float | None) -> float:
-    if duration_hours is not None and duration_hours > 0:
-        return float(duration_hours) * 3600.0
+def _project_length_sec_from_rpp(text: str, duration_minutes: float | None) -> float:
+    if duration_minutes is not None and duration_minutes > 0:
+        return float(duration_minutes) * 60.0
     match = re.search(r"^\s*MAXPROJLEN\s+\d+\s+([\d.]+)\s*$", text, re.MULTILINE)
     if match:
         return float(match.group(1))
@@ -103,11 +103,11 @@ def _project_length_sec_from_rpp(text: str, duration_hours: float | None) -> flo
 def ensure_rpp_full_project_render(
     rpp_path: Path,
     *,
-    duration_hours: float | None = None,
+    duration_minutes: float | None = None,
 ) -> bool:
     """将 RPP 渲染边界设为 Entire Project；时间选区设为前 5 分钟。"""
     text = rpp_path.read_text(encoding="utf-8")
-    total_sec = _project_length_sec_from_rpp(text, duration_hours)
+    total_sec = _project_length_sec_from_rpp(text, duration_minutes)
     if total_sec <= 0:
         return False
 
@@ -117,7 +117,7 @@ def ensure_rpp_full_project_render(
     selection_re = re.compile(r"^(\s*)(SELECTION2?)\s+[\d.]+\s+\S+.*$")
     maxprojlen_re = re.compile(r"^(\s*)MAXPROJLEN\s+\d+\s+[\d.]+\s*$")
     render_pattern_re = re.compile(r"^(\s*)RENDER_PATTERN\s+\S+\s*$")
-    suffix = duration_render_suffix(float(duration_hours)) if duration_hours else None
+    suffix = duration_render_suffix(float(duration_minutes)) if duration_minutes else None
 
     out_lines: list[str] = []
     changed = False
@@ -529,8 +529,8 @@ def make_item(
 
 
 def build_rpp(cfg: dict, repo_root: Path, rpp_dir: Path, media_mode: str = "auto") -> str:
-    hours = float(cfg.get("duration_hours", 3))
-    total_sec = hours * 3600
+    minutes = cfg_duration_minutes(cfg)
+    total_sec = minutes * 60
     maxprojlen = int(total_sec)
     render_dir = render_output_dir_for_rpp(repo_root, media_mode)
     sel_str = str(RPP_TIME_SELECTION_SEC)
@@ -538,7 +538,7 @@ def build_rpp(cfg: dict, repo_root: Path, rpp_dir: Path, media_mode: str = "auto
     header = [
         '<REAPER_PROJECT 0.1 "7.73/win64" 0 0',
         "  <NOTES 0 2",
-        f"    {cfg.get('project_name', 'Rain')} · {hours}h · sleep series",
+        f"    {cfg.get('project_name', 'Rain')} · {minutes:g}min · sleep series",
         "  >",
         "  RIPPLE 0 0",
         "  GROUPOVERRIDE 0 0 0 0",
@@ -573,7 +573,7 @@ def build_rpp(cfg: dict, repo_root: Path, rpp_dir: Path, media_mode: str = "auto
         "  <APPLYFX_CFG",
         "  >",
         rpp_render_file_line(render_dir),
-        f"  RENDER_PATTERN $project_{duration_render_suffix(hours)}",
+        f"  RENDER_PATTERN $project_{duration_render_suffix(minutes)}",
         "  RENDER_FMT 0 2 0",
         "  RENDER_1X 0",
         f"  {RPP_RENDER_RANGE_LINE}",
@@ -671,7 +671,7 @@ def build_rpp(cfg: dict, repo_root: Path, rpp_dir: Path, media_mode: str = "auto
         )
         iid += 1
 
-    cfg_dur_s = float(cfg.get("duration_hours", 0)) * 3600
+    cfg_dur_s = cfg_duration_minutes(cfg) * 60
     
     for layer in cfg.get("scatter_layers", []):
         t = layer["track"]

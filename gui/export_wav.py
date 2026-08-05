@@ -21,40 +21,40 @@ def wav_duration_seconds(path: Path) -> float | None:
         return None
 
 
-def wav_matches_target_hours(
+def wav_matches_target_minutes(
     path: Path,
-    hours: float,
+    minutes: float,
     *,
     tolerance_s: float = DEFAULT_TOLERANCE_S,
 ) -> bool:
     dur = wav_duration_seconds(path)
     if dur is None:
         return False
-    expected = float(hours) * 3600.0
+    expected = float(minutes) * 60.0
     return abs(dur - expected) <= tolerance_s
 
 
-def expected_export_wav_path(scene_id: str, hours: float) -> Path:
+def expected_export_wav_path(scene_id: str, minutes: float) -> Path:
     from scripts.config.paths import export_dir
 
-    return export_dir() / export_wav_name(scene_id, hours)
+    return export_dir() / export_wav_name(scene_id, minutes)
 
 
 def export_mp4_belongs_to_scene(
     path: Path,
     scene_id: str,
     *,
-    hours: float | None = None,
+    minutes: float | None = None,
 ) -> bool:
-    """成片 MP4 须属于当前场景序号，且文件名含目标时长标记（如 3h）。"""
+    """成片 MP4 须属于当前场景序号，且文件名含目标时长标记（如 100min）。"""
     if not path.is_file():
         return False
     if scene_id not in path.name:
         return False
-    if hours is not None:
+    if minutes is not None:
         from scripts.config.paths import duration_render_suffix
 
-        if duration_render_suffix(hours) not in path.stem:
+        if duration_render_suffix(minutes) not in path.stem:
             return False
     return True
 
@@ -62,7 +62,7 @@ def export_mp4_belongs_to_scene(
 def find_export_mp4_for_scene(
     scene_id: str,
     *,
-    hours: float | None = None,
+    minutes: float | None = None,
     export_root: Path | None = None,
 ) -> Path | None:
     """在 export 目录查找同序号、含目标时长标记的成片 MP4。"""
@@ -75,10 +75,10 @@ def find_export_mp4_for_scene(
         return None
     match = re.search(r"\d+", scene_id)
     num = match.group() if match else scene_id
-    duration_token = duration_render_suffix(hours) if hours is not None else None
+    duration_token = duration_render_suffix(minutes) if minutes is not None else None
     candidates: list[Path] = []
     for path in root.glob(f"*{num}*.mp4"):
-        if not export_mp4_belongs_to_scene(path, scene_id, hours=hours):
+        if not export_mp4_belongs_to_scene(path, scene_id, minutes=minutes):
             continue
         if duration_token and duration_token not in path.stem:
             continue

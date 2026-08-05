@@ -105,9 +105,13 @@ def load_asmr_config(path: Path) -> dict:
     m = re.search(r'series\s*=\s*"([^"]+)"', text)
     if m:
         cfg["series"] = m.group(1)
-    m = re.search(r"duration_hours\s*=\s*([\d.]+)", text)
+    m = re.search(r"duration_minutes\s*=\s*([\d.]+)", text)
     if m:
-        cfg["duration_hours"] = float(m.group(1))
+        cfg["duration_minutes"] = float(m.group(1))
+    else:
+        m = re.search(r"duration_hours\s*=\s*([\d.]+)", text)
+        if m:
+            cfg["duration_minutes"] = float(m.group(1)) * 60
     m = re.search(r"fade_sec\s*=\s*([\d.]+)", text)
     if m:
         cfg["fade_sec"] = float(m.group(1))

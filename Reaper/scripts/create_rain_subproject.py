@@ -42,10 +42,10 @@ def main() -> None:
         help="场景 ID（默认从路径推断 MVI_xxxx）",
     )
     parser.add_argument(
-        "--duration-hours",
+        "--duration-minutes",
         type=float,
-        default=3,
-        help="成片时长（默认 3）",
+        default=100,
+        help="成片时长（默认 100 分钟）",
     )
     parser.add_argument(
         "--media-mode",
@@ -74,7 +74,7 @@ def main() -> None:
     sub = create_from_video(
         video,
         scene_id=scene,
-        duration_hours=args.duration_hours,
+        duration_minutes=args.duration_minutes,
         media_mode=args.media_mode,
         skip_generate=args.skip_generate,
     )

@@ -36,7 +36,7 @@ def test_build_scene_config_only_uses_grid_selection(tmp_path: Path, monkeypatch
     cfg = build_scene_config_from_gui(
         video,
         scene_id="MVI_9999",
-        duration_hours=3.0,
+        duration_minutes=100.0,
         selected_tracks={"1_rain": rain, "4_wildlife": wild},
     )
 

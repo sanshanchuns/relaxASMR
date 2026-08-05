@@ -37,7 +37,7 @@ def _export_score(path: Path, scene_id: str) -> int:
     score = 10
     if sid in stem:
         score += 20
-    if any(tok in stem for tok in ("_fhd_", "_4k", "_3h", "_gpu")):
+    if any(tok in stem for tok in ("_fhd_", "_4k", "_gpu", "_3h")) or "min" in stem:
         score += 30
     if "_loop" in stem:
         score -= 50

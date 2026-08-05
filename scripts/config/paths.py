@@ -249,21 +249,33 @@ def series_video_prompt_read_paths(batch_id: str, index: int) -> list[Path]:
     ]
 
 
-def duration_render_suffix(hours: float) -> str:
-    """成片时长后缀，如 3 → '3h'，2.5 → '2.5h'。"""
-    h = float(hours)
-    if h == int(h):
-        return f"{int(h)}h"
-    return f"{h:g}h"
+DEFAULT_DURATION_MINUTES = 100
 
 
-def export_wav_basename(scene_id: str, hours: float) -> str:
-    """导出混音文件名（无扩展名），如 MVI_6989_3h。"""
-    return f"{scene_id}_{duration_render_suffix(hours)}"
+def cfg_duration_minutes(cfg: dict) -> float:
+    """从场景/GUI 配置读取成片时长（分钟），兼容旧 duration_hours。"""
+    if "duration_minutes" in cfg:
+        return float(cfg["duration_minutes"])
+    if "duration_hours" in cfg:
+        return float(cfg["duration_hours"]) * 60
+    return float(DEFAULT_DURATION_MINUTES)
 
 
-def export_wav_name(scene_id: str, hours: float) -> str:
-    return f"{export_wav_basename(scene_id, hours)}.wav"
+def duration_render_suffix(minutes: float) -> str:
+    """成片时长后缀，如 100 → '100min'，90.5 → '90.5min'。"""
+    m = float(minutes)
+    if m == int(m):
+        return f"{int(m)}min"
+    return f"{m:g}min"
+
+
+def export_wav_basename(scene_id: str, minutes: float) -> str:
+    """导出混音文件名（无扩展名），如 MVI_6989_100min。"""
+    return f"{scene_id}_{duration_render_suffix(minutes)}"
+
+
+def export_wav_name(scene_id: str, minutes: float) -> str:
+    return f"{export_wav_basename(scene_id, minutes)}.wav"
 
 
 # 四层音频架构（baseURL/audio/）

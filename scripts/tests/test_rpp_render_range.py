@@ -22,7 +22,7 @@ def test_ensure_rpp_full_project_render(tmp_path: Path) -> None:
                 "<REAPER_PROJECT",
                 "  MAXPROJLEN 1 10800",
                 "  RENDER_RANGE 2 0 0 0 1000",
-                "  RENDER_PATTERN $project_3h",
+                "  RENDER_PATTERN $project_180min",
                 "  SELECTION 10 0",
                 "  SELECTION2 10 0",
                 ">",
@@ -30,25 +30,25 @@ def test_ensure_rpp_full_project_render(tmp_path: Path) -> None:
         ),
         encoding="utf-8",
     )
-    assert ensure_rpp_full_project_render(rpp, duration_hours=5.0)
+    assert ensure_rpp_full_project_render(rpp, duration_minutes=300.0)
     text = rpp.read_text(encoding="utf-8")
     assert f"RENDER_RANGE {RPP_RENDER_BOUNDS_ENTIRE_PROJECT} 0 0 0 1000" in text
     assert "MAXPROJLEN 1 18000" in text
-    assert "RENDER_PATTERN $project_5h" in text
+    assert "RENDER_PATTERN $project_300min" in text
     assert "SELECTION 300 0" in text
     assert "SELECTION2 300 0" in text
 
 
 def test_build_rpp_uses_entire_project() -> None:
-    cfg = {"duration_hours": 2.5, "project_name": "T", "loop_layers": [], "scatter_layers": []}
+    cfg = {"duration_minutes": 150, "project_name": "T", "loop_layers": [], "scatter_layers": []}
     rpp = build_rpp(cfg, REPO, REPO / "Reaper" / "Projects" / "Rain", "auto")
     assert f"RENDER_RANGE {RPP_RENDER_BOUNDS_ENTIRE_PROJECT} 0 0 0 1000" in rpp
     assert "SELECTION 300 0" in rpp
-    assert "RENDER_PATTERN $project_2.5h" in rpp
+    assert "RENDER_PATTERN $project_150min" in rpp
 
 
 def test_build_rpp_group_realimit() -> None:
-    cfg = {"duration_hours": 3.0, "project_name": "T", "loop_layers": [], "scatter_layers": []}
+    cfg = {"duration_minutes": 180, "project_name": "T", "loop_layers": [], "scatter_layers": []}
     rpp = build_rpp(cfg, REPO, REPO / "Reaper" / "Projects" / "Rain", "auto")
     assert "ReaLimit" in rpp
     assert "realimit.dll" in rpp
@@ -58,14 +58,14 @@ def test_build_rpp_group_realimit() -> None:
 
 
 def test_build_rpp_1_rain_flat_no_volenv() -> None:
-    cfg = {"duration_hours": 3.0, "project_name": "T", "loop_layers": [], "scatter_layers": []}
+    cfg = {"duration_minutes": 180, "project_name": "T", "loop_layers": [], "scatter_layers": []}
     rpp = build_rpp(cfg, REPO, REPO / "Reaper" / "Projects" / "Rain", "auto")
     rain_section = rpp.split("NAME 1_rain")[1].split("<TRACK")[0]
     assert "<VOLENV2" not in rain_section
 
 
 def test_build_rpp_group_fade_in() -> None:
-    cfg = {"duration_hours": 3.0, "project_name": "T", "loop_layers": [], "scatter_layers": []}
+    cfg = {"duration_minutes": 180, "project_name": "T", "loop_layers": [], "scatter_layers": []}
     rpp = build_rpp(cfg, REPO, REPO / "Reaper" / "Projects" / "Rain", "auto")
     group_section = rpp.split("NAME Group")[1].split("<TRACK")[0]
     assert "PT 0 0 0" in group_section
@@ -88,7 +88,7 @@ def test_build_rpp_2_impact_loops_to_project_length(tmp_path: Path, monkeypatch)
     )
 
     cfg = {
-        "duration_hours": 3.0,
+        "duration_minutes": 180,
         "project_name": "T",
         "loop_layers": [
             {"track": 2, "id": "2_impact", "name": "impact", "vol": 0.5, "paths": [str(wav)]},
@@ -118,7 +118,7 @@ def test_build_rpp_3_random_scatter_count(tmp_path: Path, monkeypatch) -> None:
     )
 
     cfg = {
-        "duration_hours": 3.0,
+        "duration_minutes": 180,
         "project_name": "T",
         "loop_layers": [],
         "scatter_layers": [
@@ -163,11 +163,10 @@ def test_ensure_rpp_mix_envelopes(tmp_path: Path) -> None:
         ),
         encoding="utf-8",
     )
-    ensure_rpp_full_project_render(rpp, duration_hours=3.0)
+    ensure_rpp_full_project_render(rpp, duration_minutes=180.0)
     text = rpp.read_text(encoding="utf-8")
     rain_section = text.split("NAME 1_rain")[1].split("<TRACK")[0]
     group_section = text.split("NAME Group")[1].split("<TRACK")[0]
     assert "<VOLENV2" not in rain_section
     assert "PT 0 0 0" in group_section
     assert f"PT {GROUP_FADE_IN_SEC:g} 1 0" in group_section
-
