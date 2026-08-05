@@ -48,7 +48,7 @@ scripts/video_upload/config/
 scripts/config/series_video.json
 
 # agy（Google OAuth 凭据，含 refresh_token，禁止提交）
-cli/agy/
+agy/
 
 # ElevenLabs 网页会话凭据（Cookie / Firebase Bearer / refresh / hCaptcha）
 cli/elevenlabs_web/cookie.md

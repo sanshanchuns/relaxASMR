@@ -74,6 +74,33 @@ def test_stage_input_file(tmp_path: Path) -> None:
     assert staged.read_bytes() == b"wav-data"
 
 
+def test_staged_mp4_inputs_keeps_files_on_failure(tmp_path: Path) -> None:
+    audio = tmp_path / "audio.wav"
+    video = tmp_path / "video.mp4"
+    audio.write_bytes(b"wav")
+    video.write_bytes(b"mp4")
+    with patch("scripts.config.staging_export.local_staging_dir", return_value=tmp_path / "staging"):
+        with se.staged_mp4_inputs(audio, video) as (local_audio, local_video):
+            assert local_audio.is_file()
+            assert local_video.is_file()
+            raise RuntimeError("encode failed")
+    assert local_audio.is_file()
+    assert local_video.is_file()
+
+
+def test_staged_mp4_inputs_removes_files_on_success(tmp_path: Path) -> None:
+    audio = tmp_path / "audio.wav"
+    video = tmp_path / "video.mp4"
+    audio.write_bytes(b"wav")
+    video.write_bytes(b"mp4")
+    with patch("scripts.config.staging_export.local_staging_dir", return_value=tmp_path / "staging"):
+        with se.staged_mp4_inputs(audio, video) as (local_audio, local_video):
+            assert local_audio.is_file()
+            assert local_video.is_file()
+    assert not local_audio.is_file()
+    assert not local_video.is_file()
+
+
 def test_unique_wav_paths_from_rpp() -> None:
     text = (
         'FILE "\\\\nas\\a\\one.wav"\n'

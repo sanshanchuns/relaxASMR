@@ -3451,28 +3451,31 @@ class RelaxAsmrApp(tk.Tk):
                     bufsize=1,
                 )
                 assert proc.stdout is not None
-                while True:
-                    line = proc.stdout.readline()
-                    if not line:
-                        if proc.poll() is not None:
-                            break
-                        continue
-                    line = line.strip()
-                    if not line:
-                        continue
-                    if line.startswith("==> Done:"):
-                        raw = line.split(":", 1)[1].strip()
-                        if raw:
-                            output_mp4 = Path(raw)
-                    elif line.startswith("PROGRESS "):
-                        status = line.removeprefix("PROGRESS ").strip()
-                        pct = parse_progress_pct(status)
-                        if pct is not None:
-                            export_tail["value"] = pct >= 99 or "99%+" in status
-                            set_export_pct(pct)
-                    else:
-                        self._log(line)
-                proc.wait()
+                try:
+                    while True:
+                        line = proc.stdout.readline()
+                        if not line:
+                            if proc.poll() is not None:
+                                break
+                            continue
+                        line = line.strip()
+                        if not line:
+                            continue
+                        if line.startswith("==> Done:"):
+                            raw = line.split(":", 1)[1].strip()
+                            if raw:
+                                output_mp4 = Path(raw)
+                        elif line.startswith("PROGRESS "):
+                            status = line.removeprefix("PROGRESS ").strip()
+                            pct = parse_progress_pct(status)
+                            if pct is not None:
+                                export_tail["value"] = pct >= 99 or "99%+" in status
+                                set_export_pct(pct)
+                        else:
+                            self._log(line)
+                finally:
+                    if proc.poll() is None:
+                        proc.wait()
                 if proc.returncode != 0:
                     raise subprocess.CalledProcessError(proc.returncode, run_cmd)
 

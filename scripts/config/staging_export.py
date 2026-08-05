@@ -326,7 +326,12 @@ def _local_inputs_dir() -> Path:
     return local_staging_dir() / "inputs"
 
 
-def stage_input_file(src: Path, *, dest_name: str | None = None) -> Path:
+def stage_input_file(
+    src: Path,
+    *,
+    dest_name: str | None = None,
+    copy_only: bool = False,
+) -> Path:
     """将 NAS 上的输入文件复制/硬链到 staging/inputs/，供 FFmpeg 本地读取。"""
     src = src.resolve()
     if not src.is_file():
@@ -343,6 +348,10 @@ def stage_input_file(src: Path, *, dest_name: str | None = None) -> Path:
             pass
         dest.unlink()
 
+    if copy_only:
+        shutil.copy2(src, dest)
+        return dest
+
     try:
         os.link(src, dest)
     except OSError:
@@ -352,25 +361,26 @@ def stage_input_file(src: Path, *, dest_name: str | None = None) -> Path:
 
 @contextmanager
 def staged_mp4_inputs(audio: Path, video: Path) -> Iterator[tuple[Path, Path]]:
-    """协作机器：混音 WAV + loop 视频先落到本地 inputs/，编码结束后删除。"""
-    local_audio = stage_input_file(audio)
-    local_video = stage_input_file(video)
+    """协作机器：混音 WAV + loop 视频先落到本地 inputs/，编码成功后删除。"""
+    # 长时编码期间避免硬链被其它流程 unlink；始终复制独立副本。
+    local_audio = stage_input_file(audio, copy_only=True)
+    local_video = stage_input_file(video, copy_only=True)
+    success = False
     try:
         yield local_audio, local_video
+        success = True
     finally:
-        for path in (local_audio, local_video):
-            try:
-                if path.is_file():
-                    path.unlink()
-            except OSError:
-                pass
+        if success:
+            for path in (local_audio, local_video):
+                try:
+                    if path.is_file():
+                        path.unlink()
+                except OSError:
+                    pass
 
 
 def _local_upload_dir() -> Path:
     return local_staging_dir() / "upload"
-
-
-    return flow.run_local_server(port=0, open_browser=True)
 
 
 def _format_staging_size(num_bytes: int) -> str:

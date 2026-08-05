@@ -255,6 +255,55 @@ file_size_bytes() {
   stat -c%s "$path" 2>/dev/null || stat -f%z "$path" 2>/dev/null || printf '0'
 }
 
+verify_inputs() {
+  local missing=0
+  if [[ ! -f "$VIDEO" ]]; then
+    echo "Error: video input missing: $VIDEO" >&2
+    missing=1
+  fi
+  if [[ ! -f "$AUDIO" ]]; then
+    echo "Error: audio input missing: $AUDIO" >&2
+    missing=1
+  fi
+  return "$missing"
+}
+
+encode_part_path() {
+  local output="$1"
+  local enc="$2"
+  printf '%s.%s.part.mp4' "${output%.mp4}" "$enc"
+}
+
+cleanup_encode_artifacts() {
+  local output="$1"
+  rm -f "$output"
+  rm -f "${output%.mp4}".*.part.mp4
+  rm -f "${output}.faststart.tmp.mp4"
+}
+
+apply_faststart() {
+  local src="$1"
+  local dst="$2"
+  local tmp="${dst}.faststart.tmp.mp4"
+
+  if [[ ! -f "$src" ]]; then
+    echo "Error: encoded part missing: $src" >&2
+    return 1
+  fi
+
+  echo "==> Applying faststart remux…"
+  if ffmpeg -y -hide_banner -loglevel error -i "$src" -c copy -movflags +faststart "$tmp"; then
+    mv -f "$tmp" "$dst"
+    rm -f "$src"
+    return 0
+  fi
+
+  rm -f "$tmp"
+  echo "Warning: faststart remux failed; keeping encoded file without faststart." >&2
+  mv -f "$src" "$dst"
+  return 0
+}
+
 run_ffmpeg_with_progress() {
   local target_sec="$1"
   local output_file="$2"
@@ -517,6 +566,14 @@ echo
 
 success=false
 for current_enc in "${ENCODER_LIST[@]}"; do
+  if ! verify_inputs; then
+    echo "Error: cannot continue encoder ${current_enc} without inputs." >&2
+    break
+  fi
+
+  encode_part=$(encode_part_path "$OUTPUT" "$current_enc")
+  cleanup_encode_artifacts "$OUTPUT"
+
   ffmpeg_args=(
     -y
     -stream_loop -1 -i "$VIDEO"
@@ -622,19 +679,24 @@ for current_enc in "${ENCODER_LIST[@]}"; do
 
   ffmpeg_args+=(
     -c:a aac -b:a "$AUDIO_BITRATE" -ar 48000
-    -movflags +faststart
   )
 
   echo "==> Attempting Video encode: ${ENCODE_DESC} max ${MAXRATE} (60fps source)"
+  echo "==> Encode temp: $encode_part (faststart applied after encode)"
   
-  if run_ffmpeg_with_progress "$TARGET_SEC" "$OUTPUT" "${ffmpeg_args[@]}" "$OUTPUT"; then
-    success=true
-    break
+  if run_ffmpeg_with_progress "$TARGET_SEC" "$encode_part" "${ffmpeg_args[@]}" "$encode_part"; then
+    if apply_faststart "$encode_part" "$OUTPUT"; then
+      success=true
+      break
+    fi
+    echo "Warning: post-encode finalize failed for encoder ${current_enc}." >&2
   else
     echo "Warning: ffmpeg failed with encoder ${current_enc}." >&2
-    echo "Falling back to next encoder if available..." >&2
-    echo
   fi
+
+  rm -f "$encode_part"
+  echo "Falling back to next encoder if available..." >&2
+  echo
 done
 
 if [[ "$success" == "false" ]]; then

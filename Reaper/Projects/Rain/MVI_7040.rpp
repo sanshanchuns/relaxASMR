@@ -1,0 +1,4481 @@
+<REAPER_PROJECT 0.1 "7.73/win64" 1785823227 0
+  <NOTES 0 2
+  >
+  RIPPLE 0 0
+  GROUPOVERRIDE 0 0 0 0
+  AUTOXFADE 128
+  ENVATTACH 3
+  POOLEDENVATTACH 0
+  TCPUIFLAGS 0
+  MIXERUIFLAGS 11 48
+  ENVFADESZ10 40
+  PEAKGAIN 1
+  FEEDBACK 0
+  PANLAW 1
+  PROJOFFS 0 0 0
+  MAXPROJLEN 1 10800
+  GRID 3199 8 1 8 1 0 0 0
+  TIMEMODE 5 9 -1 60 0 0 -1 0
+  VIDEO_CONFIG 0 0 65792
+  PANMODE 3
+  PANLAWFLAGS 3
+  CURSOR 0
+  ZOOM 1.7413144175444 0 0
+  VZOOMEX 6 0
+  USE_REC_CFG 0
+  RECMODE 1
+  SMPTESYNC 0 30 100 40 1000 300 0 0 1 0 0
+  LOOP 0
+  LOOPGRAN 0 4
+  RECORD_PATH "Audio Files" ""
+  <RECORD_CFG
+    ZXZhdxgAAQ==
+  >
+  <APPLYFX_CFG
+  >
+  RENDER_FILE \\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\export
+  RENDER_PATTERN $project_3h
+  RENDER_FMT 0 2 0
+  RENDER_1X 0
+  RENDER_RANGE 1 0 0 0 1000
+  RENDER_RESAMPLE 3 0 1
+  RENDER_ADDTOPROJ 0
+  RENDER_STEMS 0
+  RENDER_DITHER 0
+  RENDER_TRIM 0.000001 0.000001 0 0
+  TIMELOCKMODE 0
+  TEMPOENVLOCKMODE 1
+  ITEMMIX 1
+  DEFPITCHMODE 589824 0
+  TAKELANE 1
+  SAMPLERATE 48000 1 0
+  <RENDER_CFG
+    ZXZhdxgAAQ==
+  >
+  LOCK 1
+  <METRONOME 6 2
+    VOL 0.25 0.125
+    BEATLEN 4
+    FREQ 1760 880 1
+    SAMPLES "" "" "" ""
+    SPLIGNORE 0 0
+    SPLDEF 2 660 "" 0 ""
+    SPLDEF 3 440 "" 0 ""
+    PATTERN 0 169
+    PATTERNSTR ABBB
+    MULT 1
+  >
+  GLOBAL_AUTO -1
+  TEMPO 60 4 4 1
+  PLAYRATE 1 0 0.25 4
+  SELECTION 10752 9600
+  SELECTION2 10752 9600
+  MASTERAUTOMODE 0
+  MASTERTRACKHEIGHT 0 0
+  MASTERPEAKCOL 16576
+  MASTERMUTESOLO 0
+  MASTERTRACKVIEW 1 0.6667 0.5 0.5 0 0 0 0 0 0 0 0 0 0 1
+  MASTERHWOUT 0 0 1 0 0 0 0 -1
+  MASTER_NCH 2 2
+  MASTER_VOLUME 1 0 -1 -1 1
+  MASTER_PANMODE 3
+  MASTER_PANLAWFLAGS 3
+  MASTER_FX 0
+  MASTER_SEL 0
+  <MASTERPLAYSPEEDENV
+    EGUID {9803FC77-4787-4218-9C71-A57DA34F2F8C}
+    ACT 0 -1
+    VIS 0 1 1
+    LANEHEIGHT 0 0
+    ARM 0
+    DEFSHAPE 0 -1 -1
+  >
+  <TEMPOENVEX
+    EGUID {63E74D85-0E6A-48A5-9090-8BD519357BB8}
+    ACT 0 -1
+    VIS 1 0 1
+    LANEHEIGHT 0 0
+    ARM 0
+    DEFSHAPE 1 -1 -1
+  >
+  RULERHEIGHT 86 86
+  RULERLANE 1 4 "" 0 -1 0
+  RULERLANE 2 8 "" 0 -1 0
+  <PROJBAY
+  >
+  <TRACK {0BA3423F-D50F-46EF-85C3-63F1A5A2244C}
+    NAME Group
+    PEAKCOL 16576
+    BEAT -1
+    AUTOMODE 0
+    PANLAWFLAGS 3
+    VOLPAN 1 0 -1 -1 1
+    MUTESOLO 0 0 0
+    IPHASE 0
+    PLAYOFFS 0 1
+    ISBUS 1 1
+    BUSCOMP 0 0 0 0 0
+    SHOWINMIX 1 0.6667 0.5 1 0.5 0 0 0 0
+    FIXEDLANES 9 0 0 0 0
+    LANEREC -1 -1 -1 0
+    SEL 0
+    REC 0 0 1 0 0 0 0 0
+    VU 64
+    TRACKHEIGHT 0 0 0 0 0 0 0
+    INQ 0 0 0 0.5 100 0 0 100
+    NCHAN 2
+    FX 1
+    TRACKID {0BA3423F-D50F-46EF-85C3-63F1A5A2244C}
+    PERF 0
+    MIDIOUT -1
+    MAINSEND 1 0
+    <VOLENV2
+      EGUID {92ADA3D1-AC23-4E8E-9376-32392677A174}
+      ACT 1 -1
+      VIS 1 1 1
+      LANEHEIGHT 0 0
+      ARM 1
+      DEFSHAPE 0 -1 -1
+      PT 0 0 0
+      PT 5 1 0
+      PT 10800 1 0
+    >
+    <FXCHAIN
+      SHOW 0
+      LASTSEL 0
+      DOCKED 0
+      BYPASS 0 0 0
+      <VST "VST: ReaLimit (Cockos)" realimit.dll 0 "" 1919708532<565354726C6D747265616C696D697400> ""
+        dG1scu5e7f4CAAAAAQAAAAAAAAACAAAAAAAAAAIAAAABAAAAAAAAAAIAAAAAAAAAMAAAAAEAAAAAABAA
+        AwAAAAEAAAAAAAAAAAAAAAAAAAAAAPC/AgAAAAAAAAAAAAAAAAAAAD+fduMQw8Y/
+        AFByb2dyYW0gMQAQAAAA
+      >
+      FLOATPOS 0 0 0 0
+      FXID {C6CEAD16-6485-49CB-A759-91C1E29829B8}
+      WAK 0 0
+    >
+  >
+  <TRACK {639E25C8-CC75-4856-97CD-E04691F0D7E9}
+    NAME 1_rain
+    PEAKCOL 16576
+    BEAT -1
+    AUTOMODE 0
+    PANLAWFLAGS 3
+    VOLPAN 4.4208 0 -1 -1 1
+    MUTESOLO 0 0 0
+    IPHASE 0
+    PLAYOFFS 0 1
+    ISBUS 0 0
+    BUSCOMP 0 0 0 0 0
+    SHOWINMIX 1 0.6667 0.5 1 0.5 0 0 0 0
+    FIXEDLANES 9 0 0 0 0
+    LANEREC -1 -1 -1 0
+    SEL 0
+    REC 0 0 1 0 0 0 0 0
+    VU 64
+    TRACKHEIGHT 0 0 0 0 0 0 0
+    INQ 0 0 0 0.5 100 0 0 100
+    NCHAN 2
+    FX 1
+    TRACKID {639E25C8-CC75-4856-97CD-E04691F0D7E9}
+    PERF 0
+    MIDIOUT -1
+    MAINSEND 1 0
+    <FXCHAIN
+      SHOW 0
+      LASTSEL 0
+      DOCKED 0
+      BYPASS 1 0 0
+      <VST "VST: ReaEQ (Cockos)" reaeq.dll 0 "" 1919247729<56535472656571726561657100000000> ""
+        cWVlcu5e7f4CAAAAAQAAAAAAAAACAAAAAAAAAAIAAAABAAAAAAAAAAIAAAAAAAAAzQAAAAEAAAAAABAA
+        IQAAAAUAAAAAAAAAAQAAAAAAAAAAAFlAAAAAAAAA8D+amZmZmZnpPwEIAAAAAQAAAAAAAAAAwHJAAAAAAAAA8D8AAAAAAAAAQAEIAAAAAQAAAAAAAAAAQI9AAAAAAAAA
+        8D8AAAAAAAAAQAEBAAAAAQAAAJ/vruhzybNAMIH/8g6n2z+amZmZmZnpPwEEAAAAAQAAAAAAAAAAAFlAAAAAAAAA8D8AAAAAAAAAQAEBAAAAAQAAAAAAAAAAAPA/AAAA
+        AP0BAABcAQAAAgABAA==
+        AFByb2dyYW0gMQAQAAAA
+      >
+      FLOATPOS 0 0 0 0
+      FXID {1E99D025-F327-4DA0-8E79-BF40A01A8291}
+      WAK 0 0
+    >
+    <ITEM
+      POSITION 0
+      SNAPOFFS 0
+      LENGTH 10800
+      LOOP 1
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {96808072-817D-4403-86CB-CAC4F3A75D35}
+      IID 102
+      NAME BI15.森林叶雨.wav
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {2B494D4C-FDF7-4791-9513-2182C8810EDC}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\1_rain\booms\BI15.森林叶雨.wav"
+      >
+    >
+  >
+  <TRACK {3E4AE314-C0DF-4BBA-9C1B-D06F1E305FAA}
+    NAME 2_impact
+    PEAKCOL 16576
+    BEAT -1
+    AUTOMODE 0
+    PANLAWFLAGS 3
+    VOLPAN 0.5 0 -1 -1 1
+    MUTESOLO 0 0 0
+    IPHASE 0
+    PLAYOFFS 0 1
+    ISBUS 0 0
+    BUSCOMP 0 0 0 0 0
+    SHOWINMIX 1 0.6667 0.5 1 0.5 0 0 0 0
+    FIXEDLANES 9 0 0 0 0
+    LANEREC -1 -1 -1 0
+    SEL 0
+    REC 0 0 1 0 0 0 0 0
+    VU 64
+    TRACKHEIGHT 0 0 0 0 0 0 0
+    INQ 0 0 0 0.5 100 0 0 100
+    NCHAN 2
+    FX 0
+    TRACKID {3E4AE314-C0DF-4BBA-9C1B-D06F1E305FAA}
+    PERF 0
+    MIDIOUT -1
+    MAINSEND 1 0
+  >
+  <TRACK {1A482A1A-8A00-431F-98DF-7950445AD3A4}
+    NAME 3_random
+    PEAKCOL 16576
+    BEAT -1
+    AUTOMODE 0
+    PANLAWFLAGS 3
+    VOLPAN 1.2162 0 -1 -1 1
+    MUTESOLO 0 0 0
+    IPHASE 0
+    PLAYOFFS 0 1
+    ISBUS 0 0
+    BUSCOMP 0 0 0 0 0
+    SHOWINMIX 1 0.6667 0.5 1 0.5 0 0 0 0
+    FIXEDLANES 9 0 0 0 0
+    LANEREC -1 -1 -1 0
+    SEL 1
+    REC 0 0 1 0 0 0 0 0
+    VU 64
+    TRACKHEIGHT 0 0 0 0 0 0 0
+    INQ 0 0 0 0.5 100 0 0 100
+    NCHAN 2
+    FX 0
+    TRACKID {1A482A1A-8A00-431F-98DF-7950445AD3A4}
+    PERF 0
+    MIDIOUT -1
+    MAINSEND 1 0
+    <ITEM
+      POSITION 24
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {E9723C16-B017-4ECA-B484-1CAEBA63FEB6}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E77CD676-F33B-41C5-A4D6-B74A554CD333}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 104
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 1
+      IGUID {5C1F55FD-0135-4B36-B305-6751CEA125B0}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {741985F2-A946-41C8-919E-C305050F1C3C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 152
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {54EC9A4B-FF52-48A2-93A6-962D2D10E6CA}
+      IID 3
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {278BEB54-8A21-4CC8-B414-1BEFE17AEA9D}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 213.17007920792079
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {11C65681-B294-4878-8B3B-3D148812EA49}
+      IID 3
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {2624440F-9E78-46D2-B5DF-D01427C057FC}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 264
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {403060D3-6624-456E-A669-AAB6D17F2C9A}
+      IID 4
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {72CCFC6D-CABC-451A-A295-6E5AB39D341B}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 317.84361533697148
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {D0DE0C37-9F6E-4960-B964-1F6894710682}
+      IID 4
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {12944347-881D-4710-8CF4-5A4F8B327A81}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 368
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6F06305A-F7D4-47D5-9689-F8FBA154B027}
+      IID 5
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {8AAD0B8F-5CC1-40C4-A30D-016D6EA813EC}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 425.1466924859472
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {CBCF10F3-AAC4-479C-9740-7807306018D8}
+      IID 5
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {D54DA131-4DB7-4DF2-9326-9052E051B67F}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 504
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {0DD00A2D-7BF1-497C-A8B6-87A89D4A785A}
+      IID 8
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {31BE1F40-A984-4EC3-8E98-191ACDB98F6F}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 552
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {0CCE58F0-FF92-4EC7-9F86-C8EF5BA64DFF}
+      IID 6
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {AB6130BA-862D-4ECF-A49B-9F2FBA29BEFD}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 608
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {7CCAC63D-CD12-4976-B836-AF27CF8B79F2}
+      IID 10
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {BCB93E0B-CE31-4847-9282-F00097870527}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 657.06198888982181
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {DBF67F46-AA45-42F3-81BD-489CD8E85C2C}
+      IID 9
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {0318A252-4353-4369-A740-410AF9808726}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 657.88364002737217
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {5904D513-7E32-40AB-939E-ECCC58F5FA14}
+      IID 7
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {A4B9D25E-352F-4D1C-8F36-1C38E5C50028}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 731.64702849372804
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {E7146AE7-B394-4FAE-81BE-38E8504E8D08}
+      IID 9
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {53FBFE18-21BE-49FA-83E2-E61D85949FF0}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 778.33968573901802
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {130A6F95-6EFA-4295-B5C5-E78D4810DD1A}
+      IID 8
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {47331EB1-C97C-4099-8444-221C9A19CF80}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 824
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {FBD7EB19-C0D4-49A2-9135-322EDD4A8041}
+      IID 10
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {727046A4-FE9B-4088-BD42-8EB9741ADC93}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 870.53617859694077
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6AD81C68-1128-4C42-939C-3DD6A573640A}
+      IID 11
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {A6FAB3F5-BE51-4AC6-BFEE-8236440B70D3}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 910.8729005928617
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {FBFB43E4-7187-4244-9E22-DE5FC9D1F254}
+      IID 12
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {35AC7D95-569F-4049-9E08-E7DE083B0B11}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 985.4579401968308
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {DA128AD1-A5D1-4D81-ABAC-46897910D68F}
+      IID 12
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {3096541F-62F4-4270-B993-CD07D47F2511}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 1056
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {EADE4FBD-E625-4992-A8CD-543EB279E471}
+      IID 17
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {5D1DD5D6-2C11-43FE-BB82-7AEA87A149C8}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 1136
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {80698E16-5206-46A4-BB00-9F7B5DBE56B1}
+      IID 17
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {42CB7383-2E9C-4844-B8CB-0E621320DAD0}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 1194.2094762077322
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {75D6C9CB-F386-495D-A7B8-A0DD1A8AAE06}
+      IID 14
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {4C5ADC70-E3E3-4EF2-B59C-DE87DBCEC59B}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 1268.7945158116615
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {563F4EBD-C532-440C-A454-E9D14C97CD42}
+      IID 14
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9BF94A42-B913-4060-9F58-E9F15F378A65}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 1317.1136334912178
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {820B97AE-8786-4D8A-A0B3-0D2772322E0B}
+      IID 16
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {0016ADEF-6EA8-42F0-9773-ED69E62AB69A}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 1360
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {4DC61ECF-0A22-4CB9-9F95-CB15D9A9596D}
+      IID 16
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {B78E7C1A-62C1-4B9C-AACB-B9519BEC4D0A}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 1400
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6079F7F7-5E0A-411B-9F44-D011A077FBEB}
+      IID 18
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {C38F6C98-634C-4374-A915-8ED3E1FFA2F4}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 1452.8863063906319
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {DD64604F-73A2-4A6C-9FE0-A8D81EA88FC7}
+      IID 13
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1A3FB1FA-A91D-4F55-8BCF-20B6919D1ECB}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 1527.4713459945535
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {C792E569-DA0B-4ADD-8318-0999F0F38D12}
+      IID 13
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {2C81752C-BA42-47D5-8585-8E24E5EC240E}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 1571.3393064951524
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {1504D4F6-008E-4895-8820-421667C27C0F}
+      IID 18
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {18487EF0-C0F4-4B0F-9D68-31BFBE19EE67}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 1614.3834767136723
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {9C426C7B-3FAE-4219-9B2B-0B87FEC7CA91}
+      IID 15
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {8DDC94CE-BC9B-4010-88EE-CE251026586C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 1688.9685163175745
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {7C03BA74-9F4F-4DEB-98D5-A49B9A8E0283}
+      IID 15
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {DF557CE3-E290-4353-8166-570944DCD50F}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 1792
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {CDC27E3B-C439-434F-8CD7-750C254E7F57}
+      IID 21
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E79C130E-705A-4B46-A3F1-D40D59B8F9FD}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 1848.1680186645826
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {2AC211EF-231A-47BA-AC82-0F82A47EF469}
+      IID 23
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {F9F7468B-CD8D-4EC3-9D3E-218C39CD254E}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 1922.7530582685033
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {CC86E4B3-7C53-437C-8B61-676C2447D394}
+      IID 23
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {B380A4B3-7C3C-441C-9B2C-7AAB20577A33}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 1976
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {A042D1BE-0120-428F-BBC2-81BFB84295E9}
+      IID 26
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {55599CBD-582C-4C7E-9E92-90EA276BA054}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 2037.3757898007752
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {7804F88A-68F2-4841-AC2D-88442CBAC5DC}
+      IID 19
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {A9722A05-43A1-4E38-A92E-DAC030A4388B}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 2123.6562379720121
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {DD52A524-5636-4E0E-9A4B-A8B7D3385009}
+      IID 21
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {0C67F632-1303-4785-8AAC-43E12397F67F}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 2167.9351738231489
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {12EBA4A2-E71D-4026-9AC7-3B178FA06D9B}
+      IID 27
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {94FCA412-A9F8-49CF-BDC1-211A944776DC}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 2204.0698131630197
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {1FF9A8C4-08E0-4AB6-9B5E-3AB25540726A}
+      IID 25
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {3008B05B-1582-458B-8068-56942820C3AB}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 2204.1063365254086
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {255DF81D-22E6-4F85-9881-EE584E1977C9}
+      IID 29
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {3BF436EC-8BC8-49E7-A5D5-B32B122AB0F9}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 2242.5202134271012
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {D4001A40-0B3E-44B6-A112-F7CDC388DC49}
+      IID 27
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E0F45A04-302D-4C73-AD0F-66BF71E60851}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 2278.6548527670316
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {7405DB3D-7983-4539-9864-1968AC57DA8D}
+      IID 25
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {BBBF993E-8EBF-4915-BFA9-06DA69CF45BB}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 2328
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {7893E518-FEBB-40C4-97C9-9FEC2F53E5F0}
+      IID 34
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9431320A-5460-4505-A8EA-29A70B9063BF}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 2376
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {0C874CDE-0CEC-4AF5-BF6E-E3907AFF2107}
+      IID 29
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {6FE74C88-89C6-4614-9685-CB19F64EBF4B}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 2427.1098576554796
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {9C0860B4-23D4-43FD-AED2-3C670E5F39FC}
+      IID 26
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1C231970-386F-434B-AD47-DA7560B34730}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 2495.7968409652822
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {D53D8506-A20C-4A76-BEED-0ECEB3324074}
+      IID 33
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {AE71E2A5-F78D-40AE-AA07-06D4D1C01039}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 2557.8065203938309
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {4E831367-CFB7-499A-A288-9B4DA4ED2643}
+      IID 34
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {A30FCEC8-26C9-4726-9246-59C3BCCF2D7B}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 2570.3818805692522
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {851297FC-C03F-47E2-A27B-34639D7BC51D}
+      IID 33
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {98844C2B-D7FA-421D-8185-50E7861258CE}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 2642.5710186702199
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {24317C47-49B4-4AD7-95A1-FEBF359ED782}
+      IID 22
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {351C782D-4FC3-4125-AFD5-B8D16253C43E}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 2657.9296727346955
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {5F65AF39-11F7-4A50-A101-A7DEE8A11735}
+      IID 32
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {4CF3CF2D-B0C1-4AA9-84E7-C33113227656}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 2717.1560582742272
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {9F0911A9-C753-4D67-B659-E052ECC0DF25}
+      IID 22
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {3D47BB79-3F5B-4B5E-8036-9FDA58D8A2CF}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 2732.5147123386259
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {8EF54318-750B-4DEE-B196-E57D2F377AC7}
+      IID 32
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {3D1DE20F-4844-47B5-B7CD-AF4E6FBC4ED0}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 2806.9792067505186
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {3C458043-B8CD-46B1-8D06-B6E46BC699CA}
+      IID 31
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {3FC00F74-2D1B-45D4-999E-14CFC7C2AB4F}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 2881.5642463544618
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {EF72E216-0CA0-466A-8502-54F2CFFFE767}
+      IID 31
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {951634C4-302A-4A2E-9179-31A71DF3682A}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 2887.3129646633752
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {29AA8E8C-DF25-43F8-B0EF-C0F28A3AE19F}
+      IID 28
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {A7F18025-D039-4C3B-931C-71BE464CCEB6}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 2961.898004267322
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {4E652A98-F20F-4580-8EAA-0C34B73B78A1}
+      IID 28
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {0F399B93-1452-4ADA-A505-1D716B3B3189}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 3144
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6B3DC277-D67F-4AB1-AD75-3F63CDBC53F1}
+      IID 37
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {7324E535-8ABB-4AC1-9C91-82CFC6FADF8E}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 3224.4525405124296
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {B85AC049-F934-4105-9B29-E165EFF960E3}
+      IID 30
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {60C43989-E06E-4CFB-B5BA-003929352CA0}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 3299.0375801163455
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {BE48C9E2-A3CF-43A5-893D-62C67FB09BA7}
+      IID 30
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {30AE67C6-1270-41A6-9D93-3F01B5633ECA}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 3350.4510147396081
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {BBA2D1EC-59F5-44AF-862F-6E604E453674}
+      IID 37
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {503543DD-1ADE-42B5-B6F2-12BA2BCFA589}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 3389.8151077998336
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {B8BFA734-6928-44DC-ABCA-8826793BDA3F}
+      IID 44
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E6DB6579-25E7-41FC-8904-21ED47F1F7CB}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 3464.4001474037459
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {A588E304-BD76-4766-A256-255394255785}
+      IID 44
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {4B8F72BF-FFD9-4D60-B6E7-0597F2A64037}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 3501.3953510068823
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {621294CB-9DD2-4189-B5EA-854E963CEC53}
+      IID 42
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {79AF452A-A4BA-4BEE-93D6-EA1F5427728A}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 3575.9803906108327
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {819EBB82-D0DB-4AF1-AD79-3ED741021D96}
+      IID 42
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {054AA869-BBDA-4D87-B77D-471A34030591}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 3670.5541617293975
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {A9B6A90A-C803-4F3A-AD4F-FD98DA5E1B68}
+      IID 46
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {B5780840-4716-4759-AF76-59E59213B6C9}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 3787.2053427594947
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {BBB0B185-D226-4C47-93FD-E074D6C5DE1B}
+      IID 35
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {4AE136CB-F625-46CB-9B80-F2D9F6B94863}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 3832
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {EDC865B0-F846-48F4-909D-749220B2ECF7}
+      IID 36
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {CE827480-D0BA-447F-A126-7FF70667C6BE}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 4160
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {CC7F56FF-1F2B-4A17-A497-3DF96BB9FA6A}
+      IID 46
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {30DC9973-848A-4F25-94F2-E1FE5F4AA5F9}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 4200
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {753DF69E-597E-416B-83D7-6B431737F676}
+      IID 36
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {8BA3C726-EE55-4A6E-BCA7-67BD4604913B}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 4320
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {4C89EC65-2EF0-4F10-8D08-3D8EEE995AFE}
+      IID 39
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {5740E7FC-4FF9-42EA-9B63-774309756592}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 4368
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {1DA69EC1-505A-49BA-B8DE-C2FEA04119B6}
+      IID 35
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {FF800EAF-5B70-4909-B8DF-58A409417A83}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 4416
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {40DA89D3-3653-4EAA-BA5D-CB1BCC40103E}
+      IID 39
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {F892DDCC-8E88-44A1-9BB0-DB1F7F76DD3D}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 4464
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {581FF18B-ABF0-4782-9F56-CAE8EE6A1D0E}
+      IID 52
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {86389267-9794-4BDB-8B6C-CDAFBBCED2D0}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 4528
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {F6AA1BBB-49E9-4595-9E73-D9024D8C7FA8}
+      IID 38
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {345E97A1-F988-4449-9A64-528612DDFDC6}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 4600
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {C696E04A-5512-4520-B3C0-436AC6595585}
+      IID 52
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {C21B4332-8061-4B23-9E74-9C1125D919FC}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 4656
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {70CCBDAD-BDFB-403F-A811-91EB751FC5BB}
+      IID 38
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1CBBC0EC-6BE8-403C-B842-CBF5743F0328}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 4704
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {59673212-5F92-42CB-8E00-C87F54E2FA56}
+      IID 53
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {75DBDB08-618C-4E6D-B7BC-B59BC1FC3C39}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 4792
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {2C7F88A7-0279-44D1-8DE0-D9FE0B7DC241}
+      IID 49
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {F1CFCF69-7763-40A0-92A7-A6C1EC0A9051}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 4848
+      SNAPOFFS 0
+      LENGTH 35.0781317989904
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {793A1DAF-865A-47BA-83E5-202156816A6D}
+      IID 53
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1AC6B3F2-AFAC-4EB1-8022-BC2C7D21EB4B}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 4896
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {BA5A74E8-AD5B-4AF3-95D8-A4C881B80D84}
+      IID 49
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {867A8330-97CD-498B-B1FB-6625E8EA66B4}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 4952
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {28A224D7-4F81-4945-BBEB-422C900DE7A5}
+      IID 41
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {7AB5B6C0-3E54-4F1F-8766-B517AA67077F}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 5007.5939871289302
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {3F4E28B2-CB6F-40FB-8C1D-B9AAAB7A7361}
+      IID 41
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {45626F40-127B-48DE-A27D-731DEEC5D33B}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 5116.3706251546973
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {9295DD69-B956-4BD5-A112-19DE6063F8A3}
+      IID 43
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {F5096DBB-A673-4920-86EA-FF91584B1474}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 5190.9556647586332
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {58C22D4C-2685-4D16-82DE-3897753ACC48}
+      IID 43
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {F16384C2-539D-4857-B083-F519308B3255}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 5248
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {0BACAA44-9076-408D-BC92-07FA8928649B}
+      IID 40
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {0D56C340-100A-4A1B-99F1-DAEC4602DA07}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 5295.7436981497494
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {357E8534-3323-4117-9C30-643AF3BDF46C}
+      IID 40
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E83AA7BA-73F5-483F-A033-1CD2EACAD778}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 5355.1527743469924
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {CC53F9E7-1736-4DC2-BE25-A3FDE23F6DEC}
+      IID 62
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {5FB9267B-284D-4757-A1E5-574580EAB844}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 5394.9972341081593
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {2B92973B-A8CA-48B3-9709-BFAB20FFCCB9}
+      IID 54
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {A08B8A27-D7F7-4379-A222-708FE00C1CE5}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 5440
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {24C4C55E-8D91-4B91-98BF-EC90AD2ED9DE}
+      IID 62
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {0AB66A9F-ECFE-4352-9968-8D9AB8C32D65}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 5480
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {C5AEE256-2F5A-4E21-87A7-F2B62D7504D8}
+      IID 48
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {F776ABC6-91ED-4811-B438-5D4206EAA4A6}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 5544.7623624408152
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {D8318357-B735-4815-BF44-E0395FE8904E}
+      IID 60
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {EE496329-66F5-4E00-A3FE-C64D77F1EC70}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 5619.3474020447557
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {C2706CD3-86BF-4D8C-855A-7918D0D717F9}
+      IID 60
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {B9B4549F-898E-41BF-8AF4-0370D771334A}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 5672
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {5912B6C4-9B18-4ED5-9F3D-28E608424EAB}
+      IID 48
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {8D297945-2FBE-4AA0-B56C-68CE36484F28}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 5736
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {D9A28812-BDD1-478E-AA63-E9AAE9FE2E81}
+      IID 54
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {B1CF4B4B-1050-4728-A289-ACFB3A6EA5B6}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 5811.7621418142226
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {B9AA9A1F-0645-4647-999E-92268D0031D5}
+      IID 47
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {F662207E-0B56-4106-8134-78E7EE8E122B}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 5874.1931016785093
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {2A65F3B3-D764-4F8B-BD8C-6E8CD290C18E}
+      IID 45
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {5C347E12-D160-49DE-A12B-40549EB540EC}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 5936
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {5EF8563A-5212-489D-9110-8F26F5FEF458}
+      IID 47
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {68918DE6-A775-4791-A3BD-A1FFFF50AAA5}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 6008
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {B89974BF-290E-4042-B844-A25B399799DB}
+      IID 51
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9F8570A5-40AA-43F1-ABFB-22AE3B451CE3}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 6104
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {D300A82A-9D5C-4960-87F1-71DC4A04A452}
+      IID 45
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {8C7FEB1C-2BE6-4B6F-89AD-FE52F809720E}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 6168
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {CA770CC1-2B90-42B5-8696-260018F1B716}
+      IID 51
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {21AF72BF-A847-4EBD-833C-6ADE208D70F8}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 6232
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {709B44B7-5309-4AD6-BCAD-3767FD920F22}
+      IID 57
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {34A854DE-AE8C-4AA8-B68B-1B470FA0906C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 6284.0599427693523
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {29323704-5352-482C-BDC4-B9174B2D26FB}
+      IID 50
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {C70083B1-5EBF-4520-81B0-7CC063ABB0D1}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 6358.6449823733292
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {23D8231F-69A0-4695-88C3-81CA5DE70E8C}
+      IID 50
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {2D826326-55F4-45FD-A943-30E78C396009}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 6457.5028492405927
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {5BAB04FE-7335-47C7-9C46-AC6C549F6157}
+      IID 57
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {477A62A3-0710-47BD-9BE9-D8F434733E25}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 6496.9727015719982
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {361B4B7B-8C59-4A5A-AB1C-BE3090F734E3}
+      IID 59
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {4A1F34FB-781C-4D27-BDDF-7735E9FCB498}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 6544
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {938E8983-0088-45D0-8F21-159E16C0A564}
+      IID 55
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {71FF961E-75DE-4B23-A0B5-373F82040268}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 6597.5335007496178
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {BEFB7871-62C9-4A7D-BD85-463C8227D357}
+      IID 71
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {60DFAA38-A4F0-4062-991B-4DBE4E335EDF}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 6648
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {41363966-F08E-4603-BF33-D04B17E72F3F}
+      IID 55
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {B7346E25-E80A-4FBD-89B7-D5FC4BFDC477}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 6720
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {1CB1EAF6-6914-4856-BE7A-533FB62A25C7}
+      IID 71
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {C99CB31A-0874-4A3E-9861-9CDAE90076C1}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 6768
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {7DCF437C-0206-4E0F-A182-A0196A92331D}
+      IID 73
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E395B097-900C-4E11-8F4A-151D9F2A99F8}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 6805.8709819491487
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {C6E383A8-2731-4D16-B172-ECF9FB8DAB90}
+      IID 70
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {14302536-F07F-41C8-A674-CA7802FF7D3C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 6848
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {E125422D-226A-4CB4-AE92-8E44A2660929}
+      IID 70
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {4255AAE4-A24A-4C16-9130-4511A6B5A201}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 6899.1065858851653
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {AA077D54-B37C-48E5-9A66-391892E4615C}
+      IID 73
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {42823FD1-588A-44A8-B319-EE6BD5D8A72E}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 6944
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {D565849F-AC27-4AC6-B010-217201B4B114}
+      IID 56
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {9FF2E61C-BBDE-4C20-9DE6-D217A8ACE7E9}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 6989.0346822907813
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {0C017CDF-F895-463F-B850-F7A88D66D63A}
+      IID 58
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {B4BDC49A-26B3-4AF0-B25D-694BA988802D}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 7028.7087218947581
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {DAF694AB-752F-4519-A946-2A8231A72792}
+      IID 56
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {B77BDCA1-CD0F-41EF-B2BF-2D7AC0145B9C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 7080
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {36060A05-C7D6-41D9-8E6E-4B90442FC15B}
+      IID 58
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {2F62BDAB-CB7D-44DB-9586-5A12E9FFD286}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 7126.8637419470215
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {7E3F228D-58C6-4F95-9350-9617BA43343C}
+      IID 66
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {A06A0662-6C5D-4485-A118-84DB40BC30C4}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 7127.2659889376273
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {AE06C2E1-2125-4137-ACD6-70DC8DB4D6AE}
+      IID 75
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {2C651E56-B9A6-4876-9ACB-E5560FE8075A}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 7168
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {719978EE-4D2B-43C8-BC12-14C54D3BD3CE}
+      IID 66
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {F3E32529-C7B3-472C-9403-E84F5D30D6E5}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 7232
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {8EF3EAD7-36B5-4B74-BEF0-1E27851E3D03}
+      IID 75
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {BBDB5592-DC1C-4317-BE94-0DD196DBDCCA}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 7285.8915714792674
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {197359FB-C1F0-480E-9DB8-3CB96B47F760}
+      IID 61
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {7E315B26-D04E-4AED-BE63-92BF001F90A4}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 7336
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {2680FE29-37F2-4CFA-9402-E2F7D40FB00F}
+      IID 61
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {21B6172A-B17F-479E-8EE0-4EA46312B2B3}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 7400
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {166204A4-A94A-4E17-B2BD-A0BE1560F3A3}
+      IID 64
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {00D42BD8-BFDA-4166-9FF5-6CF1B4908187}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 7456
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {09CF5CA0-2D4A-4E3F-ADD0-E7AE4BE3E2AD}
+      IID 69
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {89FD063A-53DD-449E-B9DB-24FEE0CED374}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 7504
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {BDEC6371-1A28-442D-81A5-52FDBA961DF4}
+      IID 65
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1DDB7E71-25C8-4BBD-84F6-1AB08DE80AA7}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 7560
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {147510E0-D36E-44FC-B0CB-F4AC77AF2D54}
+      IID 64
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {A670A3C9-0A97-45AD-AFEE-BB93237F7413}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 7608
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {BDEB07DA-9D64-4AB6-870C-A590578B842C}
+      IID 69
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {ACF0F28B-D20E-4490-BA62-3B1EAF3A002C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 7680
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {7067A2BE-0A6E-4794-AADE-BB09EC60091A}
+      IID 65
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {FBE66BAB-EFAE-433D-9627-EBFBEC1C62FA}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 7744
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {E1D25EE0-0DD1-4BC1-B452-1D76F65E9271}
+      IID 74
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {CCFE83E2-63B2-459D-80F5-AE7E06F97B37}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 7800
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {F32CCA8D-2627-40A5-AD56-06076395EAB6}
+      IID 68
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {0757EC20-5AA3-4A42-94E4-4802D5337DF5}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 7872
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {8510FC56-91DF-4F1B-AAD8-867085AB70C9}
+      IID 74
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {34F34349-10EE-45C9-9E5C-6844F9579753}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 7928
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {51273D90-AB6B-450A-9A38-DF7DE57A9115}
+      IID 68
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {F9E16A72-DEA1-444B-9D85-582F400AC752}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 7979.1217179548694
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {BDD60DC5-9ACA-48DF-8C97-AD9B478A4D60}
+      IID 67
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {74EF0D33-5E96-4015-996D-0A652D462892}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 8053.7067575588062
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {50C33C6C-522D-47D5-B581-7C395D4D39B3}
+      IID 67
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E2F2A274-4C21-44CF-BE8B-5700760CCD11}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 8104
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {A05CC31C-5312-4C35-B46F-6542C4721909}
+      IID 72
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {7D0BC58A-3A12-46E2-92F1-1D55780637B3}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 8160
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6D457EF2-DC95-416F-B46A-A19A28F4F550}
+      IID 77
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E51E321E-7F47-45D2-9359-346D321838AD}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 8208
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {295C85CA-0008-4D36-8838-5103570EE7FD}
+      IID 76
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {C75FE61B-4C62-4842-A942-75D437E21A36}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 8248
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {B3A6E459-5087-47D9-BCEB-6F9358926817}
+      IID 77
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {C0496F29-59C5-4D86-9A62-6044A7E0D236}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 8288
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {17E4AAA5-BDBF-4BFF-BA7A-1E7BAA3B8F3D}
+      IID 78
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1B94754B-1595-42B8-98F2-C9A41F967F5C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 8328
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {D147AA24-E14F-4946-A1AA-D53ACA010074}
+      IID 78
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {D34A69E0-7CA6-43C6-A6CD-39A78E99D008}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 8376
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {B8458A01-521B-4633-B87B-FBC5A628245D}
+      IID 76
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {EB6539C1-549D-4E39-A391-9862679B058E}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 8416
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {1ABA4AFC-0BF7-4641-9157-4CE4F923B8D4}
+      IID 72
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {F2A6F787-E31E-47CD-A57E-35145F706988}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 8456
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {C58E8D1B-01C8-4F36-9A6A-A8D3C3525E62}
+      IID 83
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {39787912-EB92-4EF9-AAB6-C35E1A44C64F}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 8496
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {2F4ACD19-9FBA-4FC2-BB93-6E51E44A021B}
+      IID 80
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {FD06A2A8-64BB-4FCF-93E5-242BB041D890}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 8536
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {89DF9E2D-1CC7-4E9D-9F44-70174F4EABE4}
+      IID 83
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {39FD742A-3DD7-4948-97C4-EC078DEBDD12}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 8575.124671615029
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {77B04F79-6466-4E52-B596-172A3C285F90}
+      IID 80
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {45A4B7D9-E11C-41A3-BB4C-7F1967E922D3}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 8616
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {D122FC22-A043-407A-8B63-459F66855EF4}
+      IID 79
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {D14ED8DC-B171-46B8-A34C-8A1AE937BD6A}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 8656
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {92E6DDF2-061B-48DA-8542-C51091D56CB2}
+      IID 79
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {EA30F96E-5702-4BA7-B727-BC766B19D721}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 8712
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {991EF07D-41F4-4D25-A5E6-3882C0905C12}
+      IID 85
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {714DCA99-05E1-497C-9A11-278DC4E5CEEC}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 8760
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {F2A45629-F534-47F9-BA36-471CFE1085F7}
+      IID 87
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {912088F4-AEF7-4753-82A9-680BA3B27C0E}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 8808
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {15D9AC25-770C-4495-A163-23BE3A3E0E0E}
+      IID 85
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {6F91CAC8-D877-45B8-A580-02BF2B3AA1E7}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 8848
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {3B07EFF2-CDD7-49B7-ACA5-62AC6549EA4D}
+      IID 84
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1306C585-2D16-4B0F-AF70-984F19F8F9F9}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 8888
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {B2EEE161-B961-477A-B74D-D26648DC4841}
+      IID 86
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {A85A84CD-413B-4A57-A2D8-D98F7717FAF8}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 8959.8895379227142
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {D256CD10-3708-4055-AED2-7497145759A6}
+      IID 86
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {3D7C8001-00F0-4B03-A83C-487B0C777746}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 9011.0187264626147
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {DEBE0C79-1136-4C87-BC02-56AF0E9585DC}
+      IID 89
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {2E6B433F-7CEC-42E8-A0A6-DE9A73A91B14}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 9048
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {23896463-6795-49A6-9756-91580A638084}
+      IID 81
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {4C074413-D262-4141-9E7F-F7FB02FAAC93}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 9088
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {949B9E5F-2AB5-4D85-BA13-74123A4FBFD8}
+      IID 82
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {885F2BE7-9E0B-4C22-8CB3-9DA58B44AD4D}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 9128
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {B9B4E027-FE31-4F87-877A-F5FF0C82D679}
+      IID 89
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {497E95F7-03D8-4810-A004-37DCAAE4383F}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 9176
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {C75BA477-57CD-49B3-9377-DDD638630551}
+      IID 81
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {E046EAAD-1410-45B7-BE19-BD3126A11D18}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 9216
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {5B8CB355-1F7B-4B87-8E18-363138E4C8C4}
+      IID 82
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {98F8CCDE-A890-4A68-8380-5B122FF6FAB2}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 9272
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {582D1EDE-283D-4EF2-8F37-EBD2E142BF63}
+      IID 88
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {BBB2ED26-495B-4CFD-BBE2-C65E1C5A9C7C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 9328
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {0ECC471A-340B-40C8-AAF7-A725B7B56C69}
+      IID 88
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {0AEA572C-18A5-4142-AAF1-6B9B24BA0807}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 9384
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {1F18F4F7-0B28-4067-B99D-83DFF22C9E52}
+      IID 90
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {07ADF465-96D5-441C-BE2E-4B77FD775068}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 9440
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {BC33C386-B0EB-4445-A7CD-4A94C126C793}
+      IID 91
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {3E7CDC09-A82A-4AE6-9231-0D5248564804}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 9496
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {288C08D6-5AC5-4E72-888E-47ECAE2AA691}
+      IID 90
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {6C7E15F8-EB9F-4F19-9EEB-01BE647ABB1B}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 9552
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {826A8DEE-5BF6-4EAE-8790-92141535B2E1}
+      IID 92
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {79051311-CDF1-41A1-B66C-5C162D17F219}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 9600
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {8A2A57F7-B902-4569-B3BB-6D0C9B33C682}
+      IID 91
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {F187856A-FDDC-451D-B8E3-3D6014369E5D}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 9656
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {59EAFACD-AD02-43E6-8DE8-29DE11D97440}
+      IID 92
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1C422041-AA1D-4526-922F-62B27A455463}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 9713.7497101698536
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {746C6629-AE1B-4DFC-A0B0-5A4E796C7163}
+      IID 94
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {95EB1E48-9774-40CD-B3A8-6BB246EE885E}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 9788.3347497738669
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {02D24420-D78C-4911-B12E-1CF30AF4C818}
+      IID 94
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {137BD7FC-17DA-43E4-B8B6-17013FC43715}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 9853.771859332337
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {30A1866F-A8CC-46A7-81B3-FBB61B9F5602}
+      IID 93
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {BAB1AC97-0D01-469F-B4E4-A45C5BFDA7CC}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 9904
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {46FFECD5-9461-40B7-9D33-7E61D5222A2E}
+      IID 95
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {95BA9A2B-9717-4ADF-A9E4-3218DEB592C7}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 9960
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {9820F1F6-B954-4094-876B-EED5793D6632}
+      IID 93
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {4207D624-0062-4123-AFFF-694888C445FD}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 10024
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {25F30F81-CB19-46EE-AB34-59728E92FEEF}
+      IID 95
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {6642F92A-06D5-422B-93CF-66D9359E3305}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 10109.016269875807
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {92A9DCC5-2ACD-4D52-A64E-19DDA22C3C02}
+      IID 96
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {7DCF1A11-A71C-428D-9866-45BE77B97B3D}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 10179.873222223483
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {9063CDD1-164B-4188-8898-A3127717A97D}
+      IID 97
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {8EB02B62-2254-4B64-B379-0A2036A323B8}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 10183.601309479765
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {51DD0834-AA25-4662-A03B-A4473723B5DA}
+      IID 96
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {EBE6F4FB-D78E-47A8-B737-2AEF196D2950}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 10254.4582618275
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {9A88B30E-F825-4EBF-889C-45DBFFB0EE47}
+      IID 97
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {C5485F30-871D-4C56-BCC5-3F5F2F8D56DA}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 10296
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {C658BA32-CA3D-42CC-B645-2A3A85B7E90A}
+      IID 98
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {82D592D9-7736-43D4-B058-6597CFEE4A6A}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 10341.026520842004
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6C6EAB2F-084D-46B2-BD88-E7E17606EFD8}
+      IID 98
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {641A3330-FCE4-4638-BD88-4F05CBF9E0F0}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 10392
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {8E77B49A-95E9-4E35-8E13-CFC54852FF4D}
+      IID 99
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {C3C3AEE9-EC75-463F-AEAD-181C7A15505C}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 10450.745226943462
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {8C5BDE8D-13BF-401E-BC94-FCC590027045}
+      IID 99
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1890BEF1-1388-4E89-B271-523D5A2A5182}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 10496
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {2F2F18FE-2A94-4F93-B883-38563721461D}
+      IID 100
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1A011328-CBD7-4AF1-A4D1-2BCC0B7D748F}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 10551.918920792079
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {125AF5F8-79E0-47A3-956F-61E0ADFFB883}
+      IID 100
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {FC2CF1CC-ECFA-4DC1-8741-1D1C4AC367A2}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 10602
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {7677C812-773B-4767-AF65-0AAEB51A4969}
+      IID 101
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {683D1016-C363-4878-9382-5FF44E4894D7}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+    <ITEM
+      POSITION 10658.503960396039
+      SNAPOFFS 0
+      LENGTH 34.911
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {908597FA-2B35-46A4-A9EF-5FEAAE0E31DF}
+      IID 101
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {332BD96E-8227-46CD-83AB-4B59BC7DD0AE}
+      <SOURCE WAVE
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\audio\3_random\booms\QP03 0281 Thunder distant rolling.wav"
+      >
+    >
+  >
+  <TRACK {DD238110-3FBA-4FF5-9B04-0D6013F05F2B}
+    NAME 4_wildlife
+    PEAKCOL 16576
+    BEAT -1
+    AUTOMODE 0
+    PANLAWFLAGS 3
+    VOLPAN 1 0 -1 -1 1
+    MUTESOLO 0 0 0
+    IPHASE 0
+    PLAYOFFS 0 1
+    ISBUS 0 0
+    BUSCOMP 0 0 0 0 0
+    SHOWINMIX 1 0.6667 0.5 1 0.5 0 0 0 0
+    FIXEDLANES 9 0 0 0 0
+    LANEREC -1 -1 -1 0
+    SEL 0
+    REC 0 0 1 0 0 0 0 0
+    VU 64
+    TRACKHEIGHT 0 0 0 0 0 0 0
+    INQ 0 0 0 0.5 100 0 0 100
+    NCHAN 2
+    FX 1
+    TRACKID {DD238110-3FBA-4FF5-9B04-0D6013F05F2B}
+    PERF 0
+    MIDIOUT -1
+    MAINSEND 1 0
+    <FXCHAIN
+      SHOW 0
+      LASTSEL 0
+      DOCKED 0
+      BYPASS 1 0 0
+      <VST "VST: ReaVerbate (Cockos)" reaverbate.dll 0 "" 1920361016<56535472766238726561766572626174> ""
+        OGJ2cu9e7f4CAAAAAQAAAAAAAAACAAAAAAAAAAIAAAABAAAAAAAAAAIAAAAAAAAAKAAAAAAAAAAAABAA
+        776t3g3wrd5DAgA/AACAP9oEPD817P8+AACAPwAAAAAAAIA/AAAAAA==
+        AFByb2dyYW0gMQAQAAAA
+      >
+      FLOATPOS 0 0 0 0
+      FXID {8D3AA4C9-A338-4B15-85B6-0D3364F25598}
+      WAK 0 0
+    >
+  >
+  <TRACK {C6B647F8-8B48-422E-8EE7-0A0B8CBB5F2C}
+    NAME video
+    PEAKCOL 16576
+    BEAT -1
+    AUTOMODE 0
+    PANLAWFLAGS 3
+    VOLPAN 0 0 -1 -1 1
+    MUTESOLO 0 0 0
+    IPHASE 0
+    PLAYOFFS 0 1
+    ISBUS 2 -1
+    BUSCOMP 0 0 0 0 0
+    SHOWINMIX 1 0.6667 0.5 1 0.5 0 0 0 0
+    FIXEDLANES 9 0 0 0 0
+    LANEREC -1 -1 -1 0
+    SEL 0
+    REC 0 0 1 0 0 0 0 0
+    VU 64
+    TRACKHEIGHT 0 0 0 0 0 0 0
+    INQ 0 0 0 0.5 100 0 0 100
+    NCHAN 2
+    FX 0
+    TRACKID {C6B647F8-8B48-422E-8EE7-0A0B8CBB5F2C}
+    PERF 0
+    MIDIOUT -1
+    MAINSEND 1 0
+    <ITEM
+      POSITION 0
+      SNAPOFFS 0
+      LENGTH 4505.305
+      LOOP 1
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {6ABEC3CF-607C-4BC8-802C-B6E19F116A64}
+      IID 1
+      NAME MVI_7040_loop_02_0.98_dur_3_fhd_03中雨.mp4
+      VOLPAN 0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {604E0BD2-094B-4DDD-B040-16BF6492789F}
+      <SOURCE VIDEO
+        FILE "\\wsl.localhost\Ubuntu\mnt\e\自然之声\to_youtube\MVI_7040_loop_02_0.98_dur_3_fhd_03中雨.mp4"
+      >
+    >
+  >
+>
