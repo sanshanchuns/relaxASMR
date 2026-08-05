@@ -418,6 +418,14 @@ def _is_retryable_upload_error(exc: BaseException) -> bool:
     return False
 
 
+def _configure_resumable_upload_http(http) -> None:
+    """Resumable upload 用 308 表示「续传未完成」，不是 RFC 重定向；须从 redirect_codes 排除。"""
+    try:
+        http.redirect_codes = set(http.redirect_codes) - {308}
+    except AttributeError:
+        pass
+
+
 def _build_youtube_service(creds):
     """带较长超时的 AuthorizedHttp，适合大文件 resumable upload。"""
     import httplib2
@@ -425,6 +433,7 @@ def _build_youtube_service(creds):
     from googleapiclient.discovery import build
 
     http = httplib2.Http(timeout=UPLOAD_HTTP_TIMEOUT_SEC)
+    _configure_resumable_upload_http(http)
     authorized = AuthorizedHttp(creds, http=http)
     return build("youtube", "v3", http=authorized, cache_discovery=False)
 

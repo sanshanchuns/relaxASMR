@@ -179,6 +179,31 @@ PYTHONPATH=cli:. python -m elevenlabs_web login
 
 ---
 
+## 工作流 · 成片时长（2026-08-05）
+
+**单位已改为分钟**；旧「小时」配置仍可读（自动 ×60）。
+
+| 项 | 值 |
+|---|---|
+| GUI 标签 | `成片时长(分钟)`（步骤 3） |
+| 默认 | **100** 分钟 |
+| 配置键 | `duration_minutes`（`gui/user_config.json`）；保存时删旧 `duration_hours` |
+| 兼容读取 | `duration_hours` / 旧 `target_duration`（小时字符串）→ UI 显示分钟 |
+| 导出后缀 | `100min`（非旧 `3h`），如 `MVI_1002_100min.wav` / `_100min_fhd.mp4` |
+| 核心 API | `scripts/config/paths.py`：`cfg_duration_minutes()`、`duration_render_suffix(minutes)` |
+| 校验 | `gui/export_wav.py`：`wav_matches_target_minutes()`（±30s） |
+
+**涉及模块**：`gui/app.py` · `gui/reaper_launch.py` · `Reaper/scripts/{generate_subproject,rain_subproject_lib,create_rain_subproject,asmr_config_parser}.py` · `asmr_loop_track.lua`（默认 100）
+
+**坑**
+- 旧 `_3h` 成品与新 `_100min` 命名不互通；仍用 3h 成片请在 GUI 填 **180** 分钟
+- 场景 JSON 字段：`duration_minutes`（旧 JSON 含 `duration_hours` 时 `cfg_duration_minutes` 仍可读）
+- `gui/youtube_material.py` 打分：保留 `_3h`，另认 stem 含 `min`
+
+**测试**：`scripts/tests/test_export_wav.py` · `test_rpp_render_range.py` · `test_build_scene_config_from_gui.py`
+
+---
+
 ## 其他 Tab
 
 - 数据分析：YouTube API + agy；黑马 `views_per_day`；WSL 开 URL 用 Chrome profile
