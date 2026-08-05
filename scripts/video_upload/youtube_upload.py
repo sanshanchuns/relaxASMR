@@ -5,7 +5,9 @@ from __future__ import annotations
 import json
 import os
 import shutil
+import ssl
 import subprocess
+import time
 from collections.abc import Callable
 from pathlib import Path
 
@@ -44,6 +46,13 @@ SCOPES = [
 DEFAULT_CATEGORY_ID = "19"  # Travel & Events（旅游与活动）
 DEFAULT_VIDEO_LANGUAGE = "en"  # English（标题/说明/音轨语言）
 # 字幕认证「This content has never aired on television in the U.S.」无公开 API 字段，需在 Studio 高级设置手动确认
+
+# 大文件（3h FHD ~13G）分块上传：单块失败时重试 + 拉长 HTTP 超时，避免 SSL EOF 直接整段失败。
+UPLOAD_CHUNK_SIZE = 32 * 1024 * 1024  # 32 MiB
+UPLOAD_HTTP_TIMEOUT_SEC = 600
+UPLOAD_CHUNK_MAX_RETRIES = 12
+UPLOAD_RETRY_INITIAL_DELAY_SEC = 5
+UPLOAD_RETRY_MAX_DELAY_SEC = 120
 
 
 def resolve_account_paths(
@@ -352,7 +361,6 @@ def get_youtube_service(
         from google.auth.transport.requests import Request
         from google.oauth2.credentials import Credentials
         from google_auth_oauthlib.flow import InstalledAppFlow
-        from googleapiclient.discovery import build
     except ImportError as e:
         raise RuntimeError(
             f"YouTube 上传依赖缺失: {e}\n"
@@ -384,7 +392,41 @@ def get_youtube_service(
             creds = run_oauth_local_server(flow, on_log=on_log)
         write_token_file(token_path, creds, account=account)
 
-    return build("youtube", "v3", credentials=creds)
+    return _build_youtube_service(creds)
+
+
+def _is_retryable_upload_error(exc: BaseException) -> bool:
+    """分块上传过程中可重试的瞬时网络/SSL 错误。"""
+    from googleapiclient.errors import HttpError
+
+    if isinstance(exc, HttpError):
+        status = getattr(exc.resp, "status", None)
+        return status in (408, 429, 500, 502, 503, 504)
+    if isinstance(exc, (ssl.SSLError, ConnectionError, BrokenPipeError, TimeoutError)):
+        return True
+    if isinstance(exc, OSError):
+        msg = str(exc).lower()
+        return (
+            "eof occurred in violation of protocol" in msg
+            or "connection reset" in msg
+            or "timed out" in msg
+            or "broken pipe" in msg
+        )
+    cause = getattr(exc, "__cause__", None) or getattr(exc, "__context__", None)
+    if cause is not None and cause is not exc:
+        return _is_retryable_upload_error(cause)
+    return False
+
+
+def _build_youtube_service(creds):
+    """带较长超时的 AuthorizedHttp，适合大文件 resumable upload。"""
+    import httplib2
+    from google_auth_httplib2 import AuthorizedHttp
+    from googleapiclient.discovery import build
+
+    http = httplib2.Http(timeout=UPLOAD_HTTP_TIMEOUT_SEC)
+    authorized = AuthorizedHttp(creds, http=http)
+    return build("youtube", "v3", http=authorized, cache_discovery=False)
 
 
 def upload_video(
@@ -397,8 +439,13 @@ def upload_video(
     privacy_status: str = "unlisted",
     category_id: str = DEFAULT_CATEGORY_ID,
     on_progress: Callable[[int], None] | None = None,
+    on_log: Callable[[str], None] | None = None,
 ) -> str:
     from googleapiclient.http import MediaFileUpload
+
+    def log(msg: str) -> None:
+        if on_log:
+            on_log(msg)
 
     video_path = video_path.resolve()
     if not video_path.is_file():
@@ -423,16 +470,37 @@ def upload_video(
     media = MediaFileUpload(
         str(video_path),
         mimetype="video/mp4",
-        chunksize=10 * 1024 * 1024,
+        chunksize=UPLOAD_CHUNK_SIZE,
         resumable=True,
     )
     request = service.videos().insert(part="snippet,status", body=body, media_body=media)
 
     response = None
+    last_pct = -1
     while response is None:
-        status, response = request.next_chunk()
+        attempt = 0
+        while True:
+            try:
+                status, response = request.next_chunk()
+                break
+            except Exception as exc:  # noqa: BLE001
+                if not _is_retryable_upload_error(exc) or attempt >= UPLOAD_CHUNK_MAX_RETRIES:
+                    raise
+                attempt += 1
+                delay = min(
+                    UPLOAD_RETRY_INITIAL_DELAY_SEC * (2 ** (attempt - 1)),
+                    UPLOAD_RETRY_MAX_DELAY_SEC,
+                )
+                log(
+                    f"上传块失败（{exc.__class__.__name__}: {exc}），"
+                    f"{delay}s 后重试 ({attempt}/{UPLOAD_CHUNK_MAX_RETRIES})…"
+                )
+                time.sleep(delay)
         if status and on_progress:
-            on_progress(int(status.progress() * 100))
+            pct = int(status.progress() * 100)
+            if pct != last_pct:
+                on_progress(pct)
+                last_pct = pct
 
     return response["id"]
 
@@ -543,6 +611,7 @@ def upload_from_material(
         tags=tags,
         privacy_status=privacy_status,
         on_progress=prog,
+        on_log=log,
     )
     url = f"https://www.youtube.com/watch?v={video_id}"
     log(f"视频已上传：{url}")

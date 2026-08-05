@@ -41,11 +41,21 @@ def test_format_mp4_export_stats_suffix(tmp_path: Path) -> None:
 def test_export_mp4_belongs_to_scene(tmp_path: Path) -> None:
     own = tmp_path / "MVI_7004_180min_fhd.mp4"
     other = tmp_path / "MVI_6989_180min_fhd.mp4"
+    legacy = tmp_path / "MVI_7004_3h_fhd.mp4"
     own.write_bytes(b"x")
     other.write_bytes(b"x")
+    legacy.write_bytes(b"x")
     assert export_mp4_belongs_to_scene(own, "MVI_7004", minutes=180.0)
+    assert export_mp4_belongs_to_scene(legacy, "MVI_7004", minutes=180.0)
     assert not export_mp4_belongs_to_scene(other, "MVI_7004", minutes=180.0)
     assert not export_mp4_belongs_to_scene(own, "MVI_7004", minutes=120.0)
+
+
+def test_find_export_mp4_for_scene_legacy_3h(tmp_path: Path) -> None:
+    legacy = tmp_path / "MVI_6922_3h_fhd.mp4"
+    legacy.write_bytes(b"ok")
+    found = find_export_mp4_for_scene("MVI_6922", minutes=180.0, export_root=tmp_path)
+    assert found == legacy
 
 
 def test_find_export_mp4_for_scene(tmp_path: Path) -> None:

@@ -82,7 +82,8 @@ class VideoQuotaPanel(ttk.Frame):
         for w in (quota, jm_row, el_row, self._jm_bar, self._el_bar):
             self._bind_refresh(w)
 
-        self.after(400, self.reload)
+        # Jimeng/ElevenLabs 额度由 SeriesVideoTab.on_tab_selected 按需刷新；
+        # 构造时不触发 dreamina CLI / Playwright，避免未进入该 Tab 就报错刷日志。
 
     def _bind_refresh(self, widget: tk.Misc) -> None:
         try:

@@ -86,7 +86,8 @@ class AgyQuotaPanel(ttk.Frame):
         ):
             self._bind_refresh(w)
 
-        self.after(300, self.reload)
+        # 额度查询走外部 API / dreamina CLI；由宿主 Tab 的 on_tab_selected 触发，
+        # 不在构造时自动 reload，避免用户未打开「系列视频」就刷日志/调 CLI。
 
     # -------------------------------------------------------- 账号
     def _build_account_checkboxes(self, parent: ttk.Frame) -> None:

@@ -12,6 +12,23 @@ from scripts.video_analysis.rain_sound_loop import ffprobe_duration
 DEFAULT_TOLERANCE_S = 30.0
 
 
+def duration_filename_tokens(minutes: float) -> tuple[str, ...]:
+    """导出文件名里可能出现的时长标记（新 ``180min`` + 旧 Reaper ``3h``）。"""
+    from scripts.config.paths import duration_render_suffix
+
+    tokens: list[str] = [duration_render_suffix(minutes)]
+    m = float(minutes)
+    if m > 0 and m % 60 == 0:
+        legacy = f"{int(m / 60)}h"
+        if legacy not in tokens:
+            tokens.append(legacy)
+    return tuple(tokens)
+
+
+def stem_has_duration_token(stem: str, minutes: float) -> bool:
+    return any(token in stem for token in duration_filename_tokens(minutes))
+
+
 def wav_duration_seconds(path: Path) -> float | None:
     if not path.is_file():
         return None
@@ -52,9 +69,7 @@ def export_mp4_belongs_to_scene(
     if scene_id not in path.name:
         return False
     if minutes is not None:
-        from scripts.config.paths import duration_render_suffix
-
-        if duration_render_suffix(minutes) not in path.stem:
+        if not stem_has_duration_token(path.stem, minutes):
             return False
     return True
 
@@ -68,19 +83,19 @@ def find_export_mp4_for_scene(
     """在 export 目录查找同序号、含目标时长标记的成片 MP4。"""
     import re
 
-    from scripts.config.paths import duration_render_suffix, export_dir
+    from scripts.config.paths import export_dir
 
     root = export_root or export_dir()
     if not root.is_dir():
         return None
     match = re.search(r"\d+", scene_id)
     num = match.group() if match else scene_id
-    duration_token = duration_render_suffix(minutes) if minutes is not None else None
+    duration_tokens = duration_filename_tokens(minutes) if minutes is not None else None
     candidates: list[Path] = []
     for path in root.glob(f"*{num}*.mp4"):
         if not export_mp4_belongs_to_scene(path, scene_id, minutes=minutes):
             continue
-        if duration_token and duration_token not in path.stem:
+        if duration_tokens and not any(token in path.stem for token in duration_tokens):
             continue
         candidates.append(path)
     if not candidates:

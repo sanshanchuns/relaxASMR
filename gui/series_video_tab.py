@@ -507,7 +507,7 @@ class SeriesVideoTab(ttk.Frame):
         lbl_http_hint.pack(side=tk.LEFT, padx=(8, 0))
         self._muted_labels.append(lbl_http_hint)
 
-        self._reload_providers()
+        # 视频来源可用性（含 jimeng_web import）延到首次进入本 Tab 再查。
 
     # -------------------------------------------------------- 滚动联动
     def _yview_both(self, *args) -> None:
@@ -618,6 +618,7 @@ class SeriesVideoTab(ttk.Frame):
     # ============================================================ 批次
     def on_tab_selected(self) -> None:
         first_time = not self._loaded_once
+        self._reload_providers()
         self.refresh(force=first_time)
         if hasattr(self, "agy_panel"):
             self.agy_panel.reload()
