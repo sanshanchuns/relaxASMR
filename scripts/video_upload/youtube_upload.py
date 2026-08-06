@@ -476,6 +476,19 @@ def upload_video(
         },
     }
 
+    file_size = video_path.stat().st_size
+    if file_size < 1_000_000:
+        raise RuntimeError(
+            f"拒绝上传：文件过小（{file_size} 字节），疑似未完整落到本地。"
+            f"协作机请确认 staging 已从 NAS 拷完。"
+        )
+    log(f"准备上传本地文件：{video_path}（{file_size / (1024**3):.2f} GB）")
+    log(
+        "开始分块上传到 YouTube（API resumable）。"
+        "左侧 Remaining% 来自已确认分块；Studio 网页对 API 上传常一直显示"
+        "「准备开始处理 / 0%」，直到整文件传完——与浏览器直传主机时的进度条不同。"
+    )
+
     media = MediaFileUpload(
         str(video_path),
         mimetype="video/mp4",
@@ -486,6 +499,7 @@ def upload_video(
 
     response = None
     last_pct = -1
+    last_logged_pct = -1
     while response is None:
         attempt = 0
         while True:
@@ -510,8 +524,71 @@ def upload_video(
             if pct != last_pct:
                 on_progress(pct)
                 last_pct = pct
+            # 日志每 20% 打一行，避免停在「准备上传」误以为没在传。
+            if pct >= last_logged_pct + 20 or (pct >= 100 and pct != last_logged_pct):
+                sent_gb = file_size * (pct / 100.0) / (1024**3)
+                log(f"上传进度：{pct}%（约 {sent_gb:.2f} / {file_size / (1024**3):.2f} GB）")
+                last_logged_pct = pct
 
-    return response["id"]
+    if not isinstance(response, dict) or not response.get("id"):
+        raise RuntimeError("YouTube 返回了空响应，上传未真正完成（请删除 Studio 里 0% 草稿后重试）")
+
+    video_id = str(response["id"])
+    verify_uploaded_video(service, video_id, on_log=on_log)
+    return video_id
+
+
+def verify_uploaded_video(
+    service,
+    video_id: str,
+    *,
+    on_log: Callable[[str], None] | None = None,
+    attempts: int = 6,
+    delay_sec: float = 3.0,
+) -> dict:
+    """上传结束后向 YouTube 反查，避免「客户端拿到 id、Studio 仍显示 0%」的假完成。"""
+
+    def log(msg: str) -> None:
+        if on_log:
+            on_log(msg)
+
+    last_status = None
+    for i in range(max(1, attempts)):
+        data = service.videos().list(
+            part="status,contentDetails,processingDetails",
+            id=video_id,
+        ).execute()
+        items = data.get("items") or []
+        if not items:
+            last_status = "missing"
+            log(f"上传校验：尚未查到视频 {video_id}（{i + 1}/{attempts}）…")
+            time.sleep(delay_sec)
+            continue
+
+        item = items[0]
+        upload_status = (item.get("status") or {}).get("uploadStatus")
+        last_status = upload_status
+        # uploaded / processed 才算字节已到齐；其它状态（含空）视为未真正完成。
+        if upload_status in ("uploaded", "processed"):
+            duration = ((item.get("contentDetails") or {}).get("duration")) or ""
+            processing = ((item.get("processingDetails") or {}).get("processingStatus")) or ""
+            log(
+                f"上传校验通过：uploadStatus={upload_status}"
+                + (f" · processing={processing}" if processing else "")
+                + (f" · duration={duration}" if duration else "")
+            )
+            return item
+
+        log(
+            f"上传校验：uploadStatus={upload_status!r}（{i + 1}/{attempts}），"
+            f"等待 YouTube 确认…"
+        )
+        time.sleep(delay_sec)
+
+    raise RuntimeError(
+        f"YouTube 端未确认上传完成（video_id={video_id}，最后状态={last_status!r}）。"
+        f"Studio 若显示「正在上传 0%」，请手动删除该草稿后，在协作机上重试一键上传。"
+    )
 
 
 def _log_upload_text_field(log: Callable[[str], None], label: str, value: str) -> None:

@@ -155,8 +155,23 @@ def test_stage_upload_mp4_with_log(tmp_path: Path) -> None:
     logs: list[str] = []
     with patch("scripts.config.staging_export.local_staging_dir", return_value=tmp_path / "staging"):
         se.stage_upload_mp4(src, on_log=logs.append)
-    assert any("正在复制" in line for line in logs)
-    assert any("复制完成" in line or "硬链" in line for line in logs)
+    assert any("硬链" in line or "正在复制" in line for line in logs)
+    assert any("复制完成" in line or "硬链到本地" in line or "已存在同尺寸" in line for line in logs)
+
+
+def test_stage_upload_mp4_remote_source_forces_copy(tmp_path: Path) -> None:
+    """NAS/CIFS 源禁止硬链，必须实拷并校验大小。"""
+    src = tmp_path / "remote" / "MVI_6922_3h_fhd.mp4"
+    src.parent.mkdir()
+    src.write_bytes(b"y" * 2048)
+    logs: list[str] = []
+    with patch("scripts.config.staging_export.local_staging_dir", return_value=tmp_path / "staging"):
+        with patch("scripts.config.staging_export._is_remote_path", side_effect=lambda p: p == src.resolve()):
+            local = se.stage_upload_mp4(src, on_log=logs.append)
+    assert local.is_file()
+    assert local.stat().st_size == 2048
+    assert any("NAS→本机" in line or "正在复制" in line for line in logs)
+    assert any("已校验大小" in line for line in logs)
 
 
 def test_rpp_staging_for_render_restores_rpp(tmp_path: Path) -> None:

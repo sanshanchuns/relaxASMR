@@ -224,7 +224,12 @@ class RelaxAsmrApp(tk.Tk):
         raw = self._cfg.get("target_duration")
         if raw is not None and str(raw).strip() != "":
             try:
-                return self._format_duration_minutes(float(raw) * 60)
+                # 迁移后 _persist_duration_minutes 把 target_duration 写成「分钟」
+                # （如 180）；更早的配置里它是「小时」（如 3）。用阈值区分：
+                # >24 按分钟，否则按小时换算，避免 180 被误乘成 10800。
+                val = float(raw)
+                minutes = val if val > 24 else val * 60
+                return self._format_duration_minutes(minutes)
             except (TypeError, ValueError):
                 pass
         return "100"

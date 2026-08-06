@@ -31,3 +31,37 @@ def test_configure_resumable_upload_http_excludes_308() -> None:
     _configure_resumable_upload_http(http)
     assert 308 not in http.redirect_codes
     assert 301 in http.redirect_codes
+
+
+def test_verify_uploaded_video_accepts_uploaded() -> None:
+    from unittest.mock import MagicMock
+
+    from scripts.video_upload.youtube_upload import verify_uploaded_video
+
+    service = MagicMock()
+    service.videos.return_value.list.return_value.execute.return_value = {
+        "items": [
+            {
+                "status": {"uploadStatus": "uploaded"},
+                "contentDetails": {"duration": "PT3H1S"},
+                "processingDetails": {"processingStatus": "processing"},
+            }
+        ]
+    }
+    item = verify_uploaded_video(service, "abc", attempts=1, delay_sec=0)
+    assert item["status"]["uploadStatus"] == "uploaded"
+
+
+def test_verify_uploaded_video_rejects_stuck_draft() -> None:
+    from unittest.mock import MagicMock
+
+    import pytest
+
+    from scripts.video_upload.youtube_upload import verify_uploaded_video
+
+    service = MagicMock()
+    service.videos.return_value.list.return_value.execute.return_value = {
+        "items": [{"status": {"uploadStatus": "deleted"}}]
+    }
+    with pytest.raises(RuntimeError, match="未确认上传完成"):
+        verify_uploaded_video(service, "abc", attempts=2, delay_sec=0)

@@ -391,12 +391,36 @@ def _format_staging_size(num_bytes: int) -> str:
     return f"{num_bytes / 1024:.0f} KB"
 
 
+def _same_filesystem(a: Path, b: Path) -> bool:
+    try:
+        return a.stat().st_dev == b.stat().st_dev
+    except OSError:
+        return False
+
+
+def _is_remote_path(path: Path) -> bool:
+    """源文件是否落在 NAS/CIFS 等远程挂载上。"""
+    try:
+        posix = path.resolve().as_posix()
+    except OSError:
+        posix = path.as_posix()
+    if _IP_IN_PATH_RE.search(posix):
+        return True
+    fstype = _filesystem_type(path)
+    return bool(fstype and fstype.lower() in REMOTE_FS_TYPES)
+
+
 def stage_upload_mp4(
     src: Path,
     *,
     on_log: Callable[[str], None] | None = None,
 ) -> Path:
-    """复制/硬链 export 成片到 staging/upload/，供 YouTube 从本地盘读取。"""
+    """把 export 成片落到本地 ``staging/upload/``，供 YouTube 从本机盘读取。
+
+    协作机上 export 通常在 NAS（CIFS）：绝不能硬链过去再上传——硬链仍会走网络读，
+    SSL 一抖 YouTube Studio 就会留下「正在上传 0%」的空壳，而客户端可能已拿到
+    video_id。远程源必须完整 ``copy2``，并校验字节数一致。
+    """
     src = src.resolve()
     if not src.is_file():
         raise FileNotFoundError(f"上传文件不存在: {src}")
@@ -408,23 +432,50 @@ def stage_upload_mp4(
     staging = _local_upload_dir()
     staging.mkdir(parents=True, exist_ok=True)
     dest = staging / src.name
+    src_size = src.stat().st_size
+    if src_size <= 0:
+        raise RuntimeError(f"上传源文件大小为 0：{src}")
+
     if dest.is_file():
         try:
-            if dest.stat().st_size == src.stat().st_size:
+            if dest.stat().st_size == src_size and not _is_remote_path(dest):
                 log(f"本地 staging 已存在同尺寸副本，跳过复制：{dest.name}")
                 return dest
         except OSError:
             pass
-        dest.unlink()
+        try:
+            dest.unlink()
+        except OSError:
+            pass
 
-    size_label = _format_staging_size(src.stat().st_size)
-    log(f"正在复制 {src.name}（{size_label}）到本地 staging…")
+    size_label = _format_staging_size(src_size)
+    # 仅同源本地文件系统才允许硬链；NAS/CIFS 源一律实拷。
+    can_hardlink = (not _is_remote_path(src)) and _same_filesystem(src, staging)
+    if can_hardlink:
+        log(f"正在硬链 {src.name}（{size_label}）到本地 staging…")
+        try:
+            os.link(src, dest)
+            log(f"已硬链到本地（无需数据复制）：{dest}")
+            return dest
+        except OSError as exc:
+            log(f"硬链失败（{exc}），改为完整复制…")
+
+    log(f"正在复制 {src.name}（{size_label}）到本地 staging（NAS→本机，请耐心等待）…")
+    shutil.copy2(src, dest)
     try:
-        os.link(src, dest)
-        log(f"已硬链到本地（无需数据复制）：{dest}")
-    except OSError:
-        shutil.copy2(src, dest)
-        log(f"复制完成：{dest.name}（{size_label}）")
+        dest_size = dest.stat().st_size
+    except OSError as exc:
+        raise RuntimeError(f"复制后无法读取 staging 文件：{dest}（{exc}）") from exc
+    if dest_size != src_size:
+        try:
+            dest.unlink()
+        except OSError:
+            pass
+        raise RuntimeError(
+            f"staging 复制不完整：源 {src_size} 字节，本地 {dest_size} 字节。"
+            f"请检查 NAS 连接后重试。"
+        )
+    log(f"复制完成：{dest.name}（{size_label}，已校验大小）")
     return dest
 
 
