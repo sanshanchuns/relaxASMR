@@ -245,7 +245,14 @@ def apply_tk_theme(root: tk.Misc, theme: UiTheme, widgets: dict[str, tk.Widget |
     for key in ("cover_title", "preview_title"):
         w = widgets.get(key)
         if w is not None:
-            w.configure(bg=theme.window_bg, fg=theme.fg)
+            opts: dict[str, str] = {"bg": theme.window_bg, "fg": theme.fg}
+            if isinstance(w, tk.Text):
+                opts.update(
+                    insertbackground=theme.fg,
+                    selectbackground=theme.select_bg,
+                    selectforeground=theme.select_fg,
+                )
+            w.configure(**opts)
     for key in ("cover_desc", "preview_desc", "log_text"):
         w = widgets.get(key)
         if w is not None:

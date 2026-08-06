@@ -152,20 +152,9 @@ def _parse_json(text: str) -> dict:
 
 
 def _slots_from_run(run: T2vRun) -> dict[str, list[str]]:
-    from scripts.aigc_lab.prompt_atoms import SLOT_ORDER, parse_table
+    from scripts.aigc_lab.store import slots_from_run
 
-    meta = run.meta or {}
-    raw = meta.get("slots") or {}
-    if isinstance(raw, dict) and any(raw.values()):
-        out: dict[str, list[str]] = {}
-        for key in SLOT_ORDER:
-            vals = raw.get(key) or []
-            out[key] = [str(x).strip() for x in vals if str(x).strip()]
-        return out
-    table = str(meta.get("prompt_table") or "")
-    if table.strip():
-        return parse_table(table)
-    return {k: [] for k in SLOT_ORDER}
+    return slots_from_run(run)
 
 
 def _format_tag_list(slots: dict[str, list[str]], keys: Sequence[str]) -> str:

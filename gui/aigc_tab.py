@@ -12,7 +12,7 @@ from gui.clipboard import setup_copyable_readonly_text
 from gui.tk_thread import bind_ui_root, schedule_on_main
 from gui.ui_theme import UiTheme
 from scripts.aigc_lab import ScoreError, create_run, list_runs, load_run, score_run
-from scripts.aigc_lab.store import lab_params
+from scripts.aigc_lab.store import lab_params, save_lab_params, slots_from_run
 from scripts.aigc_lab.prompt_atoms import (
     DEFAULT_RAIN_MODE,
     RAIN_MODE_LABELS,
@@ -38,6 +38,7 @@ from scripts.config.paths import ensure_cli_path
 _LIST_W = 42
 _GENERATE_BTN_LABEL = "生成视频"
 _FAIL_BORDER = "#c62828"
+_TAG_BORDER_THICKNESS = 2  # 合格/不合格统一厚度，仅改边框色，避免点击时布局跳动
 
 
 class AigcTab(ttk.Frame):
@@ -72,6 +73,9 @@ class AigcTab(ttk.Frame):
         }
         self._reflow_guard: dict[str, bool] = {key: False for key in SLOT_ORDER}
         self._slot_last_width: dict[str, int] = {key: 0 for key in SLOT_ORDER}
+        self._slot_tag_widgets: dict[str, dict[str, tk.Frame]] = {
+            key: {} for key in SLOT_ORDER
+        }
         self._layout_frozen = False
         # 统一配色（apply_theme 覆盖）
         self._atom_row_bg = "#f5f5f5"
@@ -89,11 +93,17 @@ class AigcTab(ttk.Frame):
 
         params = lab_params()
         model = params.get("model", "Seedance 2.0 VIP")
-        dur = params.get("duration_sec", 4)
+        default_dur = int(params.get("duration_sec", 4))
         ttk.Label(
             top,
-            text=f"实验台 · {model} · 16:9 · 720p · {dur}s",
+            text=f"实验台 · {model} · 16:9 · 720p ·",
         ).pack(side=tk.LEFT)
+        self.spin_duration = ttk.Spinbox(top, from_=1, to=15, width=3)
+        self.spin_duration.set(str(default_dur))
+        self.spin_duration.pack(side=tk.LEFT, padx=(0, 0))
+        ttk.Label(top, text="s").pack(side=tk.LEFT, padx=(0, 8))
+        self.spin_duration.bind("<FocusOut>", lambda _e: self._persist_duration_sec())
+        self.spin_duration.bind("<Return>", lambda _e: self._persist_duration_sec())
 
         self.btn_jimeng_login = ttk.Button(
             top, text="即梦登录", command=self._start_jimeng_login
@@ -242,6 +252,26 @@ class AigcTab(ttk.Frame):
         except OSError:
             pass
 
+    def _sync_fail_borders(self) -> None:
+        """内存中的红框状态 → 标签边框色（必要时 reflow）。"""
+        if not self._repaint_tag_borders():
+            for key in SLOT_ORDER:
+                self._reflow_tags(key)
+
+    def _preload_fail_marks(
+        self, fails: dict[str, list[str]], slots: dict[str, list[str]]
+    ) -> None:
+        """在创建标签 widget 前写入红框，避免首帧全灰。"""
+        self._clear_fail_marks()
+        for key in SLOT_ORDER:
+            slot_tags = {
+                str(a).strip() for a in (slots.get(key) or []) if str(a).strip()
+            }
+            for tag in fails.get(key) or []:
+                t = str(tag).strip()
+                if t and t in slot_tags:
+                    self._slot_fail_tags[key].add(t)
+
     def _restore_session(self) -> bool:
         data = load_session()
         if data is None:
@@ -252,17 +282,72 @@ class AigcTab(ttk.Frame):
         fails = {
             key: list((data.get("fail_tags") or {}).get(key) or []) for key in SLOT_ORDER
         }
-        self._write_slots(slots, clear_fails=False)
-        self._set_fail_marks_for_current_ui(fails)
-        for key in SLOT_ORDER:
-            self._reflow_tags(key)
         sel = str(data.get("selected_run_id") or "").strip()
+        if not any(slots.values()) and sel:
+            try:
+                run = load_run(sel)
+                run_slots = slots_from_run(run)
+                if any(run_slots.values()):
+                    slots = run_slots
+                    run_mode = str((run.meta or {}).get("rain_mode") or "").strip()
+                    if run_mode:
+                        mode = normalize_rain_mode(run_mode)
+                        self.rain_var.set(RAIN_MODE_LABELS[mode])
+            except Exception:  # noqa: BLE001
+                pass
+        self._preload_fail_marks(fails, slots)
+        self._write_slots(slots, clear_fails=False)
+        if sel and not any(v for s in self._slot_fail_tags.values() for v in s):
+            try:
+                self._apply_score_fails_from_run(load_run(sel))
+            except Exception:  # noqa: BLE001
+                pass
         if sel:
             self._selected_run_id = sel
         self.refresh()
         if sel and self.list_runs.curselection():
-            self._on_run_select()
+            self._on_run_select(load_slots=False)
         self._log("[AIGC] 已恢复上次会话（原子表 · 红框 · 选中 run）")
+        return True
+
+    def _apply_score_fails_from_run(self, run) -> None:
+        """把 scores 里 partial/no 标签标红（仅作用于当前表内已有标签）。"""
+        scores = getattr(run, "scores", None) or {}
+        if not scores:
+            return
+        failed = failed_tags_from_scores(scores)
+        self._set_fail_marks_for_current_ui(failed)
+        self._sync_fail_borders()
+
+    def _repaint_tag_borders(self) -> bool:
+        """就地刷新边框色；widget 与原子表不一致时返回 False。"""
+        for slot in SLOT_ORDER:
+            atoms = [a for a in (self._slot_atoms.get(slot) or []) if a.strip()]
+            widgets = self._slot_tag_widgets.get(slot) or {}
+            if set(widgets) != set(atoms):
+                return False
+        for slot in SLOT_ORDER:
+            fails = self._slot_fail_tags.get(slot) or set()
+            for text in self._slot_atoms.get(slot) or []:
+                outer = self._slot_tag_widgets.get(slot, {}).get(text)
+                if outer is None:
+                    return False
+                try:
+                    outer.configure(bg=self._tag_border_color(failed=text in fails))
+                except tk.TclError:
+                    return False
+        return True
+
+    def _apply_run_slots(self, run, *, clear_fails: bool = True) -> bool:
+        """把 run 的六槽原子载入标签表。"""
+        slots = slots_from_run(run)
+        if not any(slots.values()):
+            return False
+        run_mode = str((run.meta or {}).get("rain_mode") or "").strip()
+        if run_mode:
+            mode = normalize_rain_mode(run_mode)
+            self.rain_var.set(RAIN_MODE_LABELS[mode])
+        self._write_slots(slots, clear_fails=clear_fails)
         return True
 
     def apply_theme(self, theme: UiTheme) -> None:
@@ -349,11 +434,14 @@ class AigcTab(ttk.Frame):
             return None
         return self._runs[idx]
 
-    def _on_run_select(self, _event=None) -> None:
+    def _on_run_select(self, _event=None, *, load_slots: bool = True) -> None:
         run = self._selected_run()
         if run is None:
             return
         self._selected_run_id = run.run_id
+        if load_slots:
+            self._apply_run_slots(run, clear_fails=True)
+            self._apply_score_fails_from_run(run)
         self._schedule_save_session()
         lines = [
             f"run_id: {run.run_id}",
@@ -581,6 +669,9 @@ class AigcTab(ttk.Frame):
     def _is_fail_tag(self, slot: str, text: str) -> bool:
         return text in (self._slot_fail_tags.get(slot) or set())
 
+    def _tag_border_color(self, *, failed: bool) -> str:
+        return _FAIL_BORDER if failed else self._atom_border
+
     def _toggle_fail_tag(self, slot: str, text: str) -> None:
         fails = self._slot_fail_tags.setdefault(slot, set())
         if text in fails:
@@ -589,6 +680,15 @@ class AigcTab(ttk.Frame):
         else:
             fails.add(text)
             self._log(f"[AIGC] 标不合格：[{SLOT_LABELS.get(slot, slot)}] {text}")
+        outer = self._slot_tag_widgets.get(slot, {}).get(text)
+        if outer is not None:
+            try:
+                if outer.winfo_exists():
+                    outer.configure(bg=self._tag_border_color(failed=text in fails))
+                    self._schedule_save_session()
+                    return
+            except tk.TclError:
+                pass
         self._reflow_tags(slot)
         self._schedule_save_session()
 
@@ -622,15 +722,14 @@ class AigcTab(ttk.Frame):
 
     def _make_tag(self, parent: tk.Frame, slot: str, text: str, index: int) -> tk.Frame:
         failed = self._is_fail_tag(slot, text)
-        border = _FAIL_BORDER if failed else self._atom_border
-        thickness = 2 if failed else 1
         outer = tk.Frame(
             parent,
-            bg=border,
-            padx=thickness,
-            pady=thickness,
+            bg=self._tag_border_color(failed=failed),
+            padx=_TAG_BORDER_THICKNESS,
+            pady=_TAG_BORDER_THICKNESS,
             highlightthickness=0,
         )
+        self._slot_tag_widgets.setdefault(slot, {})[text] = outer
         inner = tk.Frame(outer, bg=self._atom_tag_bg)
         inner.pack(fill=tk.BOTH, expand=True)
         lbl = tk.Label(
@@ -700,6 +799,7 @@ class AigcTab(ttk.Frame):
             return
         self._reflow_guard[slot] = True
         self._slot_reflow_after[slot] = None
+        self._slot_tag_widgets[slot] = {}
         try:
             for child in list(tags_area.winfo_children()):
                 try:
@@ -862,15 +962,34 @@ class AigcTab(ttk.Frame):
         if not ok:
             self._log("[AIGC] 已取消入池")
             return
-        added, _pools = merge_into_pools(cleaned)
-        if not any(added.values()):
-            self._log("[AIGC] 入池完成：无新增（均已在池中）")
-            messagebox.showinfo("AIGC", "这些标签都已在学习池中，无新增。")
+        added, updated, _pools = merge_into_pools(cleaned)
+        if not any(added.values()) and not any(updated.values()):
+            self._log("[AIGC] 入池完成：无有效标签")
+            messagebox.showinfo("AIGC", "没有可合入的有效标签。")
         else:
-            summary = format_tags_by_slot(added)
-            self._log(f"[AIGC] 已入池新增：\n{summary}")
+            parts: list[str] = []
+            if any(added.values()):
+                parts.append(f"新增：\n{format_tags_by_slot(added)}")
+            if any(updated.values()):
+                parts.append(f"覆盖（已去重）：\n{format_tags_by_slot(updated)}")
+            summary = "\n\n".join(parts)
+            self._log(f"[AIGC] 已入池：\n{summary}")
             messagebox.showinfo("AIGC", f"已合入学习池：\n\n{summary}")
         self._refresh_all_suggestions()
+
+    def _parse_duration_sec(self) -> int:
+        try:
+            return max(1, min(15, int(self.spin_duration.get())))
+        except (ValueError, tk.TclError, AttributeError):
+            return 4
+
+    def _persist_duration_sec(self) -> None:
+        dur = self._parse_duration_sec()
+        try:
+            self.spin_duration.set(str(dur))
+            save_lab_params({"duration_sec": dur})
+        except OSError:
+            pass
 
     def _pool_qualified_manual(self) -> None:
         """人工：红框外的标签入池（先标完不合格再点）。"""
@@ -890,10 +1009,7 @@ class AigcTab(ttk.Frame):
         failed = failed_tags_from_scores(scores)
         qualified = qualified_tags_from_scores(scores)
 
-        # 只标红当前表里的标签，不写入 run.meta.slots（避免恢复/覆盖用户编辑）
-        self._set_fail_marks_for_current_ui(failed)
-        for key in SLOT_ORDER:
-            self._reflow_tags(key)
+        self._apply_score_fails_from_run(run)
         self._schedule_save_session()
 
         fail_body = format_tags_by_slot(failed)
@@ -909,7 +1025,7 @@ class AigcTab(ttk.Frame):
                 self.list_runs.selection_set(i)
                 self.list_runs.see(i)
                 break
-        self._on_run_select()
+        self._on_run_select(load_slots=False)
         self._confirm_and_merge_pools(qualified, source=f"L1+L2 自动评分 · {run_id}")
 
     def _start_jimeng_login(self) -> None:
@@ -954,8 +1070,9 @@ class AigcTab(ttk.Frame):
             from jimeng_web.client import JimengWebClient, JimengWebError
 
             client = JimengWebClient()
+            duration = self._parse_duration_sec()
+            schedule_on_main(self, self._persist_duration_sec)
             params = lab_params()
-            duration = int(params.get("duration_sec", 4))
             model = params.get("model", "Seedance 2.0 VIP")
             mode = self._current_rain_mode()
 
@@ -971,6 +1088,7 @@ class AigcTab(ttk.Frame):
                     prompt_table=table,
                     slots={k: list(v) for k, v in slots.items()},
                     repeat_index=i if n > 1 else None,
+                    duration_sec=duration,
                 )
                 schedule_on_main(
                     self,

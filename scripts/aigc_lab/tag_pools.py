@@ -85,22 +85,31 @@ def suggest_for_slot(slot: str, prefix: str = "") -> list[str]:
 
 def merge_into_pools(
     tags_by_slot: dict[str, list[str]],
-) -> tuple[dict[str, list[str]], dict[str, list[str]]]:
-    """合入学习池。返回 (新增的标签, 合入后完整池)。"""
+) -> tuple[dict[str, list[str]], dict[str, list[str]], dict[str, list[str]]]:
+    """合入学习池。相同标签先删后追加（不重复存两份）。返回 (新增, 覆盖, 合入后完整池)。"""
     pools = load_pools()
     added: dict[str, list[str]] = empty_pools()
+    updated: dict[str, list[str]] = empty_pools()
+    changed = False
     for key in SLOT_ORDER:
-        existing = set(pools.get(key) or [])
+        slot_list = list(pools.get(key) or [])
+        seen_incoming: set[str] = set()
         for tag in tags_by_slot.get(key) or []:
             t = str(tag).strip()
-            if not t or t in existing:
+            if not t or t in seen_incoming:
                 continue
-            pools.setdefault(key, []).append(t)
-            added[key].append(t)
-            existing.add(t)
-    if any(added.values()):
+            seen_incoming.add(t)
+            if t in slot_list:
+                slot_list.remove(t)
+                updated[key].append(t)
+            else:
+                added[key].append(t)
+            slot_list.append(t)
+            changed = True
+        pools[key] = slot_list
+    if changed:
         save_pools(pools)
-    return added, pools
+    return added, updated, pools
 
 
 def format_tags_by_slot(tags_by_slot: dict[str, list[str]]) -> str:

@@ -255,7 +255,88 @@ class RelaxAsmrApp(tk.Tk):
         self._cfg["duration_minutes"] = stored
         self._cfg.pop("duration_hours", None)
         self._cfg["target_duration"] = self._format_duration_minutes(m)
+        if self.scene_id:
+            sd = self._cfg.setdefault("scene_durations", {})
+            if isinstance(sd, dict):
+                sd[self.scene_id] = stored
         self._save_config()
+
+    def _infer_scene_duration_minutes(self, scene_id: str) -> float | None:
+        sd = self._cfg.get("scene_durations")
+        if isinstance(sd, dict) and scene_id in sd:
+            try:
+                return float(sd[scene_id])
+            except (TypeError, ValueError):
+                pass
+
+        import re
+
+        from scripts.config.paths import export_dir
+
+        root = export_dir()
+        if not root.is_dir():
+            return None
+        num = self._scene_num(scene_id)
+        for path in sorted(root.glob(f"*{num}*"), key=lambda p: p.stat().st_mtime, reverse=True):
+            if scene_id not in path.name:
+                continue
+            stem = path.stem
+            match = re.search(r"(\d+(?:\.\d+)?)min", stem)
+            if match:
+                return float(match.group(1))
+            match = re.search(r"(\d+)h", stem)
+            if match:
+                return float(match.group(1)) * 60
+        return None
+
+    def _sync_scene_duration(self, prev_scene: str | None, scene: str) -> None:
+        if prev_scene == scene:
+            return
+        if prev_scene:
+            try:
+                m = self._parse_duration_minutes()
+                sd = self._cfg.setdefault("scene_durations", {})
+                if isinstance(sd, dict):
+                    sd[prev_scene] = int(m) if m == int(m) else m
+            except ValueError:
+                pass
+        self._defer_scene_duration_restore(scene)
+
+    def _defer_scene_duration_restore(self, scene_id: str) -> None:
+        def worker() -> None:
+            inferred = self._infer_scene_duration_minutes(scene_id)
+
+            def apply() -> None:
+                if self.scene_id != scene_id:
+                    return
+                if inferred is not None:
+                    self.duration_var.set(self._format_duration_minutes(inferred))
+                else:
+                    sd = self._cfg.get("scene_durations")
+                    if isinstance(sd, dict) and scene_id not in sd:
+                        from scripts.config.paths import DEFAULT_DURATION_MINUTES
+
+                        self.duration_var.set(
+                            self._format_duration_minutes(DEFAULT_DURATION_MINUTES)
+                        )
+
+            schedule_on_main(self, apply)
+
+        threading.Thread(target=worker, daemon=True).start()
+
+    def _rpp_belongs_to_scene(self, rpp: Path, scene_id: str) -> bool:
+        return scene_id in rpp.stem
+
+    def _on_scene_changed(self, prev_scene: str | None, scene: str) -> None:
+        """切换场景时同步步骤 2–5（重 I/O 放后台线程）。"""
+        if prev_scene == scene:
+            return
+        if prev_scene:
+            self._snapshot_scene_audio_selections(prev_scene)
+        self._sync_scene_duration(prev_scene, scene)
+        self._restore_scene_audio_selections(scene, background=True)
+        self._apply_step4_outputs(scene, None, None)
+        self._refresh_step4_outputs(scene, background=True)
 
     def _load_config(self) -> None:
         self._cfg = {}
@@ -340,6 +421,32 @@ class RelaxAsmrApp(tk.Tk):
                         outputs[kind] = new_val
                         changed = True
 
+        for root_key in ("scene_audio_selections",):
+            root = self._cfg.get(root_key)
+            if not isinstance(root, dict):
+                continue
+            for scene_id, layers in list(root.items()):
+                if not isinstance(layers, dict):
+                    continue
+                for layer_id, paths in list(layers.items()):
+                    if not isinstance(paths, list):
+                        continue
+                    new_paths = [self._migrate_config_path_value(p) for p in paths]
+                    if new_paths != paths:
+                        layers[layer_id] = new_paths
+                        changed = True
+
+        picker_root = self._cfg.get("scene_track_picker_selections")
+        if isinstance(picker_root, dict):
+            for scene_id, pickers in list(picker_root.items()):
+                if not isinstance(pickers, dict):
+                    continue
+                for track_key, path in list(pickers.items()):
+                    new_val = self._migrate_config_path_value(path)
+                    if new_val != path:
+                        pickers[track_key] = new_val
+                        changed = True
+
         return changed
 
     def _save_config(self) -> None:
@@ -374,8 +481,8 @@ class RelaxAsmrApp(tk.Tk):
             "preview_canvas": getattr(self, "preview_video_canvas", None),
             "left_scroll_canvas": getattr(self, "_left_scroll_canvas", None),
             "library_canvases": library_canvases,
-            "cover_title": getattr(self, "lbl_cover_title_en", None),
-            "preview_title": getattr(self, "lbl_preview_title_zh", None),
+            "cover_title": getattr(self, "txt_cover_title_en", None),
+            "preview_title": getattr(self, "txt_preview_title_zh", None),
             "cover_desc": getattr(self, "txt_cover_desc_en", None),
             "preview_desc": getattr(self, "txt_preview_desc_zh", None),
             "i2v_image_canvas": getattr(self, "preview_i2v_image_canvas", None),
@@ -804,15 +911,16 @@ class RelaxAsmrApp(tk.Tk):
         cover_meta.columnconfigure(0, weight=1)
         cover_meta.rowconfigure(1, weight=1)
 
-        self.lbl_cover_title_en = tk.Label(
+        self.txt_cover_title_en = tk.Text(
             cover_meta,
-            text="",
-            anchor="nw",
-            justify=tk.LEFT,
-            wraplength=320,
+            height=2,
+            wrap=tk.WORD,
+            relief=tk.FLAT,
+            borderwidth=0,
             font=("", 11, "bold"),
         )
-        self.lbl_cover_title_en.grid(row=0, column=0, sticky="new")
+        self.txt_cover_title_en.grid(row=0, column=0, sticky="new")
+        setup_copyable_readonly_text(self.txt_cover_title_en, self)
 
         cover_text_frame = ttk.Frame(cover_meta)
         cover_text_frame.grid(row=1, column=0, sticky="nsew", pady=(8, 0))
@@ -862,15 +970,16 @@ class RelaxAsmrApp(tk.Tk):
         preview_meta.columnconfigure(0, weight=1)
         preview_meta.rowconfigure(1, weight=1)
 
-        self.lbl_preview_title_zh = tk.Label(
+        self.txt_preview_title_zh = tk.Text(
             preview_meta,
-            text="",
-            anchor="nw",
-            justify=tk.LEFT,
-            wraplength=320,
+            height=2,
+            wrap=tk.WORD,
+            relief=tk.FLAT,
+            borderwidth=0,
             font=("", 11, "bold"),
         )
-        self.lbl_preview_title_zh.grid(row=0, column=0, sticky="new")
+        self.txt_preview_title_zh.grid(row=0, column=0, sticky="new")
+        setup_copyable_readonly_text(self.txt_preview_title_zh, self)
 
         self._preview_i2v_img_h = 90
         self.preview_i2v_image_canvas = tk.Canvas(
@@ -995,6 +1104,7 @@ class RelaxAsmrApp(tk.Tk):
             self._update_preview_video_names(p)
 
             if p.is_file():
+                self._restore_workflow_extras(scene)
                 self._set_video(p, from_import=False, defer_heavy=True)
                 return
 
@@ -1025,17 +1135,27 @@ class RelaxAsmrApp(tk.Tk):
         sid = scene or self.scene_id
 
         last_rpp = self._cfg.get("last_rpp")
-        if last_rpp:
+        if sid:
+            found = self._subproject_rpp_path(sid)
+            if found:
+                self._set_rpp(found)
+            elif last_rpp:
+                rpp = Path(last_rpp)
+                if rpp.is_file() and self._rpp_belongs_to_scene(rpp, sid):
+                    self.rpp_path = rpp.resolve()
+                else:
+                    self.rpp_path = None
+            else:
+                self.rpp_path = None
+        elif last_rpp:
             rpp = Path(last_rpp)
             if rpp.is_file():
                 self.rpp_path = rpp.resolve()
 
         self._refresh_material_label()
         if sid:
+            self._defer_scene_duration_restore(sid)
             self._refresh_step4_outputs(sid, background=True)
-            if not (self.video_path and self.video_path.is_file()):
-                out_dir = base_material_dir()
-                self._load_existing_analysis(out_dir, sid)
         else:
             self._refresh_upload_label()
 
@@ -1262,9 +1382,122 @@ class RelaxAsmrApp(tk.Tk):
             self._cfg["audio_library_selection"] = sel
         return sel
 
+    def _scene_audio_selections_root(self) -> dict:
+        root = self._cfg.get("scene_audio_selections")
+        if not isinstance(root, dict):
+            root = {}
+            self._cfg["scene_audio_selections"] = root
+        return root
+
+    def _scene_track_picker_selections_root(self) -> dict:
+        root = self._cfg.get("scene_track_picker_selections")
+        if not isinstance(root, dict):
+            root = {}
+            self._cfg["scene_track_picker_selections"] = root
+        return root
+
+    def _ensure_scene_audio_migrated(self, scene_id: str) -> None:
+        """首次访问某场景时，将旧版全局选曲配置迁移为该场景记录。"""
+        if not scene_id:
+            return
+        lib_root = self._scene_audio_selections_root()
+        if scene_id not in lib_root:
+            global_lib = self._cfg.get("audio_library_selection")
+            if isinstance(global_lib, dict) and global_lib:
+                lib_root[scene_id] = {
+                    layer_id: list(paths) if isinstance(paths, list) else paths
+                    for layer_id, paths in global_lib.items()
+                }
+        picker_root = self._scene_track_picker_selections_root()
+        if scene_id not in picker_root:
+            global_picker = self._cfg.get("track_picker_selection")
+            if isinstance(global_picker, dict) and global_picker:
+                picker_root[scene_id] = dict(global_picker)
+
+    def _snapshot_scene_audio_selections(self, scene_id: str) -> None:
+        if not scene_id:
+            return
+        scene_lib: dict[str, list[str]] = {}
+        for track_id, tab in getattr(self, "_audio_library_tabs", {}).items():
+            paths = tab.get_selected()
+            scene_lib[track_id] = [str(p) for p in paths]
+        self._scene_audio_selections_root()[scene_id] = scene_lib
+
+        scene_picker: dict[str, str] = {}
+        for picker in getattr(self, "track_pickers", {}).values():
+            track_name = picker.track_name
+            sel = picker.get_selected()
+            if sel and sel.is_file():
+                scene_picker[track_name] = str(sel.resolve())
+        self._scene_track_picker_selections_root()[scene_id] = scene_picker
+        self._save_config()
+
+    def _restore_scene_audio_selections(
+        self, scene_id: str, *, background: bool = True
+    ) -> None:
+        """恢复指定场景的四轨素材库勾选（CLIP/VLM 网格由 _finish_set_video_heavy 异步加载）。"""
+        if not scene_id:
+            return
+        if not background:
+            selections = self._build_scene_audio_selections(scene_id)
+            self._apply_audio_library_selections(selections)
+            return
+
+        self._step2_restore_token = getattr(self, "_step2_restore_token", 0) + 1
+        token = self._step2_restore_token
+
+        def worker() -> None:
+            selections = self._build_scene_audio_selections(scene_id)
+            schedule_on_main(
+                self,
+                self._apply_scene_audio_selections_result,
+                scene_id,
+                selections,
+                token,
+            )
+
+        threading.Thread(target=worker, daemon=True).start()
+
+    def _build_scene_audio_selections(self, scene_id: str) -> dict[str, list[Path]]:
+        self._ensure_scene_audio_migrated(scene_id)
+        cfg = self._scene_audio_selections_root().get(scene_id, {})
+        if not isinstance(cfg, dict):
+            cfg = {}
+        selections: dict[str, list[Path]] = {}
+        for track_id in cfg:
+            raw = cfg.get(track_id, [])
+            if not isinstance(raw, list):
+                continue
+            paths = [Path(p) for p in raw if p and Path(p).is_file()]
+            selections[track_id] = paths
+        for track_id in getattr(self, "_audio_library_tabs", {}):
+            selections.setdefault(track_id, [])
+        return selections
+
+    def _apply_scene_audio_selections_result(
+        self,
+        scene_id: str,
+        selections: dict[str, list[Path]],
+        token: int,
+    ) -> None:
+        if token != getattr(self, "_step2_restore_token", 0):
+            return
+        if scene_id != self.scene_id:
+            return
+        self._apply_audio_library_selections(selections)
+
+    def _apply_scene_audio_library_selections(self, scene_id: str) -> None:
+        selections = self._build_scene_audio_selections(scene_id)
+        self._apply_audio_library_selections(selections)
+
     def _save_audio_library_selection(self, track_id: str, paths: list[Path]) -> None:
         cfg = self._audio_library_selection_cfg()
         cfg[track_id] = [str(p) for p in paths]
+        if self.scene_id:
+            self._ensure_scene_audio_migrated(self.scene_id)
+            scene_cfg = self._scene_audio_selections_root().setdefault(self.scene_id, {})
+            if isinstance(scene_cfg, dict):
+                scene_cfg[track_id] = [str(p) for p in paths]
         self._save_config()
 
     def _track_picker_selection_cfg(self) -> dict:
@@ -1280,6 +1513,16 @@ class RelaxAsmrApp(tk.Tk):
             cfg[track_key] = str(path.resolve())
         else:
             cfg.pop(track_key, None)
+        if self.scene_id:
+            self._ensure_scene_audio_migrated(self.scene_id)
+            scene_cfg = self._scene_track_picker_selections_root().setdefault(
+                self.scene_id, {}
+            )
+            if isinstance(scene_cfg, dict):
+                if path and path.is_file():
+                    scene_cfg[track_key] = str(path.resolve())
+                else:
+                    scene_cfg.pop(track_key, None)
         self._save_config()
 
     def _picker_by_track_name(self, track_name: str):
@@ -1288,8 +1531,18 @@ class RelaxAsmrApp(tk.Tk):
                 return picker
         return None
 
-    def _apply_saved_track_picker_selection(self, track_key: str, picker) -> bool:
-        raw = self._track_picker_selection_cfg().get(track_key)
+    def _apply_saved_track_picker_selection(
+        self, track_key: str, picker, *, scene_id: str | None = None
+    ) -> bool:
+        sid = scene_id or self.scene_id
+        raw = None
+        if sid:
+            self._ensure_scene_audio_migrated(sid)
+            scene_picker = self._scene_track_picker_selections_root().get(sid, {})
+            if isinstance(scene_picker, dict):
+                raw = scene_picker.get(track_key)
+        if not raw:
+            raw = self._track_picker_selection_cfg().get(track_key)
         if not raw:
             return False
         p = Path(raw)
@@ -1309,23 +1562,28 @@ class RelaxAsmrApp(tk.Tk):
                 self._sync_track_picker_from_library(tid, tab.get_selected())
 
     def _restore_audio_library_selections(self) -> None:
-        cfg = self._audio_library_selection_cfg()
+        scene = self._cfg.get("last_scene_id") or self.scene_id
 
         def worker() -> None:
+            if scene:
+                self._ensure_scene_audio_migrated(scene)
+                cfg = self._scene_audio_selections_root().get(scene, {})
+            else:
+                cfg = self._audio_library_selection_cfg()
             selections: dict[str, list[Path]] = {}
-            for track_id in self._audio_library_tabs:
-                raw = cfg.get(track_id, [])
+            for track_id in getattr(self, "_audio_library_tabs", {}):
+                raw = cfg.get(track_id, []) if isinstance(cfg, dict) else []
                 if not isinstance(raw, list):
                     continue
                 paths = [Path(p) for p in raw if p and Path(p).is_file()]
-                if paths:
-                    selections[track_id] = paths
+                selections[track_id] = paths
             schedule_on_main(self, self._apply_audio_library_selections, selections)
 
         threading.Thread(target=worker, daemon=True).start()
 
     def _apply_audio_library_selections(self, selections: dict[str, list[Path]]) -> None:
-        for track_id, paths in selections.items():
+        for track_id in self._audio_library_tabs:
+            paths = selections.get(track_id, [])
             tab = self._audio_library_tabs.get(track_id)
             if tab is None:
                 continue
@@ -2382,7 +2640,13 @@ class RelaxAsmrApp(tk.Tk):
             self._set_rpp(rpp)
         else:
             self.rpp_path = None
-            
+            if self._cfg.get("last_rpp"):
+                self._cfg.pop("last_rpp", None)
+                self._save_config()
+
+        if prev_scene != scene:
+            self._on_scene_changed(prev_scene, scene)
+
         # 2. 自动关联物料（baseURL/material/）
         out_dir = base_material_dir()
         if out_dir.is_dir():
@@ -2515,17 +2779,21 @@ class RelaxAsmrApp(tk.Tk):
         if hasattr(self, "lbl_preview_video_name"):
             self.lbl_preview_video_name.configure(text=name)
 
+    def _set_title_text(self, widget: tk.Text, text: str) -> None:
+        """更新只读标题 Text（可选中/复制）。"""
+        widget.configure(state=tk.NORMAL)
+        widget.delete("1.0", tk.END)
+        widget.insert("1.0", text)
+        widget.mark_set(tk.INSERT, "1.0")
+        widget.see("1.0")
+
     def _update_cover_metadata(self) -> None:
-        if not hasattr(self, "lbl_cover_title_en"):
+        if not hasattr(self, "txt_cover_title_en"):
             return
         title_en, desc_en, _, _ = self._load_material_meta_fields()
-        wrap = max(
-            getattr(self, "cover_body", self).winfo_width() - getattr(self, "_cover_slot_w", 213) - 24,
-            160,
-        )
-        self.lbl_cover_title_en.configure(
-            text=title_en or "（无 English Title）",
-            wraplength=wrap,
+        self._set_title_text(
+            self.txt_cover_title_en,
+            title_en or "（无 English Title）",
         )
         self.txt_cover_desc_en.configure(state=tk.NORMAL)
         self.txt_cover_desc_en.delete("1.0", tk.END)
@@ -2534,16 +2802,12 @@ class RelaxAsmrApp(tk.Tk):
         self._update_preview_metadata()
 
     def _update_preview_metadata(self) -> None:
-        if not hasattr(self, "lbl_preview_title_zh"):
+        if not hasattr(self, "txt_preview_title_zh"):
             return
         _, _, title_zh, desc_zh = self._load_material_meta_fields()
-        wrap = max(
-            getattr(self, "preview_body", self).winfo_width() - getattr(self, "_preview_slot_w", 213) - 24,
-            160,
-        )
-        self.lbl_preview_title_zh.configure(
-            text=title_zh or "（无中文标题）",
-            wraplength=wrap,
+        self._set_title_text(
+            self.txt_preview_title_zh,
+            title_zh or "（无中文标题）",
         )
         self.txt_preview_desc_zh.configure(state=tk.NORMAL)
         self.txt_preview_desc_zh.delete("1.0", tk.END)
@@ -2765,16 +3029,16 @@ class RelaxAsmrApp(tk.Tk):
         is_aigc = mode == "aigc"
         if prev == "aigc" and not is_aigc:
             self._stop_cover_video_loop()
-        if hasattr(self, "lbl_cover_title_en"):
+        if hasattr(self, "txt_cover_title_en"):
             if is_aigc:
-                self.lbl_cover_title_en.grid_remove()
+                self.txt_cover_title_en.grid_remove()
             else:
-                self.lbl_cover_title_en.grid()
-        if hasattr(self, "lbl_preview_title_zh"):
+                self.txt_cover_title_en.grid()
+        if hasattr(self, "txt_preview_title_zh"):
             if is_aigc:
-                self.lbl_preview_title_zh.grid_remove()
+                self.txt_preview_title_zh.grid_remove()
             else:
-                self.lbl_preview_title_zh.grid()
+                self.txt_preview_title_zh.grid()
         if hasattr(self, "preview_i2v_image_canvas"):
             if is_aigc:
                 self.preview_i2v_image_canvas.grid()
@@ -3046,14 +3310,8 @@ class RelaxAsmrApp(tk.Tk):
                 anchor=tk.CENTER,
             )
             self._cover_img = None
-        if hasattr(self, "lbl_cover_title_en"):
-            wrap = max(
-                getattr(self, "cover_body", self).winfo_width()
-                - getattr(self, "_cover_slot_w", 213)
-                - 24,
-                160,
-            )
-            self.lbl_cover_title_en.configure(text=title or "—", wraplength=wrap)
+        if hasattr(self, "txt_cover_title_en"):
+            self._set_title_text(self.txt_cover_title_en, title or "—")
             self.txt_cover_desc_en.configure(state=tk.NORMAL)
             self.txt_cover_desc_en.delete("1.0", tk.END)
             if description:
@@ -3061,15 +3319,9 @@ class RelaxAsmrApp(tk.Tk):
             self.txt_cover_desc_en.configure(state=tk.DISABLED)
 
     def _set_preview_panel_metadata(self, *, title: str, description: str) -> None:
-        if not hasattr(self, "lbl_preview_title_zh"):
+        if not hasattr(self, "txt_preview_title_zh"):
             return
-        wrap = max(
-            getattr(self, "preview_body", self).winfo_width()
-            - getattr(self, "_preview_slot_w", 213)
-            - 24,
-            160,
-        )
-        self.lbl_preview_title_zh.configure(text=title or "—", wraplength=wrap)
+        self._set_title_text(self.txt_preview_title_zh, title or "—")
         self.txt_preview_desc_zh.configure(state=tk.NORMAL)
         self.txt_preview_desc_zh.delete("1.0", tk.END)
         if description:
@@ -3129,13 +3381,7 @@ class RelaxAsmrApp(tk.Tk):
         if not hasattr(self, "txt_preview_desc_zh"):
             return
         prompt = (self._series_last_video_prompt or "").strip()
-        wrap = max(
-            getattr(self, "preview_body", self).winfo_width()
-            - getattr(self, "_preview_slot_w", 213)
-            - 24,
-            160,
-        )
-        self.lbl_preview_title_zh.configure(text="", wraplength=wrap)
+        self._set_title_text(self.txt_preview_title_zh, "")
         self.txt_preview_desc_zh.configure(state=tk.NORMAL)
         self.txt_preview_desc_zh.delete("1.0", tk.END)
         if prompt:

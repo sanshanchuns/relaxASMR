@@ -76,6 +76,19 @@ def lab_params() -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def save_lab_params(updates: dict) -> Path:
+    """更新 params.json 中的字段（如 duration_sec）。"""
+    path = t2v_lab_dir() / "params.json"
+    data = lab_params()
+    data.update(updates)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(
+        json.dumps(data, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    return path
+
+
 def _index_path() -> Path:
     return t2v_lab_dir() / "index.csv"
 
@@ -98,6 +111,7 @@ def create_run(
     prompt_table: str = "",
     slots: dict | None = None,
     repeat_index: int | None = None,
+    duration_sec: int | None = None,
 ) -> T2vRun:
     """新建 run 目录并写入 **送模正文** prompt；表格另存 meta。"""
     from scripts.aigc_lab.prompt_atoms import (
@@ -112,6 +126,7 @@ def create_run(
     run_dir = t2v_runs_dir() / run_id
     run_dir.mkdir(parents=True, exist_ok=True)
     params = lab_params()
+    dur = int(duration_sec if duration_sec is not None else params.get("duration_sec", 4))
     run = T2vRun(run_id=run_id, dir=run_dir)
     run.save_prompt(prompt)
     run.save_meta(
@@ -121,7 +136,7 @@ def create_run(
             "model": params.get("model", "Seedance 2.0 VIP"),
             "aspect_ratio": params.get("aspect_ratio", "16:9"),
             "resolution": params.get("resolution", "720P"),
-            "duration_sec": int(params.get("duration_sec", 4)),
+            "duration_sec": dur,
             "rain_mode": mode,
             "rain_label": RAIN_MODE_LABELS.get(mode, mode),
             "prompt_table": prompt_table,
@@ -192,6 +207,24 @@ def load_run(run_id: str) -> T2vRun:
     if run.scores_path.is_file():
         run.scores = json.loads(run.scores_path.read_text(encoding="utf-8"))
     return run
+
+
+def slots_from_run(run: T2vRun) -> dict[str, list[str]]:
+    """从 run meta.slots 或 prompt_table 解析六槽原子列表。"""
+    from scripts.aigc_lab.prompt_atoms import SLOT_ORDER, parse_table
+
+    meta = run.meta or {}
+    raw = meta.get("slots") or {}
+    if isinstance(raw, dict) and any(raw.values()):
+        out: dict[str, list[str]] = {}
+        for key in SLOT_ORDER:
+            vals = raw.get(key) or []
+            out[key] = [str(x).strip() for x in vals if str(x).strip()]
+        return out
+    table = str(meta.get("prompt_table") or "")
+    if table.strip():
+        return parse_table(table)
+    return {key: [] for key in SLOT_ORDER}
 
 
 def list_runs(*, newest_first: bool = True) -> list[T2vRun]:
