@@ -74,6 +74,45 @@ def export_mp4_belongs_to_scene(
     return True
 
 
+def export_wav_belongs_to_scene(
+    path: Path,
+    scene_id: str,
+    *,
+    minutes: float | None = None,
+) -> bool:
+    """导出混音 WAV 须属于当前场景序号，且文件名含目标时长标记（如 180min / 3h）。"""
+    return export_mp4_belongs_to_scene(path, scene_id, minutes=minutes)
+
+
+def find_export_wav_for_scene(
+    scene_id: str,
+    *,
+    minutes: float | None = None,
+    export_root: Path | None = None,
+) -> Path | None:
+    """在 export 目录查找同序号、含目标时长标记的混音 WAV（含 legacy ``3h`` 命名）。"""
+    import re
+
+    from scripts.config.paths import export_dir
+
+    root = export_root or export_dir()
+    if not root.is_dir():
+        return None
+    match = re.search(r"\d+", scene_id)
+    num = match.group() if match else scene_id
+    duration_tokens = duration_filename_tokens(minutes) if minutes is not None else None
+    candidates: list[Path] = []
+    for path in root.glob(f"*{num}*.wav"):
+        if not export_wav_belongs_to_scene(path, scene_id, minutes=minutes):
+            continue
+        if duration_tokens and not any(token in path.stem for token in duration_tokens):
+            continue
+        candidates.append(path)
+    if not candidates:
+        return None
+    return max(candidates, key=lambda p: p.stat().st_mtime)
+
+
 def find_export_mp4_for_scene(
     scene_id: str,
     *,

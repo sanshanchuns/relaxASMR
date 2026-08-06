@@ -27,7 +27,7 @@ from PIL import Image, ImageTk
 
 from gui.agy_quota_panel import AgyQuotaPanel
 from gui.tk_thread import bind_ui_root, schedule_on_main
-from gui.ui_theme import LIGHT, UiTheme, grid_theme, make_ime_entry, paint_widget_bg, style_ime_entry
+from gui.ui_theme import LIGHT, UiTheme, grid_theme, paint_widget_bg
 from gui.video_quota_panel import VideoQuotaPanel
 from scripts.config.paths import base_url, series_dir, series_video_dir
 from scripts.series_video import video_gen
@@ -70,7 +70,7 @@ SEED_W = 260
 SEED_H = 146
 CAND_W = SEED_W - 16
 CAND_H = 90
-# 关键字 / 限定词输入框宽度（中文 IME 需要比纯英文略宽）
+# 关键字 / 限定词输入框宽度
 KEYWORD_ENTRY_WIDTH = 16
 CAND_COLS = 1
 # 系列视频来源：下拉显示名 → video_gen provider id
@@ -209,7 +209,6 @@ class SeriesVideoTab(ttk.Frame):
         self._ui_theme = LIGHT
         self._grid_theme = grid_theme(LIGHT)
         self._muted_labels: list[ttk.Label] = []
-        self._ime_entries: list[tk.Entry] = []
         self._photo_refs: list[ImageTk.PhotoImage] = []
         self._img_cells: dict[str, dict] = {}
         self._vid_cells: dict[str, dict] = {}
@@ -416,14 +415,10 @@ class SeriesVideoTab(ttk.Frame):
         ttk.Label(row_seed, text="种子图 |").pack(side=tk.LEFT)
         ttk.Label(row_seed, text="灵感词").pack(side=tk.LEFT, padx=(4, 2))
         self.seed_idea_var = tk.StringVar()
-        self._seed_idea_entry = make_ime_entry(
-            row_seed,
-            self.seed_idea_var,
-            width=KEYWORD_ENTRY_WIDTH,
-            theme=self._ui_theme,
+        self._seed_idea_entry = ttk.Entry(
+            row_seed, textvariable=self.seed_idea_var, width=KEYWORD_ENTRY_WIDTH
         )
         self._seed_idea_entry.pack(side=tk.LEFT, padx=(0, 8))
-        self._ime_entries.append(self._seed_idea_entry)
         ttk.Label(row_seed, text="张数").pack(side=tk.LEFT)
         self.seed_count_var = tk.IntVar(value=3)
         ttk.Spinbox(
@@ -443,14 +438,10 @@ class SeriesVideoTab(ttk.Frame):
         ttk.Label(row_img, text="系列图 |").pack(side=tk.LEFT)
         ttk.Label(row_img, text="限定词").pack(side=tk.LEFT, padx=(4, 2))
         self.series_constraints_var = tk.StringVar()
-        self._series_constraints_entry = make_ime_entry(
-            row_img,
-            self.series_constraints_var,
-            width=KEYWORD_ENTRY_WIDTH,
-            theme=self._ui_theme,
+        self._series_constraints_entry = ttk.Entry(
+            row_img, textvariable=self.series_constraints_var, width=KEYWORD_ENTRY_WIDTH
         )
         self._series_constraints_entry.pack(side=tk.LEFT, padx=(0, 8))
-        self._ime_entries.append(self._series_constraints_entry)
         ttk.Label(row_img, text="张数").pack(side=tk.LEFT)
         self.count_var = tk.IntVar(value=3)
         ttk.Spinbox(row_img, from_=1, to=20, width=3, textvariable=self.count_var).pack(
@@ -1763,8 +1754,6 @@ class SeriesVideoTab(ttk.Frame):
         self._grid_theme = grid_theme(theme)
         for lbl in self._muted_labels:
             lbl.configure(foreground=self._grid_theme.fg_muted)
-        for entry in self._ime_entries:
-            style_ime_entry(entry, theme)
         for canvas in (
             self.seed_canvas,
             self.cand_canvas,

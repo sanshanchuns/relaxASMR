@@ -7,7 +7,9 @@ from unittest.mock import patch
 
 from gui.export_wav import (
     export_mp4_belongs_to_scene,
+    export_wav_belongs_to_scene,
     find_export_mp4_for_scene,
+    find_export_wav_for_scene,
     format_mp4_export_stats_suffix,
     format_size_compact_bytes,
     wav_matches_target_minutes,
@@ -49,6 +51,45 @@ def test_export_mp4_belongs_to_scene(tmp_path: Path) -> None:
     assert export_mp4_belongs_to_scene(legacy, "MVI_7004", minutes=180.0)
     assert not export_mp4_belongs_to_scene(other, "MVI_7004", minutes=180.0)
     assert not export_mp4_belongs_to_scene(own, "MVI_7004", minutes=120.0)
+
+
+def test_export_wav_belongs_to_scene(tmp_path: Path) -> None:
+    own = tmp_path / "MVI_7004_180min.wav"
+    other = tmp_path / "MVI_6989_180min.wav"
+    legacy = tmp_path / "MVI_7004_3h.wav"
+    own.write_bytes(b"x")
+    other.write_bytes(b"x")
+    legacy.write_bytes(b"x")
+    assert export_wav_belongs_to_scene(own, "MVI_7004", minutes=180.0)
+    assert export_wav_belongs_to_scene(legacy, "MVI_7004", minutes=180.0)
+    assert not export_wav_belongs_to_scene(other, "MVI_7004", minutes=180.0)
+    assert not export_wav_belongs_to_scene(own, "MVI_7004", minutes=120.0)
+
+
+def test_find_export_wav_for_scene_legacy_3h(tmp_path: Path) -> None:
+    legacy = tmp_path / "MVI_7047_3h.wav"
+    legacy.write_bytes(b"ok")
+    found = find_export_wav_for_scene("MVI_7047", minutes=180.0, export_root=tmp_path)
+    assert found == legacy
+
+
+def test_find_export_wav_for_scene(tmp_path: Path) -> None:
+    old = tmp_path / "MVI_7004_180min.wav"
+    newer = tmp_path / "MVI_7004_3h.wav"
+    wrong = tmp_path / "MVI_6989_180min.wav"
+    old.write_bytes(b"old")
+    newer.write_bytes(b"newer")
+    wrong.write_bytes(b"wrong")
+    old_ts = 1_000_000_000
+    newer_ts = 2_000_000_000
+    old.touch()
+    newer.touch()
+    import os
+
+    os.utime(old, (old_ts, old_ts))
+    os.utime(newer, (newer_ts, newer_ts))
+    found = find_export_wav_for_scene("MVI_7004", minutes=180.0, export_root=tmp_path)
+    assert found == newer
 
 
 def test_find_export_mp4_for_scene_legacy_3h(tmp_path: Path) -> None:

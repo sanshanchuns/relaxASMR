@@ -45,6 +45,23 @@ def cmd_generate(args: argparse.Namespace) -> int:
     return 0
 
 
+def cmd_generate_t2v(args: argparse.Namespace) -> int:
+    client = JimengWebClient()
+    try:
+        out = client.generate_t2v(
+            args.prompt,
+            Path(args.out),
+            duration_sec=args.duration,
+            model=args.model,
+            log=print,
+        )
+    except JimengWebError as exc:
+        print(f"生成失败：{exc}", file=sys.stderr)
+        return 1
+    print(f"OK → {out}")
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="jimeng_web", description="即梦网页 Playwright 图生视频")
     sub = parser.add_subparsers(dest="cmd", required=True)
@@ -60,6 +77,12 @@ def main(argv: list[str] | None = None) -> int:
     gen.add_argument("--model", default=None, help="默认 Seedance 2.0 VIP")
     gen.add_argument("--ref-mode", default=None, help="默认 首尾帧")
 
+    t2v = sub.add_parser("generate-t2v", help="文生视频（需先 login）")
+    t2v.add_argument("--prompt", required=True)
+    t2v.add_argument("--out", required=True)
+    t2v.add_argument("--duration", type=int, default=4)
+    t2v.add_argument("--model", default=None, help="默认 Seedance 2.0 VIP")
+
     args = parser.parse_args(argv)
     if args.cmd == "login":
         return cmd_login(args)
@@ -67,6 +90,8 @@ def main(argv: list[str] | None = None) -> int:
         return cmd_status(args)
     if args.cmd == "generate":
         return cmd_generate(args)
+    if args.cmd == "generate-t2v":
+        return cmd_generate_t2v(args)
     return 1
 
 

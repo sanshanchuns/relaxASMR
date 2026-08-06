@@ -4,6 +4,8 @@ from __future__ import annotations
 
 import fcntl
 import os
+import shutil
+import subprocess
 import time
 from collections.abc import Callable, Iterator
 from contextlib import contextmanager
@@ -394,12 +396,135 @@ def _video_srcs(page) -> list[str]:
             page.evaluate(
                 """() => [...document.querySelectorAll('video')]
                   .map((v) => v.currentSrc || v.src || '')
-                  .filter((s) => s.startsWith('http'))"""
+                  .filter((s) => s.startsWith('http') || s.startsWith('blob:'))"""
             )
             or []
         )
     except Exception:  # noqa: BLE001
         return []
+
+
+def _min_video_bytes(expect_duration_sec: int) -> int:
+    """4s / 720p 成片可低至 ~400KB；旧阈值 800KB 会误杀正常成片。"""
+    sec = max(1, int(expect_duration_sec))
+    return max(280_000, sec * 60_000)
+
+
+def _ffprobe_duration(path: Path) -> float:
+    exe = shutil.which("ffprobe")
+    if exe is None or not path.is_file():
+        return 0.0
+    proc = subprocess.run(
+        [
+            exe,
+            "-v",
+            "error",
+            "-show_entries",
+            "format=duration",
+            "-of",
+            "default=noprint_wrappers=1:nokey=1",
+            str(path),
+        ],
+        capture_output=True,
+        text=True,
+    )
+    try:
+        return float((proc.stdout or "").strip())
+    except ValueError:
+        return 0.0
+
+
+def _video_looks_valid(path: Path, expect_duration_sec: int | None) -> bool:
+    """优先 ffprobe 看时长；无 ffprobe 时用更宽松的体积极下限。"""
+    if not path.is_file():
+        return False
+    size = path.stat().st_size
+    if size < 1024:
+        return False
+    if expect_duration_sec is None:
+        return True
+    dur = _ffprobe_duration(path)
+    if dur > 0:
+        return dur >= expect_duration_sec * 0.75
+    return size >= _min_video_bytes(expect_duration_sec)
+
+
+def _save_blob(page, url: str, dest: Path, *, log: LogFn = None) -> bool:
+    """blob: 只能在页面上下文 fetch，不能走 context.request。"""
+    try:
+        data = page.evaluate(
+            """async (blobUrl) => {
+              const resp = await fetch(blobUrl);
+              if (!resp.ok) return null;
+              const buf = await resp.arrayBuffer();
+              return Array.from(new Uint8Array(buf));
+            }""",
+            url,
+        )
+        if not data or len(data) < 1024:
+            return False
+        dest.write_bytes(bytes(data))
+        log_line(log, f"  ✓ 已从 blob 保存（{len(data)} bytes）")
+        return True
+    except Exception as exc:  # noqa: BLE001
+        log_line(log, f"  … blob 下载失败：{exc}")
+        return False
+
+
+def _save_url(context, page, url: str, dest: Path, *, log: LogFn = None) -> bool:
+    """http(s) 走 request；blob 走页面 fetch。"""
+    if url.startswith("blob:"):
+        return _save_blob(page, url, dest, log=log)
+    try:
+        resp = context.request.get(url, timeout=180_000)
+        if not resp.ok:
+            log_line(log, f"  … 直链 HTTP {resp.status}")
+            return False
+        body = resp.body()
+        if len(body) < 1024:
+            return False
+        dest.write_bytes(body)
+        log_line(log, f"  ✓ 已从 video 直链保存（{len(body)} bytes）")
+        return True
+    except Exception as exc:  # noqa: BLE001
+        log_line(log, f"  … 直链下载失败：{exc}")
+        return False
+
+
+def _try_ui_download(page, dest: Path, *, log: LogFn = None) -> bool:
+    """点播放器/结果卡上的下载控件（含仅图标按钮）。"""
+    selectors = (
+        '[aria-label*="下载"]',
+        '[title*="下载"]',
+        '[aria-label*="Download"]',
+        '[title*="Download"]',
+    )
+    for sel in selectors:
+        try:
+            loc = page.locator(sel).first
+            if loc.count() == 0 or not loc.is_visible(timeout=300):
+                continue
+            with page.expect_download(timeout=60_000) as dl_info:
+                loc.click(timeout=5000)
+            dl_info.value.save_as(str(dest))
+            log_line(log, f"  ✓ 已通过下载图标保存（{sel}）")
+            return True
+        except Exception:  # noqa: BLE001
+            continue
+
+    for label in ("下载", "Download", "导出"):
+        try:
+            btn = page.get_by_role("button", name=label).first
+            if btn.count() == 0 or not btn.is_visible(timeout=300):
+                continue
+            with page.expect_download(timeout=60_000) as dl_info:
+                btn.click(timeout=5000)
+            dl_info.value.save_as(str(dest))
+            log_line(log, f"  ✓ 已通过「{label}」下载")
+            return True
+        except Exception:  # noqa: BLE001
+            continue
+    return False
 
 
 def _alive_page(context, page):
@@ -416,24 +541,6 @@ def _alive_page(context, page):
         except Exception:  # noqa: BLE001
             continue
     return None
-
-
-def _save_url(context, url: str, dest: Path, *, log: LogFn = None) -> bool:
-    """用浏览器上下文拉视频直链（带 cookie / referer）。"""
-    try:
-        resp = context.request.get(url, timeout=180_000)
-        if not resp.ok:
-            log_line(log, f"  … 直链 HTTP {resp.status}")
-            return False
-        body = resp.body()
-        if len(body) < 1024:
-            return False
-        dest.write_bytes(body)
-        log_line(log, f"  ✓ 已从 video 直链保存（{len(body)} bytes）")
-        return True
-    except Exception as exc:  # noqa: BLE001
-        log_line(log, f"  … 直链下载失败：{exc}")
-        return False
 
 
 def _read_dream_progress(page) -> int | None:
@@ -469,6 +576,108 @@ def _read_dream_progress(page) -> int | None:
         )
     except Exception:  # noqa: BLE001
         return None
+
+
+def _log_video_srcs(srcs: list[str], *, log: LogFn = None, prefix: str = "  …") -> None:
+    if not srcs:
+        return
+    for i, src in enumerate(srcs, start=1):
+        log_line(log, f"{prefix} video 链接 [{i}/{len(srcs)}]：{src}")
+
+
+def _download_video_candidates(
+    page,
+    context,
+    dest: Path,
+    srcs: list[str],
+    *,
+    expect_duration_sec: int | None = None,
+    log: LogFn = None,
+    progress: ProgressFn = None,
+) -> bool:
+    ordered = sorted(
+        srcs,
+        key=lambda s: (0 if s.startswith("blob:") else 1, -len(s)),
+    )
+    for src in ordered:
+        if not _save_url(context, page, src, dest, log=log):
+            continue
+        if expect_duration_sec and not _video_looks_valid(dest, expect_duration_sec):
+            dur = _ffprobe_duration(dest)
+            log_line(
+                log,
+                "  … 文件未通过校验"
+                f"（{dest.stat().st_size} bytes"
+                + (f", ffprobe={dur:.1f}s" if dur > 0 else "")
+                + "），尝试下一条链接",
+            )
+            dest.unlink(missing_ok=True)
+            continue
+        if progress:
+            try:
+                progress(100)
+            except Exception:  # noqa: BLE001
+                pass
+        return True
+    return False
+
+
+def _try_download_existing_on_page(
+    page,
+    context,
+    dest: Path,
+    *,
+    prompt_hint: str = "",
+    expect_duration_sec: int | None = None,
+    log: LogFn = None,
+    progress: ProgressFn = None,
+) -> bool:
+    """页面上已有同 prompt 的完成结果时直接下载，不再提交新任务。"""
+    hint = (prompt_hint or "").strip()[:40]
+    if not hint:
+        return False
+    try:
+        body = page.locator("body").inner_text(timeout=4000) or ""
+    except Exception:  # noqa: BLE001
+        return False
+    if hint not in body:
+        return False
+    try:
+        ready_ui = page.get_by_text("再次生成", exact=False).count() > 0
+    except Exception:  # noqa: BLE001
+        ready_ui = False
+    if not ready_ui:
+        return False
+    srcs = _video_srcs(page)
+    if not srcs:
+        return False
+    log_line(log, "[Jimeng] 页面已有同 prompt 完成结果，直接下载（跳过提交）")
+    _log_video_srcs(srcs, log=log)
+    if _download_video_candidates(
+        page,
+        context,
+        dest,
+        srcs,
+        expect_duration_sec=expect_duration_sec,
+        log=log,
+        progress=progress,
+    ):
+        return True
+    if _try_ui_download(page, dest, log=log):
+        if expect_duration_sec and not _video_looks_valid(dest, expect_duration_sec):
+            log_line(
+                log,
+                f"  … UI 下载未通过校验（{dest.stat().st_size} bytes）",
+            )
+            dest.unlink(missing_ok=True)
+            return False
+        if progress:
+            try:
+                progress(100)
+            except Exception:  # noqa: BLE001
+                pass
+        return True
+    return False
 
 
 def _wait_result_and_download(
@@ -545,46 +754,41 @@ def _wait_result_and_download(
                 if appeared_at is None:
                     appeared_at = time.monotonic()
                     log_line(log, "  … 检测到新结果 video，准备下载")
+                    _log_video_srcs(srcs, log=log)
                 stable = (time.monotonic() - appeared_at) >= 2.0
                 ok_to_save = stable and (ready_ui or prompt_hit or not prompt_hint)
                 if ok_to_save:
-                    for src in sorted(srcs, key=len, reverse=True):
-                        if _save_url(context, src, dest, log=log):
-                            if expect_duration_sec and dest.is_file():
-                                min_bytes = max(800_000, expect_duration_sec * 200_000)
-                                if dest.stat().st_size < min_bytes:
-                                    log_line(
-                                        log,
-                                        f"  … 文件偏小（{dest.stat().st_size} bytes），可能非目标结果，继续等",
-                                    )
-                                    ignore.add(src)
-                                    dest.unlink(missing_ok=True)
-                                    appeared_at = None
-                                    continue
-                            if progress:
-                                try:
-                                    progress(100)
-                                except Exception:  # noqa: BLE001
-                                    pass
-                            return
+                    if _download_video_candidates(
+                        page,
+                        context,
+                        dest,
+                        srcs,
+                        expect_duration_sec=expect_duration_sec,
+                        log=log,
+                        progress=progress,
+                    ):
+                        return
+                    appeared_at = None
+                    for src in srcs:
+                        ignore.add(src)
 
-            for label in ("下载", "Download", "导出"):
-                try:
-                    btn = page.get_by_role("button", name=label).first
-                    if btn.count() == 0 or not btn.is_visible(timeout=300):
-                        continue
-                    with page.expect_download(timeout=60_000) as dl_info:
-                        btn.click(timeout=5000)
-                    dl_info.value.save_as(str(dest))
-                    log_line(log, f"  ✓ 已通过「{label}」下载")
-                    if progress:
-                        try:
-                            progress(100)
-                        except Exception:  # noqa: BLE001
-                            pass
-                    return
-                except Exception:  # noqa: BLE001
-                    continue
+            if (ready_ui or prompt_hit) and not busy:
+                if _try_ui_download(page, dest, log=log):
+                    if expect_duration_sec and not _video_looks_valid(
+                        dest, expect_duration_sec
+                    ):
+                        log_line(
+                            log,
+                            f"  … UI 下载未通过校验（{dest.stat().st_size} bytes），继续等",
+                        )
+                        dest.unlink(missing_ok=True)
+                    else:
+                        if progress:
+                            try:
+                                progress(100)
+                            except Exception:  # noqa: BLE001
+                                pass
+                        return
 
             page.wait_for_timeout(2500)
         except JimengWebError:
@@ -691,6 +895,157 @@ class JimengWebClient:
         except BrowserError as exc:
             raise JimengWebError(str(exc)) from exc
 
+    def _open_video_composer(
+        self,
+        page,
+        *,
+        video_model: str,
+        aspect_ratio: str,
+        resolution: str,
+        seconds: int,
+        log: LogFn = None,
+        ref_mode: str | None = None,
+    ) -> None:
+        """打开首页并固定模型 / 画幅 / 时长；``ref_mode`` 为 None 时不改参考模式（文生）。"""
+        log_line(log, "[Jimeng] 打开视频生成页 …")
+        page.goto(CANVAS_URL, wait_until="domcontentloaded", timeout=90_000)
+        page.wait_for_timeout(2000)
+        dismiss_modals(page, log=log)
+
+        if not _dom_logged_in(page):
+            snap = save_debug(page, DEBUG_DIR, "not_logged_in")
+            raise JimengWebError(
+                "即梦未登录；请先 python -m jimeng_web login"
+                + (f"（截图 {snap}）" if snap else "")
+            )
+        _mark_logged_in(True)
+
+        _ensure_video_mode(page, log=log)
+        dismiss_modals(page, rounds=2, log=log)
+        _ensure_video_model(page, model=video_model, log=log)
+        dismiss_modals(page, rounds=2, log=log)
+        if ref_mode is not None:
+            _ensure_ref_mode(page, mode=ref_mode, log=log)
+        _ensure_aspect_resolution(
+            page,
+            aspect_ratio=aspect_ratio,
+            resolution=resolution,
+            log=log,
+        )
+        _ensure_duration(page, duration_sec=seconds, log=log)
+        dismiss_modals(page, rounds=1, log=log)
+
+    def generate_t2v(
+        self,
+        prompt: str,
+        out_path: Path,
+        *,
+        duration_sec: int = 4,
+        aspect_ratio: str = DEFAULT_ASPECT,
+        model: str | None = None,
+        resolution: str = DEFAULT_RESOLUTION,
+        log: LogFn = None,
+        progress: ProgressFn = None,
+    ) -> Path:
+        """文生视频：不上传参考图，只填 prompt。"""
+        ok, reason = self.available()
+        if not ok:
+            raise JimengWebError(reason)
+
+        if not prompt.strip():
+            raise JimengWebError("prompt 不能为空")
+
+        video_model = (model or DEFAULT_VIDEO_MODEL).strip()
+        seconds = int(duration_sec)
+
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        part = out_path.with_suffix(out_path.suffix + ".part")
+
+        try:
+            with _profile_lock(blocking=True):
+                with browser_context(
+                    profile_dir=PROFILE_DIR, env_key="JIMENG_HEADLESS"
+                ) as context:
+                    page = context.new_page()
+                    self._open_video_composer(
+                        page,
+                        video_model=video_model,
+                        aspect_ratio=aspect_ratio,
+                        resolution=resolution,
+                        seconds=seconds,
+                        log=log,
+                        ref_mode=None,
+                    )
+
+                    if _try_download_existing_on_page(
+                        page,
+                        context,
+                        part,
+                        prompt_hint=prompt.strip(),
+                        expect_duration_sec=seconds,
+                        log=log,
+                        progress=progress,
+                    ):
+                        if not part.is_file() or part.stat().st_size < 1024:
+                            raise JimengWebError("下载结果为空")
+                        os.replace(part, out_path)
+                        log_line(
+                            log,
+                            f"[Jimeng] 已保存 {out_path.name}（{out_path.stat().st_size} bytes）",
+                        )
+                        return out_path
+
+                    if not fill_prompt_text(page, prompt.strip(), log=log):
+                        snap = save_debug(page, DEBUG_DIR, "no_prompt_box")
+                        raise JimengWebError(
+                            "未找到 prompt 输入框"
+                            + (f"；截图 {snap}" if snap else "")
+                        )
+
+                    before_srcs = set(_video_srcs(page))
+                    log_line(
+                        log,
+                        f"[Jimeng] 提交文生（{video_model} / "
+                        f"{aspect_ratio} {resolution} / {seconds}s）…",
+                    )
+                    if not click_generate(page, log=log):
+                        snap = save_debug(page, DEBUG_DIR, "no_generate_btn")
+                        raise JimengWebError(
+                            "未找到生成按钮"
+                            + (f"；截图 {snap}" if snap else "")
+                        )
+
+                    log_line(log, "[Jimeng] 等待结果并下载 …")
+                    _wait_result_and_download(
+                        page,
+                        context,
+                        part,
+                        timeout_s=float(self.poll_timeout_sec),
+                        ignore_srcs=before_srcs,
+                        prompt_hint=prompt.strip(),
+                        expect_duration_sec=seconds,
+                        log=log,
+                        progress=progress,
+                    )
+
+                    if not part.is_file() or part.stat().st_size < 1024:
+                        raise JimengWebError("下载结果为空")
+                    os.replace(part, out_path)
+                    log_line(
+                        log,
+                        f"[Jimeng] 已保存 {out_path.name}（{out_path.stat().st_size} bytes）",
+                    )
+                    return out_path
+        except JimengWebError:
+            part.unlink(missing_ok=True)
+            raise
+        except BrowserError as exc:
+            part.unlink(missing_ok=True)
+            raise JimengWebError(str(exc)) from exc
+        except Exception as exc:  # noqa: BLE001
+            part.unlink(missing_ok=True)
+            raise JimengWebError(str(exc)) from exc
+
     def generate_i2v(
         self,
         image_path: Path,
@@ -723,32 +1078,15 @@ class JimengWebClient:
                     profile_dir=PROFILE_DIR, env_key="JIMENG_HEADLESS"
                 ) as context:
                     page = context.new_page()
-                    log_line(log, "[Jimeng] 打开视频生成页 …")
-                    page.goto(CANVAS_URL, wait_until="domcontentloaded", timeout=90_000)
-                    page.wait_for_timeout(2000)
-                    dismiss_modals(page, log=log)
-
-                    if not _dom_logged_in(page):
-                        snap = save_debug(page, DEBUG_DIR, "not_logged_in")
-                        raise JimengWebError(
-                            "即梦未登录；请先 python -m jimeng_web login"
-                            + (f"（截图 {snap}）" if snap else "")
-                        )
-                    _mark_logged_in(True)
-
-                    _ensure_video_mode(page, log=log)
-                    dismiss_modals(page, rounds=2, log=log)
-                    _ensure_video_model(page, model=video_model, log=log)
-                    dismiss_modals(page, rounds=2, log=log)
-                    _ensure_ref_mode(page, mode=reference, log=log)
-                    _ensure_aspect_resolution(
+                    self._open_video_composer(
                         page,
+                        video_model=video_model,
                         aspect_ratio=aspect_ratio,
                         resolution=resolution,
+                        seconds=seconds,
                         log=log,
+                        ref_mode=reference,
                     )
-                    _ensure_duration(page, duration_sec=seconds, log=log)
-                    dismiss_modals(page, rounds=1, log=log)
 
                     log_line(log, f"[Jimeng] 上传参考图 {Path(staged).name}（{reference}）…")
                     if not _upload_loop_frames(

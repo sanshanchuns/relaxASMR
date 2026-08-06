@@ -10,6 +10,7 @@
 | 数据分析 | 子 Tab：我的数据 / 爆款分析 |
 | 素材库 | 视频 + 各音频库 |
 | 系列视频 | 种子图 → 系列图（agy）→ 5s loop 视频（外部 provider） |
+| AIGC | 文生视频实验台（Seedance 2.0 VIP · 六槽原子 · 断言批打） |
 
 入口：`python -m gui`。`cli/` 经 `ensure_cli_path()` 进 `sys.path`。
 
@@ -123,7 +124,10 @@ rubric 却要求「阴天柔和均匀光」。**改候选词库和 rubric 必须
 | 参考 | 默认 **首尾帧**（同图×2）；`JIMENG_REF_MODE` 可改全能参考 |
 | 画幅/时长 | 16:9 720P · **5s**（时长面板数字框 + Enter） |
 | 登录判定 | 侧栏无「登录」；`status` 勿信正文模糊匹配 |
-| 进度 | 读结果卡「`N%造梦中`」→ 日志 + GUI 第三列 |
+| 进度 | 读结果卡「`N%造梦中`」→ AIGC：**生成按钮** `造梦进度：N%`；系列视频：第三列 |
+| 落盘 | `<video>` 直链 / **blob:** / 下载图标；校验 ffprobe 或体积极下限；**检测到新结果时日志打印全部 video 链接** |
+| 已有结果 | 提交前若页面已有同 prompt +「再次生成」→ **直接下载，跳过提交** |
+| 手动入库 | ``attach_run_video(run_id, mp4)`` → ``runs/<id>/video.mp4`` |
 | 落盘 | 忽略历史 `<video>` → 等新片 → `context.request` 直链 |
 | Profile | `cli/jimeng_web/.profile/` + **`.profile.lock`**（防额度面板抢 Chromium） |
 | 共享基座 | 仓库根 `shared/browser.py`（**勿**再放 `cli/shared/`，与根 `shared` 撞名） |
@@ -135,6 +139,67 @@ PYTHONPATH=cli:. python -m jimeng_web generate \
 ```
 
 生成中勿点额度面板 Jimeng 刷新。失败截图：`cli/jimeng_web/debug/`。
+
+**文生（AIGC Tab）**：`generate_t2v(prompt, …)` · 默认 **4s** / 16:9 / 720p / Seedance 2.0 VIP（无参考图）。
+
+```bash
+PYTHONPATH=cli:. python -m jimeng_web generate-t2v --prompt "…" --out …/runs/xxx/video.mp4
+```
+
+---
+
+## AIGC 文生视频实验台（2026-08-06）
+
+**产品**：油管下雨 ASMR · 场景锁**原始热带雨林** · 雨势优先 **暴雨 > 大雨 > 小/中雨**。  
+**方法**：`aigc/plan.md` — 原子断言 → 基线测评 → 按需消融 → 固化规范。  
+**评分（标签级）**：  
+- **L1 画面**：agy 看抽帧，逐标签核对 **主体 / 环境 / 镜头 / 风格 / 约束**  
+- **L2 动作**：agy 看更密多帧 + `video_probe` 运动量，逐标签核对 **动作 / 约束**  
+模型 `gemini-3.6-flash` via agy；**不复用**工作流 Foley `analyze_with_vlm`。
+
+**学习池**：`aigc/t2v_lab/learned_pools.json`（按槽）。评分 yes → 日志 + **弹窗确认**后入池；人工：单击标签红框标不合格 →「合格标签入池」。行末 Combobox **优先池内标签**。
+
+| 路径 | 说明 |
+|---|---|
+| `scripts/aigc_lab/` | `prompt_atoms.py` · `store.py` · `score.py` · `tag_pools.py` |
+| `aigc/t2v_lab/` | `params.json` · `assertions.md` · `atom_pools.md` · `learned_pools.json` · `runs/` |
+| `gui/aigc_tab.py` | 六槽原子表 · 红框不合格 · 入池 · L1/L2 标签评分 |
+| `aigc/txt_video/` | Fast VIP 弱参考，**不进**主命中率表 |
+
+### 六槽原子
+
+| 槽 | id | 规则 |
+|---|---|---|
+| 主体/动作/环境 | 开放短句 | 雨档主要改 action/environment/style 的**可见结果** |
+| 镜头 | `camera` | 闭集：**固定镜头** + **平视\|仰视\|俯视**（不写焦距/广角/景别） |
+| 风格 | `style` | 官方 keyword **1–3** + 官方 light **1** + 产品 ASMR 音频 **1** |
+| 约束 | `constraints` | 核心必选（含**无慢动作**）+ 产品常选 |
+
+**展示**：GUI **标签芯片**（`原子文案 ×`，点 × 删除；行末输入框/`+` 新增；自动换行）；**送模**：各槽原子按序用中文逗号拼接，无「主体：」、无 `+`。  
+`clamp_closed_slots` 丢弃池外词；旧中文风格可映射（如「阴沉冷色光」→ `overcast`）。
+
+**风格/光线池**（仅 Seedance 官方表，见 `atom_pools.md` / 手册）  
+keyword：`cinematic` `film tone` `35mm` `4K` `high detail` `sharp` `film grain` `analog` `vintage` `warm tone` `cool palette` `desaturated` `moody` `dreamy` `ethereal` `realistic` `natural` `documentary`  
+light：`golden hour` `rim light` `natural light` `neon` `backlit` `overcast`  
+**禁止** `短拖影` / `自然重力下落`（系列视频规范防慢放用语，非官方风格表；慢放只写约束「无慢动作」）。
+
+雨档默认 style 示例：`documentary + cool palette (+ desaturated/moody) + overcast + ASMR 句`。
+
+### GUI 行为（踩坑）
+
+| 项 | 行为 |
+|---|---|
+| 懒加载 | 启动**不**填基线；**首次**点 AIGC Tab → `after_idle(_fill_baseline)` + refresh runs + 即梦登录 |
+| 原子格空白（已修） | 旧：`pack(in_=)` + Configure 狂刷导致闪后空表 |
+| 布局 | 每槽固定结构：左 `tags_area`（可换行）+ 右 `add`（Entry/`+` 钉死右侧）；只重建左侧标签 |
+| 防闪 | 首次进 Tab：等宽度就绪后 `_fill_baseline_once` 只填一次；写入时 `_layout_frozen`；重进 Tab 不重建；Configure 防抖 120ms |
+| 配色 | 行底/标签/边框三色统一（浅 `#f3/#e4/#c8`，深 `#2d/#3c/#55`），无斑马纹 |
+| 标签交互 | 点 × 删；**单击标签**切换红框不合格；行末 Combobox 从学习池选或新输入；「合格标签入池」排除红框 |
+| 入池确认 | 自动评分 yes 候选：日志打印 + askyesno；不准时可否决；人工路径同按钮 |
+| 右侧预览 | 选 run → Prompt 详情 + AIGC 视频预览 |
+| 造梦进度 | 即梦页 `N%造梦中` → **仅**「生成视频」按钮显示 `造梦进度：N%`；**不写日志** |
+
+雨档下拉 / 「填入基线原子稿」会重写六槽。预览/生成**不钳制、不补核心约束**，完全以当前标签表拼接送模正文。
 
 ---
 
@@ -204,6 +269,39 @@ PYTHONPATH=cli:. python -m elevenlabs_web login
 
 ---
 
+## GUI · WSL 剪贴板（Tk Text 只能复制一次）
+
+**现象**：WSLg / VcXsrv 下 `tk.Text` 默认走 X11 `CLIPBOARD`；第一次 Ctrl+C 后 X 连接易坏
+（`X connection to :0 broken`），后续复制/粘贴失败。AIGC Prompt、日志区等均可复现。
+
+**方案**（同 `economist/gui/widgets.py`，本仓库 `gui/clipboard.py`）：
+
+| 函数 | 用途 |
+|---|---|
+| `setup_editable_text_copy` | 可编辑 Text：拦截 `<<Copy>>` / Ctrl+C，写 **Windows 宿主剪贴板**（PowerShell `Set-Clipboard`） |
+| `setup_copyable_readonly_text` | 只读 Text：可选中/复制/右键菜单；**勿用** `state=DISABLED`（禁用态收不到复制事件） |
+| `setup_global_clipboard_safety` | 全局安全粘贴（`<<Paste>>` / Ctrl+V），读 Windows 剪贴板，避免大 payload 走 X11 |
+
+**要点**
+- WSL 复制成功时 **不再** `clipboard_append` 到 Tk/X11（大段中文 prompt 会炸 DISPLAY）
+- 进程内保留 `root._relaxasmr_clipboard_hold` 供同 app 内粘贴兜底
+- CJK 须走 PowerShell UTF-16 stdin / 临时文件；**勿**用 `clip.exe` 传中文（CP936 乱码）
+
+**已接入**
+- `gui/app.py`：启动时 `setup_global_clipboard_safety`；日志区 `setup_copyable_readonly_text`
+- `gui/aigc_tab.py`：详情区 `setup_copyable_readonly_text`（Prompt 为六槽标签芯片，非大 Text）
+
+**新增 Text 控件时**：可编辑走 `setup_editable_text_copy`；只读走 `setup_copyable_readonly_text`，程序写内容直接 `delete`/`insert`，不要 toggling `DISABLED`。
+
+---
+
+## GUI · 输入法
+
+- 已删 `gui/ime_bootstrap.py` 及 `ui_theme.make_ime_entry` / `style_ime_entry`；系列视频灵感词等用默认 `ttk.Entry`
+- 启动日志**无** WSL 输入法提示；走系统默认 IME
+
+---
+
 ## 其他 Tab
 
 - 数据分析：YouTube API + agy；黑马 `views_per_day`；WSL 开 URL 用 Chrome profile
@@ -213,9 +311,9 @@ PYTHONPATH=cli:. python -m elevenlabs_web login
 
 ## 下一步
 
-1. **跑通一整批**：选暴雨助眠 → 出候选 → 看分类准不准 → 定稿 → 出系列图 → 出视频看验收拦不拦得住
-2. 三系列的 `frame_motion` 上界（60/16/7）只有下界是实测的，出片后按实际分布回调
-3. **elevenlabs_web** 有头联调：upload → generate → download（固化选择器）
-4. **elevenlabs_http** 修上传会话 422；captcha 时更新 `hcaptcha_token.md`
+1. **AIGC 跑通闭环**：进 Tab → 填基线 → 生成 4s 片 → L1+L2 评分 → 对照 `assertions.md` 调原子
+2. **跑通一整批**（系列视频）：选暴雨助眠 → 出候选 → 定稿 → 出系列图 → 出视频看验收
+3. 三系列 `frame_motion` 上界（60/16/7）出片后按分布回调
+4. **elevenlabs_web** 有头联调；**elevenlabs_http** 修上传 422
 5. 即梦额度 scraping（可选）补进额度面板
-6. GUI：生成完成后自动刷新批次预览（若仍显旧失败态，重载批次即可）
+6. AIGC：人标少量金标准 → 固化 prompt 规范（见 `aigc/plan.md` / `execution_plan.md`）

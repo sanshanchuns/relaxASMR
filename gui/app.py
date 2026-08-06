@@ -12,9 +12,6 @@ os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"  # Suppress TensorFlow warnings
 
 import sys
 
-from gui.ime_bootstrap import bootstrap_ime
-
-bootstrap_ime()
 import threading
 import shutil
 import time
@@ -65,6 +62,7 @@ from gui.ui_theme import (
     normalize_theme,
     theme_toggle_label,
 )  # noqa: E402
+from gui.clipboard import setup_copyable_readonly_text, setup_global_clipboard_safety
 from gui.export_mix_preview import ExportMixPreviewGrid  # noqa: E402
 from gui.tk_thread import bind_ui_root, ensure_ui_pump, schedule_on_main  # noqa: E402
 from gui.job_progress import make_elapsed_ticker, parse_progress_pct  # noqa: E402
@@ -72,6 +70,7 @@ from gui.export_wav import (  # noqa: E402
     expected_export_wav_path,
     export_mp4_belongs_to_scene,
     find_export_mp4_for_scene,
+    find_export_wav_for_scene,
     format_duration_short,
     format_mp4_export_stats_suffix,
     wav_duration_seconds,
@@ -113,6 +112,7 @@ YT_MATERIAL_SCRIPT = LIB_REPO_ROOT / "scripts" / "video_export" / "generate_yout
 
 # 视频预览临时文件前缀；每次预览一个独立文件，避免读到正在被覆盖的半截文件。
 PREVIEW_TMP_PREFIX = "relaxasmr_preview_"
+COVER_PREVIEW_TMP_PREFIX = "relaxasmr_cover_preview_"
 
 
 class RelaxAsmrApp(tk.Tk):
@@ -144,6 +144,7 @@ class RelaxAsmrApp(tk.Tk):
         self._cap = None
         self._video_loop_id = None
         self._preview_token = 0
+        self._step4_refresh_token = 0
         self._workflow_restore_after_id: str | None = None
         self.protocol("WM_DELETE_WINDOW", self._on_closing)
 
@@ -154,9 +155,10 @@ class RelaxAsmrApp(tk.Tk):
         bind_ui_root(self)
         bind_ui_root(self)
 
-        # 先映射（仍透明）→ 用真实宽度设 1:1 → 再显现
+        # 先映射（仍透明）→ 用真实宽度设 1:1 → 再显现（勿等 NAS 恢复等重任务）
         self.deiconify()
         self.update_idletasks()
+        self._reveal_when_layout_ready()
         self.after_idle(self._reveal_when_layout_ready)
 
     def _step45_task_running(self) -> bool:
@@ -183,7 +185,14 @@ class RelaxAsmrApp(tk.Tk):
                 self.competitor_tab._persist_keywords_text()
             except Exception:
                 pass
+        aigc_tab = getattr(self, "aigc_tab", None)
+        if aigc_tab is not None and hasattr(aigc_tab, "save_session_now"):
+            try:
+                aigc_tab.save_session_now()
+            except Exception:
+                pass
         self._stop_video_loop()
+        self._stop_cover_video_loop()
         if self._workflow_restore_after_id:
             self.after_cancel(self._workflow_restore_after_id)
             self._workflow_restore_after_id = None
@@ -369,6 +378,7 @@ class RelaxAsmrApp(tk.Tk):
             "preview_title": getattr(self, "lbl_preview_title_zh", None),
             "cover_desc": getattr(self, "txt_cover_desc_en", None),
             "preview_desc": getattr(self, "txt_preview_desc_zh", None),
+            "i2v_image_canvas": getattr(self, "preview_i2v_image_canvas", None),
             "log_text": getattr(self, "log_text", None),
         }
 
@@ -392,6 +402,9 @@ class RelaxAsmrApp(tk.Tk):
         series_video_tab = getattr(self, "series_video_tab", None)
         if series_video_tab is not None and hasattr(series_video_tab, "apply_theme"):
             series_video_tab.apply_theme(palette)
+        aigc_tab = getattr(self, "aigc_tab", None)
+        if aigc_tab is not None and hasattr(aigc_tab, "apply_theme"):
+            aigc_tab.apply_theme(palette)
         for tab in getattr(self, "_youtube_insight_tabs", ()):
             if hasattr(tab, "apply_theme"):
                 tab.apply_theme(palette)
@@ -480,6 +493,13 @@ class RelaxAsmrApp(tk.Tk):
         self._series_last_cover_name: str = ""
         self._series_last_cover_title: str = ""
         self._series_last_cover_prompt: str = ""
+        self._right_panel_mode = "default"
+        self._aigc_t2v_video_path: Path | None = None
+        self._aigc_t2v_prompt: str = ""
+        self._aigc_t2v_run_id: str = ""
+        self._aigc_i2v_video_path: Path | None = None
+        self._aigc_i2v_image_path: Path | None = None
+        self._aigc_i2v_prompt: str = ""
 
         # --- 数据分析（我的数据 + 爆款分析）---
         self.data_analysis_tab = ttk.Frame(self.left_notebook)
@@ -586,6 +606,16 @@ class RelaxAsmrApp(tk.Tk):
             on_stop_playback=self._stop_video_loop,
         )
         self.left_notebook.add(self.series_video_tab, text="系列视频")
+
+        # --- AIGC：文生视频实验台 ---
+        from gui.aigc_tab import AigcTab
+
+        self.aigc_tab = AigcTab(
+            self.left_notebook,
+            log_fn=self._log,
+            on_preview_run=self._aigc_preview_run,
+        )
+        self.left_notebook.add(self.aigc_tab, text="AIGC")
 
         # === 左侧工作流：步骤 1–5（小屏溢出时可垂直滚动）===
         self._setup_workflow_scroll(self.workflow_tab)
@@ -784,16 +814,24 @@ class RelaxAsmrApp(tk.Tk):
         )
         self.lbl_cover_title_en.grid(row=0, column=0, sticky="new")
 
+        cover_text_frame = ttk.Frame(cover_meta)
+        cover_text_frame.grid(row=1, column=0, sticky="nsew", pady=(8, 0))
+        cover_text_frame.columnconfigure(0, weight=1)
+        cover_text_frame.rowconfigure(0, weight=1)
+        self.cover_prompt_scroll = ttk.Scrollbar(cover_text_frame, orient=tk.VERTICAL)
         self.txt_cover_desc_en = tk.Text(
-            cover_meta,
+            cover_text_frame,
             height=6,
             wrap=tk.WORD,
             relief=tk.FLAT,
             borderwidth=0,
             state=tk.DISABLED,
             font=("", 10),
+            yscrollcommand=self.cover_prompt_scroll.set,
         )
-        self.txt_cover_desc_en.grid(row=1, column=0, sticky="nsew", pady=(8, 0))
+        self.txt_cover_desc_en.grid(row=0, column=0, sticky="nsew")
+        self.cover_prompt_scroll.config(command=self.txt_cover_desc_en.yview)
+        self.cover_prompt_scroll.grid(row=0, column=1, sticky="ns")
 
         self.preview_frame = ttk.LabelFrame(self.right_pane, text="视频预览", padding=10)
         self.lbl_preview_video_name = ttk.Label(
@@ -834,23 +872,43 @@ class RelaxAsmrApp(tk.Tk):
         )
         self.lbl_preview_title_zh.grid(row=0, column=0, sticky="new")
 
-        self.txt_preview_desc_zh = tk.Text(
+        self._preview_i2v_img_h = 90
+        self.preview_i2v_image_canvas = tk.Canvas(
             preview_meta,
+            width=320,
+            height=self._preview_i2v_img_h,
+            highlightthickness=0,
+            bd=0,
+        )
+        self.preview_i2v_image_canvas.grid(row=0, column=0, sticky="new", pady=(0, 4))
+        self.preview_i2v_image_canvas.grid_remove()
+
+        preview_text_frame = ttk.Frame(preview_meta)
+        preview_text_frame.grid(row=1, column=0, sticky="nsew", pady=(8, 0))
+        preview_text_frame.columnconfigure(0, weight=1)
+        preview_text_frame.rowconfigure(0, weight=1)
+        self.preview_prompt_scroll = ttk.Scrollbar(preview_text_frame, orient=tk.VERTICAL)
+        self.txt_preview_desc_zh = tk.Text(
+            preview_text_frame,
             height=6,
             wrap=tk.WORD,
             relief=tk.FLAT,
             borderwidth=0,
             state=tk.DISABLED,
             font=("", 10),
+            yscrollcommand=self.preview_prompt_scroll.set,
         )
-        self.txt_preview_desc_zh.grid(row=1, column=0, sticky="nsew", pady=(8, 0))
+        self.txt_preview_desc_zh.grid(row=0, column=0, sticky="nsew")
+        self.preview_prompt_scroll.config(command=self.txt_preview_desc_zh.yview)
+        self.preview_prompt_scroll.grid(row=0, column=1, sticky="ns")
 
         sec_log = ttk.LabelFrame(self.right_pane, text="日志", padding=8)
-        self.log_text = tk.Text(sec_log, height=14, wrap=tk.WORD, state=tk.DISABLED)
+        self.log_text = tk.Text(sec_log, height=14, wrap=tk.WORD)
         scroll = ttk.Scrollbar(sec_log, command=self.log_text.yview)
         self.log_text.configure(yscrollcommand=scroll.set)
         self.log_text.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         scroll.pack(side=tk.RIGHT, fill=tk.Y)
+        setup_copyable_readonly_text(self.log_text, self, export_selection=False)
 
         self.right_pane.add(self.cover_frame, weight=1)
         self.right_pane.add(self.preview_frame, weight=1)
@@ -859,6 +917,10 @@ class RelaxAsmrApp(tk.Tk):
 
         self._cover_img = None
         self._preview_img = None
+        self._i2v_img = None
+        self._cover_cap = None
+        self._cover_video_loop_id: str | None = None
+        self._cover_preview_token = 0
         self._right_pane_resize_after_id: str | None = None
         self._right_pane_last_h = 0
         self._equalize_retry_count = 0
@@ -871,9 +933,10 @@ class RelaxAsmrApp(tk.Tk):
             if p.is_dir():
                 self.material_dir = p
         self._apply_theme(self._theme_mode)
+        setup_global_clipboard_safety(self)
 
         self.after_idle(self._init_preview_panel)
-        self.after_idle(self._restore_audio_library_selections)
+        self.after(50, self._restore_audio_library_selections)
 
         self.left_notebook.bind("<<NotebookTabChanged>>", self._on_left_tab_changed)
         self.data_analysis_notebook.bind(
@@ -884,7 +947,7 @@ class RelaxAsmrApp(tk.Tk):
         )
 
         self.after_idle(self._update_left_scrollbar_visibility)
-        self.after_idle(self._restore_workflow_state)
+        self.after(50, self._restore_workflow_state)
         self.after_idle(self._equalize_main_pane_once)
         self.after(120, self._equalize_main_pane_once)
         self.after(350, self._equalize_main_pane_once)
@@ -894,7 +957,6 @@ class RelaxAsmrApp(tk.Tk):
     def _log_startup_info(self) -> None:
         if is_wsl():
             self._log("WSL 环境：打开/渲染工程将调用 Windows 版 Reaper")
-            self._log("WSL 输入法：使用 Windows 系统输入法（如微信输入法），请先点进输入框再切换中文")
         elif is_mac():
             self._log("macOS 环境：使用本机 Reaper；素材默认挂载于 /Volumes/192.168.3.128/…")
         self._log(f"仓库根目录：{LIB_REPO_ROOT}")
@@ -970,7 +1032,7 @@ class RelaxAsmrApp(tk.Tk):
 
         self._refresh_material_label()
         if sid:
-            self._refresh_step4_outputs(sid)
+            self._refresh_step4_outputs(sid, background=True)
             if not (self.video_path and self.video_path.is_file()):
                 out_dir = base_material_dir()
                 self._load_existing_analysis(out_dir, sid)
@@ -1248,14 +1310,27 @@ class RelaxAsmrApp(tk.Tk):
 
     def _restore_audio_library_selections(self) -> None:
         cfg = self._audio_library_selection_cfg()
-        for track_id, tab in self._audio_library_tabs.items():
-            raw = cfg.get(track_id, [])
-            if not isinstance(raw, list):
+
+        def worker() -> None:
+            selections: dict[str, list[Path]] = {}
+            for track_id in self._audio_library_tabs:
+                raw = cfg.get(track_id, [])
+                if not isinstance(raw, list):
+                    continue
+                paths = [Path(p) for p in raw if p and Path(p).is_file()]
+                if paths:
+                    selections[track_id] = paths
+            schedule_on_main(self, self._apply_audio_library_selections, selections)
+
+        threading.Thread(target=worker, daemon=True).start()
+
+    def _apply_audio_library_selections(self, selections: dict[str, list[Path]]) -> None:
+        for track_id, paths in selections.items():
+            tab = self._audio_library_tabs.get(track_id)
+            if tab is None:
                 continue
-            paths = [Path(p) for p in raw if p and Path(p).is_file()]
-            if paths:
-                tab.set_selected(paths, notify=False)
-                self._sync_track_picker_from_library(track_id, paths)
+            tab.set_selected(paths, notify=False)
+            self._sync_track_picker_from_library(track_id, paths)
 
     def _ensure_rain_boom_tab(self):
         from gui.track_picker_ui import TrackPickerUI
@@ -1348,14 +1423,25 @@ class RelaxAsmrApp(tk.Tk):
             self._on_material_library_subtab_changed()
         elif tab is self.series_video_tab:
             self._show_default_right_panels()
+            self._set_right_panel_mode("default")
             if hasattr(self, "cover_frame"):
                 self.cover_frame.configure(text="图片预览")
             if hasattr(self, "preview_frame"):
                 self.preview_frame.configure(text="系列视频")
             self.series_video_tab.on_tab_selected()
             self._series_refresh_right_panels()
+        elif tab is self.aigc_tab:
+            self._show_default_right_panels()
+            self._set_right_panel_mode("aigc")
+            if hasattr(self, "cover_frame"):
+                self.cover_frame.configure(text="文生视频")
+            if hasattr(self, "preview_frame"):
+                self.preview_frame.configure(text="图生视频")
+            self.aigc_tab.on_tab_selected()
+            self._aigc_refresh_right_panels()
         elif tab is self.workflow_tab:
             self._show_default_right_panels()
+            self._set_right_panel_mode("default")
             if hasattr(self, "cover_frame"):
                 self.cover_frame.configure(text="封面预览")
             if hasattr(self, "preview_frame"):
@@ -1592,7 +1678,10 @@ class RelaxAsmrApp(tk.Tk):
             return
         self._right_pane_last_h = h
         self._refresh_preview_layout()
-        self._update_cover_preview()
+        if getattr(self, "_right_panel_mode", "default") == "aigc":
+            self._show_i2v_image(self._aigc_i2v_image_path)
+        else:
+            self._update_cover_preview()
 
     def _init_preview_panel(self) -> None:
         if not self.video_path or not self.video_path.is_file():
@@ -1606,10 +1695,8 @@ class RelaxAsmrApp(tk.Tk):
             return
 
         def append() -> None:
-            self.log_text.configure(state=tk.NORMAL)
             self.log_text.insert(tk.END, msg + "\n")
             self.log_text.see(tk.END)
-            self.log_text.configure(state=tk.DISABLED)
 
         schedule_on_main(self, append)
 
@@ -1688,6 +1775,9 @@ class RelaxAsmrApp(tk.Tk):
         saved = self._get_scene_export_path(scene_id, "wav")
         if saved and wav_matches_target_minutes(saved, m):
             return saved.resolve()
+        latest = find_export_wav_for_scene(scene_id, minutes=m)
+        if latest and wav_matches_target_minutes(latest, m):
+            return latest.resolve()
         return None
 
     def _format_export_wav_status(
@@ -2015,7 +2105,50 @@ class RelaxAsmrApp(tk.Tk):
             return "待开始"
         return self._format_export_status(path)
 
-    def _refresh_step4_outputs(self, scene_id: str | None = None) -> None:
+    def _refresh_step4_outputs(
+        self, scene_id: str | None = None, *, background: bool = False
+    ) -> None:
+        sid = scene_id or self.scene_id
+        if not sid:
+            self._apply_step4_outputs(None, None, None)
+            return
+        if background:
+            self._step4_refresh_token += 1
+            token = self._step4_refresh_token
+
+            def worker() -> None:
+                wav = self._resolve_valid_export_wav(sid)
+                mp4 = self._resolve_valid_export_mp4(sid)
+                schedule_on_main(
+                    self,
+                    self._apply_step4_outputs,
+                    sid,
+                    wav,
+                    mp4,
+                    refresh_token=token,
+                )
+
+            threading.Thread(target=worker, daemon=True).start()
+            return
+
+        wav = self._resolve_valid_export_wav(sid)
+        mp4 = self._resolve_valid_export_mp4(sid)
+        self._apply_step4_outputs(sid, wav, mp4)
+
+    def _apply_step4_outputs(
+        self,
+        scene_id: str | None,
+        wav: Path | None,
+        mp4: Path | None,
+        *,
+        refresh_token: int | None = None,
+    ) -> None:
+        if refresh_token is not None:
+            if refresh_token != self._step4_refresh_token:
+                return
+            if scene_id != self.scene_id:
+                return
+
         sid = scene_id or self.scene_id
         if not sid:
             self.last_export_wav = None
@@ -2026,10 +2159,8 @@ class RelaxAsmrApp(tk.Tk):
                 self.lbl_upload.configure(text="待上传：—")
             return
 
-        wav = self._resolve_valid_export_wav(sid)
         self._clear_invalid_export_wav(sid)
         self._clear_invalid_export_mp4(sid)
-        mp4 = self._resolve_valid_export_mp4(sid)
         if wav:
             self._save_scene_export_path(sid, "wav", wav)
         else:
@@ -2290,14 +2421,65 @@ class RelaxAsmrApp(tk.Tk):
 
         threading.Thread(target=load_resolution, daemon=True).start()
 
-        # 3. 恢复步骤 4 上次成功的混音 / 合成路径
-        self._refresh_step4_outputs(scene)
+        scene_token = scene
+        video_token = video
 
+        def worker() -> None:
+            from gui.core_controller import load_cached_rain_tabs
+
+            out_dir = base_material_dir()
+            cached = None
+            if out_dir.is_dir():
+                cached = load_cached_rain_tabs(scene_token)
+            schedule_on_main(
+                self,
+                self._apply_finish_set_video_heavy,
+                scene_token,
+                video_token,
+                cached,
+            )
+
+        threading.Thread(target=worker, daemon=True).start()
+
+    def _apply_finish_set_video_heavy(
+        self,
+        scene: str,
+        video: Path,
+        cached: dict | None,
+    ) -> None:
+        if self.video_path != video or self.scene_id != scene:
+            return
+
+        mat = base_material_dir()
+        if mat.is_dir():
+            self.material_dir = mat
+
+        self._refresh_step4_outputs(scene, background=True)
         self._save_config()
         self._update_cover_preview()
         self._update_preview(video)
-        out_dir = base_material_dir()
-        self._load_existing_analysis(out_dir, scene)
+        if cached:
+            self._log(f"找到之前的分析结果: {Path(cached['clip_json']).name}")
+            self._apply_rain_tabs(cached)
+        else:
+            self._load_existing_analysis_picker_fallback(scene)
+
+        self._update_cover_preview()
+
+    def _load_existing_analysis_picker_fallback(self, scene_id: str) -> None:
+        picker1 = getattr(self, "track_pickers", {}).get("1_rain")
+        if not picker1:
+            return
+        picker1.lbl_status.configure(text="未找到数据文件")
+        picker1._clear_grid()
+        self._remove_vlm_tab()
+        self.pickers_notebook.tab(picker1.master, text="1_rain")
+        picker1.track_name = "1_rain"
+        self._ensure_rain_boom_tab()
+        boom_tab = self._audio_library_tabs.get("1_rain_boom")
+        if boom_tab:
+            self._sync_track_picker_from_library("1_rain_boom", boom_tab.get_selected())
+        self._select_rain_boom_tab()
 
     def _material_dir_for_video(self) -> Path:
         return base_material_dir()
@@ -2369,6 +2551,8 @@ class RelaxAsmrApp(tk.Tk):
         self.txt_preview_desc_zh.configure(state=tk.DISABLED)
 
     def _update_cover_preview(self) -> None:
+        if getattr(self, "_right_panel_mode", "default") == "aigc":
+            return
         if not hasattr(self, "cover_thumb_canvas"):
             return
         self._update_preview_video_names(self.video_path)
@@ -2450,6 +2634,236 @@ class RelaxAsmrApp(tk.Tk):
         if self._cap is not None:
             self._cap.release()
             self._cap = None
+
+    def _stop_cover_video_loop(self) -> None:
+        self._cover_preview_token += 1
+        if self._cover_video_loop_id is not None:
+            self.after_cancel(self._cover_video_loop_id)
+            self._cover_video_loop_id = None
+        if self._cover_cap is not None:
+            self._cover_cap.release()
+            self._cover_cap = None
+
+    def _cover_preview_tmp_path(self, token: int) -> str:
+        import tempfile
+
+        name = f"{COVER_PREVIEW_TMP_PREFIX}{os.getpid()}_{token}.mp4"
+        return os.path.join(tempfile.gettempdir(), name)
+
+    def _cleanup_cover_preview_tmp(self, *, keep: str | None = None) -> None:
+        import tempfile
+
+        tmp_dir = tempfile.gettempdir()
+        prefix = f"{COVER_PREVIEW_TMP_PREFIX}{os.getpid()}_"
+        keep_abs = os.path.abspath(keep) if keep else None
+        try:
+            names = os.listdir(tmp_dir)
+        except OSError:
+            return
+        for name in names:
+            if not name.startswith(prefix):
+                continue
+            path = os.path.join(tmp_dir, name)
+            if keep_abs is not None and os.path.abspath(path) == keep_abs:
+                continue
+            try:
+                os.remove(path)
+            except OSError:
+                pass
+
+    def _show_cover_video_placeholder(self, text: str) -> None:
+        if not hasattr(self, "cover_thumb_canvas"):
+            return
+        slot_w, slot_h = self._cover_thumb_size()
+        self._apply_cover_slot_geometry(slot_w, slot_h)
+        self.cover_thumb_canvas.delete("all")
+        self.cover_thumb_canvas.create_text(
+            slot_w // 2,
+            slot_h // 2,
+            text=text,
+            anchor=tk.CENTER,
+            width=max(slot_w - 8, 80),
+        )
+
+    def _load_cover_preview_video(self, video_path: Path) -> None:
+        self._show_cover_video_placeholder("加载视频预览中...")
+        token = self._cover_preview_token
+        tmp_path = self._cover_preview_tmp_path(token)
+
+        def copy_and_play() -> None:
+            error: Exception | None = None
+            try:
+                shutil.copy2(video_path, tmp_path)
+            except Exception as exc:  # noqa: BLE001
+                error = exc
+            self._post_to_ui(
+                lambda: self._on_cover_preview_copy_done(token, tmp_path, error)
+            )
+
+        threading.Thread(target=copy_and_play, daemon=True).start()
+
+    def _on_cover_preview_copy_done(
+        self, token: int, tmp_path: str, error: Exception | None
+    ) -> None:
+        if token != self._cover_preview_token:
+            try:
+                os.remove(tmp_path)
+            except OSError:
+                pass
+            return
+        if error is not None:
+            self._show_cover_video_placeholder(f"视频复制失败: {error}")
+            return
+        self._start_cover_video_loop(tmp_path)
+        self._cleanup_cover_preview_tmp(keep=tmp_path)
+
+    def _start_cover_video_loop(self, tmp_path: str) -> None:
+        import cv2
+
+        self._cover_cap = cv2.VideoCapture(tmp_path)
+        if not self._cover_cap.isOpened():
+            self._show_cover_video_placeholder("无法打开临时视频文件进行循环播放")
+            return
+        self._play_cover_next_frame()
+
+    def _play_cover_next_frame(self) -> None:
+        if self._cover_cap is None:
+            return
+
+        import cv2
+
+        ret, frame = self._cover_cap.read()
+        if not ret:
+            self._cover_cap.set(cv2.CAP_PROP_POS_FRAMES, 0)
+            ret, frame = self._cover_cap.read()
+
+        if ret:
+            try:
+                slot_w, slot_h = self._cover_thumb_size()
+                self._apply_cover_slot_geometry(slot_w, slot_h)
+                frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                img = Image.fromarray(frame)
+                img.thumbnail((slot_w, slot_h), Image.Resampling.LANCZOS)
+                self._cover_img = ImageTk.PhotoImage(img)
+                self.cover_thumb_canvas.delete("all")
+                self.cover_thumb_canvas.create_image(
+                    slot_w // 2,
+                    slot_h // 2,
+                    anchor=tk.CENTER,
+                    image=self._cover_img,
+                )
+            except Exception:
+                pass
+
+        self._cover_video_loop_id = self.after(33, self._play_cover_next_frame)
+
+    def _set_right_panel_mode(self, mode: str) -> None:
+        prev = getattr(self, "_right_panel_mode", "default")
+        if prev == mode:
+            return
+        self._right_panel_mode = mode
+        is_aigc = mode == "aigc"
+        if prev == "aigc" and not is_aigc:
+            self._stop_cover_video_loop()
+        if hasattr(self, "lbl_cover_title_en"):
+            if is_aigc:
+                self.lbl_cover_title_en.grid_remove()
+            else:
+                self.lbl_cover_title_en.grid()
+        if hasattr(self, "lbl_preview_title_zh"):
+            if is_aigc:
+                self.lbl_preview_title_zh.grid_remove()
+            else:
+                self.lbl_preview_title_zh.grid()
+        if hasattr(self, "preview_i2v_image_canvas"):
+            if is_aigc:
+                self.preview_i2v_image_canvas.grid()
+            else:
+                self.preview_i2v_image_canvas.grid_remove()
+
+    def _set_cover_prompt_text(self, prompt: str) -> None:
+        if not hasattr(self, "txt_cover_desc_en"):
+            return
+        self.txt_cover_desc_en.configure(state=tk.NORMAL)
+        self.txt_cover_desc_en.delete("1.0", tk.END)
+        if prompt:
+            self.txt_cover_desc_en.insert("1.0", prompt)
+        self.txt_cover_desc_en.configure(state=tk.DISABLED)
+        self.txt_cover_desc_en.see("1.0")
+
+    def _set_preview_prompt_text(self, prompt: str) -> None:
+        if not hasattr(self, "txt_preview_desc_zh"):
+            return
+        self.txt_preview_desc_zh.configure(state=tk.NORMAL)
+        self.txt_preview_desc_zh.delete("1.0", tk.END)
+        if prompt:
+            self.txt_preview_desc_zh.insert("1.0", prompt)
+        self.txt_preview_desc_zh.configure(state=tk.DISABLED)
+        self.txt_preview_desc_zh.see("1.0")
+
+    def _show_i2v_image(self, path: Path | None) -> None:
+        if not hasattr(self, "preview_i2v_image_canvas"):
+            return
+        canvas = self.preview_i2v_image_canvas
+        canvas.delete("all")
+        slot_w = max(canvas.winfo_width(), 160)
+        slot_h = getattr(self, "_preview_i2v_img_h", 90)
+        if path is not None and path.is_file():
+            try:
+                img = Image.open(path)
+                img.thumbnail((slot_w, slot_h), Image.Resampling.LANCZOS)
+                self._i2v_img = ImageTk.PhotoImage(img)
+                canvas.create_image(
+                    slot_w // 2,
+                    slot_h // 2,
+                    anchor=tk.CENTER,
+                    image=self._i2v_img,
+                )
+            except Exception as exc:
+                canvas.create_text(
+                    slot_w // 2,
+                    slot_h // 2,
+                    text=f"图片加载失败: {exc}",
+                    anchor=tk.CENTER,
+                    width=max(slot_w - 8, 80),
+                )
+                self._i2v_img = None
+        else:
+            canvas.create_text(
+                slot_w // 2,
+                slot_h // 2,
+                text="无图片",
+                anchor=tk.CENTER,
+            )
+            self._i2v_img = None
+
+    def _aigc_refresh_right_panels(self) -> None:
+        if getattr(self, "_right_panel_mode", "default") != "aigc":
+            return
+        run_id = (self._aigc_t2v_run_id or "—").strip() or "—"
+        if hasattr(self, "lbl_cover_video_name"):
+            self.lbl_cover_video_name.configure(text=run_id)
+        self._set_cover_prompt_text(self._aigc_t2v_prompt)
+        t2v_path = self._aigc_t2v_video_path
+        if t2v_path is not None and t2v_path.is_file():
+            self._load_cover_preview_video(t2v_path)
+        else:
+            self._stop_cover_video_loop()
+            self._show_cover_video_placeholder("无预览")
+
+        self._set_preview_prompt_text(self._aigc_i2v_prompt)
+        self._show_i2v_image(self._aigc_i2v_image_path)
+        i2v_path = self._aigc_i2v_video_path
+        if i2v_path is not None and i2v_path.is_file():
+            if hasattr(self, "lbl_preview_video_name"):
+                self.lbl_preview_video_name.configure(text=i2v_path.name)
+            self._update_preview_file(i2v_path)
+        else:
+            if hasattr(self, "lbl_preview_video_name"):
+                self.lbl_preview_video_name.configure(text="—")
+            self._stop_video_loop()
+            self._preview_img = None
+            self._show_preview_placeholder("无预览")
 
     def _preview_tmp_path(self, token: int) -> str:
         import tempfile
@@ -2598,6 +3012,7 @@ class RelaxAsmrApp(tk.Tk):
         """在「封面预览」区显示任意静态图（系列视频 Tab 用）。"""
         if not hasattr(self, "cover_thumb_canvas"):
             return
+        self._stop_cover_video_loop()
         if hasattr(self, "lbl_cover_video_name"):
             self.lbl_cover_video_name.configure(text=name)
         slot_w, slot_h = self._cover_thumb_size()
@@ -2798,6 +3213,13 @@ class RelaxAsmrApp(tk.Tk):
             description=message,
         )
         self._series_refresh_video_preview()
+
+    def _aigc_preview_run(self, video_path: Path, run_id: str, prompt: str) -> None:
+        self._aigc_t2v_video_path = video_path.resolve()
+        self._aigc_t2v_prompt = (prompt or "").strip()
+        self._aigc_t2v_run_id = run_id
+        if getattr(self, "_right_panel_mode", "default") == "aigc":
+            self._aigc_refresh_right_panels()
 
     def _video_dialog_initialdir(self) -> str:
         saved = self._cfg.get("last_video_dir")
@@ -3373,7 +3795,7 @@ class RelaxAsmrApp(tk.Tk):
             return str(p.resolve())
 
         encoder = "auto" if sys.platform == "darwin" else "nvenc"
-        export_args = ["--encoder", encoder]
+        export_args = ["--encoder", encoder, "--no-video-fade-in"]
 
         def _predict_final_mp4() -> Path:
             predict_args = [

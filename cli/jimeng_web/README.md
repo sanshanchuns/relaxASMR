@@ -10,6 +10,10 @@ PYTHONPATH=cli:. python -m jimeng_web generate \
   --image /path/series_001.png \
   --prompt "Animate the provided image..." \
   --out /path/series_001.mp4
+PYTHONPATH=cli:. python -m jimeng_web generate-t2v \
+  --prompt "固定机位拍摄原始热带雨林，大暴雨…" \
+  --out /path/out.mp4 \
+  --duration 4
 ```
 
 Profile：`cli/jimeng_web/.profile/`（已 gitignore）

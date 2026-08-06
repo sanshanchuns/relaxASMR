@@ -176,6 +176,19 @@ def series_dir() -> Path:
     return aigc_dir()
 
 
+def t2v_lab_dir() -> Path:
+    """文生视频实验台：``aigc/t2v_lab/``。"""
+    p = aigc_dir() / "t2v_lab"
+    p.mkdir(parents=True, exist_ok=True)
+    return p.resolve()
+
+
+def t2v_runs_dir() -> Path:
+    p = t2v_lab_dir() / "runs"
+    p.mkdir(parents=True, exist_ok=True)
+    return p.resolve()
+
+
 def series_batch_dir(batch_id: str) -> Path:
     return series_dir() / batch_id
 

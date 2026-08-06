@@ -127,65 +127,6 @@ def theme_toggle_label(mode: str) -> str:
     return "浅色模式" if normalize_theme(mode) == "dark" else "深色模式"
 
 
-def _ime_entry_font(parent: tk.Misc) -> tuple[str, int]:
-    """WSLg 优先用 Windows 同步的中文字体，便于微信输入法候选与上屏。"""
-    for family in (
-        "Microsoft YaHei UI",
-        "Microsoft YaHei",
-        "SimHei",
-        "PingFang SC",
-        "WenQuanYi Micro Hei",
-        "Noto Sans CJK SC",
-    ):
-        try:
-            probe = f"_ime_font_{family.replace(' ', '_')}"
-            parent.tk.call("font", "create", probe, "-family", family, "-size", 10)
-            parent.tk.call("font", "delete", probe)
-            return (family, 10)
-        except tk.TclError:
-            continue
-    return ("", 10)
-
-
-def make_ime_entry(
-    parent: tk.Misc,
-    textvariable: tk.StringVar | None = None,
-    *,
-    width: int = 16,
-    theme: UiTheme | None = None,
-) -> tk.Entry:
-    """单行输入框。Linux/WSL 下 ``ttk.Entry`` 常无法输入中文，故用 ``tk.Entry``。"""
-    palette = theme or LIGHT
-    kwargs: dict = {
-        "width": width,
-        "font": _ime_entry_font(parent) if os.environ.get("WSL_DISTRO_NAME") else ("", 10),
-        "bg": palette.entry_bg,
-        "fg": palette.entry_fg,
-        "insertbackground": palette.entry_fg,
-        "selectbackground": palette.select_bg,
-        "selectforeground": palette.select_fg,
-        "relief": tk.FLAT,
-        "highlightthickness": 1,
-        "highlightbackground": palette.trough,
-        "highlightcolor": palette.trough,
-    }
-    if textvariable is not None:
-        kwargs["textvariable"] = textvariable
-    return tk.Entry(parent, **kwargs)
-
-
-def style_ime_entry(entry: tk.Entry, theme: UiTheme) -> None:
-    entry.configure(
-        bg=theme.entry_bg,
-        fg=theme.entry_fg,
-        insertbackground=theme.entry_fg,
-        selectbackground=theme.select_bg,
-        selectforeground=theme.select_fg,
-        highlightbackground=theme.trough,
-        highlightcolor=theme.trough,
-    )
-
-
 def ensure_clam_style(style: ttk.Style) -> None:
     try:
         if style.theme_use() not in ("clam", "alt"):
@@ -260,6 +201,19 @@ def apply_ttk_theme(style: ttk.Style, theme: UiTheme) -> None:
         fieldbackground=[("readonly", theme.entry_bg)],
         foreground=[("readonly", theme.entry_fg)],
     )
+    style.configure(
+        "TSpinbox",
+        fieldbackground=theme.entry_bg,
+        foreground=theme.entry_fg,
+        background=theme.trough,
+        arrowcolor=fg,
+        insertcolor=theme.entry_fg,
+    )
+    style.map(
+        "TSpinbox",
+        fieldbackground=[("readonly", theme.entry_bg), ("disabled", theme.trough)],
+        foreground=[("disabled", "#888888")],
+    )
     style.configure("TCheckbutton", background=bg, foreground=fg)
     style.map("TCheckbutton", background=[("active", bg)])
     style.configure("Horizontal.TPanedwindow", background=bg)
@@ -273,6 +227,7 @@ def apply_tk_theme(root: tk.Misc, theme: UiTheme, widgets: dict[str, tk.Widget |
     canvas_keys = (
         "cover_canvas",
         "preview_canvas",
+        "i2v_image_canvas",
         "left_scroll_canvas",
         "library_canvas",
         "video_library_canvas",
