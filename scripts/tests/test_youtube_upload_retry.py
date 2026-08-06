@@ -65,3 +65,31 @@ def test_verify_uploaded_video_rejects_stuck_draft() -> None:
     }
     with pytest.raises(RuntimeError, match="未确认上传完成"):
         verify_uploaded_video(service, "abc", attempts=2, delay_sec=0)
+
+
+def test_wait_for_processing_started() -> None:
+    from unittest.mock import MagicMock
+
+    from scripts.video_upload.youtube_upload import wait_for_processing_started
+
+    service = MagicMock()
+    service.videos.return_value.list.return_value.execute.side_effect = [
+        {
+            "items": [
+                {
+                    "status": {"uploadStatus": "uploaded"},
+                    "processingDetails": {"processingStatus": ""},
+                }
+            ]
+        },
+        {
+            "items": [
+                {
+                    "status": {"uploadStatus": "uploaded"},
+                    "processingDetails": {"processingStatus": "processing"},
+                }
+            ]
+        },
+    ]
+    status = wait_for_processing_started(service, "abc", attempts=3, delay_sec=0)
+    assert status == "processing"

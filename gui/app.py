@@ -4302,7 +4302,15 @@ class RelaxAsmrApp(tk.Tk):
                     self._mark_scene_uploaded(upload_scene_id, mp4=upload_mp4, url=url)
                     self._save_config()
                     self._refresh_upload_label()
-                    messagebox.showinfo("上传完成", f"视频已上传：\n{url}\n\n可见性：{privacy}")
+                    messagebox.showinfo(
+                        "上传完成",
+                        f"视频字节已上传：\n{url}\n\n"
+                        f"可见性：{privacy}\n\n"
+                        "Studio 对 API 上传不会在传文件时显示百分比；"
+                        "此时应进入「Processing up to HD」。"
+                        "若仍长时间停在「即将开始处理 / 0%」，请刷新页面；"
+                        "超过约 30 分钟无变化再删草稿重传。",
+                    )
 
                 schedule_on_main(self, done_ok)
             except Exception as exc:

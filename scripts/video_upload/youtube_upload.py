@@ -485,8 +485,9 @@ def upload_video(
     log(f"准备上传本地文件：{video_path}（{file_size / (1024**3):.2f} GB）")
     log(
         "开始分块上传到 YouTube（API resumable）。"
-        "左侧 Remaining% 来自已确认分块；Studio 网页对 API 上传常一直显示"
-        "「准备开始处理 / 0%」，直到整文件传完——与浏览器直传主机时的进度条不同。"
+        "请以本程序进度为准：Studio 对 Data API 上传不会显示浏览器那种上传百分比，"
+        "整文件传完前网页常停在「即将开始处理 / Processing will begin shortly」；"
+        "传完并校验通过后，Studio 才会进入「Processing up to HD」。"
     )
 
     media = MediaFileUpload(
@@ -535,7 +536,17 @@ def upload_video(
 
     video_id = str(response["id"])
     verify_uploaded_video(service, video_id, on_log=on_log)
+    wait_for_processing_started(service, video_id, on_log=on_log)
     return video_id
+
+
+def _video_status_snapshot(service, video_id: str) -> dict | None:
+    data = service.videos().list(
+        part="status,contentDetails,processingDetails",
+        id=video_id,
+    ).execute()
+    items = data.get("items") or []
+    return items[0] if items else None
 
 
 def verify_uploaded_video(
@@ -554,18 +565,13 @@ def verify_uploaded_video(
 
     last_status = None
     for i in range(max(1, attempts)):
-        data = service.videos().list(
-            part="status,contentDetails,processingDetails",
-            id=video_id,
-        ).execute()
-        items = data.get("items") or []
-        if not items:
+        item = _video_status_snapshot(service, video_id)
+        if not item:
             last_status = "missing"
             log(f"上传校验：尚未查到视频 {video_id}（{i + 1}/{attempts}）…")
             time.sleep(delay_sec)
             continue
 
-        item = items[0]
         upload_status = (item.get("status") or {}).get("uploadStatus")
         last_status = upload_status
         # uploaded / processed 才算字节已到齐；其它状态（含空）视为未真正完成。
@@ -587,8 +593,53 @@ def verify_uploaded_video(
 
     raise RuntimeError(
         f"YouTube 端未确认上传完成（video_id={video_id}，最后状态={last_status!r}）。"
-        f"Studio 若显示「正在上传 0%」，请手动删除该草稿后，在协作机上重试一键上传。"
+        f"Studio 若显示「正在上传 0%」，请手动删除该草稿后重试一键上传。"
     )
+
+
+def wait_for_processing_started(
+    service,
+    video_id: str,
+    *,
+    on_log: Callable[[str], None] | None = None,
+    attempts: int = 20,
+    delay_sec: float = 6.0,
+) -> str:
+    """字节传完后轮询 processingDetails，确认 Studio 侧已进入转码队列。"""
+
+    def log(msg: str) -> None:
+        if on_log:
+            on_log(msg)
+
+    last = ""
+    for i in range(max(1, attempts)):
+        item = _video_status_snapshot(service, video_id) or {}
+        processing = ((item.get("processingDetails") or {}).get("processingStatus")) or ""
+        upload_status = ((item.get("status") or {}).get("uploadStatus")) or ""
+        last = processing or upload_status
+        if processing in ("processing", "succeeded") or upload_status == "processed":
+            log(
+                f"YouTube 已开始处理：processingStatus={processing or 'n/a'} "
+                f"（Studio 应很快显示 Processing up to HD；大文件转码可能需数十分钟）"
+            )
+            return processing or upload_status
+        if processing == "failed":
+            raise RuntimeError(
+                f"YouTube 处理失败（video_id={video_id}）。请到 Studio 查看该条草稿详情。"
+            )
+        if i == 0 or (i + 1) % 5 == 0:
+            log(
+                f"等待 YouTube 进入转码队列"
+                f"（processing={processing or 'pending'}，{i + 1}/{attempts}）…"
+            )
+        time.sleep(delay_sec)
+
+    log(
+        f"字节已上传完成，但暂未读到 processingStatus"
+        f"（最后={last!r}）。Studio 可能仍短暂显示「即将开始处理」，"
+        f"请刷新频道内容页；若超过 30 分钟仍无 HD 进度再删草稿重传。"
+    )
+    return last
 
 
 def _log_upload_text_field(log: Callable[[str], None], label: str, value: str) -> None:
