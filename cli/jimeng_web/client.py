@@ -36,7 +36,7 @@ CANVAS_URL = os.environ.get(
     "JIMENG_CANVAS_URL",
     "https://jimeng.jianying.com/ai-tool/home?type=video&workspace=undefined",
 )
-DEFAULT_VIDEO_MODEL = os.environ.get("JIMENG_VIDEO_MODEL", "Seedance 2.0 VIP")
+DEFAULT_VIDEO_MODEL = os.environ.get("JIMENG_VIDEO_MODEL", "Seedance 2.0 Fast VIP")
 DEFAULT_REF_MODE = os.environ.get("JIMENG_REF_MODE", "首尾帧")
 DEFAULT_DURATION_SEC = int(os.environ.get("JIMENG_DURATION_SEC", "5"))
 DEFAULT_ASPECT = os.environ.get("JIMENG_ASPECT_RATIO", "16:9")
@@ -44,6 +44,7 @@ DEFAULT_RESOLUTION = os.environ.get("JIMENG_RESOLUTION", "720P")
 
 LogFn = Callable[[str], None] | None
 ProgressFn = Callable[[int], None] | None
+CreditFn = Callable[[int], None] | None
 
 
 class JimengWebError(BrowserError):
@@ -150,12 +151,14 @@ def _normalize_model_label(text: str) -> str:
 
 
 def _model_selected(current: str, target: str) -> bool:
-    """精确匹配目标模型；VIP 不含 Fast VIP / mini / 2.5。"""
+    """精确匹配目标模型，避免 Fast VIP / 标准 VIP / mini / 2.5 串选。"""
     cur = _normalize_model_label(current)
     tgt = _normalize_model_label(target)
     if not cur:
         return False
     if "mini" in cur or "2.5" in cur:
+        return False
+    if "fast" in tgt and "fast" not in cur:
         return False
     if "vip" in tgt and "fast" not in tgt and "fast" in cur:
         return False
@@ -167,7 +170,7 @@ def _model_selected(current: str, target: str) -> bool:
 
 
 def _ensure_video_model(page, *, model: str = DEFAULT_VIDEO_MODEL, log: LogFn = None) -> None:
-    """composer 工具栏模型下拉：默认 Seedance 2.0 VIP。"""
+    """composer 工具栏模型下拉：默认 Seedance 2.0 Fast VIP。"""
     try:
         selector = page.locator(
             ".lv-select[role='combobox'], .lv-select[class*='toolbar-select']"
@@ -187,12 +190,10 @@ def _ensure_video_model(page, *, model: str = DEFAULT_VIDEO_MODEL, log: LogFn = 
         selector.click(timeout=3000)
         page.wait_for_timeout(700)
 
-        # 优先点精确文案，避免误点 Fast VIP / mini
+        # 仅点目标模型精确文案，避免误点标准 VIP / mini。
         labels = [
             f"即梦 {model}",
             model,
-            "即梦 Seedance 2.0 VIP",
-            "Seedance 2.0 VIP",
         ]
         for label in labels:
             try:
@@ -329,7 +330,7 @@ def _ensure_aspect_resolution(
         log_line(log, f"  … 当前 {text!r}，切换为 {aspect_ratio} {res}")
         btn.click(timeout=3000)
         page.wait_for_timeout(600)
-        for label in (aspect_ratio, f"{aspect_ratio} {res}", res, "720P", "720p"):
+        for label in (aspect_ratio, f"{aspect_ratio} {res}", res, "720P", "720p", "1080P", "1080p"):
             try:
                 opt = page.get_by_text(label, exact=True).first
                 if opt.count() > 0 and opt.is_visible(timeout=400):
@@ -541,6 +542,79 @@ def _alive_page(context, page):
         except Exception:  # noqa: BLE001
             continue
     return None
+
+
+def _estimate_video_credits(*, duration_sec: int, resolution: str, model: str) -> int:
+    res = resolution.upper().strip()
+    sec = max(1, int(duration_sec))
+    per_sec = {"480P": 4, "720P": 8, "1080P": 12}.get(res, 8)
+    if "Fast" in (model or ""):
+        per_sec = max(4, per_sec - 2)
+    return per_sec * sec
+
+
+def _read_submit_credit_cost(page) -> int | None:
+    """读取提交按钮附近的本次消耗积分。"""
+    try:
+        cost = page.evaluate(
+            """() => {
+              const pick = (text) => {
+                if (!text) return null;
+                const patterns = [
+                  /(\\d{1,4})\\s*积分/,
+                  /消耗\\s*(\\d{1,4})/,
+                  /(\\d{1,4})\\s*credits?/i,
+                ];
+                for (const re of patterns) {
+                  const m = String(text).match(re);
+                  if (m) {
+                    const n = parseInt(m[1], 10);
+                    if (n > 0 && n < 5000) return n;
+                  }
+                }
+                return null;
+              };
+              const hints = [];
+              document.querySelectorAll(
+                'button, [class*="submit"], [class*="credit"], [class*="cost"], [class*="price"]'
+              ).forEach((el) => {
+                const t = (el.textContent || '').trim();
+                if (t && t.length < 80) hints.push(t);
+              });
+              for (const t of hints) {
+                const n = pick(t);
+                if (n) return n;
+              }
+              return pick((document.body?.innerText || '').slice(0, 12000));
+            }"""
+        )
+        return int(cost) if cost else None
+    except Exception:  # noqa: BLE001
+        return None
+
+
+def _notify_credit_cost(
+    page,
+    *,
+    on_credits: CreditFn,
+    duration_sec: int,
+    resolution: str,
+    model: str,
+    log: LogFn = None,
+) -> int:
+    cost = _read_submit_credit_cost(page)
+    if cost is None:
+        cost = _estimate_video_credits(
+            duration_sec=duration_sec, resolution=resolution, model=model
+        )
+    else:
+        log_line(log, f"  … 本次消耗 {cost} 积分")
+    if on_credits:
+        try:
+            on_credits(cost)
+        except Exception:  # noqa: BLE001
+            pass
+    return cost
 
 
 def _read_dream_progress(page) -> int | None:
@@ -1059,6 +1133,7 @@ class JimengWebClient:
         resolution: str = DEFAULT_RESOLUTION,
         log: LogFn = None,
         progress: ProgressFn = None,
+        on_credits: CreditFn = None,
     ) -> Path:
         ok, reason = self.available()
         if not ok:
@@ -1110,6 +1185,14 @@ class JimengWebClient:
                         f"[Jimeng] 提交生成（{video_model} / {reference} / "
                         f"{aspect_ratio} {resolution} / {seconds}s）…",
                     )
+                    _notify_credit_cost(
+                        page,
+                        on_credits=on_credits,
+                        duration_sec=seconds,
+                        resolution=resolution,
+                        model=video_model,
+                        log=log,
+                    )
                     if not click_generate(page, log=log):
                         snap = save_debug(page, DEBUG_DIR, "no_generate_btn")
                         raise JimengWebError(
@@ -1149,3 +1232,24 @@ class JimengWebClient:
             raise JimengWebError(str(exc)) from exc
         finally:
             cleanup_stage(tmp)
+
+    def agentic_chat(
+        self,
+        prompt: str,
+        *,
+        images: list[Path | str] | None = None,
+        timeout_s: float = 180.0,
+        new_chat: bool = True,
+        log: LogFn = None,
+    ) -> str:
+        """即梦 Agent 页对话，返回助手文本。"""
+        from .agentic import agentic_chat as _agentic_chat
+
+        return _agentic_chat(
+            prompt,
+            images=images,
+            timeout_s=timeout_s,
+            new_chat=new_chat,
+            log=log,
+        )
+

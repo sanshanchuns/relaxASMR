@@ -133,7 +133,7 @@ def create_run(
         {
             "run_id": run_id,
             "created_at": _now_iso(),
-            "model": params.get("model", "Seedance 2.0 VIP"),
+            "model": params.get("model", "Seedance 2.0 Fast VIP"),
             "aspect_ratio": params.get("aspect_ratio", "16:9"),
             "resolution": params.get("resolution", "720P"),
             "duration_sec": dur,

@@ -593,6 +593,9 @@ class RelaxAsmrApp(tk.Tk):
         self._competitor_preview = YoutubePreviewPanel(
             self.right_pane, enable_analysis=True, log_fn=self._log
         )
+        from gui.aigc_preview_panel import AigcPreviewPanel
+
+        self._aigc_preview = AigcPreviewPanel(self.right_pane)
         self._active_side_preview: ttk.Frame | None = None
         self._series_last_video_path: Path | None = None
         self._series_last_video_prompt: str = ""
@@ -601,12 +604,19 @@ class RelaxAsmrApp(tk.Tk):
         self._series_last_cover_title: str = ""
         self._series_last_cover_prompt: str = ""
         self._right_panel_mode = "default"
+        # 右侧 sash 按模式独立：AIGC 专用预览与工作流三栏互不影响
+        self._right_pane_sash_by_mode: dict[str, tuple[int, ...] | None] = {
+            "default": None,
+            "aigc": None,
+        }
         self._aigc_t2v_video_path: Path | None = None
-        self._aigc_t2v_prompt: str = ""
+        self._aigc_t2v_slots: dict[str, list[str]] = {}
         self._aigc_t2v_run_id: str = ""
         self._aigc_i2v_video_path: Path | None = None
         self._aigc_i2v_image_path: Path | None = None
-        self._aigc_i2v_prompt: str = ""
+        self._aigc_i2v_slots: dict[str, list[str]] = {}
+        self._aigc_i2v_run_id: str = ""
+        self._aigc_preview_kind = "i2v"  # 默认首个子 Tab：图生视频
 
         # --- 数据分析（我的数据 + 爆款分析）---
         self.data_analysis_tab = ttk.Frame(self.left_notebook)
@@ -714,13 +724,14 @@ class RelaxAsmrApp(tk.Tk):
         )
         self.left_notebook.add(self.series_video_tab, text="系列视频")
 
-        # --- AIGC：文生视频实验台 ---
-        from gui.aigc_tab import AigcTab
+        # --- AIGC：旧 / 文生视频 / 图生视频 ---
+        from gui.aigc_shell import AigcShell
 
-        self.aigc_tab = AigcTab(
+        self.aigc_tab = AigcShell(
             self.left_notebook,
             log_fn=self._log,
             on_preview_run=self._aigc_preview_run,
+            on_subtab_changed=self._on_aigc_subtab_changed,
         )
         self.left_notebook.add(self.aigc_tab, text="AIGC")
 
@@ -1676,10 +1687,19 @@ class RelaxAsmrApp(tk.Tk):
         except tk.TclError:
             return
         if tab is self.data_analysis_tab:
+            if getattr(self, "_right_panel_mode", "default") == "aigc":
+                self._remember_current_right_sash()
+                self._set_right_panel_mode("default")
             self._on_data_analysis_subtab_changed()
         elif tab is self.material_library_tab:
+            if getattr(self, "_right_panel_mode", "default") == "aigc":
+                self._remember_current_right_sash()
+            self._show_default_right_panels()
+            self._set_right_panel_mode("default")
             self._on_material_library_subtab_changed()
         elif tab is self.series_video_tab:
+            if getattr(self, "_right_panel_mode", "default") == "aigc":
+                self._remember_current_right_sash()
             self._show_default_right_panels()
             self._set_right_panel_mode("default")
             if hasattr(self, "cover_frame"):
@@ -1689,15 +1709,14 @@ class RelaxAsmrApp(tk.Tk):
             self.series_video_tab.on_tab_selected()
             self._series_refresh_right_panels()
         elif tab is self.aigc_tab:
-            self._show_default_right_panels()
+            if getattr(self, "_right_panel_mode", "default") != "aigc":
+                self._remember_current_right_sash()
+            self._show_side_preview_panel(self._aigc_preview)
             self._set_right_panel_mode("aigc")
-            if hasattr(self, "cover_frame"):
-                self.cover_frame.configure(text="文生视频")
-            if hasattr(self, "preview_frame"):
-                self.preview_frame.configure(text="图生视频")
-            self.aigc_tab.on_tab_selected()
-            self._aigc_refresh_right_panels()
+            self.after_idle(self.aigc_tab.on_tab_selected)
         elif tab is self.workflow_tab:
+            if getattr(self, "_right_panel_mode", "default") == "aigc":
+                self._remember_current_right_sash()
             self._show_default_right_panels()
             self._set_right_panel_mode("default")
             if hasattr(self, "cover_frame"):
@@ -1721,7 +1740,9 @@ class RelaxAsmrApp(tk.Tk):
             sub.on_tab_selected()
 
     def _on_material_library_subtab_changed(self, _event=None) -> None:
-        self._show_default_right_panels()
+        # 主 Tab 切换时已 restore 默认右侧；子 Tab 切换只刷新内容
+        if self._active_side_preview is not None:
+            self._show_default_right_panels()
         try:
             sub = self.material_library_notebook.nametowidget(
                 self.material_library_notebook.select()
@@ -1734,10 +1755,11 @@ class RelaxAsmrApp(tk.Tk):
             sub.on_tab_selected()
 
     def _show_side_preview_panel(self, panel: ttk.Frame) -> None:
-        """把某个 Tab 专属的预览面板换到右侧面板的上 2/3 区域。
+        """把某个 Tab 专属的预览面板换到右侧上区（约 2/3）。
 
-        「我的数据」「爆款分析」用 YoutubePreviewPanel；「系列视频」复用下方
-        工作流同款封面/视频预览区。日志区（下 1/3）始终保留。"""
+        「我的数据」「爆款分析」用 YoutubePreviewPanel；AIGC 用
+        AigcPreviewPanel；「系列视频」复用工作流封面/视频预览区。
+        日志区（下 1/3）始终保留。"""
         if not hasattr(self, "right_pane"):
             return
         if self._active_side_preview is panel:
@@ -1935,11 +1957,10 @@ class RelaxAsmrApp(tk.Tk):
         if abs(h - self._right_pane_last_h) < 6:
             return
         self._right_pane_last_h = h
-        self._refresh_preview_layout()
         if getattr(self, "_right_panel_mode", "default") == "aigc":
-            self._show_i2v_image(self._aigc_i2v_image_path)
-        else:
-            self._update_cover_preview()
+            return
+        self._refresh_preview_layout()
+        self._update_cover_preview()
 
     def _init_preview_panel(self) -> None:
         if not self.video_path or not self.video_path.is_file():
@@ -3021,29 +3042,82 @@ class RelaxAsmrApp(tk.Tk):
 
         self._cover_video_loop_id = self.after(33, self._play_cover_next_frame)
 
+    def _capture_right_pane_sashes(self) -> tuple[int, ...] | None:
+        if not hasattr(self, "right_pane"):
+            return None
+        panes = self.right_pane.panes()
+        if len(panes) < 2:
+            return None
+        try:
+            return tuple(
+                int(self.right_pane.sashpos(i)) for i in range(len(panes) - 1)
+            )
+        except tk.TclError:
+            return None
+
+    def _restore_right_pane_sashes(self, sashes: tuple[int, ...] | None) -> None:
+        if not hasattr(self, "right_pane") or not sashes:
+            return
+        panes = self.right_pane.panes()
+        if len(panes) < 2:
+            return
+        try:
+            for i, pos in enumerate(sashes):
+                if i >= len(panes) - 1:
+                    break
+                self.right_pane.sashpos(i, int(pos))
+        except tk.TclError:
+            return
+
+    def _remember_current_right_sash(self) -> None:
+        """在换掉右侧 pane 之前调用，按当前 mode 记住 sash。"""
+        if not hasattr(self, "right_pane"):
+            return
+        mode = getattr(self, "_right_panel_mode", "default")
+        panes = self.right_pane.panes()
+        # 避免 Youtube 侧栏等临时 2 栏布局写进 default，冲掉工作流三栏比例
+        if mode == "default":
+            cover = getattr(self, "cover_frame", None)
+            if cover is None or str(cover) not in panes:
+                return
+        elif mode == "aigc":
+            panel = getattr(self, "_aigc_preview", None)
+            if panel is None or str(panel) not in panes:
+                return
+        by_mode = getattr(self, "_right_pane_sash_by_mode", None)
+        if by_mode is None:
+            by_mode = {}
+            self._right_pane_sash_by_mode = by_mode
+        captured = self._capture_right_pane_sashes()
+        if captured is not None:
+            by_mode[mode] = captured
+
     def _set_right_panel_mode(self, mode: str) -> None:
         prev = getattr(self, "_right_panel_mode", "default")
         if prev == mode:
             return
+        if prev == "aigc" and mode != "aigc":
+            if hasattr(self, "_aigc_preview"):
+                self._aigc_preview.stop_playback()
         self._right_panel_mode = mode
-        is_aigc = mode == "aigc"
-        if prev == "aigc" and not is_aigc:
-            self._stop_cover_video_loop()
-        if hasattr(self, "txt_cover_title_en"):
-            if is_aigc:
-                self.txt_cover_title_en.grid_remove()
-            else:
-                self.txt_cover_title_en.grid()
-        if hasattr(self, "txt_preview_title_zh"):
-            if is_aigc:
-                self.txt_preview_title_zh.grid_remove()
-            else:
-                self.txt_preview_title_zh.grid()
-        if hasattr(self, "preview_i2v_image_canvas"):
-            if is_aigc:
-                self.preview_i2v_image_canvas.grid()
-            else:
-                self.preview_i2v_image_canvas.grid_remove()
+        self._schedule_restore_right_sash(mode)
+
+    def _schedule_restore_right_sash(self, mode: str) -> None:
+        by_mode = getattr(self, "_right_pane_sash_by_mode", {}) or {}
+        saved = by_mode.get(mode)
+        if saved is not None:
+            # 排在 show_* 的 equalize 之后执行，以恢复值覆盖均分
+            self.after_idle(lambda s=saved: self._apply_mode_right_pane_sashes(s))
+        else:
+            self.after_idle(self._equalize_right_pane_once)
+
+    def _apply_mode_right_pane_sashes(self, sashes: tuple[int, ...]) -> None:
+        self._restore_right_pane_sashes(sashes)
+        self.update_idletasks()
+        if getattr(self, "_right_panel_mode", "default") == "aigc":
+            return
+        self._refresh_preview_layout()
+        self._update_cover_preview()
 
     def _set_cover_prompt_text(self, prompt: str) -> None:
         if not hasattr(self, "txt_cover_desc_en"):
@@ -3101,33 +3175,41 @@ class RelaxAsmrApp(tk.Tk):
             )
             self._i2v_img = None
 
+    def _on_aigc_subtab_changed(self, sub) -> None:
+        """AIGC 内子 Tab 切换：右侧预览模式与内容跟随（延迟，避免卡 UI）。"""
+        if getattr(self, "_right_panel_mode", "default") != "aigc":
+            return
+        from gui.aigc_shell import AigcShell
+
+        self._aigc_preview_kind = AigcShell.preview_kind_for(sub)
+
+        def _deferred() -> None:
+            if hasattr(sub, "sync_right_preview"):
+                sub.sync_right_preview()
+            else:
+                self._aigc_refresh_right_panels()
+
+        self.after_idle(_deferred)
+
     def _aigc_refresh_right_panels(self) -> None:
         if getattr(self, "_right_panel_mode", "default") != "aigc":
             return
-        run_id = (self._aigc_t2v_run_id or "—").strip() or "—"
-        if hasattr(self, "lbl_cover_video_name"):
-            self.lbl_cover_video_name.configure(text=run_id)
-        self._set_cover_prompt_text(self._aigc_t2v_prompt)
-        t2v_path = self._aigc_t2v_video_path
-        if t2v_path is not None and t2v_path.is_file():
-            self._load_cover_preview_video(t2v_path)
+        if not hasattr(self, "_aigc_preview"):
+            return
+        kind = getattr(self, "_aigc_preview_kind", "t2v")
+        if kind == "i2v":
+            self._aigc_preview.show_i2v(
+                self._aigc_i2v_video_path,
+                run_id=self._aigc_i2v_run_id or "—",
+                slots=self._aigc_i2v_slots,
+                image_path=self._aigc_i2v_image_path,
+            )
         else:
-            self._stop_cover_video_loop()
-            self._show_cover_video_placeholder("无预览")
-
-        self._set_preview_prompt_text(self._aigc_i2v_prompt)
-        self._show_i2v_image(self._aigc_i2v_image_path)
-        i2v_path = self._aigc_i2v_video_path
-        if i2v_path is not None and i2v_path.is_file():
-            if hasattr(self, "lbl_preview_video_name"):
-                self.lbl_preview_video_name.configure(text=i2v_path.name)
-            self._update_preview_file(i2v_path)
-        else:
-            if hasattr(self, "lbl_preview_video_name"):
-                self.lbl_preview_video_name.configure(text="—")
-            self._stop_video_loop()
-            self._preview_img = None
-            self._show_preview_placeholder("无预览")
+            self._aigc_preview.show_t2v(
+                self._aigc_t2v_video_path,
+                run_id=self._aigc_t2v_run_id or "—",
+                slots=self._aigc_t2v_slots,
+            )
 
     def _preview_tmp_path(self, token: int) -> str:
         import tempfile
@@ -3460,12 +3542,39 @@ class RelaxAsmrApp(tk.Tk):
         )
         self._series_refresh_video_preview()
 
-    def _aigc_preview_run(self, video_path: Path, run_id: str, prompt: str) -> None:
-        self._aigc_t2v_video_path = video_path.resolve()
-        self._aigc_t2v_prompt = (prompt or "").strip()
-        self._aigc_t2v_run_id = run_id
+    def _aigc_preview_run(
+        self,
+        video_path: Path | None,
+        run_id: str,
+        slots: dict | None = None,
+        *,
+        kind: str = "t2v",
+        image_path: Path | None = None,
+    ) -> None:
+        """刷新 AIGC 专用预览；默认文生，子 tab 分流后可传 kind=i2v。"""
+        rid = str(run_id or "").strip()
+        slot_map = {
+            str(k): [str(x).strip() for x in (v or []) if str(x).strip()]
+            for k, v in (slots or {}).items()
+        }
+        self._aigc_preview_kind = "i2v" if kind == "i2v" else "t2v"
+        if self._aigc_preview_kind == "i2v":
+            self._aigc_i2v_run_id = rid
+            self._aigc_i2v_video_path = (
+                video_path.resolve() if video_path and video_path.is_file() else None
+            )
+            self._aigc_i2v_image_path = (
+                image_path.resolve() if image_path and image_path.is_file() else None
+            )
+            self._aigc_i2v_slots = slot_map
+        else:
+            self._aigc_t2v_run_id = rid
+            self._aigc_t2v_video_path = (
+                video_path.resolve() if video_path and video_path.is_file() else None
+            )
+            self._aigc_t2v_slots = slot_map
         if getattr(self, "_right_panel_mode", "default") == "aigc":
-            self._aigc_refresh_right_panels()
+            self.after_idle(self._aigc_refresh_right_panels)
 
     def _video_dialog_initialdir(self) -> str:
         saved = self._cfg.get("last_video_dir")

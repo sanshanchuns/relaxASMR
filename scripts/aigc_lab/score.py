@@ -1,7 +1,7 @@
 """L1 画面标签核对 + L2 动作标签核对（agy · gemini-3.6-flash）。
 
-L1：主体 / 环境 / 镜头 / 风格 / 约束 — 与抽帧画面是否匹配  
-L2：动作 / 约束 — 与视频动作（多帧时序 + 运动量）是否匹配  
+L1：主体 / 环境 — 与抽帧画面是否匹配  
+L2：动作 — 与视频动作（多帧时序 + 运动量）是否匹配  
 
 粒度：逐标签 yes|partial|no，不是整槽一条。
 """
@@ -29,15 +29,13 @@ LogFn = Callable[[str], None]
 _REVIEW_MODEL = "gemini-3.6-flash"
 _JSON_BLOCK = re.compile(r"\{.*\}", re.DOTALL)
 
-# L1 画面核对槽；L2 动作核对槽（约束两边都查）
+# 仅检查会随单次生成内容变化的开放槽。
+# 镜头 / 风格 / 约束是产品固定项，不参与 VLM 验收或可疑红框。
 _L1_SLOTS: tuple[str, ...] = (
     "subject",
     "environment",
-    "camera",
-    "style",
-    "constraints",
 )
-_L2_SLOTS: tuple[str, ...] = ("action", "constraints")
+_L2_SLOTS: tuple[str, ...] = ("action",)
 _L2_FRAME_COUNT = 8
 
 # 粗标定：真实素材区间（见 CONTEXT / video_probe）
@@ -184,13 +182,10 @@ def _build_l1_prompt(
     system = (
         "你是雨 ASMR 文生视频的「画面验收员」。\n"
         "输入：同一条短视频按时间顺序抽出的静帧。\n"
-        "任务：逐条核对【主体 / 环境 / 镜头 / 风格 / 约束】标签是否在画面中可见/成立。\n"
+        "任务：逐条核对【主体 / 环境】标签是否在画面中可见/成立。\n"
         "只根据画面证据判断，不要编造。\n"
         f"目标雨档「{label}」仅作氛围参考；L1 不评动作强度。\n"
-        "约束（画面侧）：无人物、无动物、无闪电等是否在画面中成立；"
-        "「无慢动作」若单帧无法判断可给 partial 并说明。\n"
-        "镜头：构图是否固定/角度是否匹配标签。\n"
-        "风格：色调/质感/光线是否可见匹配（音频类标签若画面无法验证 → partial）。"
+        "镜头、风格、约束为产品固定项，不在本次验收范围内。"
     )
     user = (
         "请对下列每个标签给出 verdict=yes|partial|no、confidence(0-1)、note(一句依据)。\n"
@@ -215,11 +210,10 @@ def _build_l2_prompt(
     system = (
         "你是雨 ASMR 文生视频的「动作验收员」。\n"
         "输入：同一条短视频按时间顺序抽出的多帧（把它们当作视频时间轴）+ 客观运动量。\n"
-        "任务：逐条核对【动作 / 约束】标签是否与视频动作匹配。\n"
-        "关注：雨滴/溅花/叶动/径流/雨幕是否随时间变化；是否慢动作悬停；是否切镜/转场。\n"
+        "任务：逐条核对【动作】标签是否与视频动作匹配。\n"
+        "关注：雨滴/溅花/叶动/径流/雨幕是否随时间变化。\n"
         f"目标雨档「{label}」——动作强度须匹配该档，滑档 → no。\n"
-        "约束（动作侧）：无慢动作、无切镜、无转场等是否在时序上成立；"
-        "纯画面约束（无人物等）若已在多帧中可见可评，否则参考运动证据。"
+        "镜头、风格、约束为产品固定项，不在本次验收范围内。"
     )
     user = (
         f"客观运动量（帧差 0–100）：{motion_score:.1f}。"
@@ -302,16 +296,14 @@ def _score_layer(
 
 def _route_disputes(result: RunScore, *, rain_mode: str) -> None:
     reasons: list[str] = []
-    critical_slots = {"subject", "environment", "camera", "action"}
+    critical_slots = {"subject", "environment", "action"}
 
     def walk(layer: LayerScore, prefix: str) -> None:
         for slot, tags in layer.slots.items():
             for sc in tags:
                 short = sc.tag if len(sc.tag) <= 18 else sc.tag[:16] + "…"
                 key = f"{prefix}.{slot}:{short}"
-                if sc.verdict in ("partial", "no") and (
-                    slot in critical_slots or slot == "constraints"
-                ):
+                if sc.verdict in ("partial", "no") and slot in critical_slots:
                     if sc.confidence < 0.75 and sc.verdict == "partial":
                         reasons.append(f"{key} 低置信 {sc.confidence:.2f}")
                     else:

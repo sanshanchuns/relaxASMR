@@ -189,6 +189,32 @@ def t2v_runs_dir() -> Path:
     return p.resolve()
 
 
+def agent_t2v_lab_dir() -> Path:
+    """AIGC「文生视频」子 Tab：Jimeng Agent × Gemini 管线。"""
+    p = aigc_dir() / "agent_t2v_lab"
+    p.mkdir(parents=True, exist_ok=True)
+    return p.resolve()
+
+
+def agent_t2v_runs_dir() -> Path:
+    p = agent_t2v_lab_dir() / "runs"
+    p.mkdir(parents=True, exist_ok=True)
+    return p.resolve()
+
+
+def agent_i2v_lab_dir() -> Path:
+    """AIGC「图生视频」子 Tab：截图 + 雨型 → Agent × Gemini。"""
+    p = aigc_dir() / "agent_i2v_lab"
+    p.mkdir(parents=True, exist_ok=True)
+    return p.resolve()
+
+
+def agent_i2v_runs_dir() -> Path:
+    p = agent_i2v_lab_dir() / "runs"
+    p.mkdir(parents=True, exist_ok=True)
+    return p.resolve()
+
+
 def series_batch_dir(batch_id: str) -> Path:
     return series_dir() / batch_id
 

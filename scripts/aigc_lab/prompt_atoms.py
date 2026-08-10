@@ -44,6 +44,21 @@ SLOT_LABELS: dict[str, str] = {
 }
 ATOM_ORDER = SLOT_ORDER
 
+# 开放槽：LLM 基线可自写；闭集槽：产品固定（纯自然雨 ASMR）
+OPEN_SLOTS: tuple[str, ...] = ("subject", "action", "environment")
+LOCKED_SLOTS: tuple[str, ...] = ("camera", "style", "constraints")
+
+# 场景：只指导 LLM，不进送模正文
+DEFAULT_SCENES: tuple[str, ...] = ("原始热带雨林",)
+SCENE_SEED_POOL: tuple[str, ...] = (
+    "原始热带雨林",
+    "热带雨林溪谷",
+    "热带雨林林冠下层",
+    "红树林潮沼",
+    "温带针叶密林",
+    "竹林雨径",
+)
+
 # ---------------------------------------------------------------------------
 # 闭集原子池（镜头 / 风格 / 约束）— LLM 只能原样选取
 # 参考: https://help.apiyi.com/seedance-2-0-prompt-guide-video-generation-camera-style-tips.html
@@ -148,11 +163,15 @@ CONSTRAINTS_EXTRA: tuple[str, ...] = (
     "无狂风摇树",
 )
 
-# 主体：画面里有什么（决定「拍到多大范围」，替代焦距/广角）
+# 主体：一条原子只描述一个可见主体，不能把多个物体并在一起。
+# 主体范围决定画面覆盖范围，替代焦距/广角。
 _SUBJECT_DEFAULT: tuple[str, ...] = (
-    "高大香蕉树与热带乔木",
-    "巨大蕉叶与浓密灌木",
-    "粗壮树干与湿润地面",
+    "香蕉树",
+    "宽大蕉叶",
+    "热带乔木",
+    "浓密灌木",
+    "粗壮树干",
+    "湿润地面",
 )
 
 # 动作：只写雨与表面的互动（正交于环境的空中密度/能见度）
@@ -348,16 +367,65 @@ def clamp_closed_slots(
     return out
 
 
+# 图生视频产品建议默认原子（提示词软引导；管线不再强制覆写槽位）
+I2V_FIXED_CAMERA: tuple[str, ...] = ("固定机位拍摄",)
+I2V_FIXED_STYLE: tuple[str, ...] = ("写实自然风格",)
+I2V_FIXED_CONSTRAINTS: tuple[str, ...] = ("无人物",)
+
+
+def i2v_product_locked_slots() -> dict[str, list[str]]:
+    """兼容旧调用：返回产品建议默认原子，非强制锁。"""
+    return {
+        "camera": list(I2V_FIXED_CAMERA),
+        "style": list(I2V_FIXED_STYLE),
+        "constraints": list(I2V_FIXED_CONSTRAINTS),
+    }
+
+
+def apply_i2v_fixed_slots(slots: dict[str, list[str]]) -> dict[str, list[str]]:
+    """兼容旧调用：六槽全开放，原样返回（不再强制注入固定项）。"""
+    return {k: list(slots.get(k) or []) for k in SLOT_ORDER}
+
+
+def product_locked_closed_slots(rain_mode: str | None = None) -> dict[str, list[str]]:
+    """纯自然雨 ASMR：镜头/风格关键词/光线/约束固定；音频随雨档。
+
+    LLM 基线只允许改 subject / action / environment。
+    """
+    mode = normalize_rain_mode(rain_mode)
+    # 关键词顺序跟 STYLE_KEYWORD_POOL / clamp_closed_slots 一致
+    keywords = [k for k in STYLE_KEYWORD_POOL if k in ("documentary", "moody", "desaturated")]
+    return {
+        "camera": list(_DEFAULT_CAMERA),  # 固定镜头 + 平视
+        "style": [
+            *keywords,
+            "overcast",
+            STYLE_AUDIO_POOL[mode][0],
+        ],
+        "constraints": list(_DEFAULT_CONSTRAINTS),
+    }
+
+
+def default_scenes() -> list[str]:
+    return list(DEFAULT_SCENES)
+
+
+def format_scenes(scenes: Sequence[str] | None) -> str:
+    tags = [str(s).strip() for s in (scenes or []) if str(s).strip()]
+    if not tags:
+        tags = list(DEFAULT_SCENES)
+    return " · ".join(tags)
+
+
 def default_slots(rain_mode: str | None = None) -> dict[str, list[str]]:
     mode = normalize_rain_mode(rain_mode)
     ae = _ACTION_ENV[mode]
+    locked = product_locked_closed_slots(mode)
     raw = {
         "subject": list(_SUBJECT_DEFAULT),
         "action": list(ae["action"]),
         "environment": list(ae["environment"]),
-        "camera": list(_DEFAULT_CAMERA),
-        "style": _default_style_atoms(mode),
-        "constraints": list(_DEFAULT_CONSTRAINTS),
+        **locked,
     }
     return clamp_closed_slots(raw, rain_mode=mode)
 
@@ -497,44 +565,62 @@ def rain_mode_brief(rain_mode: str | None = None) -> str:
     )
 
 
-def _system_for_mode(rain_mode: str) -> str:
+def _system_for_mode(
+    rain_mode: str,
+    *,
+    scenes: Sequence[str] | None = None,
+) -> str:
     mode = normalize_rain_mode(rain_mode)
     label = RAIN_MODE_LABELS[mode]
-    return f"""你是即梦 Seedance 2.0 提示词工程师，专写「原始热带雨林 × {label}」。
+    scene_text = format_scenes(scenes)
+    locked = product_locked_closed_slots(mode)
+    return f"""你是即梦 Seedance 2.0 提示词工程师，专写「纯自然雨 ASMR · {scene_text} × {label}」。
 遵循官方 6 步公式：主体→动作→环境→镜头→风格→约束。
 参考指南：镜头与动作分离；只写一个主镜头指令；光线必写；约束用 avoid 类负面词。
 
+创作必须紧扣场景：{scene_text}。禁止漂移到无关地貌/城市/室内/人物题材。
+
 只输出一个 JSON（不要 markdown），键：
-subject, action, environment, camera, style, constraints
-值为字符串数组。
+subject, action, environment
+值为字符串数组（每槽 2–4 条短句可见结果）。
+不要输出 camera / style / constraints —— 它们由产品固定，你无权改。
 
-【开放槽 — 可自写短句，须是可见结果】
-- subject：雨林受雨体（蕉叶/树干/地面），禁止人物
-- action：该雨档的密度/溅水/泄水/径流可见结果
-- environment：雨林空间、水雾能见度、开场即满强度且全程恒定
+【开放槽 — 可自写短句，须是可见结果，且符合场景】
+- subject：该场景下一个受雨主体（植被或地表等），禁止人物
+- action：一个雨水互动结果（溅水、泄水或径流之一）
+- environment：一个空间/空中雨雾/恒定性条件
 
-【闭集槽 — 必须从池中原样复制字符串，禁止同义改写、禁止自造】
-{format_pool_block(mode)}
+【原子化硬规则】
+1. 数组中的每一项只能表达一个主体、一个动作结果或一个环境条件（即单一语义断言）。
+2. subject 禁止在同一项里并列多个对象：禁止「A与B」「A和B」「A、B」。
+3. 例如 subject 应写「香蕉树」「宽大蕉叶」「热带乔木」，不要写「高大香蕉树与热带乔木」或「巨大蕉叶与浓密灌木」。
+4. 不写无法从单帧稳定核验的相对形容词，如「高大」「巨大」；以具体物体名替代。
+5. action/environment 可以用顿号或逗号补全同一个结果/条件；例如「该雨强已持续、开场即满、全程恒定无渐入」是一个“雨势时间连续性”原子，必须保留为一项。
 
-选池硬规则：
-1. camera：恰好「固定镜头」+「平视|仰视|俯视」各 1 条
-2. style：官方风格关键词 1–3 条 + 官方光线 1 条 + 产品音频 1 条；禁止短拖影/自然重力等自造词
-3. constraints：含全部核心必选（含「无慢动作」）；不要写「无运镜」
-4. 正交：action=表面互动；environment=空间+空中雨/雾+恒定
-5. 禁止 epic/amazing；禁止闪电狂风；禁止分时段「0–3秒」剧本
+【产品固定闭集（仅供对齐，勿输出、勿改写）】
+- camera：{' + '.join(locked['camera'])}
+- style：{' + '.join(locked['style'])}
+- constraints：{' + '.join(locked['constraints'])}
 
-当前雨档基线参考：
-{format_table(default_slots(mode))}
+正交：action=表面互动；environment=空间+空中雨/雾+恒定
+禁止 epic/amazing；禁止闪电狂风；禁止分时段「0–3秒」剧本
+
+当前雨档开放槽参考：
+{format_table({k: default_slots(mode)[k] for k in OPEN_SLOTS})}
 """
 
 
 def rewrite_atomic(
-    draft: str,
+    draft: str = "",
     *,
     rain_mode: str | None = None,
+    scenes: Sequence[str] | None = None,
     log_fn: LogFn | None = None,
-) -> tuple[str, str]:
-    """改写为六槽表格；镜头/风格/约束钳回闭集池。"""
+) -> tuple[dict[str, list[str]], str]:
+    """LLM 基线：只生成主体/动作/环境；镜头/风格/约束用产品固定值。
+
+    返回 (slots, agy_email)。
+    """
     ensure_cli_path()
     from agy import generate_text_via_agy_accounts, has_agy_credentials
     from agy.client import AGY_PROMPT_LABELS
@@ -544,36 +630,287 @@ def rewrite_atomic(
 
     mode = normalize_rain_mode(rain_mode)
     label = RAIN_MODE_LABELS[mode]
+    scene_text = format_scenes(scenes)
     user = (
-        f"请把草稿改写成「{label}」档六槽原子 JSON。"
-        f"camera/style/constraints 必须从系统提示的池中原样选取。"
-        f"若草稿为空，输出该档基线。\n\n"
+        f"请围绕场景「{scene_text}」为「{label}」档生成六槽中的开放三槽原子 JSON"
+        f"（仅 subject/action/environment）。\n"
+        f"若草稿非空，在其基础上改写；若草稿为空，按该档基线风格新写一批，"
+        f"须与参考基线有可见差异，但仍属同一场景与雨档。\n\n"
         f"草稿：\n{(draft or '').strip() or '（空）'}"
     )
     text, email = generate_text_via_agy_accounts(
         user,
         model=_REWRITE_MODEL,
         effort="medium",
-        system=_system_for_mode(mode),
+        system=_system_for_mode(mode, scenes=scenes),
         log_fn=log_fn,
         account_labels=AGY_PROMPT_LABELS,
     )
-    slots = _parse_rewrite_json(text, fallback_mode=mode)
-    slots = clamp_closed_slots(slots, rain_mode=mode)
-    return format_table(slots), email
+    open_slots = _parse_rewrite_json(text, fallback_mode=mode)
+    locked = product_locked_closed_slots(mode)
+    slots = {
+        "subject": list(open_slots.get("subject") or []),
+        "action": list(open_slots.get("action") or []),
+        "environment": list(open_slots.get("environment") or []),
+        **locked,
+    }
+    # 开放槽若解析失败则回退基线开放槽
+    base = default_slots(mode)
+    for key in OPEN_SLOTS:
+        if not slots[key]:
+            slots[key] = list(base[key])
+    return slots, email
+
+
+def check_tag_conflicts(
+    slots: dict[str, Sequence[str]],
+    *,
+    rain_mode: str | None = None,
+    scenes: Sequence[str] | None = None,
+    log_fn: LogFn | None = None,
+) -> tuple[dict[str, list[dict[str, object]]], str]:
+    """用 LLM 检查当前六槽标签之间是否自相矛盾或重复表达。
+
+    返回 ``({conflicts: [...], duplicates: [...]}, agy_email)``。
+    只接受能精确对应到当前标签的冲突，避免模型泛泛评论时误标红。
+    """
+    ensure_cli_path()
+    from agy import generate_text_via_agy_accounts, has_agy_credentials
+    from agy.client import AGY_PROMPT_LABELS
+
+    if not has_agy_credentials():
+        raise RuntimeError("未配置 agy 凭据，无法进行生成前标签冲突检查")
+
+    mode = normalize_rain_mode(rain_mode)
+    label = RAIN_MODE_LABELS[mode]
+    scene_text = format_scenes(scenes)
+    current = {
+        key: [str(atom).strip() for atom in (slots.get(key) or []) if str(atom).strip()]
+        for key in SLOT_ORDER
+    }
+    system = f"""你是即梦 Seedance 2.0 的生成前提示词质检员。
+任务：只检查下列六槽标签之间是否存在会让同一条视频无法同时成立的明确矛盾。
+场景：{scene_text}；雨档：{label}。
+
+判为冲突的例子：同一画面同时要求固定镜头与明显推拉/摇移；同时要求无人物与出现人物；
+同时要求暴雨与无雨；同一主体同时要求静止不动与剧烈摆动。
+不判为冲突：同一暴雨场景中树干稳定、叶片轻微摆动、雨水持续流淌；不同主体的正常共存；
+只是风格不同、描述颗粒度不同、或无法确定的轻微张力。
+
+只输出 JSON，不要 markdown：
+{{"conflicts":[
+  {{"tags":[{{"slot":"subject","tag":"必须逐字引用当前标签"}}, {{"slot":"action","tag":"必须逐字引用当前标签"}}],
+    "reason":"一句话说明为什么无法同时成立"}}
+],
+"duplicates":[
+  {{"tags":[{{"slot":"subject","tag":"必须逐字引用当前标签"}}, {{"slot":"environment","tag":"必须逐字引用当前标签"}}],
+    "reason":"一句话说明重复表达了什么"}}
+]}}
+重复只指两个标签表达同一主体、状态或动作，删除其中一个不会损失信息。
+描述相近但各自补充了数量、空间关系、动作强度或时间条件时不是重复。
+若没有问题，输出 {{"conflicts":[],"duplicates":[]}}。每项必须列出至少两个当前标签；不得编造标签。"""
+    user = f"请检查这些当前标签：\n{format_table(current)}"
+    text, email = generate_text_via_agy_accounts(
+        user,
+        model=_REWRITE_MODEL,
+        effort="medium",
+        system=system,
+        log_fn=log_fn,
+        account_labels=AGY_PROMPT_LABELS,
+    )
+    return _parse_tag_conflicts(text, current), email
+
+
+def _parse_tag_conflicts(
+    text: str,
+    current: dict[str, list[str]],
+) -> dict[str, list[dict[str, object]]]:
+    """解析并严格过滤 LLM 返回的冲突/重复标签，防止误提示。"""
+    m = re.search(r"\{.*\}", text or "", re.DOTALL)
+    if not m:
+        return {"conflicts": [], "duplicates": []}
+    try:
+        data = json.loads(m.group(0))
+    except json.JSONDecodeError:
+        return {"conflicts": [], "duplicates": []}
+
+    valid = {(slot, tag) for slot, tags in current.items() for tag in tags}
+    def parse_items(raw_items: object) -> list[dict[str, object]]:
+        if not isinstance(raw_items, list):
+            return []
+        out: list[dict[str, object]] = []
+        seen: set[tuple[tuple[str, str], ...]] = set()
+        for item in raw_items:
+            if not isinstance(item, dict):
+                continue
+            refs: list[dict[str, str]] = []
+            seen_ref: set[tuple[str, str]] = set()
+            for ref in item.get("tags") or []:
+                if not isinstance(ref, dict):
+                    continue
+                slot = str(ref.get("slot") or "").strip()
+                tag = str(ref.get("tag") or "").strip()
+                key = (slot, tag)
+                if key in valid and key not in seen_ref:
+                    seen_ref.add(key)
+                    refs.append({"slot": slot, "tag": tag})
+            if len(refs) < 2:
+                continue
+            fingerprint = tuple(sorted((r["slot"], r["tag"]) for r in refs))
+            if fingerprint in seen:
+                continue
+            seen.add(fingerprint)
+            reason = str(item.get("reason") or "标签描述存在重复或矛盾").strip()
+            out.append({"tags": refs, "reason": reason or "标签描述存在重复或矛盾"})
+        return out
+
+    return {
+        "conflicts": parse_items(data.get("conflicts")),
+        "duplicates": parse_items(data.get("duplicates")),
+    }
+
+
+def replace_failed_atoms(
+    slots: dict[str, Sequence[str]],
+    failed: dict[str, Sequence[str]],
+    *,
+    rain_mode: str | None = None,
+    scenes: Sequence[str] | None = None,
+    log_fn: LogFn | None = None,
+) -> tuple[dict[str, list[str]], str]:
+    """用 LLM 替换红框可疑标签；未标红的标签保持不变。
+
+    开放槽可自写；闭集槽须从池原样选取。返回 (新 slots, agy_email)。
+    """
+    ensure_cli_path()
+    from agy import generate_text_via_agy_accounts, has_agy_credentials
+    from agy.client import AGY_PROMPT_LABELS
+
+    if not has_agy_credentials():
+        raise RuntimeError("未配置 agy 凭据，无法替换可疑标签")
+
+    mode = normalize_rain_mode(rain_mode)
+    label = RAIN_MODE_LABELS[mode]
+    scene_text = format_scenes(scenes)
+
+    fail_map: dict[str, list[str]] = {}
+    for key in SLOT_ORDER:
+        tags = [str(t).strip() for t in (failed.get(key) or []) if str(t).strip()]
+        if tags:
+            fail_map[key] = tags
+    if not fail_map:
+        raise ValueError("没有红框可疑标签可替换")
+
+    current = {
+        key: [str(a).strip() for a in (slots.get(key) or []) if str(a).strip()]
+        for key in SLOT_ORDER
+    }
+    fail_lines = "\n".join(
+        f"- {SLOT_LABELS[k]}: {' | '.join(v)}" for k, v in fail_map.items()
+    )
+    system = f"""你是即梦 Seedance 2.0 提示词工程师，专写「纯自然雨 ASMR · {scene_text} × {label}」。
+任务：只替换「可疑/不合格」标签，其余标签一字不改。
+创作必须紧扣场景：{scene_text}。
+
+只输出一个 JSON（不要 markdown）：
+{{
+  "replacements": {{
+    "<slot>": {{ "<旧标签>": "<新标签>", ... }},
+    ...
+  }}
+}}
+slot 只能是：subject, action, environment, camera, style, constraints。
+新标签规则：
+- subject/action/environment：可自写短句可见结果，须符合场景与雨档；每一项必须是一个语义断言。subject 禁止「A与B」「A和B」「A、B」等并列对象；action/environment 可用顿号或逗号补全同一结果/条件（如雨势时间连续性）。不要用「高大」「巨大」等不可稳定核验的相对形容词
+- 【保真压缩】新标签必须是信息不丢失的最短电报式短语：保留数量、主体、必要的景别/空间关系、动作/状态和必要限定；删除「画面中、可以看到、排列着、分布的、正在、呈现、进行着」等不增加可见信息的语法填充，不要写完整句。
+- 示例：保留景别、数量、前后交错关系和主体时，「中景排列着五株前后交错分布的野芭蕉树」应写成「中景五株交错野芭蕉树」。不得把它缩成「芭蕉树」而丢失数量或交错关系。
+- 不添加旧标签没有的对象、数量、关系或动作；一个标签只输出一个短语。
+- camera：必须从池原样选：{' | '.join(camera_pool())}
+- style：必须从池原样选：{' | '.join(style_pool(mode))}
+- constraints：必须从池原样选：{' | '.join(constraints_pool())}
+禁止把旧标签原样写回；禁止改未列出的标签。
+"""
+    user = (
+        f"当前六槽：\n{format_table(current)}\n\n"
+        f"须替换的可疑标签：\n{fail_lines}\n\n"
+        f"请为每条可疑标签给出符合场景「{scene_text}」的替代标签。"
+    )
+    text, email = generate_text_via_agy_accounts(
+        user,
+        model=_REWRITE_MODEL,
+        effort="medium",
+        system=system,
+        log_fn=log_fn,
+        account_labels=AGY_PROMPT_LABELS,
+    )
+    replacements = _parse_replacements_json(text)
+    out = {k: list(v) for k, v in current.items()}
+    for key, mapping in replacements.items():
+        if key not in out or not isinstance(mapping, dict):
+            continue
+        new_list: list[str] = []
+        for atom in out[key]:
+            if atom in fail_map.get(key, []):
+                replacements_for_atom = mapping.get(atom) or []
+                if replacements_for_atom and replacements_for_atom != [atom]:
+                    new_list.extend(replacements_for_atom)
+                else:
+                    # LLM 未给出有效替换则保留，留给人工
+                    new_list.append(atom)
+            else:
+                new_list.append(atom)
+        # 去重保序
+        seen: set[str] = set()
+        cleaned: list[str] = []
+        for a in new_list:
+            if a not in seen:
+                seen.add(a)
+                cleaned.append(a)
+        out[key] = cleaned
+
+    out = clamp_closed_slots(out, rain_mode=mode)
+    return out, email
+
+
+def _parse_replacements_json(text: str) -> dict[str, dict[str, list[str]]]:
+    m = re.search(r"\{.*\}", text or "", re.DOTALL)
+    if not m:
+        return {}
+    try:
+        data = json.loads(m.group(0))
+    except json.JSONDecodeError:
+        return {}
+    raw = data.get("replacements") if isinstance(data, dict) else None
+    if not isinstance(raw, dict):
+        # 兼容直接给 slot→{old:new}
+        raw = data if isinstance(data, dict) else {}
+    out: dict[str, dict[str, list[str]]] = {}
+    for key in SLOT_ORDER:
+        val = raw.get(key)
+        if not isinstance(val, dict):
+            continue
+        mapping: dict[str, list[str]] = {}
+        for old, new in val.items():
+            o = str(old).strip()
+            new_atoms = _atomic_open_atoms(new, slot=key)
+            if o and new_atoms:
+                mapping[o] = new_atoms
+        if mapping:
+            out[key] = mapping
+    return out
 
 
 def _parse_rewrite_json(text: str, *, fallback_mode: str) -> dict[str, list[str]]:
     m = re.search(r"\{.*\}", text or "", re.DOTALL)
     if not m:
-        return default_slots(fallback_mode)
+        return {k: list(default_slots(fallback_mode)[k]) for k in OPEN_SLOTS}
     try:
         data = json.loads(m.group(0))
     except json.JSONDecodeError:
         parsed = parse_table(_strip_fence(text))
-        if any(parsed.values()):
-            return parsed
-        return default_slots(fallback_mode)
+        if any(parsed.get(k) for k in OPEN_SLOTS):
+            return _atomicize_open_slots(parsed)
+        return {k: list(default_slots(fallback_mode)[k]) for k in OPEN_SLOTS}
 
     out: dict[str, list[str]] = {k: [] for k in SLOT_ORDER}
     for key in SLOT_ORDER:
@@ -582,8 +919,42 @@ def _parse_rewrite_json(text: str, *, fallback_mode: str) -> dict[str, list[str]
             out[key] = [str(x).strip() for x in val if str(x).strip()]
         elif isinstance(val, str) and val.strip():
             out[key] = split_atoms(val)
-    if not any(out.values()):
-        return default_slots(fallback_mode)
+    if not any(out.get(k) for k in OPEN_SLOTS):
+        return {k: list(default_slots(fallback_mode)[k]) for k in OPEN_SLOTS}
+    return _atomicize_open_slots(out)
+
+
+_SUBJECT_OBJECT_SPLIT_RE = re.compile(r"\s*(?:以及|与|和|及|、)\s*")
+_UNVERIFIABLE_SIZE_PREFIX_RE = re.compile(r"^(?:高大|巨大)\s*")
+
+
+def _atomic_open_atoms(value: object, *, slot: str) -> list[str]:
+    """规范 LLM 的开放槽输出为单一语义断言。
+
+    只有 subject 会拆分并列对象；action/environment 中的顿号、逗号可能
+    是同一结果/条件的必要限定，不能按标点机械拆分。
+    此兜底只作用于 LLM 生成/替换结果；不会改写用户手工维护的既有标签。
+    """
+    raw_items = value if isinstance(value, list) else [value]
+    out: list[str] = []
+    seen: set[str] = set()
+    for raw in raw_items:
+        text = str(raw or "").strip()
+        if not text:
+            continue
+        parts = _SUBJECT_OBJECT_SPLIT_RE.split(text) if slot == "subject" else [text]
+        for part in parts:
+            atom = _UNVERIFIABLE_SIZE_PREFIX_RE.sub("", part.strip())
+            if atom and atom not in seen:
+                seen.add(atom)
+                out.append(atom)
+    return out
+
+
+def _atomicize_open_slots(slots: dict[str, list[str]]) -> dict[str, list[str]]:
+    out = {key: list(vals) for key, vals in slots.items()}
+    for key in OPEN_SLOTS:
+        out[key] = _atomic_open_atoms(out.get(key) or [], slot=key)
     return out
 
 
@@ -614,9 +985,13 @@ __all__ = [
     "CONSTRAINTS_CORE",
     "CONSTRAINTS_EXTRA",
     "DEFAULT_RAIN_MODE",
+    "DEFAULT_SCENES",
+    "LOCKED_SLOTS",
+    "OPEN_SLOTS",
     "RAIN_MODES",
     "RAIN_MODE_IDS",
     "RAIN_MODE_LABELS",
+    "SCENE_SEED_POOL",
     "SLOT_LABELS",
     "SLOT_ORDER",
     "STYLE_AUDIO_POOL",
@@ -627,19 +1002,24 @@ __all__ = [
     "baseline_model_prompt",
     "baseline_prompt",
     "camera_pool",
+    "check_tag_conflicts",
     "clamp_closed_slots",
     "compose_prompt",
     "constraints_pool",
     "default_atoms",
+    "default_scenes",
     "default_slots",
     "format_agy_account",
     "format_pool_block",
+    "format_scenes",
     "format_slot_line",
     "format_table",
     "normalize_rain_mode",
     "parse_table",
     "pools_doc_path",
+    "product_locked_closed_slots",
     "rain_mode_brief",
+    "replace_failed_atoms",
     "rewrite_atomic",
     "split_atoms",
     "style_pool",

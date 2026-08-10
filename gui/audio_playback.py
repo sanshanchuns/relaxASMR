@@ -583,3 +583,31 @@ def start_wav_preview_loop(
     if max_seconds is not None:
         src = wav_preview_clip(wav_path, max_seconds=max_seconds)
     return _start_locked(src, loop=True)
+
+
+def start_media_audio_loop(media_path: Path) -> subprocess.Popen | None:
+    """循环播放视频/音频文件的音轨（无画面）。
+
+    供 OpenCV 画布预览旁路出声；``-vn`` 跳过视频解码以省 CPU。
+    需要系统有 ``ffplay``；找不到则静默返回 None。
+    """
+    path = Path(media_path).resolve()
+    if not path.is_file() or not which("ffplay"):
+        return None
+    args = [
+        "ffplay",
+        "-nodisp",
+        "-vn",
+        "-loglevel",
+        "quiet",
+        "-loop",
+        "0",
+        "-sync",
+        "audio",
+        str(path),
+    ]
+    try:
+        with _PLAY_LOCK:
+            return _spawn_playback(args, pipe_stdin=True)
+    except FileNotFoundError:
+        return None

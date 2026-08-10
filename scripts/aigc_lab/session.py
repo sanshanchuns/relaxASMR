@@ -1,4 +1,4 @@
-"""AIGC 实验台 GUI 会话持久化（原子表 + 红框 + 雨档 + 选中 run）。
+"""AIGC 实验台 GUI 会话持久化（场景 + 原子表 + 红框 + 雨档 + 选中 run）。
 
 路径：``aigc/t2v_lab/gui_session.json``
 """
@@ -8,7 +8,12 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from scripts.aigc_lab.prompt_atoms import DEFAULT_RAIN_MODE, SLOT_ORDER, normalize_rain_mode
+from scripts.aigc_lab.prompt_atoms import (
+    DEFAULT_RAIN_MODE,
+    DEFAULT_SCENES,
+    SLOT_ORDER,
+    normalize_rain_mode,
+)
 from scripts.config.paths import t2v_lab_dir
 
 _SESSION_NAME = "gui_session.json"
@@ -23,10 +28,24 @@ def empty_session() -> dict:
     return {
         "version": _VERSION,
         "rain_mode": DEFAULT_RAIN_MODE,
+        "scenes": list(DEFAULT_SCENES),
         "slots": {key: [] for key in SLOT_ORDER},
         "fail_tags": {key: [] for key in SLOT_ORDER},
         "selected_run_id": "",
     }
+
+
+def _clean_tag_list(raw) -> list[str]:
+    if not isinstance(raw, list):
+        return []
+    seen: set[str] = set()
+    cleaned: list[str] = []
+    for v in raw:
+        t = str(v).strip()
+        if t and t not in seen:
+            seen.add(t)
+            cleaned.append(t)
+    return cleaned
 
 
 def _clean_slot_map(raw: dict | None) -> dict[str, list[str]]:
@@ -34,17 +53,7 @@ def _clean_slot_map(raw: dict | None) -> dict[str, list[str]]:
     if not isinstance(raw, dict):
         return out
     for key in SLOT_ORDER:
-        vals = raw.get(key) or []
-        if not isinstance(vals, list):
-            continue
-        seen: set[str] = set()
-        cleaned: list[str] = []
-        for v in vals:
-            t = str(v).strip()
-            if t and t not in seen:
-                seen.add(t)
-                cleaned.append(t)
-        out[key] = cleaned
+        out[key] = _clean_tag_list(raw.get(key) or [])
     return out
 
 
@@ -62,6 +71,8 @@ def load_session() -> dict | None:
     out["rain_mode"] = normalize_rain_mode(
         str(raw.get("rain_mode") or DEFAULT_RAIN_MODE)
     )
+    scenes = _clean_tag_list(raw.get("scenes"))
+    out["scenes"] = scenes if scenes else list(DEFAULT_SCENES)
     out["slots"] = _clean_slot_map(raw.get("slots"))
     out["fail_tags"] = _clean_slot_map(raw.get("fail_tags"))
     out["selected_run_id"] = str(raw.get("selected_run_id") or "").strip()
@@ -75,6 +86,8 @@ def save_session(data: dict) -> Path:
     payload["rain_mode"] = normalize_rain_mode(
         str(data.get("rain_mode") or DEFAULT_RAIN_MODE)
     )
+    scenes = _clean_tag_list(data.get("scenes"))
+    payload["scenes"] = scenes if scenes else list(DEFAULT_SCENES)
     payload["slots"] = _clean_slot_map(data.get("slots"))
     payload["fail_tags"] = _clean_slot_map(data.get("fail_tags"))
     payload["selected_run_id"] = str(data.get("selected_run_id") or "").strip()

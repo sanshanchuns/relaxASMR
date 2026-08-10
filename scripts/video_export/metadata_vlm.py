@@ -1,4 +1,4 @@
-"""Gemini VLM 生成差异化 YouTube 标题/描述（参考 metadata_templates_report.md）。"""
+"""Gemini VLM 生成差异化 YouTube 标题/描述（特性 + 功能结构）。"""
 
 from __future__ import annotations
 
@@ -11,29 +11,44 @@ from scripts.config.common_constants import CLOSE_NAMES, DISTANT_NAMES, SPACE_NA
 from scripts.config.paths import clip_matches_path, vlm_matches_path
 from scripts.video_analysis.vlm_engine import call_gemini_vision_json, seed_rng
 
-# 标题模版 T1–T4（design/rain_series/metadata_templates_report.md）
-TITLE_TEMPLATES = {
-    "T1": "{Benefit} | {SceneRain} | {Format}",
-    "T2": "{Pct}% {Benefit} With {SceneRain} | {Secondary}",
-    "T3": "{Duration} {SceneRain} for {Purpose}",
-    "T4": "{Emoji}{Adj} {SceneRain} | {Format}",
+# 标题结构：特性（VLM 画面分析）+ 功能（由特性推导：助眠 / 专注 / 冥想）
+FUNCTION_TYPES = ("sleep", "focus", "meditation")
+
+FUNCTION_HINTS_ZH: dict[str, list[str]] = {
+    "sleep": [
+        "伴您5分钟入睡，治疗失眠",
+        "助您安心入眠，缓解焦虑",
+        "伴您整夜深睡，告别失眠",
+    ],
+    "focus": [
+        "助您专注工作学习",
+        "屏蔽杂音，提升效率",
+        "伴您深度专注，不受干扰",
+    ],
+    "meditation": [
+        "伴您深度冥想，静心减压",
+        "伴您左右，找回内在平静",
+        "助您放松身心，回归当下",
+    ],
 }
 
-TITLE_BENEFITS = [
-    "Rain Sounds for Sleep",
-    "Relaxing Rain Sounds",
-    "Deep Sleep Rain ASMR",
-    "Calming Rain for Focus",
-    "Cozy Rain ASMR",
-]
-
-TITLE_PURPOSES = ["Sleeping", "Studying", "Relaxation", "Meditation", "Deep Focus"]
-TITLE_SECONDARY = [
-    "Calm Anxiety & Beat Insomnia",
-    "Stress Relief & Better Sleep",
-    "Focus & Relaxation",
-]
-TITLE_ADJECTIVES = ["Peaceful", "Calming", "Cozy", "Gentle", "Misty", "Soothing"]
+FUNCTION_HINTS_EN: dict[str, list[str]] = {
+    "sleep": [
+        "lull you to sleep in 5 minutes, beat insomnia",
+        "help you fall asleep fast and stay asleep",
+        "ease anxiety and drift into deep sleep",
+    ],
+    "focus": [
+        "help you focus and study without distraction",
+        "block noise for deep work and concentration",
+        "keep you in the zone for hours",
+    ],
+    "meditation": [
+        "guide your meditation and inner calm",
+        "keep you company in quiet moments",
+        "ease stress and bring you back to the present",
+    ],
+}
 
 CORE_TAGS = [
     "rain sounds",
@@ -173,9 +188,15 @@ def sanitize_resolution_in_copy(copy: dict, *, quality: str) -> dict:
     return out
 
 
-def select_title_template(video_seed: str) -> str:
+def select_function_type(video_seed: str) -> str:
+    """按视频 seed 确定性选择功能方向：助眠 / 专注 / 冥想。"""
     rng = seed_rng(video_seed or "default")
-    return rng.choice(["T1", "T2", "T3", "T4"])
+    return rng.choice(FUNCTION_TYPES)
+
+
+def select_title_template(video_seed: str) -> str:
+    """兼容旧调用；返回功能类型 sleep/focus/meditation。"""
+    return select_function_type(video_seed)
 
 
 def build_metadata_prompt(
@@ -185,15 +206,17 @@ def build_metadata_prompt(
     *,
     video_seed: str,
     show_4k: bool,
-    template_id: str,
+    function_type: str,
     visual_context: dict | None = None,
+    template_id: str | None = None,
 ) -> str:
-    fmt_en = _format_en(meta, show_4k=show_4k)
-    fmt_zh = _format_zh(meta, show_4k=show_4k)
-    dur_en = _duration_title_en(meta)
+    if template_id and template_id not in FUNCTION_TYPES:
+        function_type = template_id
     quality, _ = resolve_video_quality(meta)
     footage_line = _footage_constraint(meta, quality=quality)
     hashtag_line = _hashtag_hint(quality=quality)
+    dur_zh = meta.get("duration_human", "")
+    dur_en = _duration_title_en(meta)
 
     acoustic = ""
     if vlm_ctx:
@@ -213,32 +236,40 @@ def build_metadata_prompt(
         f"draft place EN: {scene.get('place_en_long', '')}."
     )
 
-    tmpl = TITLE_TEMPLATES.get(template_id, TITLE_TEMPLATES["T1"])
-    rng = seed_rng(f"{video_seed}:{template_id}")
+    rng = seed_rng(f"{video_seed}:{function_type}")
+    fn_hint_zh = rng.choice(FUNCTION_HINTS_ZH.get(function_type, FUNCTION_HINTS_ZH["sleep"]))
+    fn_hint_en = rng.choice(FUNCTION_HINTS_EN.get(function_type, FUNCTION_HINTS_EN["sleep"]))
+    fn_label = {"sleep": "助眠", "focus": "专注", "meditation": "冥想"}.get(function_type, "助眠")
 
     return f"""You are a YouTube metadata writer for a rain ASMR channel.
 Write UNIQUE title and description for THIS specific video frame — avoid generic copy reused across uploads.
 
 {visual_block}
-## Channel constraints (MUST follow)
-{footage_line}
-- Format segment for English title MUST be exactly: `{fmt_en}`
+## Title structure (MUST follow — NOT three-part / NOT pipe-separated)
+Each title = **Feature + Function** (特性 + 功能), written as one flowing phrase.
+
+- **Feature (特性)**: Poetic phrase from what you SEE in the image — rain, bridge, pond, forest, stone arch, lily pads, etc.
+  Derive ONLY from visible elements. Examples:
+  - 轻柔的雨声 / Soft rain sounds
+  - 小桥流水 / Gentle stream and stone bridge
+  - 雨打石拱桥与静谧森林池塘 / Rain on stone arch bridge and quiet forest pond
+- **Function (功能)**: Derived from the feature mood. Assigned direction: **{fn_label}** ({function_type}).
+  Pick or adapt one hint:
+  - Chinese hint: {fn_hint_zh}
+  - English hint: {fn_hint_en}
+- **Compose titles** by joining feature + function naturally (no `|` separators, no duration/4K/FHD format segment in title):
+  - Chinese example: 轻柔的雨声伴您5分钟入睡，治疗失眠
+  - Chinese example: 小桥流水伴您左右，静心减压
+  - English example: Soft rain sounds lull you to sleep in 5 minutes, beat insomnia
 - English title ≤ 100 characters; include rain + sleep/relax/ASMR keywords.
-- Use assigned title template structure: **{template_id}** → `{tmpl}`
-- SceneRain phrase MUST describe ONLY what you SEE in the image (pond, lily pads, trees — NOT path unless visible).
 - If VISUAL FACTS say has_path=false, NEVER use path/trail/walkway/stone path in title or description.
 - Descriptions: Hook → 3 benefit bullets (✅) → scene sensory paragraph → CTA → hashtags
+- Mention duration ({dur_zh} / {dur_en}) in description, NOT in title.
 - Chinese and English must match the same scene but NOT be literal translations — vary wording.
-- Video seed (for uniqueness): `{video_seed}` — make copy distinct from other videos with same template.
+- Video seed (for uniqueness): `{video_seed}` — make copy distinct from other videos.
 
-## Suggested slot values (you may adapt)
-- Benefit examples: {", ".join(TITLE_BENEFITS[:4])}
-- Purpose examples: {", ".join(TITLE_PURPOSES)}
-- Secondary benefit (T2): {rng.choice(TITLE_SECONDARY)}
-- Adjective (T4): {rng.choice(TITLE_ADJECTIVES)}
-- Percent hook (T2): {rng.choice([95, 97, 99])}%
-- Duration (T3): {dur_en}
-- Chinese format segment: `{fmt_zh}`
+## Channel constraints (MUST follow)
+{footage_line}
 
 ## Low-priority hints (do NOT override VISUAL FACTS)
 {heuristic}
@@ -249,21 +280,30 @@ Acoustic mix hint (sound design, not necessarily visible): {acoustic or "not ava
 
 Return ONLY raw JSON (no markdown):
 {{
-  "title_en": "...",
-  "title_zh": "...",
+  "feature_zh": "特性短语，如 轻柔的雨声",
+  "function_zh": "功能短语，如 伴您5分钟入睡，治疗失眠",
+  "feature_en": "feature phrase, e.g. Soft rain sounds",
+  "function_en": "function phrase, e.g. lull you to sleep in 5 minutes, beat insomnia",
+  "title_zh": "特性+功能合成标题",
+  "title_en": "feature + function combined title",
   "description_en": "...",
   "description_zh": "...",
-  "scene_rain_en": "short scene phrase for thumbnail, e.g. Calming Rain on Forest Pond Lily Pads",
+  "scene_rain_en": "short scene phrase for thumbnail, e.g. Rain on Stone Bridge and Forest Pond",
+  "function_type": "{function_type}",
   "tags_en": ["rain sounds", "rain asmr", "..."]
 }}
 """
 
 
 def _validate_copy(data: dict, fmt_en: str) -> dict | None:
+    del fmt_en  # 标题不再包含格式段
     required = ("title_en", "title_zh", "description_en", "description_zh")
     if not all(data.get(k) for k in required):
         return None
     title_en = str(data["title_en"]).strip()
+    title_zh = str(data["title_zh"]).strip()
+    if "|" in title_en or "|" in title_zh:
+        return None
     if len(title_en) > 100:
         title_en = title_en[:100].rsplit(" ", 1)[0]
     desc_en = str(data["description_en"]).strip()
@@ -275,15 +315,21 @@ def _validate_copy(data: dict, fmt_en: str) -> dict | None:
         tags = [t.strip() for t in re.split(r"[,，]", tags) if t.strip()]
     tags = list(dict.fromkeys(str(t).strip() for t in tags if str(t).strip()))
     scene_rain = str(data.get("scene_rain_en", "")).strip()
+    fn_type = str(data.get("function_type", "")).strip()
+    if fn_type not in FUNCTION_TYPES:
+        fn_type = ""
     return {
         "title_en": title_en,
-        "title_zh": str(data["title_zh"]).strip(),
+        "title_zh": title_zh,
         "description_en": desc_en,
         "description_zh": desc_zh,
         "scene_rain_en": scene_rain,
         "tags": tags or list(CORE_TAGS),
-        "format_en": fmt_en,
-        "template_id": data.get("template_id", ""),
+        "function_type": fn_type,
+        "feature_zh": str(data.get("feature_zh", "")).strip(),
+        "function_zh": str(data.get("function_zh", "")).strip(),
+        "feature_en": str(data.get("feature_en", "")).strip(),
+        "function_en": str(data.get("function_en", "")).strip(),
     }
 
 
@@ -309,7 +355,7 @@ def generate_youtube_copy_with_vlm(
         return None
 
     fmt_en = _format_en(meta, show_4k=show_4k)
-    template_id = select_title_template(video_seed)
+    function_type = select_function_type(video_seed)
     ctx = enrich_layer_context(vlm_ctx or {})
     quality, _ = resolve_video_quality(meta)
 
@@ -320,24 +366,19 @@ def generate_youtube_copy_with_vlm(
             ctx,
             video_seed=video_seed,
             show_4k=show_4k,
-            template_id=template_id,
+            function_type=function_type,
             visual_context=visual_context,
         )
         if extra_note:
             prompt += f"\n\nRETRY NOTE: Previous draft violated visual constraints. {extra_note}\n"
         raw = call_gemini_vision_json(prompt, frame_path, on_progress=on_progress)
-        raw["template_id"] = template_id
+        raw["function_type"] = raw.get("function_type") or function_type
         result = _validate_copy(raw, fmt_en)
-        if result and fmt_en not in result["title_en"]:
-            if template_id in ("T1", "T4") and "|" in result["title_en"]:
-                parts = [p.strip() for p in result["title_en"].split("|")]
-                if len(parts) >= 2:
-                    parts[-1] = fmt_en
-                    result["title_en"] = " | ".join(parts)
         return result
 
     if on_progress:
-        on_progress(f"VLM 生成差异化文案（模版 {template_id}）…")
+        fn_label = {"sleep": "助眠", "focus": "专注", "meditation": "冥想"}.get(function_type, function_type)
+        on_progress(f"VLM 生成差异化文案（特性+功能 · {fn_label}）…")
 
     try:
         result = _run_once()
@@ -362,7 +403,8 @@ def generate_youtube_copy_with_vlm(
             result = sanitize_resolution_in_copy(result, quality=quality)
 
         if on_progress and result:
-            on_progress(f"VLM 文案完成 · 模版 {template_id} · {result['title_en'][:60]}…")
+            fn = result.get("function_type") or function_type
+            on_progress(f"VLM 文案完成 · {fn} · {result['title_en'][:60]}…")
         return result
     except Exception as e:
         if on_progress:
@@ -384,5 +426,9 @@ def merge_vlm_copy_with_tags(vlm_copy: dict, core_tags: list[str], scene_tags: l
         "subtitle_en": "Sleep · Focus · Meditation · Stress Relief",
         "scene_rain_en": vlm_copy.get("scene_rain_en", ""),
         "metadata_source": "vlm",
-        "template_id": vlm_copy.get("template_id", ""),
+        "function_type": vlm_copy.get("function_type", ""),
+        "feature_zh": vlm_copy.get("feature_zh", ""),
+        "function_zh": vlm_copy.get("function_zh", ""),
+        "feature_en": vlm_copy.get("feature_en", ""),
+        "function_en": vlm_copy.get("function_en", ""),
     }

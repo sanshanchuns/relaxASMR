@@ -14,6 +14,7 @@ from video_export.metadata_vlm import (  # noqa: E402
     enrich_layer_context,
     resolve_video_quality,
     sanitize_resolution_in_copy,
+    select_function_type,
     select_title_template,
 )
 from video_export.viral_metadata import (  # noqa: E402
@@ -46,13 +47,14 @@ SAMPLE_META = {
 
 
 class TestMetadataVariation(unittest.TestCase):
-    def test_select_title_template_deterministic(self):
-        a = select_title_template("MVI_6918")
-        b = select_title_template("MVI_6918")
-        c = select_title_template("MVI_6919")
+    def test_select_function_type_deterministic(self):
+        a = select_function_type("MVI_6918")
+        b = select_function_type("MVI_6918")
+        c = select_function_type("MVI_6919")
         self.assertEqual(a, b)
-        self.assertIn(a, {"T1", "T2", "T3", "T4"})
-        self.assertIn(c, {"T1", "T2", "T3", "T4"})
+        self.assertIn(a, {"sleep", "focus", "meditation"})
+        self.assertIn(c, {"sleep", "focus", "meditation"})
+        self.assertEqual(select_title_template("MVI_6918"), a)
 
     def test_scene_rain_from_vlm_layers(self):
         ctx = enrich_layer_context({"l1_key": 100, "l2_key": 590, "l3_key": 900, "climate_key": "light"})
@@ -78,18 +80,21 @@ class TestMetadataVariation(unittest.TestCase):
         )
         self.assertNotEqual(copy_a["title_en"], copy_b["title_en"])
         self.assertNotEqual(copy_a["description_en"], copy_b["description_en"])
+        self.assertNotIn("|", copy_a["title_en"])
+        self.assertNotIn("|", copy_a["title_zh"])
 
-    def test_prompt_contains_template_and_format(self):
+    def test_prompt_contains_feature_function_structure(self):
         prompt = build_metadata_prompt(
             SAMPLE_SCENE,
             SAMPLE_META,
             enrich_layer_context({"l1_key": 100, "l2_key": 590, "l3_key": 900}),
             video_seed="MVI_6918",
             show_4k=True,
-            template_id="T1",
+            function_type="sleep",
         )
-        self.assertIn("T1", prompt)
-        self.assertIn("3 Hours 4K Rain Loop ASMR", prompt)
+        self.assertIn("Feature + Function", prompt)
+        self.assertIn("feature_zh", prompt)
+        self.assertIn("NOT three-part", prompt)
         self.assertIn("NOT black screen", prompt)
 
     def test_resolve_video_quality_fhd(self):
@@ -106,9 +111,8 @@ class TestMetadataVariation(unittest.TestCase):
             enrich_layer_context({"l1_key": 100, "l2_key": 590, "l3_key": 900}),
             video_seed="MVI_6989",
             show_4k=False,
-            template_id="T1",
+            function_type="focus",
         )
-        self.assertIn("3 Hours FHD Rain Loop ASMR", prompt)
         self.assertIn("NOT 4K", prompt)
         self.assertNotIn("Real 4K rain loop", prompt)
 

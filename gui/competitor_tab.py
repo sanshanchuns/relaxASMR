@@ -31,6 +31,11 @@ from gui.ui_theme import LIGHT, UiTheme, grid_theme  # noqa: E402
 from gui.video_insight import cached_insight  # noqa: E402
 from gui.youtube_api import ChannelInfo, VideoInfo, YoutubeApiError, format_relative_time  # noqa: E402
 from gui.youtube_cache import cache_age_seconds, cache_get, cache_set, download_thumbnail  # noqa: E402
+from scripts.aigc_lab.youtube_competitor_pool import (  # noqa: E402
+    DEFAULT_KEYWORDS_TEXT,
+    fetch_competitor_pool,
+    parse_keywords,
+)
 from gui.youtube_grid_common import (  # noqa: E402
     CELL_H,
     CELL_W,
@@ -41,8 +46,6 @@ from gui.youtube_grid_common import (  # noqa: E402
     mark_cell_analyzed,
 )
 from gui.youtube_preview_panel import YoutubePreviewPanel, open_in_browser  # noqa: E402
-
-DEFAULT_KEYWORDS_TEXT = "leaf rain"
 
 _SEARCH_MAX_RESULTS = 25
 _MAX_KEYWORDS = 6
@@ -76,9 +79,7 @@ def _channel_from_dict(d: dict) -> ChannelInfo:
 
 
 def _parse_keywords(text: str) -> list[str]:
-    parts = [p.strip() for p in text.replace("，", ",").split(",")]
-    keywords = [p for p in parts if p]
-    return keywords[:_MAX_KEYWORDS] or [DEFAULT_KEYWORDS_TEXT]
+    return parse_keywords(text)
 
 
 def _darkhorse_score(v: VideoInfo) -> float:
@@ -231,44 +232,7 @@ class CompetitorTab(ttk.Frame):
     def _fetch_pool(
         self, force: bool, keywords: list[str]
     ) -> tuple[list[VideoInfo], dict[str, ChannelInfo], bool]:
-        """返回 (视频池, 频道信息, 是否命中缓存)。"""
-        from gui import youtube_api as yt
-
-        cache_key = _POOL_CACHE_KEY_PREFIX + "|".join(keywords)
-
-        if not force:
-            cached = cache_get(cache_key, ttl_seconds=_CACHE_TTL_SEC)
-            if cached:
-                videos = [_video_from_dict(d) for d in cached.get("videos", [])]
-                channels = {
-                    cid: _channel_from_dict(d) for cid, d in (cached.get("channels") or {}).items()
-                }
-                return videos, channels, True
-
-        seen_ids: dict[str, None] = {}
-        for kw in keywords:
-            # 分别按「总播放量」和「最新发布」各搜一次：只按播放量排序容易只捞到
-            # 早已成名的老爆款，加一路「最新发布」能补充刚起量、还没冲上总量榜的黑马候选。
-            self._log(f"[爆款分析] 搜索关键词「{kw}」（按播放量）…")
-            for vid in yt.search_video_ids(kw, max_results=_SEARCH_MAX_RESULTS, order="viewCount"):
-                seen_ids.setdefault(vid, None)
-            self._log(f"[爆款分析] 搜索关键词「{kw}」（按最新发布，挖黑马）…")
-            for vid in yt.search_video_ids(kw, max_results=_SEARCH_MAX_RESULTS, order="date"):
-                seen_ids.setdefault(vid, None)
-
-        all_details = yt.get_videos_details(list(seen_ids.keys()))
-
-        channel_ids = list(dict.fromkeys(v.channel_id for v in all_details))
-        channels = yt.get_channels_details(channel_ids)
-
-        cache_set(
-            cache_key,
-            {
-                "videos": [_video_to_dict(v) for v in all_details],
-                "channels": {cid: _channel_to_dict(c) for cid, c in channels.items()},
-            },
-        )
-        return all_details, channels, False
+        return fetch_competitor_pool(keywords, force=force, log_fn=self._log)
 
     def _load_bg(self, force: bool, keywords: list[str]) -> None:
         try:

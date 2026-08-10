@@ -10,32 +10,29 @@ import random
 import re
 from typing import Callable
 
-# --- 标题模版（T1/T2/T3/T4，来自 metadata_templates_report.md）---
+# --- 标题：特性 + 功能（特性来自画面，功能为助眠/专注/冥想）---
 
-TITLE_BENEFITS_EN = [
-    "Rain Sounds for Sleep",
-    "Relaxing Rain Sounds",
-    "Deep Sleep Rain ASMR",
-    "Calming Rain for Focus",
-    "Cozy Rain ASMR",
-    "Peaceful Rain for Sleeping",
-]
+FEATURE_PATTERNS_ZH: dict[str, list[str]] = {
+    "grove_pond": ["小桥流水", "林间池塘雨声", "雨打荷叶与静谧水面", "石拱桥下的雨景"],
+    "grove": ["轻柔的林间雨声", "雨打森林叶", "密林细雨"],
+    "grove_path": ["林间小径雨声", "雨打林叶与泥土"],
+    "park_pond": ["公园荷塘雨声", "雨打睡莲与绿水"],
+    "pond": ["荷塘雨声", "雨打荷叶"],
+    "nature": ["轻柔的雨声", "自然雨景"],
+}
 
-TITLE_BENEFITS_ZH = [
-    "助眠雨声",
-    "放松雨声",
-    "深度睡眠雨声",
-    "专注冥想雨声",
-    "治愈雨声",
-]
-
-TITLE_PURPOSES_EN = ["Sleeping", "Studying", "Relaxation", "Meditation", "Deep Focus"]
-TITLE_ADJECTIVES_EN = ["Peaceful", "Calming", "Cozy", "Gentle", "Misty", "Soothing"]
-TITLE_SECONDARY_EN = [
-    "Calm Anxiety & Beat Insomnia",
-    "Stress Relief & Better Sleep",
-    "Focus & Relaxation",
-]
+FEATURE_PATTERNS_EN: dict[str, list[str]] = {
+    "grove_pond": [
+        "Gentle stream and stone bridge",
+        "Soft rain on forest pond",
+        "Rain on lily pads and quiet water",
+    ],
+    "grove": ["Soft rain in the forest", "Gentle rain on forest leaves"],
+    "grove_path": ["Rain on a forest path", "Soft rain along the woodland trail"],
+    "park_pond": ["Rain beside a lotus pond", "Gentle rain on park water"],
+    "pond": ["Peaceful rain on lotus pond", "Soft rain on lily pads"],
+    "nature": ["Soft rain sounds", "Gentle natural rain"],
+}
 
 # --- 描述：模版池（约 50%）---
 
@@ -234,15 +231,39 @@ def _pick(rng: random.Random, items: list, count: int = 1) -> list:
     return rng.sample(items, count)
 
 
-def _duration_title_en(meta: dict) -> str:
-    s = int(meta["duration_s"])
-    h = s // 3600
-    m = (s % 3600) // 60
-    if h >= 1:
-        return f"{h} Hour{'s' if h != 1 else ''}"
-    if m >= 1:
-        return f"{m} Minutes"
-    return f"{s} Seconds"
+def _select_function_type(seed: str) -> str:
+    from video_export.metadata_vlm import select_function_type
+    return select_function_type(seed)
+
+
+def _feature_from_scene(rng: random.Random, scene: dict, lang: str) -> str:
+    key = scene.get("scene_key", "nature")
+    if lang == "zh":
+        bank = FEATURE_PATTERNS_ZH.get(key, FEATURE_PATTERNS_ZH["nature"])
+        place = scene.get("place_zh_short", "自然")
+        extras = [f"{place}雨声", f"雨打{place}"]
+        return rng.choice(bank + extras)
+    bank = FEATURE_PATTERNS_EN.get(key, FEATURE_PATTERNS_EN["nature"])
+    place = scene.get("place_en_short", "Nature")
+    extras = [f"Soft rain on {place}", f"Gentle rain in {place}"]
+    return rng.choice(bank + extras)
+
+
+def _function_phrase(rng: random.Random, function_type: str, lang: str) -> str:
+    from video_export.metadata_vlm import FUNCTION_HINTS_EN, FUNCTION_HINTS_ZH
+    if lang == "zh":
+        return rng.choice(FUNCTION_HINTS_ZH.get(function_type, FUNCTION_HINTS_ZH["sleep"]))
+    return rng.choice(FUNCTION_HINTS_EN.get(function_type, FUNCTION_HINTS_EN["sleep"]))
+
+
+def _compose_title_zh(feature: str, function: str) -> str:
+    if function.startswith(("伴", "助", "帮")):
+        return f"{feature}{function}"
+    return f"{feature}，{function}"
+
+
+def _compose_title_en(feature: str, function: str) -> str:
+    return f"{feature} {function}"
 
 
 def _viral_format_en(meta: dict, *, show_4k: bool) -> str:
@@ -265,42 +286,30 @@ def _viral_format_zh(meta: dict, *, show_4k: bool) -> str:
 
 def _build_title_en(
     rng: random.Random,
+    scene: dict,
+    function_type: str,
     scene_rain: str,
     fmt_en: str,
     meta: dict,
 ) -> str:
-    variant = rng.randint(0, 3)
-    benefit = rng.choice(TITLE_BENEFITS_EN)
-    adj = rng.choice(TITLE_ADJECTIVES_EN)
-    purpose = rng.choice(TITLE_PURPOSES_EN)
-    dur = _duration_title_en(meta)
-
-    if variant == 0:
-        return f"{benefit} | {scene_rain} | {fmt_en}"
-    if variant == 1:
-        pct = rng.choice([95, 97, 99])
-        secondary = rng.choice(TITLE_SECONDARY_EN)
-        return f"{pct}% {benefit} With {scene_rain} | {secondary}"
-    if variant == 2:
-        return f"{dur} {scene_rain} for {purpose}"
-    emoji = rng.choice(["🌧️ ", "☔ ", ""])
-    return f"{emoji}{adj} {scene_rain} | {fmt_en}"
+    del fmt_en, meta  # 标题不再使用格式段/时长
+    feature = _feature_from_scene(rng, scene, "en")
+    if scene_rain and rng.random() < 0.4:
+        feature = scene_rain
+    function = _function_phrase(rng, function_type, "en")
+    return _compose_title_en(feature, function)
 
 
 def _build_title_zh(
     rng: random.Random,
     scene: dict,
+    function_type: str,
     fmt_zh: str,
 ) -> str:
-    variant = rng.randint(0, 2)
-    benefit = rng.choice(TITLE_BENEFITS_ZH)
-    place = scene["place_zh_short"]
-    if variant == 0:
-        return f"{benefit} | {place}雨声 | {fmt_zh}"
-    if variant == 1:
-        mood = "雾气" if scene.get("misty") else "治愈"
-        return f"{mood}{place}雨景 | {benefit} | {fmt_zh}"
-    return f"{scene['place_zh_long']} | {benefit} | {fmt_zh}"
+    del fmt_zh
+    feature = _feature_from_scene(rng, scene, "zh")
+    function = _function_phrase(rng, function_type, "zh")
+    return _compose_title_zh(feature, function)
 
 
 def _creative_scene_lines(
@@ -410,9 +419,10 @@ def build_varied_forest_rain_copy(
     hear = scene.get("thumb_place", scene["place_en_long"])
     fmt_en = _viral_format_en(meta, show_4k=show_4k)
     fmt_zh = _viral_format_zh(meta, show_4k=show_4k)
+    function_type = _select_function_type(seed)
 
-    title_en = _build_title_en(rng, scene_rain, fmt_en, meta)
-    title_zh = _build_title_zh(rng, scene, fmt_zh)
+    title_en = _build_title_en(rng, scene, function_type, scene_rain, fmt_en, meta)
+    title_zh = _build_title_zh(rng, scene, function_type, fmt_zh)
     desc_en = _build_description_en(rng, scene, meta, hear)
     desc_zh = _build_description_zh(rng, scene, meta)
 
@@ -430,5 +440,6 @@ def build_varied_forest_rain_copy(
         "subtitle_zh": "睡眠 · 专注 · 冥想 · 减压",
         "subtitle_en": "Sleep · Focus · Meditation · Stress Relief",
         "metadata_source": "template",
+        "function_type": function_type,
         "scene_rain_en": scene_rain,
     }

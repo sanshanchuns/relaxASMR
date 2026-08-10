@@ -40,6 +40,9 @@ def build_material_record(
     src = youtube_copy.get("metadata_source")
     if src:
         record["metadata_source"] = src
+    fn = youtube_copy.get("function_type")
+    if fn:
+        record["function_type"] = fn
     tmpl = youtube_copy.get("template_id")
     if tmpl:
         record["template_id"] = tmpl
@@ -83,6 +86,7 @@ def _normalize_json_record(data: dict) -> dict:
         "thumb_subtitle_en": data.get("thumb_subtitle_en", ""),
         "scene_key": data.get("scene_key", ""),
         "metadata_source": data.get("metadata_source", ""),
+        "function_type": data.get("function_type", ""),
         "template_id": data.get("template_id", ""),
         "video": data.get("video") or {},
     }

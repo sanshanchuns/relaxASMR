@@ -916,8 +916,8 @@ def render_markdown(
         lines.append(f"- 画面推断：`{scene_key}`（auto_from_scene）")
     meta_src = youtube_copy.get("metadata_source")
     if meta_src:
-        tmpl = youtube_copy.get("template_id", "")
-        src_note = f"{meta_src}" + (f" · {tmpl}" if tmpl else "")
+        fn = youtube_copy.get("function_type", "")
+        src_note = f"{meta_src}" + (f" · {fn}" if fn else "")
         lines.append(f"- 文案来源：`{src_note}`")
     lines.extend([
         "",
@@ -1124,7 +1124,8 @@ def generate_material(
                 max_words=14,
             )
         src = youtube_copy.get("metadata_source", "template")
-        log(f"文案来源：{src}" + (f" · {youtube_copy.get('template_id', '')}" if youtube_copy.get("template_id") else ""))
+        fn = youtube_copy.get("function_type", "")
+        log(f"文案来源：{src}" + (f" · {fn}" if fn else ""))
     else:
         youtube_copy = resolve_youtube_copy(preset, scene, meta, stem, title_zh, title_en)
         thumb_title_resolved, thumb_subtitle_resolved = resolve_thumb_text(

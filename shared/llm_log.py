@@ -1,11 +1,15 @@
-"""Route in-process LLM / pipeline logs to GUI (or stdout when unset).
+"""Route in-process LLM / pipeline logs to an active callback (GUI log panel).
 
 与 ``economist/shared/llm_log.py`` 保持一致：``cli/agy/`` 内部用 ``emit_llm_log``
 打日志，因此这里必须提供同名同签名的实现，否则 ``import agy`` 会 ModuleNotFoundError。
+
+Without a callback, stay silent so GUI terminals are not flooded by agy lines.
+CLI/debug can opt in with ``LLM_LOG_STDOUT=1``.
 """
 
 from __future__ import annotations
 
+import os
 from collections.abc import Callable
 from contextvars import ContextVar, Token
 
@@ -39,12 +43,14 @@ class llm_log_context:
 
 
 def emit_llm_log(message: str) -> None:
-    """Send to active GUI callback when set; otherwise print to stdout."""
+    """Send to active callback when set; otherwise silent (unless LLM_LOG_STDOUT=1)."""
     text = (message or "").rstrip()
     if not text:
         return
     callback = _log_callback.get()
     if callback is not None:
         callback(text)
-    else:
+        return
+    flag = os.environ.get("LLM_LOG_STDOUT", "").strip().lower()
+    if flag in {"1", "true", "yes", "on"}:
         print(text, flush=True)

@@ -191,12 +191,37 @@ def _windows_clipboard_read() -> str:
     return ""
 
 
-def _get_safe_clipboard(master: tk.Misc) -> str:
+def _resolve_event_widget(widget: object) -> tk.Misc | None:
+    """``bind_class`` 偶发把 ``event.widget`` 传成路径字符串，需解析回控件。"""
+    if widget is None:
+        return None
+    if isinstance(widget, tk.Misc):
+        return widget
+    if isinstance(widget, str):
+        root = None
+        try:
+            root = tk._get_default_root()  # type: ignore[attr-defined]  # noqa: SLF001
+        except Exception:
+            root = getattr(tk, "_default_root", None)
+        if root is not None:
+            try:
+                return root.nametowidget(widget)
+            except (tk.TclError, KeyError, AttributeError):
+                return None
+    return None
+
+
+def _get_safe_clipboard(master: tk.Misc | None) -> str:
+    widget = _resolve_event_widget(master) if not isinstance(master, tk.Misc) else master
+    if widget is None and isinstance(master, tk.Misc):
+        widget = master
+
     try:
-        root = master.winfo_toplevel()
-        hold = getattr(root, "_relaxasmr_clipboard_hold", None)
-        if hold:
-            return hold
+        if widget is not None:
+            root = widget.winfo_toplevel()
+            hold = getattr(root, "_relaxasmr_clipboard_hold", None)
+            if hold:
+                return hold
     except Exception:
         pass
 
@@ -205,16 +230,22 @@ def _get_safe_clipboard(master: tk.Misc) -> str:
         if val:
             return val
 
-    try:
-        return master.clipboard_get()
-    except tk.TclError:
-        return ""
+    for candidate in (widget, getattr(tk, "_default_root", None)):
+        if candidate is None or not hasattr(candidate, "clipboard_get"):
+            continue
+        try:
+            return candidate.clipboard_get()
+        except (tk.TclError, AttributeError):
+            continue
+    return ""
 
 
 def _safe_paste_event(event: tk.Event) -> str:
-    widget = event.widget
+    widget = _resolve_event_widget(event.widget)
     text = _get_safe_clipboard(widget)
     if not text:
+        return "break"
+    if widget is None:
         return "break"
     try:
         if isinstance(widget, tk.Text):
@@ -236,7 +267,7 @@ def _safe_paste_event(event: tk.Event) -> str:
 
 def setup_global_clipboard_safety(root: tk.Misc) -> None:
     """全局安全粘贴，避免 WSL 下 X connection to :0 broken。"""
-    for cls_name in ("Text", "Entry", "TEntry"):
+    for cls_name in ("Text", "Entry", "TEntry", "TCombobox"):
         try:
             root.bind_class(cls_name, "<<Paste>>", _safe_paste_event)
             root.bind_class(cls_name, "<Control-v>", _safe_paste_event)
