@@ -12,6 +12,7 @@ fi
 VIDEO=""
 AUDIO=""
 OUTPUT=""
+PREFIX=""
 DURATION=""
 ENCODE_MODE="quality"   # quality (CRF/CQ) | bitrate (fixed -b:v)
 VIDEO_CRF=""
@@ -96,6 +97,28 @@ probe_duration_sec() {
     return 1
   fi
   awk "BEGIN {printf \"%.3f\", $d}"
+}
+
+probe_video_height() {
+  local path="$1"
+  local h
+  h=$(ffprobe -v error -select_streams v:0 -show_entries stream=height -of csv=p=0 "$path" 2>/dev/null || true)
+  if [[ "$h" =~ ^[0-9]+$ ]]; then
+    printf '%s' "$h"
+    return 0
+  fi
+  return 1
+}
+
+probe_video_fps() {
+  local path="$1"
+  local r
+  r=$(ffprobe -v error -select_streams v:0 -show_entries stream=r_frame_rate -of csv=p=0 "$path" 2>/dev/null || true)
+  if [[ -z "$r" || "$r" == "N/A" ]]; then
+    printf '60'
+    return 0
+  fi
+  printf '%s' "$r"
 }
 
 probe_video_width() {
@@ -424,6 +447,7 @@ Usage: export_mp4.sh -v VIDEO -a AUDIO [-o OUTPUT] [options]
 
   -v, --video PATH       Video source (looped to match audio)
   -a, --audio PATH       Audio source (WAV etc.; sets duration)
+      --prefix PATH      Intro clip played once, then -v loops for the rest
   -o, --output PATH      Output .mp4 (default: <audio_dir>/<stem>_<res>.mp4;
                          res from video width: _4k ≥3840, _fhd ≥1920, _720p ≥1280)
   -d, --duration SEC     Cap output length (default: full audio)
@@ -457,6 +481,7 @@ while [[ $# -gt 0 ]]; do
     -v|--video) VIDEO="$2"; shift 2 ;;
     -a|--audio) AUDIO="$2"; shift 2 ;;
     -o|--output) OUTPUT="$2"; shift 2 ;;
+    --prefix) PREFIX="$2"; shift 2 ;;
     -d|--duration) DURATION="$2"; shift 2 ;;
     --encoder) ENCODER="$2"; shift 2 ;;
     --threads) THREADS="$2"; shift 2 ;;
@@ -489,6 +514,11 @@ fi
 
 if [[ ! -f "$AUDIO" ]]; then
   echo "Error: audio not found: $AUDIO" >&2
+  exit 1
+fi
+
+if [[ -n "$PREFIX" && ! -f "$PREFIX" ]]; then
+  echo "Error: prefix video not found: $PREFIX" >&2
   exit 1
 fi
 
@@ -537,10 +567,19 @@ else
   TARGET_SEC=$(probe_duration_sec "$AUDIO" || echo "0")
 fi
 
+video_h=""
+if ! video_h=$(probe_video_height "$VIDEO" 2>/dev/null); then
+  video_h=1080
+fi
+video_fps=$(probe_video_fps "$VIDEO")
+
 ENCODER_LIST=()
 build_encoder_list
 
 echo "==> Video:  $VIDEO (looped)"
+if [[ -n "$PREFIX" ]]; then
+  echo "==> Prefix: $PREFIX (once, then loop)"
+fi
 res_label=$(resolution_suffix_from_width "$video_w" | tr -d '_')
 echo "==> Video size: ${video_w}px wide (${res_label} suffix)"
 echo "==> Audio:  $AUDIO"
@@ -574,11 +613,29 @@ for current_enc in "${ENCODER_LIST[@]}"; do
   encode_part=$(encode_part_path "$OUTPUT" "$current_enc")
   cleanup_encode_artifacts "$OUTPUT"
 
-  ffmpeg_args=(
-    -y
-    -stream_loop -1 -i "$VIDEO"
-    -i "$AUDIO"
-  )
+  fade_d=""
+  if awk -v f="$VIDEO_FADE_IN" 'BEGIN {exit (f+0 > 0) ? 0 : 1}'; then
+    fade_d="$VIDEO_FADE_IN"
+    if [[ -n "$TARGET_SEC" && "$TARGET_SEC" != "0" ]]; then
+      fade_d=$(awk -v f="$VIDEO_FADE_IN" -v t="$TARGET_SEC" \
+        'BEGIN {printf "%.3f", (f+0 < t+0 ? f+0 : t+0)}')
+    fi
+  fi
+
+  if [[ -n "$PREFIX" ]]; then
+    ffmpeg_args=(
+      -y
+      -i "$PREFIX"
+      -stream_loop -1 -i "$VIDEO"
+      -i "$AUDIO"
+    )
+  else
+    ffmpeg_args=(
+      -y
+      -stream_loop -1 -i "$VIDEO"
+      -i "$AUDIO"
+    )
+  fi
 
   if [[ -n "$DURATION" ]]; then
     ffmpeg_args+=(-t "$DURATION")
@@ -586,15 +643,20 @@ for current_enc in "${ENCODER_LIST[@]}"; do
     ffmpeg_args+=(-shortest)
   fi
 
-  ffmpeg_args+=(-map 0:v:0 -map 1:a:0)
-
-  if awk -v f="$VIDEO_FADE_IN" 'BEGIN {exit (f+0 > 0) ? 0 : 1}'; then
-    fade_d="$VIDEO_FADE_IN"
-    if [[ -n "$TARGET_SEC" && "$TARGET_SEC" != "0" ]]; then
-      fade_d=$(awk -v f="$VIDEO_FADE_IN" -v t="$TARGET_SEC" \
-        'BEGIN {printf "%.3f", (f+0 < t+0 ? f+0 : t+0)}')
+  if [[ -n "$PREFIX" ]]; then
+    prefix_vf="[0:v]fps=${video_fps},scale=${video_w}:${video_h}:force_original_aspect_ratio=decrease,pad=${video_w}:${video_h}:(ow-iw)/2:(oh-ih)/2:color=black,setsar=1,format=yuv420p,setpts=PTS-STARTPTS[v0];"
+    prefix_vf+="[1:v]fps=${video_fps},scale=${video_w}:${video_h},setsar=1,format=yuv420p,setpts=PTS-STARTPTS[v1];"
+    if [[ -n "$fade_d" ]]; then
+      prefix_vf+="[v0][v1]concat=n=2:v=1:a=0,fade=t=in:st=0:d=${fade_d}[v]"
+    else
+      prefix_vf+="[v0][v1]concat=n=2:v=1:a=0[v]"
     fi
-    ffmpeg_args+=(-vf "fade=t=in:st=0:d=${fade_d}")
+    ffmpeg_args+=(-filter_complex "$prefix_vf" -map "[v]" -map 2:a:0)
+  else
+    ffmpeg_args+=(-map 0:v:0 -map 1:a:0)
+    if [[ -n "$fade_d" ]]; then
+      ffmpeg_args+=(-vf "fade=t=in:st=0:d=${fade_d}")
+    fi
   fi
 
   case "$current_enc" in

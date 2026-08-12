@@ -158,7 +158,9 @@ class MyChannelTab(ttk.Frame):
         self._canvas.configure(scrollregion=(0, 0, w, h))
 
     def on_tab_selected(self) -> None:
-        self.refresh(force=False)
+        # 与「爆款分析」一致：仅首次进入时自动拉取；切换 Tab 不应反复置「加载中」。
+        if not self._loaded_once:
+            self.refresh(force=False)
 
     def refresh(self, *, force: bool = False) -> None:
         if self._loading:
@@ -236,8 +238,8 @@ class MyChannelTab(ttk.Frame):
             overview, playlists, playlist_video_map, unclassified, all_videos, from_cache = (
                 self._fetch_data(force)
             )
-            for v in all_videos:
-                download_thumbnail(v.thumbnail_url)
+            # 缩略图在 _render_section 里按需下载（命中本地缓存则瞬时完成）。
+            # 若在此处串行预下载全部封面，会长时间阻塞 UI 状态为「加载中」。
 
             schedule_on_main(
                 self,

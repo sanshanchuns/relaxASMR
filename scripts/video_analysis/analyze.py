@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import argparse
 import re
+import shutil
 import subprocess
 import sys
 from dataclasses import dataclass, field
@@ -1282,8 +1283,9 @@ def analyze_video(
     force_refresh: bool = False,
     *,
     skip_clip: bool = False,
+    apply_rain_fx: bool = True,
 ) -> dict:
-    """提取首帧 → CLIP 远景/空间/近景 → 雨效封面。不分析视频内嵌音轨。"""
+    """提取首帧 → CLIP 远景/空间/近景 → 封面（可选雨效）。不分析视频内嵌音轨。"""
     video_path = Path(video_path)
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -1311,10 +1313,15 @@ def analyze_video(
         _notify(on_progress, "CLIP 分析首帧（远景 + 空间 + 近景）…")
         _, ai_results = analyze_and_map_with_clip(str(raw_jpg), on_progress)
 
-    from scripts.video_analysis.cover_composite import composite_rain_cover
     if force_refresh or not thumbnail_jpg.exists():
-        _notify(on_progress, "正在合成雨效封面 (rain_fx.png)…")
-        composite_rain_cover(raw_jpg, thumbnail_jpg)
+        if apply_rain_fx:
+            from scripts.video_analysis.cover_composite import composite_rain_cover
+
+            _notify(on_progress, "正在合成雨效封面 (rain_fx.png)…")
+            composite_rain_cover(raw_jpg, thumbnail_jpg)
+        else:
+            _notify(on_progress, "封面不加雨效，使用原始首帧…")
+            shutil.copy2(raw_jpg, thumbnail_jpg)
         _notify(on_progress, f"封面已保存: {thumbnail_jpg.name}")
     else:
         _notify(on_progress, f"封面已存在，跳过: {thumbnail_jpg.name}")

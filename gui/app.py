@@ -102,6 +102,7 @@ from scripts.config.staging_export import (  # noqa: E402
     finalize_export,
     local_staging_dir,
     rpp_staging_for_render,
+    stage_input_file,
     staged_mp4_inputs,
     staged_upload_mp4,
     use_export_staging,
@@ -140,6 +141,8 @@ class RelaxAsmrApp(tk.Tk):
         self._upload_running = False
         self.last_export_wav: Path | None = None
         self.last_export_mp4: Path | None = None
+        self.prefix_video_path: Path | None = None
+        self._prefix_ui_ready = False
         
         self._cap = None
         self._video_loop_id = None
@@ -373,7 +376,7 @@ class RelaxAsmrApp(tk.Tk):
             self._cfg["base_url"] = target_base
             changed = True
 
-        for key in ("last_video", "last_video_dir", "last_material_dir", "last_export_mp4"):
+        for key in ("last_video", "last_video_dir", "last_material_dir", "last_export_mp4", "raw_video_dir", "last_prefix_video"):
             if key not in self._cfg:
                 continue
             new_val = self._migrate_config_path_value(self._cfg[key])
@@ -453,6 +456,12 @@ class RelaxAsmrApp(tk.Tk):
         self._cfg["base_url"] = str(base_url())
         if hasattr(self, "collaboration_machine_var"):
             self._cfg["collaboration_machine"] = bool(self.collaboration_machine_var.get())
+        if hasattr(self, "chk_cover_rain_var"):
+            self._cfg["cover_rain_fx"] = bool(self.chk_cover_rain_var.get())
+        if getattr(self, "_prefix_ui_ready", False):
+            self._cfg["last_prefix_video"] = (
+                str(self.prefix_video_path) if self.prefix_video_path else ""
+            )
         try:
             tmp = CONFIG_PATH.with_suffix(".json.tmp")
             tmp.write_text(
@@ -476,6 +485,10 @@ class RelaxAsmrApp(tk.Tk):
         video_canvas = getattr(video_tab, "_canvas", None) if video_tab is not None else None
         if video_canvas is not None:
             library_canvases.append(video_canvas)
+        raw_tab = getattr(self, "raw_video_library_tab", None)
+        raw_canvas = getattr(raw_tab, "_canvas", None) if raw_tab is not None else None
+        if raw_canvas is not None:
+            library_canvases.append(raw_canvas)
         return {
             "cover_canvas": getattr(self, "cover_thumb_canvas", None),
             "preview_canvas": getattr(self, "preview_video_canvas", None),
@@ -506,6 +519,9 @@ class RelaxAsmrApp(tk.Tk):
         video_tab = getattr(self, "video_library_tab", None)
         if video_tab is not None and hasattr(video_tab, "apply_theme"):
             video_tab.apply_theme(palette)
+        raw_video_tab = getattr(self, "raw_video_library_tab", None)
+        if raw_video_tab is not None and hasattr(raw_video_tab, "apply_theme"):
+            raw_video_tab.apply_theme(palette)
         series_video_tab = getattr(self, "series_video_tab", None)
         if series_video_tab is not None and hasattr(series_video_tab, "apply_theme"):
             series_video_tab.apply_theme(palette)
@@ -604,6 +620,7 @@ class RelaxAsmrApp(tk.Tk):
         self._series_last_cover_title: str = ""
         self._series_last_cover_prompt: str = ""
         self._right_panel_mode = "default"
+        self._raw_preview_active = False
         # 右侧 sash 按模式独立：AIGC 专用预览与工作流三栏互不影响
         self._right_pane_sash_by_mode: dict[str, tuple[int, ...] | None] = {
             "default": None,
@@ -657,6 +674,7 @@ class RelaxAsmrApp(tk.Tk):
         self.material_library_notebook.pack(fill=tk.BOTH, expand=True)
 
         from gui.video_library_tab import VideoLibraryTab
+        from gui.raw_video_library_tab import RawVideoLibraryTab
 
         self.video_library_tab = VideoLibraryTab(
             self.material_library_notebook,
@@ -665,7 +683,16 @@ class RelaxAsmrApp(tk.Tk):
             on_video_select=self._select_video_from_library,
             log_fn=self._log,
         )
-        self.material_library_notebook.add(self.video_library_tab, text="视频")
+        self.material_library_notebook.add(self.video_library_tab, text="loop视频")
+
+        self.raw_video_library_tab = RawVideoLibraryTab(
+            self.material_library_notebook,
+            get_directory=lambda: str(self._cfg.get("raw_video_dir") or ""),
+            set_directory=self._set_raw_video_dir,
+            on_video_preview=self._preview_raw_video,
+            log_fn=self._log,
+        )
+        self.material_library_notebook.add(self.raw_video_library_tab, text="raw视频")
 
         self.rain_boom_library_tab = AudioLibraryTab(
             self.material_library_notebook,
@@ -764,11 +791,30 @@ class RelaxAsmrApp(tk.Tk):
         ttk.Checkbutton(row1, text="覆盖物料", variable=self.chk_overwrite_mat_var).pack(
             side=tk.LEFT, padx=(8, 0)
         )
+        self.chk_cover_rain_var = tk.BooleanVar(value=bool(self._cfg.get("cover_rain_fx", True)))
+        ttk.Checkbutton(row1, text="封面加雨效", variable=self.chk_cover_rain_var).pack(
+            side=tk.LEFT, padx=(8, 0)
+        )
+        self.chk_cover_rain_var.trace_add("write", lambda *_a: self._save_config())
 
         row2 = ttk.Frame(sec1)
         row2.pack(fill=tk.X, pady=(8, 0))
         self.lbl_video = ttk.Label(row2, text="未选择")
         self.lbl_video.pack(side=tk.LEFT, anchor=tk.W)
+
+        row_prefix = ttk.Frame(sec1)
+        row_prefix.pack(fill=tk.X, pady=(8, 0))
+        self.btn_pick_prefix = ttk.Button(
+            row_prefix, text="选择前缀视频…", command=self._import_prefix_video
+        )
+        self.btn_pick_prefix.pack(side=tk.LEFT)
+        self.btn_clear_prefix = ttk.Button(
+            row_prefix, text="清除前缀", command=self._clear_prefix_video
+        )
+        self.btn_clear_prefix.pack(side=tk.LEFT, padx=(8, 0))
+        self.lbl_prefix = ttk.Label(row_prefix, text="前缀视频：未选择（合成时仅 loop 循环）")
+        self.lbl_prefix.pack(side=tk.LEFT, padx=(8, 0), anchor=tk.W)
+        self._restore_prefix_video_from_config()
 
         # 2. 选择四轨音频
         sec2 = ttk.LabelFrame(self.left_content, text="2. 选择四轨声音库 (按画面推荐)", padding=10)
@@ -920,11 +966,12 @@ class RelaxAsmrApp(tk.Tk):
         cover_meta = ttk.Frame(self.cover_body)
         cover_meta.grid(row=0, column=1, sticky="nsew")
         cover_meta.columnconfigure(0, weight=1)
+        cover_meta.columnconfigure(1, weight=0)
         cover_meta.rowconfigure(1, weight=1)
 
         self.txt_cover_title_en = tk.Text(
             cover_meta,
-            height=2,
+            height=4,
             wrap=tk.WORD,
             relief=tk.FLAT,
             borderwidth=0,
@@ -932,6 +979,13 @@ class RelaxAsmrApp(tk.Tk):
         )
         self.txt_cover_title_en.grid(row=0, column=0, sticky="new")
         setup_copyable_readonly_text(self.txt_cover_title_en, self)
+
+        # English Title 可能很长（UI 只想展示一小块会“看起来被截断”）。
+        # 给标题区域加滚动条，确保可完整查看/复制。
+        self.cover_title_scroll = ttk.Scrollbar(cover_meta, orient=tk.VERTICAL)
+        self.cover_title_scroll.grid(row=0, column=1, sticky="ns", padx=(4, 0))
+        self.txt_cover_title_en.configure(yscrollcommand=self.cover_title_scroll.set)
+        self.cover_title_scroll.config(command=self.txt_cover_title_en.yview)
 
         cover_text_frame = ttk.Frame(cover_meta)
         cover_text_frame.grid(row=1, column=0, sticky="nsew", pady=(8, 0))
@@ -1750,9 +1804,19 @@ class RelaxAsmrApp(tk.Tk):
         except tk.TclError:
             return
         if sub is self.video_library_tab:
+            self._raw_preview_active = False
             self.video_library_tab.on_tab_selected()
+            self._update_cover_preview()
+        elif sub is getattr(self, "raw_video_library_tab", None):
+            self.raw_video_library_tab.on_tab_selected()
         elif sub in self._audio_library_tabs.values():
+            self._raw_preview_active = False
             sub.on_tab_selected()
+            self._update_cover_preview()
+
+    def _set_raw_video_dir(self, directory: str) -> None:
+        self._cfg["raw_video_dir"] = str(directory)
+        self._save_config()
 
     def _show_side_preview_panel(self, panel: ttk.Frame) -> None:
         """把某个 Tab 专属的预览面板换到右侧上区（约 2/3）。
@@ -2215,7 +2279,9 @@ class RelaxAsmrApp(tk.Tk):
         analyze_script = LIB_REPO_ROOT / "scripts" / "video_analysis" / "analyze.py"
         vst_mod = load_module(analyze_script, "relaxasmr_video_analyze")
         ensure_base_url_dirs()
-        ensure_rain_fx_png()
+        apply_rain = self._cover_rain_fx_enabled()
+        if apply_rain:
+            ensure_rain_fx_png()
         out_dir = base_material_dir()
         out_dir.mkdir(parents=True, exist_ok=True)
         vst_mod.analyze_video(
@@ -2224,6 +2290,7 @@ class RelaxAsmrApp(tk.Tk):
             on_progress=self._log,
             force_refresh=force_refresh,
             skip_clip=True,
+            apply_rain_fx=apply_rain,
         )
         return get_thumbnail_path(scene_id)
 
@@ -2266,7 +2333,9 @@ class RelaxAsmrApp(tk.Tk):
         vst_mod = load_module(analyze_script, "relaxasmr_video_analyze")
 
         ensure_base_url_dirs()
-        ensure_rain_fx_png()
+        apply_rain = self._cover_rain_fx_enabled()
+        if apply_rain:
+            ensure_rain_fx_png()
         out_dir = base_material_dir()
         out_dir.mkdir(parents=True, exist_ok=True)
 
@@ -2290,7 +2359,12 @@ class RelaxAsmrApp(tk.Tk):
             self._log("CLIP 已存在，跳过 CLIP；继续 VLM…")
             clip_analysis = clip_analysis_from_matches(Path(cached["clip_json"]))
             vst_mod.analyze_video(
-                loop_video, out_dir, on_progress=self._log, force_refresh=False, skip_clip=True
+                loop_video,
+                out_dir,
+                on_progress=self._log,
+                force_refresh=False,
+                skip_clip=True,
+                apply_rain_fx=apply_rain,
             )
             frame_jpg = get_snapshot_raw_path(scene_id)
         else:
@@ -2300,6 +2374,7 @@ class RelaxAsmrApp(tk.Tk):
                 on_progress=self._log,
                 force_refresh=force_refresh,
                 skip_clip=False,
+                apply_rain_fx=apply_rain,
             )
             clip_analysis = clip_data.get("clip_analysis", {})
             frame_jpg = Path(clip_data["frame_jpg"]) if clip_data.get("frame_jpg") else frame_jpg
@@ -2469,6 +2544,10 @@ class RelaxAsmrApp(tk.Tk):
         if hasattr(self, "btn_gen_project"):
             self.btn_gen_project.configure(state=state)
         if hasattr(self, 'btn_analyze'): self.btn_analyze.configure(state=state)
+        if hasattr(self, "btn_pick_prefix"):
+            self.btn_pick_prefix.configure(state=state)
+        if hasattr(self, "btn_clear_prefix"):
+            self.btn_clear_prefix.configure(state=state)
         if hasattr(self, 'btn_upload'): self.btn_upload.configure(state=state)
         if hasattr(self, 'btn_export') and not getattr(self, "_export_running", False):
             self.btn_export.configure(state=state)
@@ -2633,6 +2712,7 @@ class RelaxAsmrApp(tk.Tk):
             return
 
         self.video_path = video
+        self._raw_preview_active = False
         self.video_rel = str(video)
         prev_scene = self.scene_id
         self.scene_id = scene
@@ -2837,6 +2917,8 @@ class RelaxAsmrApp(tk.Tk):
 
     def _update_cover_preview(self) -> None:
         if getattr(self, "_right_panel_mode", "default") == "aigc":
+            return
+        if getattr(self, "_raw_preview_active", False):
             return
         if not hasattr(self, "cover_thumb_canvas"):
             return
@@ -3400,6 +3482,96 @@ class RelaxAsmrApp(tk.Tk):
                 self.txt_cover_desc_en.insert("1.0", description)
             self.txt_cover_desc_en.configure(state=tk.DISABLED)
 
+    def _preview_raw_video(
+        self,
+        video: Path,
+        info: dict[str, str],
+        thumb: Image.Image | None,
+    ) -> None:
+        """素材库 raw 视频/JPG 单击：封面预览区放大缩略图，右侧显示拍摄参数。"""
+        self._raw_preview_active = True
+        self._show_raw_video_cover(thumb, name=video.name, info=info)
+
+        def worker() -> None:
+            from gui.video_metadata import is_image_path, load_raw_media_thumb
+
+            image = thumb
+            if is_image_path(video):
+                larger = load_raw_media_thumb(video, max_side=max(self._cover_thumb_size()[0] - 8, 960))
+                if larger is not None:
+                    image = larger
+            else:
+                from gui.video_library_tab import _thumb_cache_dir, extract_first_frame
+
+                slot_w, _ = self._cover_thumb_size()
+                cache = _thumb_cache_dir() / f"raw_preview_{video.stem}_{int(video.stat().st_mtime)}.jpg"
+                ok, _ = extract_first_frame(video, cache, width=max(slot_w - 8, 640))
+                if ok and cache.is_file():
+                    try:
+                        image = Image.open(cache).convert("RGB")
+                    except OSError:
+                        pass
+            self.after(0, lambda: self._show_raw_video_cover(image, name=video.name, info=info))
+
+        threading.Thread(target=worker, daemon=True).start()
+
+    def _show_raw_video_cover(
+        self,
+        image: Image.Image | None,
+        *,
+        name: str,
+        info: dict[str, str],
+    ) -> None:
+        if not getattr(self, "_raw_preview_active", False):
+            return
+        if not hasattr(self, "cover_thumb_canvas"):
+            return
+        from gui.video_metadata import format_raw_video_detail_text
+
+        self._stop_cover_video_loop()
+        if hasattr(self, "lbl_cover_video_name"):
+            self.lbl_cover_video_name.configure(text=name)
+        slot_w, slot_h = self._cover_thumb_size()
+        self._apply_cover_slot_geometry(slot_w, slot_h)
+        self.cover_thumb_canvas.delete("all")
+        if image is not None:
+            try:
+                img = image.copy()
+                img.thumbnail((slot_w, slot_h), Image.Resampling.LANCZOS)
+                self._cover_img = ImageTk.PhotoImage(img)
+                self.cover_thumb_canvas.create_image(
+                    slot_w // 2,
+                    slot_h // 2,
+                    anchor=tk.CENTER,
+                    image=self._cover_img,
+                )
+            except Exception as exc:
+                self.cover_thumb_canvas.create_text(
+                    slot_w // 2,
+                    slot_h // 2,
+                    text=f"封面加载失败: {exc}",
+                    anchor=tk.CENTER,
+                    width=slot_w - 8,
+                )
+                self._cover_img = None
+        else:
+            self.cover_thumb_canvas.create_text(
+                slot_w // 2,
+                slot_h // 2,
+                text="无预览",
+                anchor=tk.CENTER,
+            )
+            self._cover_img = None
+        title = info.get("title") or name
+        description = format_raw_video_detail_text(info)
+        if hasattr(self, "txt_cover_title_en"):
+            self._set_title_text(self.txt_cover_title_en, title)
+            self.txt_cover_desc_en.configure(state=tk.NORMAL)
+            self.txt_cover_desc_en.delete("1.0", tk.END)
+            if description:
+                self.txt_cover_desc_en.insert("1.0", description)
+            self.txt_cover_desc_en.configure(state=tk.DISABLED)
+
     def _set_preview_panel_metadata(self, *, title: str, description: str) -> None:
         if not hasattr(self, "txt_preview_title_zh"):
             return
@@ -3585,6 +3757,63 @@ class RelaxAsmrApp(tk.Tk):
             return str(bu)
         return str(LIB_REPO_ROOT)
 
+    def _cover_rain_fx_enabled(self) -> bool:
+        if hasattr(self, "chk_cover_rain_var"):
+            return bool(self.chk_cover_rain_var.get())
+        return True
+
+    def _resolved_prefix_video(self) -> Path | None:
+        path = self.prefix_video_path
+        if path is not None and path.is_file():
+            return path
+        return None
+
+    def _refresh_prefix_label(self) -> None:
+        if not hasattr(self, "lbl_prefix"):
+            return
+        path = self.prefix_video_path
+        if path is None:
+            self.lbl_prefix.configure(text="前缀视频：未选择（合成时仅 loop 循环）")
+            return
+        note = "" if path.is_file() else "（文件暂不可访问）"
+        self.lbl_prefix.configure(text=f"前缀视频：{path}{note}")
+
+    def _set_prefix_video(self, path: Path | None) -> None:
+        self.prefix_video_path = path.resolve() if path is not None else None
+        self._refresh_prefix_label()
+        self._save_config()
+
+    def _restore_prefix_video_from_config(self) -> None:
+        raw = self._cfg.get("last_prefix_video")
+        if not raw:
+            self.prefix_video_path = None
+        else:
+            self.prefix_video_path = Path(raw)
+        self._refresh_prefix_label()
+        self._prefix_ui_ready = True
+
+    def _import_prefix_video(self) -> None:
+        path = filedialog.askopenfilename(
+            title="选择前缀视频（只出现一次）",
+            initialdir=self._video_dialog_initialdir(),
+            filetypes=[("MP4 视频", "*.mp4"), ("所有文件", "*.*")],
+        )
+        if not path:
+            return
+        picked = Path(path)
+        if not picked.is_file():
+            messagebox.showerror("导入失败", f"视频不存在：{picked}")
+            return
+        self._cfg["last_video_dir"] = str(picked.parent)
+        self._set_prefix_video(picked)
+        self._log(f"已选定前缀视频（只出现一次）：{picked}")
+
+    def _clear_prefix_video(self) -> None:
+        if self.prefix_video_path is None:
+            return
+        self._set_prefix_video(None)
+        self._log("已清除前缀视频")
+
     def _import_video(self) -> None:
         path = filedialog.askopenfilename(
             title="选择 Loop 视频",
@@ -3617,10 +3846,15 @@ class RelaxAsmrApp(tk.Tk):
             
         loop_video = self.video_path
         force_refresh = self.chk_overwrite_mat_var.get()
+        apply_rain = self._cover_rain_fx_enabled()
         self._set_busy(True)
         self._log("—— 开始执行分析与物料生成 ——")
+        if apply_rain:
+            self._log("封面：加雨效")
+        else:
+            self._log("封面：不加雨效（原始首帧）")
 
-        def worker(*, force_refresh: bool = force_refresh) -> None:
+        def worker(*, force_refresh: bool = force_refresh, apply_rain: bool = apply_rain) -> None:
             try:
                 import threading
                 import shutil
@@ -3635,7 +3869,8 @@ class RelaxAsmrApp(tk.Tk):
                 num = match.group() if match else scene_id
                 
                 ensure_base_url_dirs()
-                ensure_rain_fx_png()
+                if apply_rain:
+                    ensure_rain_fx_png()
 
                 self._log("—— 1. 准备物料目录 ——")
                 out_dir = base_material_dir()
@@ -3685,6 +3920,7 @@ class RelaxAsmrApp(tk.Tk):
                         on_progress=self._log,
                         force_refresh=False,
                         skip_clip=True,
+                        apply_rain_fx=apply_rain,
                     )
                     frame_jpg = get_snapshot_raw_path(scene_id)
 
@@ -3703,6 +3939,7 @@ class RelaxAsmrApp(tk.Tk):
                         on_progress=self._log,
                         force_refresh=force_refresh,
                         skip_clip=False,
+                        apply_rain_fx=apply_rain,
                     )
                     clip_analysis = clip_data.get("clip_analysis", {})
                     frame_jpg = Path(clip_data["frame_jpg"]) if clip_data.get("frame_jpg") else frame_jpg
@@ -4115,6 +4352,13 @@ class RelaxAsmrApp(tk.Tk):
                 return
 
         vid_file = self.video_path
+        prefix_file = self._resolved_prefix_video()
+        if self.prefix_video_path is not None and prefix_file is None:
+            messagebox.showwarning(
+                "提示",
+                f"前缀视频不可访问：\n{self.prefix_video_path}\n请重新选择，或点「清除前缀」。",
+            )
+            return
 
         script = LIB_REPO_ROOT / "scripts" / "video_export" / "export_mp4.sh"
         import sys
@@ -4183,7 +4427,9 @@ class RelaxAsmrApp(tk.Tk):
         else:
             export_args_with_output = list(export_args)
 
-        def _build_export_cmd(run_audio: Path, run_video: Path) -> list[str]:
+        def _build_export_cmd(
+            run_audio: Path, run_video: Path, run_prefix: Path | None = None
+        ) -> list[str]:
             bash_args = [
                 "-v",
                 _shell_path(run_video),
@@ -4191,6 +4437,8 @@ class RelaxAsmrApp(tk.Tk):
                 _shell_path(run_audio),
                 *export_args_with_output,
             ]
+            if run_prefix is not None:
+                bash_args.extend(["--prefix", _shell_path(run_prefix)])
             if sys.platform == "win32":
                 return [
                     "wsl",
@@ -4198,12 +4446,16 @@ class RelaxAsmrApp(tk.Tk):
                 ]
             return _line_buffered_bash(_shell_path(script), bash_args)
 
-        cmd = _build_export_cmd(audio_file, vid_file)
+        cmd = _build_export_cmd(audio_file, vid_file, prefix_file)
 
         self._set_export_ui(running=True, status="Elapsed: 00:00:00  Remaining: …")
         self._log("—— 开始合成视频 (export_mp4) ——")
         self._log(f"音频：{audio_file.name}")
-        self._log(f"视频：{vid_file.name}")
+        if prefix_file:
+            self._log(f"前缀视频：{prefix_file.name}（只出现一次）")
+            self._log(f"Loop 视频：{vid_file.name}（循环）")
+        else:
+            self._log(f"视频：{vid_file.name}")
 
         export_tail = {"value": False}
 
@@ -4265,7 +4517,20 @@ class RelaxAsmrApp(tk.Tk):
                 if use_staging:
                     self._log("复制混音与 loop 视频到本地…")
                     with staged_mp4_inputs(audio_file, vid_file) as (local_audio, local_video):
-                        _run_export(_build_export_cmd(local_audio, local_video))
+                        local_prefix = None
+                        if prefix_file:
+                            self._log(f"复制前缀视频到本地：{prefix_file.name}")
+                            local_prefix = stage_input_file(prefix_file, copy_only=True)
+                        try:
+                            _run_export(
+                                _build_export_cmd(local_audio, local_video, local_prefix)
+                            )
+                        finally:
+                            if local_prefix is not None:
+                                try:
+                                    local_prefix.unlink(missing_ok=True)
+                                except OSError:
+                                    pass
                 else:
                     _run_export(cmd)
 
@@ -4413,12 +4678,8 @@ class RelaxAsmrApp(tk.Tk):
                     self._refresh_upload_label()
                     messagebox.showinfo(
                         "上传完成",
-                        f"视频字节已上传：\n{url}\n\n"
-                        f"可见性：{privacy}\n\n"
-                        "Studio 对 API 上传不会在传文件时显示百分比；"
-                        "此时应进入「Processing up to HD」。"
-                        "若仍长时间停在「即将开始处理 / 0%」，请刷新页面；"
-                        "超过约 30 分钟无变化再删草稿重传。",
+                        f"视频已上传：\n{url}\n"
+                        f"可见性：{privacy}",
                     )
 
                 schedule_on_main(self, done_ok)

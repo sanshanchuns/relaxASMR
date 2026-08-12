@@ -441,6 +441,19 @@ PYTHONPATH=cli:. python -m elevenlabs_web login
 
 ---
 
+## 本次对话新增（raw 视频 Tab，GUI）
+- `raw 视频` 宫格新增字段：**码率**（ffprobe `format.bit_rate`）、**ISO 小数取整**（四舍五入成整数）。
+- 交互：目录选择后立即刷新路径与**`共 N 个`**；宫格**单击**做封面放大预览 + 右侧显示：标题、分辨率、帧率、码率、ISO、光圈、快门、色温、焦距；双击不再触发任何动作。
+- 性能：对 raw 元数据加**磁盘+内存缓存**（`material_dir/.raw_video_meta/*.json`），避免每次 ffprobe/exiftool 实时解析；首次会先渲染占位再逐步填充（封面后参数）。
+- Sony a7m4 坑点：XAVC 的拍摄参数在 `rtmd` 嵌入轨，需 `exiftool -ExtractEmbedded`；并通过 rtmd 额外扫描补齐（焦距/色温）等缺失项。
+- 扩展：宫格支持根层 **JPG/JPEG**，同样解析 EXIF 并展示 `ISO/光圈/快门/色温/焦距`，帧率/码率不显示。
+- UI 修复：raw 子 Tab
+  - 深色模式下滚动区/背景适配；
+  - 宫格按 **视频/照片 分组**显示；
+  - 滚动条仅在内容超出视口时出现（避免“复用 loop 视频”的假滚动/常显滚动条）。
+
+---
+
 ## 下一步
 
 1. **AIGC 跑通闭环**：场景 → LLM生成基线 → 预检 → 生成 → 自动 VLM 红框 → LLM替换/合格入池

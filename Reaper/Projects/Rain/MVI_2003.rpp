@@ -1,0 +1,6968 @@
+<REAPER_PROJECT 0.1 "7.73/win64" 1786523518 0
+  <NOTES 0 2
+  >
+  RIPPLE 0 0
+  GROUPOVERRIDE 0 0 0 0
+  AUTOXFADE 128
+  ENVATTACH 3
+  POOLEDENVATTACH 0
+  TCPUIFLAGS 0
+  MIXERUIFLAGS 11 48
+  ENVFADESZ10 40
+  PEAKGAIN 1
+  FEEDBACK 0
+  PANLAW 1
+  PROJOFFS 0 0 0
+  MAXPROJLEN 1 5400
+  GRID 3199 8 1 8 1 0 0 0
+  TIMEMODE 5 9 -1 60 0 0 -1 0
+  VIDEO_CONFIG 0 0 65792
+  PANMODE 3
+  PANLAWFLAGS 3
+  CURSOR 633
+  ZOOM 11.69598424653145 7167 0
+  VZOOMEX 6 0
+  USE_REC_CFG 0
+  RECMODE 1
+  SMPTESYNC 0 30 100 40 1000 300 0 0 1 0 0
+  LOOP 0
+  LOOPGRAN 0 4
+  RECORD_PATH "Audio Files" ""
+  <RECORD_CFG
+    ZXZhdxgAAQ==
+  >
+  <APPLYFX_CFG
+  >
+  RENDER_FILE E:\自然之声\to_youtube\export
+  RENDER_PATTERN $project_90min
+  RENDER_FMT 0 2 0
+  RENDER_1X 0
+  RENDER_RANGE 1 0 0 0 1000
+  RENDER_RESAMPLE 3 0 1
+  RENDER_ADDTOPROJ 0
+  RENDER_STEMS 0
+  RENDER_DITHER 0
+  RENDER_TRIM 0.000001 0.000001 0 0
+  TIMELOCKMODE 0
+  TEMPOENVLOCKMODE 1
+  ITEMMIX 1
+  DEFPITCHMODE 589824 0
+  TAKELANE 1
+  SAMPLERATE 48000 1 0
+  <RENDER_CFG
+    ZXZhdxgAAQ==
+  >
+  LOCK 1
+  <METRONOME 6 2
+    VOL 0.25 0.125
+    BEATLEN 4
+    FREQ 1760 880 1
+    SAMPLES "" "" "" ""
+    SPLIGNORE 0 0
+    SPLDEF 2 660 "" 0 ""
+    SPLDEF 3 440 "" 0 ""
+    PATTERN 0 169
+    PATTERNSTR ABBB
+    MULT 1
+  >
+  GLOBAL_AUTO -1
+  TEMPO 60 4 4 1
+  PLAYRATE 1 0 0.25 4
+  SELECTION 300 0
+  SELECTION2 300 0
+  MASTERAUTOMODE 0
+  MASTERTRACKHEIGHT 0 0
+  MASTERPEAKCOL 16576
+  MASTERMUTESOLO 0
+  MASTERTRACKVIEW 1 0.6667 0.5 0.5 0 0 0 0 0 0 0 0 0 0 1
+  MASTERHWOUT 0 0 1 0 0 0 0 -1
+  MASTER_NCH 2 2
+  MASTER_VOLUME 1 0 -1 -1 1
+  MASTER_PANMODE 3
+  MASTER_PANLAWFLAGS 3
+  MASTER_FX 0
+  MASTER_SEL 0
+  <MASTERPLAYSPEEDENV
+    EGUID {9803FC77-4787-4218-9C71-A57DA34F2F8C}
+    ACT 0 -1
+    VIS 0 1 1
+    LANEHEIGHT 0 0
+    ARM 0
+    DEFSHAPE 0 -1 -1
+  >
+  <TEMPOENVEX
+    EGUID {63E74D85-0E6A-48A5-9090-8BD519357BB8}
+    ACT 0 -1
+    VIS 1 0 1
+    LANEHEIGHT 0 0
+    ARM 0
+    DEFSHAPE 1 -1 -1
+  >
+  RULERHEIGHT 86 86
+  RULERLANE 1 4 "" 0 -1 0
+  RULERLANE 2 8 "" 0 -1 0
+  <PROJBAY
+  >
+  <TRACK {B32DBFAF-B970-40F1-B474-95EB502E571E}
+    NAME Group
+    PEAKCOL 16576
+    BEAT -1
+    AUTOMODE 0
+    PANLAWFLAGS 3
+    VOLPAN 1 0 -1 -1 1
+    MUTESOLO 0 0 0
+    IPHASE 0
+    PLAYOFFS 0 1
+    ISBUS 1 1
+    BUSCOMP 0 0 0 0 0
+    SHOWINMIX 1 0.6667 0.5 1 0.5 0 0 0 0
+    FIXEDLANES 9 0 0 0 0
+    LANEREC -1 -1 -1 0
+    SEL 0
+    REC 0 0 1 0 0 0 0 0
+    VU 64
+    TRACKHEIGHT 0 0 0 0 0 0 0
+    INQ 0 0 0 0.5 100 0 0 100
+    NCHAN 2
+    FX 1
+    TRACKID {B32DBFAF-B970-40F1-B474-95EB502E571E}
+    PERF 0
+    MIDIOUT -1
+    MAINSEND 1 0
+    <VOLENV2
+      ACT 1 -1
+      VIS 1 1 1
+      LANEHEIGHT 0 0
+      ARM 1
+      DEFSHAPE 0 -1 -1
+      PT 0 0 0
+      PT 5 1 0
+      PT 5400 1 0
+    >
+    <FXCHAIN
+      SHOW 0
+      LASTSEL 0
+      DOCKED 0
+      BYPASS 0 0 0
+      <VST "VST: ReaLimit (Cockos)" realimit.dll 0 "" 1919708532<565354726C6D747265616C696D697400> ""
+        dG1scu5e7f4CAAAAAQAAAAAAAAACAAAAAAAAAAIAAAABAAAAAAAAAAIAAAAAAAAAMAAAAAEAAAAAABAA
+        AwAAAAEAAAAAAAAAAAAAAAAAAAAAAPC/AgAAAAAAAAAAAAAAAAAAAD+fduMQw8Y/
+        AFByb2dyYW0gMQAQAAAA
+      >
+      FLOATPOS 0 0 0 0
+      FXID {7059E408-39EB-4204-8FEA-D2B9D5643EE5}
+      WAK 0 0
+    >
+  >
+  <TRACK {C6DFEED6-6769-443E-98FD-6F8E575B83A3}
+    NAME 1_rain
+    PEAKCOL 16576
+    BEAT -1
+    AUTOMODE 0
+    PANLAWFLAGS 3
+    VOLPAN 1.074 0 -1 -1 1
+    MUTESOLO 0 0 0
+    IPHASE 0
+    PLAYOFFS 0 1
+    ISBUS 0 0
+    BUSCOMP 0 0 0 0 0
+    SHOWINMIX 1 0.6667 0.5 1 0.5 0 0 0 0
+    FIXEDLANES 9 0 0 0 0
+    LANEREC -1 -1 -1 0
+    SEL 0
+    REC 0 0 1 0 0 0 0 0
+    VU 64
+    TRACKHEIGHT 0 0 0 0 0 0 0
+    INQ 0 0 0 0.5 100 0 0 100
+    NCHAN 2
+    FX 1
+    TRACKID {C6DFEED6-6769-443E-98FD-6F8E575B83A3}
+    PERF 0
+    MIDIOUT -1
+    MAINSEND 1 0
+    <FXCHAIN
+      SHOW 0
+      LASTSEL 0
+      DOCKED 0
+      BYPASS 1 0 0
+      <VST "VST: ReaEQ (Cockos)" reaeq.dll 0 "" 1919247729<56535472656571726561657100000000> ""
+        cWVlcu5e7f4CAAAAAQAAAAAAAAACAAAAAAAAAAIAAAABAAAAAAAAAAIAAAAAAAAAzQAAAAEAAAAAABAA
+        IQAAAAUAAAAAAAAAAQAAAAAAAAAAAFlAAAAAAAAA8D+amZmZmZnpPwEIAAAAAQAAAAAAAAAAwHJAAAAAAAAA8D8AAAAAAAAAQAEIAAAAAQAAAAAAAAAAQI9AAAAAAAAA
+        8D8AAAAAAAAAQAEBAAAAAQAAAJ/vruhzybNAMIH/8g6n2z+amZmZmZnpPwEEAAAAAQAAAAAAAAAAAFlAAAAAAAAA8D8AAAAAAAAAQAEBAAAAAQAAAAAAAAAAAPA/AAAA
+        AP0BAABcAQAAAgABAA==
+        AFByb2dyYW0gMQAQAAAA
+      >
+      FLOATPOS 0 0 0 0
+      FXID {FF429655-7EFE-414F-BD30-07041DF0475A}
+      WAK 0 0
+    >
+    <ITEM
+      POSITION 0
+      SNAPOFFS 0
+      LENGTH 5400
+      LOOP 1
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {09AEFA9D-2DB5-4408-B772-75322C413C58}
+      IID 102
+      NAME QP01
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {3EF7C1B7-7D02-4265-A1EE-F3571AD00A82}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\1_rain\booms\QP01 0013 Rain strong.wav"
+      >
+    >
+  >
+  <TRACK {9E781963-11F9-4C9F-B230-8117C2112806}
+    NAME 2_impact
+    PEAKCOL 16576
+    BEAT -1
+    AUTOMODE 0
+    PANLAWFLAGS 3
+    VOLPAN 0.5 0 -1 -1 1
+    MUTESOLO 0 0 0
+    IPHASE 0
+    PLAYOFFS 0 1
+    ISBUS 0 0
+    BUSCOMP 0 0 0 0 0
+    SHOWINMIX 1 0.6667 0.5 1 0.5 0 0 0 0
+    FIXEDLANES 9 0 0 0 0
+    LANEREC -1 -1 -1 0
+    SEL 1
+    REC 0 0 1 0 0 0 0 0
+    VU 64
+    TRACKHEIGHT 0 0 0 0 0 0 0
+    INQ 0 0 0 0.5 100 0 0 100
+    NCHAN 2
+    FX 0
+    TRACKID {9E781963-11F9-4C9F-B230-8117C2112806}
+    PERF 0
+    MIDIOUT -1
+    MAINSEND 1 0
+  >
+  <TRACK {DCD7175B-DD57-45E0-9FB6-8719956EAA3B}
+    NAME 3_random
+    PEAKCOL 16576
+    BEAT -1
+    AUTOMODE 0
+    PANLAWFLAGS 3
+    VOLPAN 0.7525 0 -1 -1 1
+    MUTESOLO 0 0 0
+    IPHASE 0
+    PLAYOFFS 0 1
+    ISBUS 0 0
+    BUSCOMP 0 0 0 0 0
+    SHOWINMIX 1 0.6667 0.5 1 0.5 0 0 0 0
+    FIXEDLANES 9 0 0 0 0
+    LANEREC -1 -1 -1 0
+    SEL 0
+    REC 0 0 1 0 0 0 0 0
+    VU 64
+    TRACKHEIGHT 0 0 0 0 0 0 0
+    INQ 0 0 0 0.5 100 0 0 100
+    NCHAN 2
+    FX 0
+    TRACKID {DCD7175B-DD57-45E0-9FB6-8719956EAA3B}
+    PERF 0
+    MIDIOUT -1
+    MAINSEND 1 0
+    <ITEM
+      POSITION 14.79882102959079
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 34.36734659018036
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 56.18770868720681
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 72.37950788663474
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 90.19050347226293
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 110.10033475022354
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 128.06478396170567
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 147.76559686587163
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 164.07571070523591
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 179.2034510312688
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 194.17026674790196
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 215.07439243256522
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 233.10450220004984
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 254.66467827767761
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 272.50963001275994
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 286.27493708618209
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 305.31794961976368
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 322.15021318383043
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 334.64463262928996
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 356.98255858730869
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 375.40026577936192
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 395.30923835645262
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 407.5739869839548
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 423.86988578962843
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 443.71457110655382
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 460.85360766456989
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 487.14174883180129
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 495.89773196677635
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 523.08403160541206
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 531.5947723919744
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 558.43848729839203
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 569.80816830387676
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 594.11084545611493
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 603.79967346053775
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 621.70367567429548
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 642.97196941790071
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 666.21004994956604
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 683.36142254415427
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 697.21495372047843
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 712.54161715524424
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 735.29316289188228
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 750.87650538057528
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 767.19910739226498
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 791.31713269596685
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 809.33806776257734
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 827.19139851078251
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 835.47817737856838
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 860.12267194749438
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 873.70637144806517
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 892.13024111823131
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 914.68145680384316
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 932.86867672266521
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 948.88519114890437
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 962.37554764400397
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 978.87824458725652
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1001.2308998663992
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1020.8501262809835
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1034.1750901223791
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1052.0217512970171
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1072.8258648075223
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1092.0904146891417
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1108.4539603885282
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1128.3993761048621
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1140.9139993684789
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1162.017145511111
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1184.2890416918199
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1193.2939750664857
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1211.2760794436606
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1230.6012135243705
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1251.5280257448485
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1263.9983133635833
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1290.313309917859
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1308.6523608596935
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1317.8504770637196
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1345.2000115980575
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1358.2603369382296
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1372.1190739714173
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1390.8641968997113
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1407.7719367983245
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1433.1197715299311
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1448.8836204685842
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1461.6471483381579
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1488.3232389806208
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1502.9698229298172
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1521.0792110217699
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1539.7225072100759
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1555.3197124338301
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1573.7637811228008
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1586.49396810094
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1612.2858990565787
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1630.4932316272022
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1640.1977537122848
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1663.7315140712017
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1680.8406604679274
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1693.4777773686003
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1712.4074871912048
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1727.9533459829647
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1753.6056493790013
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1772.4049926080118
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1783.1673826267133
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1803.3988413503257
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1825.4429248563415
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1836.1229908255857
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1860.346832286117
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1879.6242974108704
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1890.3461980746501
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1910.3511926722201
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1934.0966057595131
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1944.6743132870126
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1970.678111321115
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1981.5104083460305
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 1998.7837325795535
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2015.4997809702013
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2037.8844868992958
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2053.2012151627141
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2069.0964229729962
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2091.462403770302
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2110.0600179575667
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2124.3392806409684
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2139.6273819500557
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2160.0715523272816
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2176.9023667789806
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2192.9443571037978
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2219.3301271054211
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2238.5246681600702
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2253.6294947884285
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2266.0640146698347
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2288.3426228912481
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2299.9665991221882
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2318.7896777469418
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2336.3991371809734
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2361.4030478897162
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2380.6701615677534
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2397.1885062663014
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2410.3700356700174
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2434.4265505590297
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2446.1835261586671
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2460.6292000845106
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2484.1822923791501
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2500.9318280802431
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2521.3848649307088
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2535.7300405774595
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2553.2106064463719
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2571.3840270009441
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2595.2266768965146
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2613.81016258205
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2627.5692979165415
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2640.9787937842175
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2664.9191519722826
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2678.1634198180691
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2693.4718260365526
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2712.7878275721932
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2733.0123024627092
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2751.6045073272612
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2772.7172821063109
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2784.1735584356989
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2809.0091074810152
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2826.4779710834159
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2837.4420947884569
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2854.1789716958242
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2876.5991283315407
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2893.8048908947831
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2916.6906861775824
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2932.1848277122226
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2947.0579322117046
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2967.1821266080897
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 2978.9710447346506
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3006.1730594034775
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3017.2858714264803
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3042.6804809488749
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3056.3817287122524
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3077.384096441494
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3092.0518829087928
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3108.5127183430636
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3131.5699887690357
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3143.8571245128346
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3159.7404004865957
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3175.3562109025129
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3195.7585009228833
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3210.9246033945419
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3236.3859507337088
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3251.2268653992896
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3271.1746399766989
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3292.3185673624466
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3309.185944050299
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3326.6544684805344
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3342.6421588764069
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3356.2012546283586
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3379.5691788357435
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3396.2017838623751
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3409.4984091604565
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3432.8503544206533
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3451.7459957605288
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3465.073087904314
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3483.003027574935
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3497.8247606125656
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3516.8523704093009
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3533.4412109923555
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3558.6917887561135
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3569.9545726539395
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3589.5893878641173
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3609.8706788724107
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3623.7393401604031
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3641.0052487452422
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3661.2258539273898
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3685.9449913153371
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3700.3875173793435
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3714.1693609301492
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3739.6534354690425
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3749.5591526816734
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3772.1472331800237
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3790.163378703779
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3809.892253626364
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3827.9052108317392
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3837.3274471514478
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3862.6014403140139
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3880.8100985059909
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3893.9202396196988
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3918.3635201475654
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3929.5781293109235
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3945.3840223112911
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3966.0528205180321
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 3982.5253168243121
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4001.5435351451792
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4022.0306281272415
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4040.2506234364173
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4059.9835118263786
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4075.4043389576213
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4093.5164834241964
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4110.9186663641412
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4122.8249269164744
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4144.7949777735939
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4165.4596091534822
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4184.5030708020267
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4196.8480576413031
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4219.0296944987331
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4231.5519365520477
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4256.0362744511185
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4272.9025704531286
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4290.8718260764108
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4302.015781996547
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4320.1818589533368
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4343.0260342499496
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4357.9653825739961
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4372.6220241001829
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4398.9237044734873
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4410.9246352721284
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4426.3606005621095
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4448.5314478686114
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4467.6879327252645
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4485.3687566478357
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4501.2856430482807
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4520.0596831867197
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4535.0469029644419
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4554.6569749661949
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4577.0647893531568
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4591.1929740844489
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4610.0980969213024
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4632.9466655722072
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4643.8668396888779
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4660.3327321356619
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4683.6033493189207
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4697.2622109799668
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4712.8181707630047
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4736.2642906578303
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4748.697929168974
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4772.8942271918859
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4791.049025673231
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4801.569058315682
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4825.4125655850739
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4840.9179889339021
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4857.8230706227914
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4879.4571651774559
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4892.4914506742489
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4916.8311967130148
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4926.3475506954092
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4949.6050231148602
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4968.0827328519481
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4980.050885562242
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 4999.1283091789446
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 5021.5075910555597
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 5039.2085110844073
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 5053.8461115910377
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 5070.3061636572247
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 5087.4119870071299
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 5111.3521999812656
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 5125.9290839196638
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 5149.1853565810534
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 5164.2592844074716
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 5181.9769193499405
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 5196.7518225529775
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 5221.2425325547965
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 5232.1557143459859
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 5255.4511332904767
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 5268.9983171136464
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 5294.1299359712293
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 5306.852243282061
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 5329.2306007111029
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 5345.5050761473385
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+    <ITEM
+      POSITION 5358.6886743494979
+      SNAPOFFS 0
+      LENGTH 21.850583
+      LOOP 0
+      ALLTAKES 0
+      FADEIN 1 0.08 0 1 0 0 0
+      FADEOUT 1 0.08 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {90571786-7DB1-4C5E-879B-64F34F027193}
+      IID 2
+      NAME QP03
+      VOLPAN 1 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {1996FF96-6C81-498D-8AC1-A00BB242AACA}
+      <SOURCE WAVE
+        FILE "E:\自然之声\to_youtube\audio\3_random\booms\QP03 0289 Thunder very distant booming.wav"
+      >
+    >
+  >
+  <TRACK {561D2BE3-5887-4E90-896F-6100FC9FBE09}
+    NAME 4_wildlife
+    PEAKCOL 16576
+    BEAT -1
+    AUTOMODE 0
+    PANLAWFLAGS 3
+    VOLPAN 1 0 -1 -1 1
+    MUTESOLO 0 0 0
+    IPHASE 0
+    PLAYOFFS 0 1
+    ISBUS 0 0
+    BUSCOMP 0 0 0 0 0
+    SHOWINMIX 1 0.6667 0.5 1 0.5 0 0 0 0
+    FIXEDLANES 9 0 0 0 0
+    LANEREC -1 -1 -1 0
+    SEL 0
+    REC 0 0 1 0 0 0 0 0
+    VU 64
+    TRACKHEIGHT 0 0 0 0 0 0 0
+    INQ 0 0 0 0.5 100 0 0 100
+    NCHAN 2
+    FX 1
+    TRACKID {561D2BE3-5887-4E90-896F-6100FC9FBE09}
+    PERF 0
+    MIDIOUT -1
+    MAINSEND 1 0
+    <FXCHAIN
+      SHOW 0
+      LASTSEL 0
+      DOCKED 0
+      BYPASS 1 0 0
+      <VST "VST: ReaVerbate (Cockos)" reaverbate.dll 0 "" 1920361016<56535472766238726561766572626174> ""
+        OGJ2cu9e7f4CAAAAAQAAAAAAAAACAAAAAAAAAAIAAAABAAAAAAAAAAIAAAAAAAAAKAAAAAAAAAAAABAA
+        776t3g3wrd5DAgA/AACAP9oEPD817P8+AACAPwAAAAAAAIA/AAAAAA==
+        AFByb2dyYW0gMQAQAAAA
+      >
+      FLOATPOS 0 0 0 0
+      FXID {9C47CE7B-6003-400D-B462-BD31769B77C9}
+      WAK 0 0
+    >
+  >
+  <TRACK {D0056469-C8B1-4345-8F67-26D8E0F2E033}
+    NAME video
+    PEAKCOL 16576
+    BEAT -1
+    AUTOMODE 0
+    PANLAWFLAGS 3
+    VOLPAN 0 0 -1 -1 1
+    MUTESOLO 1 0 0
+    IPHASE 0
+    PLAYOFFS 0 1
+    ISBUS 2 -1
+    BUSCOMP 0 0 0 0 0
+    SHOWINMIX 1 0.6667 0.5 1 0.5 0 0 0 0
+    FIXEDLANES 9 0 0 0 0
+    LANEREC -1 -1 -1 0
+    SEL 0
+    REC 0 0 1 0 0 0 0 0
+    VU 64
+    TRACKHEIGHT 0 0 0 0 0 0 0
+    INQ 0 0 0 0.5 100 0 0 100
+    NCHAN 2
+    FX 0
+    TRACKID {D0056469-C8B1-4345-8F67-26D8E0F2E033}
+    PERF 0
+    MIDIOUT -1
+    MAINSEND 1 0
+    <ITEM
+      POSITION 0
+      SNAPOFFS 0
+      LENGTH 2.857007
+      LOOP 1
+      ALLTAKES 0
+      FADEIN 1 0 0 1 0 0 0
+      FADEOUT 1 0 0 1 0 0 0
+      MUTE 0 0
+      SEL 0
+      IGUID {52E194FB-2C7C-44D1-8E85-EC34B4AF1DE5}
+      IID 1
+      NAME MVI_2003_loop_0.96_dur_3_FHD.mp4
+      VOLPAN 0 0 1 -1
+      SOFFS 0
+      PLAYRATE 1 1 0 -1 0 0.0025
+      CHANMODE 0
+      GUID {5090FDD1-93FC-41FB-AF21-B11B75C065DA}
+      <SOURCE VIDEO
+        FILE "E:\自然之声\to_youtube\MVI_2003_loop_0.96_dur_3_FHD.mp4"
+      >
+    >
+  >
+  <EXTENSIONS
+  >
+>
