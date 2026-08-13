@@ -1,0 +1,23 @@
+curl -H "Host: weather.bndspn.cn" -H "accept: */*" -H "x-signature: 8427f4c45b02618f7cb51f51d22b37ed" -H "x-timestamp: 1786605348" -H "user-agent: ios//com.apalonapps.radarfree//5.13.68//1000167//26.3//iPhone18,5//f4dcfbd198eedbc1b9802cdf57757eaa////" -H "priority: u=3" -H "accept-language: en-US,en;q=0.9" "https://weather.bndspn.cn/meteoradar/map/frc/tile/1/7/107/53/20260814060000/20260812120000/606a7b6a3b1c5064f43e9de7fdfb0350"
+
+curl -H "Host: weather.bndspn.cn" -H "accept: */*" -H "x-signature: 5899bc19858513f7923f873d143129f6" -H "x-timestamp: 1786605290" -H "user-agent: ios//com.apalonapps.radarfree//5.13.68//1000167//26.3//iPhone18,5//f4dcfbd198eedbc1b9802cdf57757eaa////" -H "priority: u=3" -H "accept-language: en-US,en;q=0.9" "https://weather.bndspn.cn/meteoradar/map/frc/tile/1/7/107/53/20260814000000/20260812120000/606a7b6a3b1c5064f43e9de7fdfb0350"
+
+curl -H "Host: weather.bndspn.cn" -H "accept: */*" -H "x-signature: 849cafd60577b7cd16349e86b3f73897" -H "x-timestamp: 1786605608" -H "user-agent: ios//com.apalonapps.radarfree//5.13.68//1000167//26.3//iPhone18,5//f4dcfbd198eedbc1b9802cdf57757eaa////" -H "priority: u=3" -H "accept-language: en-US,en;q=0.9" "https://weather.bndspn.cn/meteoradar/map/frc/tile/1/6/52/26/20260814000000/20260812120000/606a7b6a3b1c5064f43e9de7fdfb0350"
+
+curl -H "Host: weather.bndspn.cn" -H "accept: */*" -H "x-signature: eb1036a4042753b799c1791e854ab8a2" -H "x-timestamp: 1786605264" -H "user-agent: ios//com.apalonapps.radarfree//5.13.68//1000167//26.3//iPhone18,5//f4dcfbd198eedbc1b9802cdf57757eaa////" -H "priority: u=3" -H "accept-language: en-US,en;q=0.9" "https://weather.bndspn.cn/meteoradar/map/frc/tile/1/10/852/423/20260813090000/20260812120000/606a7b6a3b1c5064f43e9de7fdfb0350"
+
+curl -H "Host: weather.bndspn.cn" -H "accept: */*" -H "x-signature: 373abe9c9ae1f0cd92c5bf69e57eec6f" -H "x-timestamp: 1786605695" -H "user-agent: ios//com.apalonapps.radarfree//5.13.68//1000167//26.3//iPhone18,5//f4dcfbd198eedbc1b9802cdf57757eaa////" -H "priority: u=3" -H "accept-language: en-US,en;q=0.9" "https://weather.bndspn.cn/meteoradar/map/frc/tile/1/8/213/106/20260814000000/20260812120000/606a7b6a3b1c5064f43e9de7fdfb0350"
+
+curl -H "Host: weather.bndspn.cn" -H "accept: */*" -H "x-signature: 50821ec309947e4c3857de0dd5bee35d" -H "content-type: application/x-www-form-urlencoded" -H "accept-language: en-US,en;q=0.9" -H "x-timestamp: 1786605270" -H "user-agent: ios//com.apalonapps.radarfree//5.13.68//1000167//26.3//iPhone18,5//f4dcfbd198eedbc1b9802cdf57757eaa////" -H "priority: u=3" --data-binary "{\"source\":\"application\",\"provider\":\"foreca-map\",\"time\":\"2026-08-13T07:14:30Z\",\"numberRequests\":31}" "https://weather.bndspn.cn/radar/statistic/applicationRequest"
+
+curl -H "Host: weather.bndspn.cn" -H "accept: */*" -H "x-signature: 6bbdd3dc2cb8b8196e52d5f95b99f7d2" -H "cache-control: no-cache" -H "x-timestamp: 1786605276" -H "user-agent: ios//com.apalonapps.radarfree//5.13.68//1000167//26.3//iphone18,5//f4dcfbd198eedbc1b9802cdf57757eaa////" -H "priority: u=3, i" -H "accept-language: en-US,en;q=0.9" "https://weather.bndspn.cn/geocode/reverse/en/30.23260/119.96425"
+
+curl -H "Host: weather.bndspn.cn" -H "accept: */*" -H "x-signature: 51ec1415e3415af39b7e9614ec0ac411" -H "cache-control: no-cache" -H "x-timestamp: 1786605504" -H "user-agent: ios//com.apalonapps.radarfree//5.13.68//1000167//26.3//iphone18,5//f4dcfbd198eedbc1b9802cdf57757eaa////" -H "priority: u=3, i" -H "accept-language: en-US,en;q=0.9" "https://weather.bndspn.cn/feed/forecast/en/23967"
+
+curl -H "Host: weather.bndspn.cn" -H "accept: */*" -H "x-signature: 1fa260ac48c7e9df8ae30a94a618ae91" -H "x-timestamp: 1786605501" -H "user-agent: ios//com.apalonapps.radarfree//5.13.68//1000167//26.3//iPhone18,5//f4dcfbd198eedbc1b9802cdf57757eaa////" -H "priority: u=3" -H "accept-language: en-US,en;q=0.9" "https://weather.bndspn.cn/feed/hurricane/list"
+
+curl -H "Host: weather.bndspn.cn" -H "accept: */*" -H "x-signature: 69f9765a84ac4d23a6ae0d1aaaef5c47" -H "cache-control: no-cache" -H "x-timestamp: 1786605504" -H "if-none-match: W/\"f8c8a0adbf1342fae1a0ead4d072a2b5\"" -H "user-agent: ios//com.apalonapps.radarfree//5.13.68//1000167//26.3//iphone18,5//f4dcfbd198eedbc1b9802cdf57757eaa////" -H "priority: u=3, i" -H "accept-language: en-US,en;q=0.9" "https://weather.bndspn.cn/feed/lightning/23967"
+
+curl -H "Host: weather.bndspn.cn" -H "accept: */*" -H "x-signature: 4a0c0871c8022d410bc2b97d94cf1594" -H "x-timestamp: 1786605504" -H "user-agent: ios//com.apalonapps.radarfree//5.13.68//1000167//26.3//iPhone18,5//f4dcfbd198eedbc1b9802cdf57757eaa////" -H "priority: u=3" -H "accept-language: en-US,en;q=0.9" "https://weather.bndspn.cn/swc/event/list"
+
+
