@@ -71,7 +71,7 @@
 
 - **Render bounds**：**Entire Project**（`RENDER_RANGE 1 …`，bounds=1）；Headless 渲染（`-renderproject`）据此输出完整成片。
 - **Time selection**：默认选中**前 5 分钟**（`SELECTION` / `SELECTION2` = 300 s），便于在 Reaper 内试听；与 Render bounds 独立（bounds=2 才是 Time selection）。
-- **工程长度**：`MAXPROJLEN` 仍为成片时长（如 100 min = 6000 s）。
+- **工程长度**：`MAXPROJLEN` 仍为成片时长（如 90 min = 5400 s）。
 
 ### 视频导出（步骤 4）
 
@@ -87,7 +87,7 @@
 | `lufs_target_min` / `lufs_target_max` | −28 | 主 bed `1_rain` 的 LUFS 目标 |
 | `random_lufs_offset_db` | **+3** | `3_random` 相对主 bed 的 LU 偏移 |
 | `lufs_fx_compensation_db` | 0 | EQ 链响度补偿（dB） |
-| `duration_minutes` | 100 | 默认成片时长（分钟） |
+| `duration_minutes` | 90 | 默认成片时长（分钟） |
 | `theme` | — | GUI 浅/深色 |
 
 ---

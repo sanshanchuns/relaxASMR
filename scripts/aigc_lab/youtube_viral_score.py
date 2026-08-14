@@ -53,7 +53,7 @@ def youtube_viral_score(
 ) -> dict:
     """对 run.video_path 抽帧，注入 Top5 基准后打分；写入 viral_score.json。"""
     from scripts.config.paths import ensure_cli_path
-    from scripts.series_video.video_probe import extract_review_frames, measure_motion, probe_video
+    from scripts.aigc_lab.video_probe import extract_review_frames, measure_motion, probe_video
 
     ensure_cli_path()
     from agy import generate_text_via_agy_accounts, has_agy_credentials

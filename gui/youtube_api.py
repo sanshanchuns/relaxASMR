@@ -1,7 +1,8 @@
 """YouTube Data API v3 封装：自有频道数据 + 同类爆款视频聚合。
 
-- 常规查询（频道详情、播放列表、视频统计、关键词搜索）统一走 ``YOUTUBE_DATA_API_KEY``
-  （环境变量），这些都是公开数据，无需 OAuth。
+- 常规查询（频道详情、播放列表、视频统计、关键词搜索）走 Data API key，
+  按 ``YOUTUBE_DATA_API_JAPAN`` → ``YOUTUBE_DATA_API_USA`` → ``YOUTUBE_DATA_API_MAIN``
+  依次尝试，三个都失败才报错。
 - 仅「解析自己频道 ID」与「订阅数被频道设置隐藏时的兜底」两处复用
   ``scripts/video_upload`` 现成的 leo 账号 OAuth token（同一账号
   ace.leo.zhu@gmail.com），避免让用户重新配置一套凭据。
@@ -10,6 +11,7 @@
 from __future__ import annotations
 
 import os
+import re
 import sys
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
@@ -22,7 +24,14 @@ if str(REPO_ROOT) not in sys.path:
 
 from gui.youtube_cache import cache_get, cache_set  # noqa: E402
 
-API_KEY_ENV = "YOUTUBE_DATA_API_KEY"
+# 依次尝试：Japan → USA → Main
+API_KEY_ENVS = (
+    "YOUTUBE_DATA_API_JAPAN",
+    "YOUTUBE_DATA_API_USA",
+    "YOUTUBE_DATA_API_MAIN",
+)
+# 兼容旧文档/导出名（已不再单独使用）
+API_KEY_ENV = "YOUTUBE_DATA_API_MAIN"
 OWN_ACCOUNT_EMAIL = "ace.leo.zhu@gmail.com"
 _OWN_CHANNEL_CACHE_KEY = "own_channel_id::leo"
 
@@ -148,25 +157,125 @@ class OwnChannelOverview:
     uploads_playlist_id: str
 
 
-def _api_key() -> str:
-    key = (os.environ.get(API_KEY_ENV) or "").strip()
-    if not key:
-        raise YoutubeApiError(f"未设置环境变量 {API_KEY_ENV}，无法调用 YouTube Data API")
-    return key
+def load_youtube_data_api_keys() -> list[tuple[str, str]]:
+    """Return [(env_name, key_value), ...]：Japan → USA → Main。"""
+    api_keys: dict[str, str] = {}
+    for name in API_KEY_ENVS:
+        val = (os.environ.get(name) or "").strip()
+        if val:
+            api_keys[name] = val
+
+    zshrc_path = os.path.expanduser("~/.zshrc")
+    if os.path.exists(zshrc_path):
+        with open(zshrc_path, encoding="utf-8") as f:
+            for line in f:
+                if not line.startswith("export "):
+                    continue
+                match = re.match(r'export\s+([A-Z_]+)="?(.*?)"?$', line.strip())
+                if match and match.group(1) in API_KEY_ENVS:
+                    name = match.group(1)
+                    if name not in api_keys and match.group(2).strip():
+                        api_keys[name] = match.group(2).strip()
+
+    return [(name, api_keys[name]) for name in API_KEY_ENVS if name in api_keys]
 
 
-_api_key_service_cache: Any = None
+_service_by_key_name: dict[str, Any] = {}
+_active_key_name: str | None = None
+_HTTP_TIMEOUT_SEC = 45
+_request_seq = 0
 
 
-def _api_key_service():
-    global _api_key_service_cache
-    if _api_key_service_cache is None:
+def _service_for(key_name: str, key_value: str):
+    service = _service_by_key_name.get(key_name)
+    if service is None:
         from googleapiclient.discovery import build
 
-        _api_key_service_cache = build(
-            "youtube", "v3", developerKey=_api_key(), cache_discovery=False
+        try:
+            import httplib2
+
+            http = httplib2.Http(timeout=_HTTP_TIMEOUT_SEC)
+            service = build(
+                "youtube",
+                "v3",
+                developerKey=key_value,
+                cache_discovery=False,
+                http=http,
+            )
+        except Exception:
+            service = build(
+                "youtube", "v3", developerKey=key_value, cache_discovery=False
+            )
+        _service_by_key_name[key_name] = service
+    return service
+
+
+def _ordered_api_keys() -> list[tuple[str, str]]:
+    keys = load_youtube_data_api_keys()
+    if not keys:
+        raise YoutubeApiError(
+            "未配置 YouTube Data API key（需要 YOUTUBE_DATA_API_JAPAN / "
+            "YOUTUBE_DATA_API_USA / YOUTUBE_DATA_API_MAIN 至少一个）"
         )
-    return _api_key_service_cache
+    if _active_key_name:
+        preferred = [kv for kv in keys if kv[0] == _active_key_name]
+        rest = [kv for kv in keys if kv[0] != _active_key_name]
+        if preferred:
+            return preferred + rest
+    return keys
+
+
+def _run(
+    request_factory: Callable[[Any], Any],
+    *,
+    log_fn: Callable[[str], None] | None = None,
+) -> dict[str, Any]:
+    """对 Japan → USA → Main 依次执行 ``request_factory(service)``；全失败则报错。
+
+    ``request_factory`` 接收 youtube service，返回带 ``.execute()`` 的 request。
+    成功的 key 会 sticky，后续请求优先复用。
+    """
+    from googleapiclient.errors import HttpError
+
+    global _active_key_name, _request_seq
+    keys = _ordered_api_keys()
+    errors: list[str] = []
+
+    for key_name, key_val in keys:
+        try:
+            if log_fn and key_name != _active_key_name:
+                log_fn(f"YouTube Data API 尝试 {key_name}…")
+            service = _service_for(key_name, key_val)
+            _request_seq += 1
+            seq = _request_seq
+            result = request_factory(service).execute()
+            if _active_key_name != key_name:
+                _active_key_name = key_name
+                if log_fn:
+                    log_fn(f"YouTube Data API 使用 {key_name}")
+            if log_fn and seq % 10 == 0:
+                log_fn(f"YouTube Data API 已完成 {seq} 次请求（{key_name}）")
+            return result
+        except HttpError as exc:
+            err_msg = f"{key_name} 失败：{exc}"
+            if log_fn:
+                log_fn(f"  → {err_msg}")
+            errors.append(err_msg)
+            if _active_key_name == key_name:
+                _active_key_name = None
+            continue
+        except Exception as exc:  # noqa: BLE001
+            err_msg = f"{key_name} 失败：{exc}"
+            if log_fn:
+                log_fn(f"  → {err_msg}")
+            errors.append(err_msg)
+            if _active_key_name == key_name:
+                _active_key_name = None
+            continue
+
+    raise YoutubeApiError(
+        "三个 YouTube Data API key 均失败：" + "; ".join(errors)
+    )
 
 
 _oauth_service_cache: Any = None
@@ -205,7 +314,7 @@ def _oauth_service(*, log_fn: Callable[[str], None] | None = None):
         raise YoutubeApiError(_oauth_error) from exc
 
 
-def _run(request) -> dict[str, Any]:
+def _run_oauth(request) -> dict[str, Any]:
     from googleapiclient.errors import HttpError
 
     try:
@@ -220,7 +329,7 @@ def resolve_own_channel_id(*, force: bool = False, log_fn: Callable[[str], None]
         if cached:
             return str(cached)
     service = _oauth_service(log_fn=log_fn)
-    data = _run(service.channels().list(part="id", mine=True))
+    data = _run_oauth(service.channels().list(part="id", mine=True))
     items = data.get("items") or []
     if not items:
         raise YoutubeApiError("OAuth 账号下没有找到任何 YouTube 频道")
@@ -258,10 +367,11 @@ def get_own_channel_overview(
     """自有频道概览：优先 API key（公开数据），订阅数被隐藏时兜底走 OAuth。"""
     channel_id = resolve_own_channel_id(force=force_refresh, log_fn=log_fn)
     data = _run(
-        _api_key_service().channels().list(
+        lambda s: s.channels().list(
             part="snippet,statistics,contentDetails",
             id=channel_id,
-        )
+        ),
+        log_fn=log_fn,
     )
     items = data.get("items") or []
     if not items:
@@ -274,7 +384,7 @@ def get_own_channel_overview(
 
     if channel.hidden_subscriber_count:
         try:
-            oauth_data = _run(
+            oauth_data = _run_oauth(
                 _oauth_service(log_fn=log_fn).channels().list(part="statistics", mine=True)
             )
             oauth_items = oauth_data.get("items") or []
@@ -287,18 +397,23 @@ def get_own_channel_overview(
     return OwnChannelOverview(channel=channel, uploads_playlist_id=str(uploads_playlist_id))
 
 
-def list_channel_playlists(channel_id: str) -> list[PlaylistInfo]:
-    service = _api_key_service()
+def list_channel_playlists(
+    channel_id: str, *, log_fn: Callable[[str], None] | None = None
+) -> list[PlaylistInfo]:
     playlists: list[PlaylistInfo] = []
     page_token: str | None = None
     while True:
+        token = page_token
+        kwargs: dict[str, Any] = {
+            "part": "snippet,contentDetails",
+            "channelId": channel_id,
+            "maxResults": _MAX_RESULTS_PER_PAGE,
+        }
+        if token:
+            kwargs["pageToken"] = token
         data = _run(
-            service.playlists().list(
-                part="snippet,contentDetails",
-                channelId=channel_id,
-                maxResults=_MAX_RESULTS_PER_PAGE,
-                pageToken=page_token,
-            )
+            lambda s, kw=dict(kwargs): s.playlists().list(**kw),
+            log_fn=log_fn,
         )
         for item in data.get("items") or []:
             snippet = item.get("snippet") or {}
@@ -312,30 +427,39 @@ def list_channel_playlists(channel_id: str) -> list[PlaylistInfo]:
                 )
             )
         page_token = data.get("nextPageToken")
-        if not page_token:
+        if not page_token or page_token == token:
+            break
+        if len(playlists) >= 500:
             break
     return playlists
 
 
-def list_playlist_video_ids(playlist_id: str) -> list[str]:
-    service = _api_key_service()
+def list_playlist_video_ids(
+    playlist_id: str, *, log_fn: Callable[[str], None] | None = None
+) -> list[str]:
     ids: list[str] = []
     page_token: str | None = None
     while True:
+        token = page_token
+        kwargs: dict[str, Any] = {
+            "part": "contentDetails",
+            "playlistId": playlist_id,
+            "maxResults": _MAX_RESULTS_PER_PAGE,
+        }
+        if token:
+            kwargs["pageToken"] = token
         data = _run(
-            service.playlistItems().list(
-                part="contentDetails",
-                playlistId=playlist_id,
-                maxResults=_MAX_RESULTS_PER_PAGE,
-                pageToken=page_token,
-            )
+            lambda s, kw=dict(kwargs): s.playlistItems().list(**kw),
+            log_fn=log_fn,
         )
         for item in data.get("items") or []:
             vid = (item.get("contentDetails") or {}).get("videoId")
             if vid:
                 ids.append(str(vid))
         page_token = data.get("nextPageToken")
-        if not page_token:
+        if not page_token or page_token == token:
+            break
+        if len(ids) >= 5000:
             break
     return ids
 
@@ -365,32 +489,40 @@ def _video_info_from_item(item: dict[str, Any]) -> VideoInfo:
     )
 
 
-def get_videos_details(video_ids: list[str]) -> list[VideoInfo]:
+def get_videos_details(
+    video_ids: list[str], *, log_fn: Callable[[str], None] | None = None
+) -> list[VideoInfo]:
     if not video_ids:
         return []
-    service = _api_key_service()
     out: list[VideoInfo] = []
     for chunk in _chunked(video_ids, _MAX_RESULTS_PER_PAGE):
+        ids = list(chunk)
         data = _run(
-            service.videos().list(
+            lambda s, c=ids: s.videos().list(
                 part="snippet,statistics,contentDetails",
-                id=",".join(chunk),
-            )
+                id=",".join(c),
+            ),
+            log_fn=log_fn,
         )
         for item in data.get("items") or []:
             out.append(_video_info_from_item(item))
     return out
 
 
-def get_channels_details(channel_ids: list[str]) -> dict[str, ChannelInfo]:
+def get_channels_details(
+    channel_ids: list[str], *, log_fn: Callable[[str], None] | None = None
+) -> dict[str, ChannelInfo]:
     ids = [c for c in dict.fromkeys(channel_ids) if c]
     if not ids:
         return {}
-    service = _api_key_service()
     out: dict[str, ChannelInfo] = {}
     for chunk in _chunked(ids, _MAX_RESULTS_PER_PAGE):
+        part = list(chunk)
         data = _run(
-            service.channels().list(part="snippet,statistics", id=",".join(chunk))
+            lambda s, c=part: s.channels().list(
+                part="snippet,statistics", id=",".join(c)
+            ),
+            log_fn=log_fn,
         )
         for item in data.get("items") or []:
             info = _channel_info_from_item(item)
@@ -405,26 +537,28 @@ def search_video_ids(
     order: str = "viewCount",
     region_code: str | None = None,
     relevance_language: str | None = None,
+    log_fn: Callable[[str], None] | None = None,
 ) -> list[str]:
     """``search.list``：单次调用消耗 100 配额，请勿在无缓存的情况下频繁调用。"""
-    service = _api_key_service()
     ids: list[str] = []
     page_token: str | None = None
     while len(ids) < max_results:
         page_size = min(_MAX_RESULTS_PER_PAGE, max_results - len(ids))
+        token = page_token
         kwargs: dict[str, Any] = dict(
             part="id",
             q=query,
             type="video",
             order=order,
             maxResults=page_size,
-            pageToken=page_token,
         )
+        if token:
+            kwargs["pageToken"] = token
         if region_code:
             kwargs["regionCode"] = region_code
         if relevance_language:
             kwargs["relevanceLanguage"] = relevance_language
-        data = _run(service.search().list(**kwargs))
+        data = _run(lambda s, kw=dict(kwargs): s.search().list(**kw), log_fn=log_fn)
         for item in data.get("items") or []:
             vid = (item.get("id") or {}).get("videoId")
             if vid:
@@ -437,6 +571,7 @@ def search_video_ids(
 
 __all__ = [
     "API_KEY_ENV",
+    "API_KEY_ENVS",
     "OWN_ACCOUNT_EMAIL",
     "YoutubeApiError",
     "PlaylistInfo",
@@ -445,6 +580,7 @@ __all__ = [
     "OwnChannelOverview",
     "best_thumbnail_url",
     "format_relative_time",
+    "load_youtube_data_api_keys",
     "resolve_own_channel_id",
     "get_own_channel_overview",
     "list_channel_playlists",

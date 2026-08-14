@@ -1,10 +1,7 @@
-"""Route in-process LLM / pipeline logs to an active callback (GUI log panel).
+"""把进程内 LLM / 流水线日志路由到当前回调（如 GUI 日志区）。
 
-与 ``economist/shared/llm_log.py`` 保持一致：``cli/agy/`` 内部用 ``emit_llm_log``
-打日志，因此这里必须提供同名同签名的实现，否则 ``import agy`` 会 ModuleNotFoundError。
-
-Without a callback, stay silent so GUI terminals are not flooded by agy lines.
-CLI/debug can opt in with ``LLM_LOG_STDOUT=1``.
+``cli/agy/`` 内部用 ``emit_llm_log`` 打日志；GUI 可用 ``llm_log_context`` 注入回调。
+无回调时默认静默，避免刷屏；调试可设 ``LLM_LOG_STDOUT=1``。
 """
 
 from __future__ import annotations

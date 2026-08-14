@@ -270,6 +270,7 @@ def load_cached_rain_tabs(scene_id: str) -> dict[str, Any] | None:
             "vlm_json": vlm_path,
             "vlm_title": vlm_data.get("title", ""),
             "partial": False,
+            "vlm_only": False,
         }
 
     if clip_data.get("vlm_reconciled") is False:
@@ -281,6 +282,7 @@ def load_cached_rain_tabs(scene_id: str) -> dict[str, Any] | None:
             "vlm_json": None,
             "vlm_title": "",
             "partial": True,
+            "vlm_only": False,
         }
 
     return {
@@ -291,6 +293,7 @@ def load_cached_rain_tabs(scene_id: str) -> dict[str, Any] | None:
         "vlm_json": None,
         "vlm_title": "",
         "partial": False,
+        "vlm_only": clip_data.get("source") == "vlm_only",
     }
 
 
@@ -301,6 +304,82 @@ def _mark_clip_vlm_reconciled(clip_json: Path, *, agree: bool) -> None:
     clip_json.write_text(json.dumps(data, ensure_ascii=False), encoding="utf-8")
 
 
+def vlm_analysis_as_clip_shaped(vlm_analysis: dict) -> dict:
+    """把 VLM 三层 key 转成与 CLIP 分析结果相同的嵌套结构，供物料/缓存复用。"""
+    if not vlm_analysis:
+        return {}
+    return {
+        "l3": {"key": vlm_analysis.get("l3_key")},
+        "l2": {"key": vlm_analysis.get("l2_key")},
+        "l1": {"key": vlm_analysis.get("l1_key")},
+    }
+
+
+def finalize_vlm_only(
+    scene_id: str,
+    vlm_analysis: dict,
+    logger: Callable[[str], None],
+    all_wavs: list[Path] | None = None,
+) -> dict[str, Any]:
+    """仅 VLM：写入 clip_matches（内容来自 VLM），GUI 只显示 1_rain。
+
+    CLIP 引擎代码保留，但步骤 1 入口不再跑 CLIP；不再展开 1_rain_vlm 双 tab。
+    """
+    wavs = all_wavs if all_wavs is not None else list_rain_wavs()
+    clip_shaped = vlm_analysis_as_clip_shaped(vlm_analysis)
+    title = format_vlm_title(vlm_analysis) if vlm_analysis else format_clip_title(clip_shaped)
+
+    if not vlm_analysis:
+        clip_json, clip_title, _ = save_clip_matches(
+            scene_id, {}, wavs, vlm_reconciled=True, log_fn=logger
+        )
+        _mark_clip_vlm_reconciled(clip_json, agree=True)
+        vlm_path = vlm_matches_path(scene_id)
+        if vlm_path.is_file():
+            vlm_path.unlink()
+        logger("VLM 无结果，雨声配方未更新。")
+        return {
+            "agree": True,
+            "clip_json": clip_json,
+            "vlm_json": None,
+            "clip_title": clip_title,
+            "vlm_title": "",
+            "rain_tab": "1_rain",
+            "show_vlm_tab": False,
+        }
+
+    clip_json, _, matches = save_clip_matches(
+        scene_id, clip_shaped, wavs, vlm_reconciled=True, log_fn=logger
+    )
+    # 标题用 VLM 文案；candidates 已按 VLM 三层写入
+    payload = json.loads(clip_json.read_text(encoding="utf-8"))
+    payload["title"] = title
+    payload["vlm_reconciled"] = True
+    payload["vlm_agree"] = True
+    payload["source"] = "vlm_only"
+    clip_json.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
+
+    vlm_path = vlm_matches_path(scene_id)
+    if vlm_path.is_file():
+        vlm_path.unlink()
+
+    logger(f"已保存: {clip_json.name}（VLM only）")
+    if matches:
+        logger(f"结论: 采用 VLM 配方 {title}，九宫格候选 {len(matches)} 条。")
+    else:
+        logger(f"结论: 采用 VLM 配方 {title}（暂无匹配雨声文件）。")
+
+    return {
+        "agree": True,
+        "clip_json": clip_json,
+        "vlm_json": None,
+        "clip_title": title,
+        "vlm_title": "",
+        "rain_tab": "1_rain",
+        "show_vlm_tab": False,
+    }
+
+
 def reconcile_clip_vlm(
     scene_id: str,
     clip_analysis: dict,
@@ -309,6 +388,8 @@ def reconcile_clip_vlm(
     all_wavs: list[Path] | None = None,
 ) -> dict[str, Any]:
     """对比 CLIP 与 VLM 三层结论，写入 clip_matches / vlm_matches。
+
+    步骤 1 入口已改为 VLM-only（见 finalize_vlm_only）；本函数保留供旧流程/测试。
 
     返回:
       agree: bool — 结论一致，GUI 只显示 1_rain（采用 CLIP）

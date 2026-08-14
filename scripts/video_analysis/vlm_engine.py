@@ -4,17 +4,15 @@ import os
 import re
 from pathlib import Path
 
-DEFAULT_GEMINI_MODELS = [
-    "gemini-3.1-flash-lite-preview",
-    "gemini-3-flash-preview",
-    "gemini-3.5-flash",
-]
+DEFAULT_GEMINI_MODEL = "gemini-3.1-flash-lite-preview"
+DEFAULT_GEMINI_MODELS = [DEFAULT_GEMINI_MODEL]
 
-_KEY_NAMES = ["GEMINI_API_KEY", "GEMINI_JAPAN_API_KEY", "GEMINI_USA_API_KEY"]
+# 步骤 1 VLM：依次 USA → main（不再使用 Japan）
+_KEY_NAMES = ["GEMINI_USA_API_KEY", "GEMINI_API_KEY"]
 
 
-def load_gemini_api_keys(*, skip_japan: bool = True) -> list[tuple[str, str]]:
-    """Return [(key_name, key_value), ...] in priority order."""
+def load_gemini_api_keys() -> list[tuple[str, str]]:
+    """Return [(key_name, key_value), ...] in priority order (USA → main)."""
     api_keys: dict[str, str] = {}
     for name in _KEY_NAMES:
         if os.environ.get(name):
@@ -34,11 +32,8 @@ def load_gemini_api_keys(*, skip_japan: bool = True) -> list[tuple[str, str]]:
 
     out: list[tuple[str, str]] = []
     for name in _KEY_NAMES:
-        if name not in api_keys:
-            continue
-        if skip_japan and name == "GEMINI_JAPAN_API_KEY":
-            continue
-        out.append((name, api_keys[name]))
+        if name in api_keys:
+            out.append((name, api_keys[name]))
     return out
 
 
@@ -60,7 +55,11 @@ def call_gemini_vision_json(
     on_progress=None,
     models: list[str] | None = None,
 ) -> dict:
-    """Send image + prompt to Gemini; parse JSON response."""
+    """Send image + prompt to Gemini; parse JSON response.
+
+    只用 gemini-3.1-flash-lite-preview；按 USA → main 依次换 key，
+    两个都失败则抛错（不再使用 Japan）。
+    """
     try:
         from google import genai
         from PIL import Image
@@ -72,43 +71,32 @@ def call_gemini_vision_json(
 
     available_keys = load_gemini_api_keys()
     if not available_keys:
-        raise RuntimeError("未配置任何 GEMINI API KEY (包括通用、JAPAN、USA)")
+        raise RuntimeError(
+            "未配置任何 GEMINI API KEY（需要 GEMINI_USA_API_KEY / "
+            "GEMINI_API_KEY 至少一个）"
+        )
 
     try:
         img = Image.open(image_path)
     except Exception as e:
         raise RuntimeError(f"无法打开画面图片: {e}") from e
 
-    models_to_try = models or DEFAULT_GEMINI_MODELS
+    model_name = (models or DEFAULT_GEMINI_MODELS)[0]
     errors: list[str] = []
 
     for key_name, key_val in available_keys:
         try:
-            msg = f"正在尝试使用 {key_name} 请求大模型..."
+            msg = f"正在尝试使用 {key_name} + {model_name} ..."
             if on_progress:
                 on_progress(msg)
             else:
                 print(f"vlm_engine: {msg}")
 
             client = genai.Client(api_key=key_val)
-            response = None
-            last_err: Exception | None = None
-
-            for model_name in models_to_try:
-                try:
-                    if on_progress:
-                        on_progress(f"  -> 尝试模型: {model_name} ...")
-                    response = client.models.generate_content(
-                        model=model_name,
-                        contents=[prompt, img],
-                    )
-                    break
-                except Exception as me:
-                    last_err = me
-
-            if response is None:
-                raise last_err or RuntimeError("无可用模型")
-
+            response = client.models.generate_content(
+                model=model_name,
+                contents=[prompt, img],
+            )
             text = _strip_json_fence(response.text)
             return json.loads(text)
         except Exception as e:
@@ -119,7 +107,9 @@ def call_gemini_vision_json(
                 print(f"vlm_engine: {err_msg}")
             errors.append(err_msg)
 
-    raise RuntimeError("所有 API Key 均测试失败: " + "; ".join(errors))
+    raise RuntimeError(
+        f"USA / main 两个账号均无法调用 {model_name}: " + "; ".join(errors)
+    )
 
 
 def analyze_with_vlm(image_path: Path, on_progress=None) -> dict:

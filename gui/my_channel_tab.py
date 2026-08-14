@@ -33,6 +33,7 @@ from gui.youtube_grid_common import (  # noqa: E402
     compute_cols,
     load_local_image,
     mark_cell_analyzed,
+    set_cell_image,
 )
 from gui.youtube_preview_panel import YoutubePreviewPanel, open_in_browser  # noqa: E402
 
@@ -89,6 +90,7 @@ class MyChannelTab(ttk.Frame):
         self._preview = preview
         self._loading = False
         self._loaded_once = False
+        self._load_gen = 0
         self._photo_refs: list = []
         self._cells: dict[str, dict] = {}
         self._videos_by_id: dict[str, VideoInfo] = {}
@@ -163,24 +165,93 @@ class MyChannelTab(ttk.Frame):
             self.refresh(force=False)
 
     def refresh(self, *, force: bool = False) -> None:
-        if self._loading:
-            return
+        self._load_gen += 1
+        gen = self._load_gen
         self._loading = True
-        self._lbl_status.configure(text="加载中…（拉取频道 / 播放列表 / 视频数据）")
-        threading.Thread(target=self._load_bg, args=(force,), daemon=True).start()
+        self._set_progress("加载中…（准备拉取）")
+        threading.Thread(target=self._load_bg, args=(force, gen), daemon=True).start()
 
-    def _fetch_data(
-        self, force: bool
-    ) -> tuple[
-        OwnChannelOverview,
-        list[PlaylistInfo],
-        dict[str, list[VideoInfo]],
-        list[VideoInfo],
-        list[VideoInfo],
-        bool,
-    ]:
-        """返回 (频道概览, 播放列表, 系列→视频, 未分类视频, 全部视频, 是否命中缓存)。"""
+    def _set_progress(self, text: str, *, also_log: bool = True) -> None:
+        """更新状态条；可从后台线程调用（经主线程调度）。"""
+
+        def apply() -> None:
+            if self.winfo_exists():
+                self._lbl_status.configure(text=text)
+
+        schedule_on_main(self, apply)
+        if also_log:
+            self._log(f"[我的数据] {text}")
+
+    def _alive(self, gen: int) -> bool:
+        return gen == self._load_gen
+
+    def _push_render(
+        self,
+        gen: int,
+        overview: OwnChannelOverview,
+        playlists: list[PlaylistInfo],
+        playlist_video_map: dict[str, list[VideoInfo]],
+        unclassified: list[VideoInfo],
+        all_videos: list[VideoInfo],
+        from_cache: bool,
+    ) -> None:
+        if not self._alive(gen):
+            return
+        schedule_on_main(
+            self,
+            self._render_if_current,
+            gen,
+            overview,
+            playlists,
+            playlist_video_map,
+            unclassified,
+            all_videos,
+            from_cache,
+        )
+
+    def _render_if_current(
+        self,
+        gen: int,
+        overview: OwnChannelOverview,
+        playlists: list[PlaylistInfo],
+        playlist_video_map: dict[str, list[VideoInfo]],
+        unclassified: list[VideoInfo],
+        all_videos: list[VideoInfo],
+        from_cache: bool,
+    ) -> None:
+        if not self._alive(gen):
+            return
+        try:
+            self._render(
+                overview,
+                playlists,
+                playlist_video_map,
+                unclassified,
+                all_videos,
+                from_cache,
+                gen=gen,
+            )
+        except Exception as exc:  # noqa: BLE001
+            self._on_error(f"渲染失败：{exc}")
+
+    def _apply_overview(self, gen: int, overview: OwnChannelOverview) -> None:
+        if not self._alive(gen) or not self.winfo_exists():
+            return
+        ch = overview.channel
+        sub_text = "已隐藏" if ch.hidden_subscriber_count else f"{ch.subscriber_count:,}"
+        self._lbl_summary.configure(
+            text=(
+                f"频道：{ch.title}　·　订阅人数：{sub_text}　·　"
+                f"总视频数：{ch.video_count:,}　·　总观看次数：{ch.view_count:,}　·　拉取中…"
+            )
+        )
+
+    def _fetch_data(self, force: bool, gen: int) -> None:
+        """拉取并分阶段推到 UI：先出频道/视频，再按播放列表分组。"""
+        from gui import youtube_api as yt
+
         if not force:
+            self._set_progress("检查本地缓存…")
             cached = cache_get(_DATA_CACHE_KEY, ttl_seconds=_CACHE_TTL_SEC)
             if cached:
                 overview = OwnChannelOverview(
@@ -197,22 +268,60 @@ class MyChannelTab(ttk.Frame):
                 }
                 classified_ids = {i for ids in playlist_video_ids.values() for i in ids}
                 unclassified = [v for v in all_videos if v.id not in classified_ids]
-                return overview, playlists, playlist_video_map, unclassified, all_videos, True
+                self._set_progress(f"命中缓存（{len(all_videos)} 个视频），正在渲染…")
+                self._push_render(
+                    gen, overview, playlists, playlist_video_map, unclassified, all_videos, True
+                )
+                return
 
-        from gui import youtube_api as yt
+        log = self._log
+        self._set_progress("1/4 拉取频道概览（订阅 / 总视频 / 总观看）…")
+        overview = yt.get_own_channel_overview(force_refresh=force, log_fn=log)
+        if not self._alive(gen):
+            return
+        ch = overview.channel
+        self._set_progress(
+            f"1/4 完成：{ch.title} · 订阅 {ch.subscriber_count:,} · 视频 {ch.video_count:,}"
+        )
+        schedule_on_main(self, self._apply_overview, gen, overview)
 
-        overview = yt.get_own_channel_overview(force_refresh=force, log_fn=self._log)
-        playlists = yt.list_channel_playlists(overview.channel.id)
-        uploads_ids = yt.list_playlist_video_ids(overview.uploads_playlist_id)
-        all_videos = yt.get_videos_details(uploads_ids)
+        self._set_progress("2/4 拉取播放列表…")
+        playlists = yt.list_channel_playlists(overview.channel.id, log_fn=log)
+        if not self._alive(gen):
+            return
+        nonempty = [p for p in playlists if p.item_count > 0]
+        empty_n = len(playlists) - len(nonempty)
+        self._set_progress(
+            f"2/4 完成：API 返回 {len(playlists)} 个播放列表，"
+            f"有视频 {len(nonempty)} 个，跳过空列表 {empty_n} 个"
+        )
+        playlists = nonempty
+
+        self._set_progress("3/4 拉取 uploads 视频列表…")
+        uploads_ids = yt.list_playlist_video_ids(overview.uploads_playlist_id, log_fn=log)
+        if not self._alive(gen):
+            return
+        self._set_progress(f"3/4 视频 ID {len(uploads_ids)} 个，拉取详情…")
+        all_videos = yt.get_videos_details(uploads_ids, log_fn=log)
+        if not self._alive(gen):
+            return
         videos_by_id = {v.id: v for v in all_videos}
+        self._set_progress(f"3/4 完成：拿到 {len(all_videos)} 条视频详情，先展示全部视频…")
+
+        # 先渲染扁平列表，不必等每个播放列表再拉一遍（那一步往往要几十次请求）。
+        all_sorted = sorted(all_videos, key=lambda v: v.view_count, reverse=True)
+        self._push_render(gen, overview, playlists, {}, all_sorted, all_videos, False)
 
         playlist_video_map: dict[str, list[VideoInfo]] = {}
         playlist_video_ids: dict[str, list[str]] = {}
         classified_ids: set[str] = set()
-        for p in playlists:
-            ids = yt.list_playlist_video_ids(p.id)
-            vids = [videos_by_id[i] for i in ids if i in videos_by_id]
+        total_pl = len(playlists)
+        for i, p in enumerate(playlists, start=1):
+            if not self._alive(gen):
+                return
+            self._set_progress(f"4/4 播放列表 ({i}/{total_pl})：{p.title}…")
+            ids = yt.list_playlist_video_ids(p.id, log_fn=log)
+            vids = [videos_by_id[vid] for vid in ids if vid in videos_by_id]
             vids.sort(key=lambda v: v.view_count, reverse=True)
             playlist_video_map[p.id] = vids
             playlist_video_ids[p.id] = [v.id for v in vids]
@@ -221,6 +330,7 @@ class MyChannelTab(ttk.Frame):
         unclassified = [v for v in all_videos if v.id not in classified_ids]
         unclassified.sort(key=lambda v: v.view_count, reverse=True)
 
+        self._set_progress("写入本地缓存…")
         cache_set(
             _DATA_CACHE_KEY,
             {
@@ -231,30 +341,21 @@ class MyChannelTab(ttk.Frame):
                 "playlist_video_ids": playlist_video_ids,
             },
         )
-        return overview, playlists, playlist_video_map, unclassified, all_videos, False
+        self._set_progress("拉取完成，按系列重新分组…")
+        self._push_render(
+            gen, overview, playlists, playlist_video_map, unclassified, all_videos, False
+        )
 
-    def _load_bg(self, force: bool) -> None:
+    def _load_bg(self, force: bool, gen: int) -> None:
         try:
-            overview, playlists, playlist_video_map, unclassified, all_videos, from_cache = (
-                self._fetch_data(force)
-            )
-            # 缩略图在 _render_section 里按需下载（命中本地缓存则瞬时完成）。
-            # 若在此处串行预下载全部封面，会长时间阻塞 UI 状态为「加载中」。
-
-            schedule_on_main(
-                self,
-                self._render,
-                overview,
-                playlists,
-                playlist_video_map,
-                unclassified,
-                all_videos,
-                from_cache,
-            )
+            self._log(f"[我的数据] 开始加载（force={force}）")
+            self._fetch_data(force, gen)
         except YoutubeApiError as exc:
-            schedule_on_main(self, self._on_error, str(exc))
+            if self._alive(gen):
+                schedule_on_main(self, self._on_error, str(exc))
         except Exception as exc:  # noqa: BLE001
-            schedule_on_main(self, self._on_error, f"未知错误：{exc}")
+            if self._alive(gen):
+                schedule_on_main(self, self._on_error, f"未知错误：{exc}")
 
     def _on_error(self, msg: str) -> None:
         self._loading = False
@@ -269,6 +370,8 @@ class MyChannelTab(ttk.Frame):
         unclassified: list[VideoInfo],
         all_videos: list[VideoInfo],
         from_cache: bool = False,
+        *,
+        gen: int | None = None,
     ) -> None:
         self._loading = False
         self._loaded_once = True
@@ -294,18 +397,23 @@ class MyChannelTab(ttk.Frame):
         has_any_playlist_videos = any(playlist_video_map.values())
 
         if not playlists or not has_any_playlist_videos:
-            # 频道没有播放列表（或播放列表都是空的）→ 不支持系列分组，
-            # 直接展示一个扁平宫格，全部视频按播放量从高到低排序。
             all_sorted = sorted(all_videos, key=lambda v: v.view_count, reverse=True)
-            self._lbl_status.configure(
-                text=f"该频道未使用播放列表分系列 · 按播放量排序展示全部 {len(all_sorted)} 个视频"
-            )
+            grouping_pending = bool(playlists) and not has_any_playlist_videos
+            if grouping_pending:
+                self._lbl_status.configure(
+                    text=f"已拿到 {len(all_sorted)} 个视频，正在按播放列表分组…"
+                )
+            else:
+                self._lbl_status.configure(
+                    text=f"该频道未使用播放列表分系列 · 按播放量排序展示全部 {len(all_sorted)} 个视频"
+                )
             if all_sorted:
                 self._render_section(f"📁 全部视频（按播放量排序，{len(all_sorted)}）", all_sorted)
             else:
                 ttk.Label(self._grid_host, text="没有找到任何视频").pack(padx=8, pady=8)
             bind_mousewheel_deep(self._grid_host, self._on_mousewheel)
             self.after_idle(self._sync_scroll_region)
+            self._start_thumb_loader(gen if gen is not None else self._load_gen)
             return
 
         total_shown = sum(len(v) for v in playlist_video_map.values()) + len(unclassified)
@@ -323,10 +431,9 @@ class MyChannelTab(ttk.Frame):
 
         bind_mousewheel_deep(self._grid_host, self._on_mousewheel)
         self.after_idle(self._sync_scroll_region)
+        self._start_thumb_loader(gen if gen is not None else self._load_gen)
 
     def _render_section(self, title: str, videos: list[VideoInfo]) -> None:
-        # 独立行块（LabelFrame）+ 彩色标题条：确保每个系列在视觉上明显分组，
-        # 而不是所有宫格挤成一整块。
         colors = self._grid_theme
         section = ttk.LabelFrame(self._grid_host, padding=(0, 0, 0, 6))
         section.pack(fill=tk.X, padx=4, pady=(0, 12), anchor=tk.W)
@@ -349,8 +456,6 @@ class MyChannelTab(ttk.Frame):
         cols = compute_cols(self._canvas.winfo_width())
         for idx, v in enumerate(videos):
             row, col = divmod(idx, cols)
-            thumb_path = download_thumbnail(v.thumbnail_url)
-            img = load_local_image(thumb_path, target_w=CELL_W - 4, target_h=CELL_H - 4)
             subtitle = f"👁 {self._fmt_compact(v.view_count)}"
             cell = build_grid_cell(
                 grid_frame,
@@ -358,7 +463,7 @@ class MyChannelTab(ttk.Frame):
                 col=col,
                 title=v.title,
                 subtitle=subtitle,
-                image=img,
+                image=None,
                 theme=self._grid_theme,
                 photo_refs=self._photo_refs,
                 on_click=lambda vid=v.id: self._on_select(vid),
@@ -367,6 +472,27 @@ class MyChannelTab(ttk.Frame):
             )
             self._cells[v.id] = cell
             self._videos_by_id[v.id] = v
+
+    def _start_thumb_loader(self, gen: int) -> None:
+        items = [(vid, v.thumbnail_url) for vid, v in self._videos_by_id.items() if v.thumbnail_url]
+        if not items:
+            return
+        threading.Thread(target=self._load_thumbs_bg, args=(items, gen), daemon=True).start()
+
+    def _load_thumbs_bg(self, items: list[tuple[str, str]], gen: int) -> None:
+        for vid, url in items:
+            if not self._alive(gen):
+                return
+            path = download_thumbnail(url)
+            img = load_local_image(path, target_w=CELL_W - 4, target_h=CELL_H - 4)
+            schedule_on_main(self, self._apply_thumb, gen, vid, img)
+
+    def _apply_thumb(self, gen: int, video_id: str, img) -> None:
+        if not self._alive(gen):
+            return
+        cell = self._cells.get(video_id)
+        if cell:
+            set_cell_image(cell, img, self._photo_refs)
 
     @staticmethod
     def _fmt_compact(n: float) -> str:

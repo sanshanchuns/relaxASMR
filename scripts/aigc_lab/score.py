@@ -17,7 +17,7 @@ from pathlib import Path
 
 from scripts.aigc_lab.store import T2vRun, load_run
 from scripts.config.paths import ensure_cli_path
-from scripts.series_video.video_probe import (
+from scripts.aigc_lab.video_probe import (
     VideoProbeError,
     extract_review_frames,
     measure_motion,

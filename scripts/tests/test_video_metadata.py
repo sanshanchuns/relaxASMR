@@ -26,17 +26,19 @@ def test_list_dir_videos_non_recursive(tmp_path: Path) -> None:
     (tmp_path / "b.MOV").write_bytes(b"x")
     (tmp_path / "c.JPG").write_bytes(b"x")
     (tmp_path / "d.jpeg").write_bytes(b"x")
+    (tmp_path / "e.png").write_bytes(b"x")
     (tmp_path / "sub").mkdir()
     (tmp_path / "sub" / "c.mp4").write_bytes(b"x")
     (tmp_path / ".hidden.mp4").write_bytes(b"x")
     names = [p.name for p in list_dir_videos(tmp_path)]
-    assert names == ["a.mp4", "b.MOV", "c.JPG", "d.jpeg"]
+    assert names == ["a.mp4", "b.MOV", "c.JPG", "d.jpeg", "e.png"]
 
 
 def test_format_raw_image_meta_lines() -> None:
     info = {
         "title": "IMG_7305",
         "kind": "image",
+        "format": "JPG",
         "resolution": "6000×4000",
         "fps": "—",
         "bitrate": "—",
@@ -56,6 +58,10 @@ def test_format_raw_image_meta_lines() -> None:
     assert "帧率" not in detail
     assert "码率" not in detail
     assert "ISO：1600" in detail
+
+    png_info = {**info, "format": "PNG", "title": "seed"}
+    png_line1, _, _ = format_raw_video_meta_lines(png_info)
+    assert "PNG" in png_line1
 
 
 def test_format_helpers() -> None:

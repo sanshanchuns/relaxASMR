@@ -19,6 +19,7 @@ if str(_REPO) not in sys.path:
 
 from scripts.config.paths import (
     AUDIO_LAYER_IDS,
+    DEFAULT_DURATION_MINUTES,
     RAIN_PROJECT_DIR,
     RAIN_SCENES_DIR,
     REPO_ROOT,
@@ -175,7 +176,7 @@ def build_asmr_config(
     scene_id: str,
     video_rel: str,
     *,
-    duration_minutes: float = 100,
+    duration_minutes: float = DEFAULT_DURATION_MINUTES,
     visual: dict | None = None,
 ) -> tuple[dict, dict[str, str]]:
     cfg = {
@@ -237,7 +238,7 @@ def build_scene_config_from_gui(
     video: Path,
     *,
     scene_id: str | None = None,
-    duration_minutes: float = 100,
+    duration_minutes: float = DEFAULT_DURATION_MINUTES,
     selected_tracks: dict[str, Path] | None = None,
     log_fn: Callable[[str], None] | None = None,
 ) -> dict:
@@ -359,7 +360,7 @@ def write_video_analysis(
         f"> 分析日期：{today}",
         "> 状态：**Looper 首帧代表全片**（`create_rain_subproject.py` 自动生成，§一 请人工核对）",
         "> 系列：**Rain 睡眠**",
-        f"> 成片时长：**{cfg.get('duration_minutes', 100)} min**",
+        f"> 成片时长：**{cfg.get('duration_minutes', DEFAULT_DURATION_MINUTES)} min**",
         "",
         "---",
         "",
@@ -432,7 +433,7 @@ def create_from_video(
     video: Path,
     *,
     scene_id: str | None = None,
-    duration_minutes: float = 100,
+    duration_minutes: float = DEFAULT_DURATION_MINUTES,
     media_mode: str = "auto",
     skip_generate: bool = False,
     on_progress: Callable[[str], None] | None = None,

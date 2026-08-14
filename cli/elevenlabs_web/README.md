@@ -1,6 +1,6 @@
 # ElevenLabs 网页 Playwright（UI 自动化）
 
-与 `cli/elevenlabs_http/`（Firebase Bearer HTTP）并存。系列视频回退链在 HTTP 失败时使用本包。
+与 `cli/elevenlabs_http/`（Firebase Bearer HTTP）并存。AIGC / 即梦回退链在 HTTP 失败时可用本包。
 
 ```bash
 PYTHONPATH=cli:. python -m elevenlabs_web login

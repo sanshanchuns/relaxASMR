@@ -9,8 +9,6 @@
 - **Jimeng**：做成 Agent 技能「雨ASMR图生」（见 `instructions/jimeng_skills/雨ASMR图生.md`），对话只发短指令 + 选技能，**不**整段粘贴规则。
 - **Gemini**：审核 system 注入同一压缩块（无技能 UI）。
 
-系列视频 Tab（首尾帧 loop）仍走 `rain_asmr_video_prompt.md`，**不要**与本规范混用。
-
 ---
 
 ## 一、产品目标

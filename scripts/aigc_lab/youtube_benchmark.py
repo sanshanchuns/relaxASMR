@@ -127,7 +127,7 @@ def _download_first_segment(url: str, out_path: Path, *, seconds: int = _DOWNLOA
 
 
 def _extract_spread_frames(video: Path, out_dir: Path, *, count: int = _FRAME_COUNT) -> list[Path]:
-    from scripts.series_video.video_probe import extract_review_frames
+    from scripts.aigc_lab.video_probe import extract_review_frames
 
     return extract_review_frames(video, out_dir, count=count)
 

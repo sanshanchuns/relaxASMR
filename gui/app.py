@@ -244,7 +244,9 @@ class RelaxAsmrApp(tk.Tk):
                 return self._format_duration_minutes(minutes)
             except (TypeError, ValueError):
                 pass
-        return "100"
+        from scripts.config.paths import DEFAULT_DURATION_MINUTES
+
+        return self._format_duration_minutes(DEFAULT_DURATION_MINUTES)
 
     def _parse_duration_minutes(self) -> float:
         try:
@@ -522,9 +524,6 @@ class RelaxAsmrApp(tk.Tk):
         raw_video_tab = getattr(self, "raw_video_library_tab", None)
         if raw_video_tab is not None and hasattr(raw_video_tab, "apply_theme"):
             raw_video_tab.apply_theme(palette)
-        series_video_tab = getattr(self, "series_video_tab", None)
-        if series_video_tab is not None and hasattr(series_video_tab, "apply_theme"):
-            series_video_tab.apply_theme(palette)
         aigc_tab = getattr(self, "aigc_tab", None)
         if aigc_tab is not None and hasattr(aigc_tab, "apply_theme"):
             aigc_tab.apply_theme(palette)
@@ -613,12 +612,6 @@ class RelaxAsmrApp(tk.Tk):
 
         self._aigc_preview = AigcPreviewPanel(self.right_pane)
         self._active_side_preview: ttk.Frame | None = None
-        self._series_last_video_path: Path | None = None
-        self._series_last_video_prompt: str = ""
-        self._series_last_cover_path: Path | None = None
-        self._series_last_cover_name: str = ""
-        self._series_last_cover_title: str = ""
-        self._series_last_cover_prompt: str = ""
         self._right_panel_mode = "default"
         self._raw_preview_active = False
         # 右侧 sash 按模式独立：AIGC 专用预览与工作流三栏互不影响
@@ -736,20 +729,6 @@ class RelaxAsmrApp(tk.Tk):
             "3_random": self.random_library_tab,
             "4_wildlife": self.wildlife_library_tab,
         }
-
-        # --- 系列视频：种子图 → 系列图 → 5s loop 视频 ---
-        from gui.series_video_tab import SeriesVideoTab
-
-        self.series_video_tab = SeriesVideoTab(
-            self.left_notebook,
-            log_fn=self._log,
-            on_preview_image=self._series_preview_image,
-            on_preview_series=self._series_preview_series,
-            on_preview_video=self._series_preview_video,
-            on_preview_empty=self._series_preview_empty,
-            on_stop_playback=self._stop_video_loop,
-        )
-        self.left_notebook.add(self.series_video_tab, text="系列视频")
 
         # --- AIGC：旧 / 文生视频 / 图生视频 ---
         from gui.aigc_shell import AigcShell
@@ -1735,7 +1714,6 @@ class RelaxAsmrApp(tk.Tk):
             self.mix_preview_grid.stop_playback()
         for tab in self._audio_library_tabs.values():
             tab.stop_playback()
-        self.series_video_tab.stop_playback()
         try:
             tab = self.left_notebook.nametowidget(self.left_notebook.select())
         except tk.TclError:
@@ -1751,17 +1729,6 @@ class RelaxAsmrApp(tk.Tk):
             self._show_default_right_panels()
             self._set_right_panel_mode("default")
             self._on_material_library_subtab_changed()
-        elif tab is self.series_video_tab:
-            if getattr(self, "_right_panel_mode", "default") == "aigc":
-                self._remember_current_right_sash()
-            self._show_default_right_panels()
-            self._set_right_panel_mode("default")
-            if hasattr(self, "cover_frame"):
-                self.cover_frame.configure(text="图片预览")
-            if hasattr(self, "preview_frame"):
-                self.preview_frame.configure(text="系列视频")
-            self.series_video_tab.on_tab_selected()
-            self._series_refresh_right_panels()
         elif tab is self.aigc_tab:
             if getattr(self, "_right_panel_mode", "default") != "aigc":
                 self._remember_current_right_sash()
@@ -1782,6 +1749,14 @@ class RelaxAsmrApp(tk.Tk):
             self._update_preview(self.video_path)
 
     def _on_data_analysis_subtab_changed(self, _event=None) -> None:
+        # 嵌套 Notebook 在 bind/创建时也会发 <<NotebookTabChanged>>，
+        # 此时左侧仍停留在「工作流」，绝不能因此去打 YouTube API。
+        try:
+            left = self.left_notebook.nametowidget(self.left_notebook.select())
+        except tk.TclError:
+            return
+        if left is not self.data_analysis_tab:
+            return
         try:
             sub = self.data_analysis_notebook.nametowidget(self.data_analysis_notebook.select())
         except tk.TclError:
@@ -1794,6 +1769,13 @@ class RelaxAsmrApp(tk.Tk):
             sub.on_tab_selected()
 
     def _on_material_library_subtab_changed(self, _event=None) -> None:
+        # 同数据分析：子 Notebook 启动时也会误触发，只有真正选中「素材库」才加载。
+        try:
+            left = self.left_notebook.nametowidget(self.left_notebook.select())
+        except tk.TclError:
+            return
+        if left is not self.material_library_tab:
+            return
         # 主 Tab 切换时已 restore 默认右侧；子 Tab 切换只刷新内容
         if self._active_side_preview is not None:
             self._show_default_right_panels()
@@ -1822,8 +1804,7 @@ class RelaxAsmrApp(tk.Tk):
         """把某个 Tab 专属的预览面板换到右侧上区（约 2/3）。
 
         「我的数据」「爆款分析」用 YoutubePreviewPanel；AIGC 用
-        AigcPreviewPanel；「系列视频」复用工作流封面/视频预览区。
-        日志区（下 1/3）始终保留。"""
+        AigcPreviewPanel。日志区（下 1/3）始终保留。"""
         if not hasattr(self, "right_pane"):
             return
         if self._active_side_preview is panel:
@@ -2323,10 +2304,9 @@ class RelaxAsmrApp(tk.Tk):
     ) -> None:
         """阻塞式生成物料（供上传前自动补全；逻辑同「开始分析」）。"""
         from gui.core_controller import (
-            clip_analysis_from_matches,
+            finalize_vlm_only,
             load_cached_rain_tabs,
-            reconcile_clip_vlm,
-            save_clip_matches,
+            vlm_analysis_as_clip_shaped,
         )
 
         analyze_script = LIB_REPO_ROOT / "scripts" / "video_analysis" / "analyze.py"
@@ -2350,41 +2330,40 @@ class RelaxAsmrApp(tk.Tk):
         clip_analysis: dict = {}
         frame_jpg = get_snapshot_raw_path(scene_id)
 
-        skip_clip_vlm = cached is not None and not cached.get("partial")
+        skip_analysis = cached is not None and not cached.get("partial") and cached.get("vlm_only")
 
-        if skip_clip_vlm:
-            self._log("CLIP/VLM 已存在，跳过解析。")
+        if skip_analysis:
+            self._log("VLM 雨声配方已存在，跳过解析。")
+            from gui.core_controller import clip_analysis_from_matches
+
             clip_analysis = clip_analysis_from_matches(Path(cached["clip_json"]))
-        elif cached and cached.get("partial"):
-            self._log("CLIP 已存在，跳过 CLIP；继续 VLM…")
-            clip_analysis = clip_analysis_from_matches(Path(cached["clip_json"]))
-            vst_mod.analyze_video(
-                loop_video,
-                out_dir,
-                on_progress=self._log,
-                force_refresh=False,
-                skip_clip=True,
-                apply_rain_fx=apply_rain,
-            )
-            frame_jpg = get_snapshot_raw_path(scene_id)
         else:
-            clip_data = vst_mod.analyze_video(
+            # 抽帧 + 封面；CLIP 入口关闭（clip_engine 代码保留）
+            if cached and not cached.get("vlm_only"):
+                self._log("检测到旧版 CLIP 缓存，改为仅跑 VLM…")
+            else:
+                self._log("跳过 CLIP，仅跑 VLM…")
+            analyze_out = vst_mod.analyze_video(
                 loop_video,
                 out_dir,
                 on_progress=self._log,
                 force_refresh=force_refresh,
-                skip_clip=False,
+                skip_clip=True,
                 apply_rain_fx=apply_rain,
             )
-            clip_analysis = clip_data.get("clip_analysis", {})
-            frame_jpg = Path(clip_data["frame_jpg"]) if clip_data.get("frame_jpg") else frame_jpg
-            save_clip_matches(scene_id, clip_analysis, vlm_reconciled=False, log_fn=self._log)
+            frame_jpg = (
+                Path(analyze_out["frame_jpg"])
+                if analyze_out.get("frame_jpg")
+                else get_snapshot_raw_path(scene_id)
+            )
+            if frame_jpg and frame_jpg.is_file():
+                from scripts.video_analysis.analyze import analyze_vlm_frame
 
-        if not skip_clip_vlm and frame_jpg and frame_jpg.is_file():
-            from scripts.video_analysis.analyze import analyze_vlm_frame
-
-            vlm_res = analyze_vlm_frame(frame_jpg, on_progress=self._log)
-            reconcile_clip_vlm(scene_id, clip_analysis, vlm_res, self._log)
+                vlm_res = analyze_vlm_frame(frame_jpg, on_progress=self._log)
+                finalize_vlm_only(scene_id, vlm_res, self._log)
+                clip_analysis = vlm_analysis_as_clip_shaped(vlm_res)
+            else:
+                self._log("未找到首帧图片，跳过 VLM 分析。")
 
         existing = material_metadata_path(scene_id)
         if existing and not force_refresh:
@@ -3429,66 +3408,13 @@ class RelaxAsmrApp(tk.Tk):
 
         self._video_loop_id = self.after(33, self._play_next_frame)
 
-    def _show_cover_image_file(
-        self,
-        path: Path | None,
-        *,
-        name: str = "—",
-        title: str = "",
-        description: str = "",
-    ) -> None:
-        """在「封面预览」区显示任意静态图（系列视频 Tab 用）。"""
-        if not hasattr(self, "cover_thumb_canvas"):
-            return
-        self._stop_cover_video_loop()
-        if hasattr(self, "lbl_cover_video_name"):
-            self.lbl_cover_video_name.configure(text=name)
-        slot_w, slot_h = self._cover_thumb_size()
-        self._apply_cover_slot_geometry(slot_w, slot_h)
-        self.cover_thumb_canvas.delete("all")
-        if path is not None and path.is_file():
-            try:
-                img = Image.open(path)
-                img.thumbnail((slot_w, slot_h), Image.Resampling.LANCZOS)
-                self._cover_img = ImageTk.PhotoImage(img)
-                self.cover_thumb_canvas.create_image(
-                    slot_w // 2,
-                    slot_h // 2,
-                    anchor=tk.CENTER,
-                    image=self._cover_img,
-                )
-            except Exception as exc:
-                self.cover_thumb_canvas.create_text(
-                    slot_w // 2,
-                    slot_h // 2,
-                    text=f"封面加载失败: {exc}",
-                    anchor=tk.CENTER,
-                    width=slot_w - 8,
-                )
-                self._cover_img = None
-        else:
-            self.cover_thumb_canvas.create_text(
-                slot_w // 2,
-                slot_h // 2,
-                text="无预览",
-                anchor=tk.CENTER,
-            )
-            self._cover_img = None
-        if hasattr(self, "txt_cover_title_en"):
-            self._set_title_text(self.txt_cover_title_en, title or "—")
-            self.txt_cover_desc_en.configure(state=tk.NORMAL)
-            self.txt_cover_desc_en.delete("1.0", tk.END)
-            if description:
-                self.txt_cover_desc_en.insert("1.0", description)
-            self.txt_cover_desc_en.configure(state=tk.DISABLED)
-
     def _preview_raw_video(
         self,
         video: Path,
         info: dict[str, str],
         thumb: Image.Image | None,
     ) -> None:
-        """素材库 raw 视频/JPG 单击：封面预览区放大缩略图，右侧显示拍摄参数。"""
+        """素材库 raw 视频/图片单击：封面预览区放大缩略图，右侧显示拍摄参数。"""
         self._raw_preview_active = True
         self._show_raw_video_cover(thumb, name=video.name, info=info)
 
@@ -3571,148 +3497,6 @@ class RelaxAsmrApp(tk.Tk):
             if description:
                 self.txt_cover_desc_en.insert("1.0", description)
             self.txt_cover_desc_en.configure(state=tk.DISABLED)
-
-    def _set_preview_panel_metadata(self, *, title: str, description: str) -> None:
-        if not hasattr(self, "txt_preview_title_zh"):
-            return
-        self._set_title_text(self.txt_preview_title_zh, title or "—")
-        self.txt_preview_desc_zh.configure(state=tk.NORMAL)
-        self.txt_preview_desc_zh.delete("1.0", tk.END)
-        if description:
-            self.txt_preview_desc_zh.insert("1.0", description)
-        self.txt_preview_desc_zh.configure(state=tk.DISABLED)
-
-    def _update_preview_file(self, video_path: Path | None) -> None:
-        """在「视频预览」区循环播放任意本地 mp4（与工作流 `_update_preview` 相同逻辑）。"""
-        if not hasattr(self, "preview_video_canvas"):
-            return
-        self._stop_video_loop()
-        if not video_path or not video_path.is_file():
-            self._preview_img = None
-            self._show_preview_placeholder("无预览")
-            return
-        self._load_preview_video(video_path)
-
-    def _series_remember_cover(
-        self,
-        path: Path | None,
-        *,
-        name: str,
-        title: str,
-        description: str,
-    ) -> None:
-        if path is not None and path.is_file():
-            self._series_last_cover_path = path.resolve()
-            self._series_last_cover_name = name
-            self._series_last_cover_title = title
-            self._series_last_cover_prompt = description
-        else:
-            self._series_last_cover_path = None
-            self._series_last_cover_name = ""
-            self._series_last_cover_title = ""
-            self._series_last_cover_prompt = ""
-
-    def _series_refresh_cover_preview(self) -> None:
-        """系列视频 Tab：图片区显示上次点击的静帧，否则空白。"""
-        path = self._series_last_cover_path
-        if path is not None and path.is_file():
-            self._show_cover_image_file(
-                path,
-                name=self._series_last_cover_name or path.name,
-                title=self._series_last_cover_title,
-                description=self._series_last_cover_prompt,
-            )
-            return
-        self._show_cover_image_file(None, name="—", title="", description="")
-
-    def _series_refresh_right_panels(self) -> None:
-        """切到系列视频 Tab 时，整段右侧预览区恢复上次点击状态或空白。"""
-        self._series_refresh_cover_preview()
-        self._series_refresh_video_preview()
-
-    def _series_refresh_video_prompt_panel(self) -> None:
-        """系列视频 Tab：右侧文案区只显示上次点击的第三列视频 prompt，否则留空。"""
-        if not hasattr(self, "txt_preview_desc_zh"):
-            return
-        prompt = (self._series_last_video_prompt or "").strip()
-        self._set_title_text(self.txt_preview_title_zh, "")
-        self.txt_preview_desc_zh.configure(state=tk.NORMAL)
-        self.txt_preview_desc_zh.delete("1.0", tk.END)
-        if prompt:
-            self.txt_preview_desc_zh.insert("1.0", prompt)
-        self.txt_preview_desc_zh.configure(state=tk.DISABLED)
-
-    def _series_refresh_video_preview(self) -> None:
-        """系列视频 Tab：视频区显示上次点击的第三列视频，否则「无预览」。"""
-        path = self._series_last_video_path
-        if path is not None and path.is_file():
-            if hasattr(self, "lbl_preview_video_name"):
-                self.lbl_preview_video_name.configure(text=path.name)
-            self._update_preview_file(path)
-            self._series_refresh_video_prompt_panel()
-            return
-        if hasattr(self, "lbl_preview_video_name"):
-            self.lbl_preview_video_name.configure(text="—")
-        self._stop_video_loop()
-        self._preview_img = None
-        self._show_preview_placeholder("无预览")
-        self._series_refresh_video_prompt_panel()
-
-    def _series_preview_image(self, path: Path, *, title: str = "", prompt: str = "") -> None:
-        self._series_remember_cover(
-            path,
-            name=path.name,
-            title=title or path.name,
-            description=prompt,
-        )
-        self._series_refresh_right_panels()
-
-    def _series_preview_series(
-        self,
-        image_path: Path,
-        *,
-        title: str = "",
-        image_prompt: str = "",
-        video_prompt: str = "",
-        generating: bool = False,
-    ) -> None:
-        del generating, video_prompt
-        self._series_remember_cover(
-            image_path,
-            name=image_path.name,
-            title=title or image_path.name,
-            description=image_prompt,
-        )
-        self._series_refresh_right_panels()
-
-    def _series_preview_video(
-        self,
-        image_path: Path,
-        video_path: Path,
-        *,
-        title: str = "",
-        image_prompt: str = "",
-        video_prompt: str = "",
-    ) -> None:
-        del title
-        self._series_last_video_path = video_path.resolve()
-        self._series_last_video_prompt = (video_prompt or "").strip()
-        self._series_remember_cover(
-            image_path,
-            name=image_path.name,
-            title=image_path.name,
-            description=image_prompt,
-        )
-        self._series_refresh_right_panels()
-
-    def _series_preview_empty(self, message: str) -> None:
-        self._show_cover_image_file(
-            None,
-            name="—",
-            title="—",
-            description=message,
-        )
-        self._series_refresh_video_preview()
 
     def _aigc_preview_run(
         self,
@@ -3879,9 +3663,9 @@ class RelaxAsmrApp(tk.Tk):
                 self._log("—— 2. 自动分析画面 ——")
                 from gui.core_controller import (
                     clip_analysis_from_matches,
+                    finalize_vlm_only,
                     load_cached_rain_tabs,
-                    reconcile_clip_vlm,
-                    save_clip_matches,
+                    vlm_analysis_as_clip_shaped,
                 )
                 from scripts.config.paths import clear_scene_material, get_snapshot_raw_path, material_metadata_path
 
@@ -3894,11 +3678,16 @@ class RelaxAsmrApp(tk.Tk):
 
                 clip_analysis: dict = {}
                 frame_jpg: Path | None = get_snapshot_raw_path(scene_id)
-                skip_clip_vlm = cached is not None and not cached.get("partial")
+                # 仅当已有 VLM-only 完整缓存时跳过；旧 CLIP / 双 tab 缓存会重跑 VLM
+                skip_analysis = (
+                    cached is not None
+                    and not cached.get("partial")
+                    and cached.get("vlm_only")
+                )
                 rain_tab_result: dict | None = None
 
-                if skip_clip_vlm:
-                    self._log("CLIP/VLM 已存在，跳过解析，直接加载。")
+                if skip_analysis:
+                    self._log("VLM 雨声配方已存在，跳过解析，直接加载。")
 
                     def load_cached_ui() -> None:
                         self.material_dir = out_dir
@@ -3909,81 +3698,46 @@ class RelaxAsmrApp(tk.Tk):
 
                     self.after(0, load_cached_ui)
                     clip_analysis = clip_analysis_from_matches(Path(cached["clip_json"]))
-                elif cached and cached.get("partial"):
-                    self._log("CLIP 已存在，跳过 CLIP；继续 VLM…")
-                    clip_json = Path(cached["clip_json"])
-                    clip_analysis = clip_analysis_from_matches(clip_json)
-
-                    vst_mod.analyze_video(
-                        loop_video,
-                        out_dir,
-                        on_progress=self._log,
-                        force_refresh=False,
-                        skip_clip=True,
-                        apply_rain_fx=apply_rain,
-                    )
-                    frame_jpg = get_snapshot_raw_path(scene_id)
-
-                    def load_partial_clip_ui() -> None:
-                        self.material_dir = out_dir
-                        self._refresh_material_label()
-                        self._update_cover_preview()
-                        self._apply_rain_tabs(cached)
-                        self._log("CLIP 阶段已从缓存加载。")
-
-                    self.after(0, load_partial_clip_ui)
                 else:
-                    clip_data = vst_mod.analyze_video(
+                    if cached and not cached.get("vlm_only"):
+                        self._log("检测到旧版 CLIP 缓存，改为仅跑 VLM…")
+                    else:
+                        self._log("跳过 CLIP，仅跑 VLM…")
+                    analyze_out = vst_mod.analyze_video(
                         loop_video,
                         out_dir,
                         on_progress=self._log,
                         force_refresh=force_refresh,
-                        skip_clip=False,
+                        skip_clip=True,
                         apply_rain_fx=apply_rain,
                     )
-                    clip_analysis = clip_data.get("clip_analysis", {})
-                    frame_jpg = Path(clip_data["frame_jpg"]) if clip_data.get("frame_jpg") else frame_jpg
-
-                    clip_json, clip_title, clip_matches = save_clip_matches(
-                        scene_id, clip_analysis, vlm_reconciled=False, log_fn=self._log
+                    frame_jpg = (
+                        Path(analyze_out["frame_jpg"])
+                        if analyze_out.get("frame_jpg")
+                        else get_snapshot_raw_path(scene_id)
                     )
-                    rain_tab_result = {
-                        "rain_tab": "1_rain_clip",
-                        "clip_json": clip_json,
-                        "clip_title": clip_title,
-                        "show_vlm_tab": False,
-                        "vlm_json": None,
-                        "vlm_title": "",
-                    }
 
-                    def update_clip_ui() -> None:
+                    def update_frame_ui() -> None:
                         self.material_dir = out_dir
                         self._refresh_material_label()
                         self._update_cover_preview()
-                        self._apply_rain_tabs(rain_tab_result)
-                        if clip_matches:
-                            self._log("CLIP 阶段结束，九宫格已就绪。")
-                        else:
-                            self._log("CLIP 阶段结束。")
 
-                    self.after(0, update_clip_ui)
+                    self.after(0, update_frame_ui)
 
-                if skip_clip_vlm:
-                    pass
-                elif frame_jpg and frame_jpg.is_file():
-                    from scripts.video_analysis.analyze import analyze_vlm_frame
+                    if frame_jpg and frame_jpg.is_file():
+                        from scripts.video_analysis.analyze import analyze_vlm_frame
 
-                    vlm_res = analyze_vlm_frame(frame_jpg, on_progress=self._log)
-                    rain_tab_result = reconcile_clip_vlm(
-                        scene_id, clip_analysis, vlm_res, self._log
-                    )
+                        vlm_res = analyze_vlm_frame(frame_jpg, on_progress=self._log)
+                        rain_tab_result = finalize_vlm_only(scene_id, vlm_res, self._log)
+                        clip_analysis = vlm_analysis_as_clip_shaped(vlm_res)
 
-                    def update_vlm_ui() -> None:
-                        self._apply_rain_tabs(rain_tab_result)
+                        def update_vlm_ui() -> None:
+                            self._apply_rain_tabs(rain_tab_result)
+                            self._log("VLM 阶段结束，九宫格已就绪。")
 
-                    self.after(0, update_vlm_ui)
-                elif not skip_clip_vlm:
-                    self._log("未找到首帧图片，跳过 VLM 分析。")
+                        self.after(0, update_vlm_ui)
+                    else:
+                        self._log("未找到首帧图片，跳过 VLM 分析。")
 
                 clip_data = {"clip_analysis": clip_analysis}
 

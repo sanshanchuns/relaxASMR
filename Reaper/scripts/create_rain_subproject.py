@@ -25,6 +25,7 @@ if str(SCRIPT_DIR) not in sys.path:
 
 from rain_subproject_lib import create_from_video, derive_scene_id, REPO_ROOT
 from scene_config import scene_config_path
+from scripts.config.paths import DEFAULT_DURATION_MINUTES
 
 
 def main() -> None:
@@ -44,8 +45,8 @@ def main() -> None:
     parser.add_argument(
         "--duration-minutes",
         type=float,
-        default=100,
-        help="成片时长（默认 100 分钟）",
+        default=DEFAULT_DURATION_MINUTES,
+        help=f"成片时长（默认 {int(DEFAULT_DURATION_MINUTES)} 分钟）",
     )
     parser.add_argument(
         "--media-mode",

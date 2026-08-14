@@ -23,7 +23,8 @@ def get_clip_components():
     if _clip_model is None:
         _device = resolve_clip_device()
         _clip_model = CLIPModel.from_pretrained(CLIP_MODEL_NAME).to(_device)
-        _clip_processor = CLIPProcessor.from_pretrained(CLIP_MODEL_NAME)
+        # use_fast=True：避免 transformers 默认慢速 ImageProcessor 的启动警告
+        _clip_processor = CLIPProcessor.from_pretrained(CLIP_MODEL_NAME, use_fast=True)
     return _clip_model, _clip_processor, _device
 
 DISTANT_PROMPTS = {

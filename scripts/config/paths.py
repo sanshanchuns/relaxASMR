@@ -156,7 +156,7 @@ def export_dir() -> Path:
     return base_url() / "export"
 
 
-# 系列视频产物根（仓库内 aigc/，避免写外盘性能问题）
+# AIGC 产物根（仓库内 aigc/，避免写外盘性能问题）
 
 
 def aigc_dir() -> Path:
@@ -169,11 +169,6 @@ def aigc_dir() -> Path:
     p = REPO_ROOT / "aigc"
     p.mkdir(parents=True, exist_ok=True)
     return p.resolve()
-
-
-def series_dir() -> Path:
-    """「系列视频」产物根目录：``aigc/<batch_id>/``。"""
-    return aigc_dir()
 
 
 def t2v_lab_dir() -> Path:
@@ -215,80 +210,7 @@ def agent_i2v_runs_dir() -> Path:
     return p.resolve()
 
 
-def series_batch_dir(batch_id: str) -> Path:
-    return series_dir() / batch_id
-
-
-def series_seed_image_dir(batch_id: str) -> Path:
-    """种子图与待选种子图：``seed_image/``。"""
-    return series_batch_dir(batch_id) / "seed_image"
-
-
-def series_series_image_dir(batch_id: str) -> Path:
-    """系列图：``series_image/``。"""
-    return series_batch_dir(batch_id) / "series_image"
-
-
-def series_video_dir(batch_id: str) -> Path:
-    """系列视频：``series_video/``。"""
-    return series_batch_dir(batch_id) / "series_video"
-
-
-def series_image_read_paths(batch_id: str, filename: str) -> list[Path]:
-    """解析系列图路径（兼容同批次内旧子目录名 ``derive_image/``）。"""
-    root = series_batch_dir(batch_id)
-    return [root / sub / filename for sub in ("series_image", "derive_image", "images")]
-
-
-def series_video_read_paths(batch_id: str, filename: str) -> list[Path]:
-    """解析系列视频路径（兼容 ``video/`` / ``clips/``）。"""
-    root = series_batch_dir(batch_id)
-    return [root / sub / filename for sub in ("series_video", "video", "clips")]
-
-
-def series_seed_path(batch_id: str) -> Path:
-    return series_seed_image_dir(batch_id) / "seed_001.png"
-
-
-def series_seed_candidates_dir(batch_id: str) -> Path:
-    """待选种子图（与 ``seed_image/`` 同目录）。"""
-    return series_seed_image_dir(batch_id)
-
-
-def series_images_dir(batch_id: str) -> Path:
-    """兼容旧名 → ``series_image/``。"""
-    return series_series_image_dir(batch_id)
-
-
-def series_clips_dir(batch_id: str) -> Path:
-    """兼容旧名 → ``series_video/``。"""
-    return series_video_dir(batch_id)
-
-
-def series_meta_path(batch_id: str) -> Path:
-    return series_batch_dir(batch_id) / "batch.json"
-
-
-def series_seed_meta_path(batch_id: str) -> Path:
-    """种子图相关 prompt：``seed.json``（与批次目录同级）。"""
-    return series_batch_dir(batch_id) / "seed.json"
-
-
-def series_video_prompt_path(batch_id: str, index: int) -> Path:
-    """单条视频 prompt：``video_series_001.json`` …"""
-    return series_batch_dir(batch_id) / f"video_series_{index:03d}.json"
-
-
-def series_video_prompt_read_paths(batch_id: str, index: int) -> list[Path]:
-    """读取 sidecar（新 ``video_series_*``，兼容旧 ``video_derive_*``）。"""
-    root = series_batch_dir(batch_id)
-    return [
-        root / f"video_series_{index:03d}.json",
-        root / f"video_derive_{index:03d}.json",
-    ]
-
-
-DEFAULT_DURATION_MINUTES = 100
+DEFAULT_DURATION_MINUTES = 90
 
 
 def cfg_duration_minutes(cfg: dict) -> float:
@@ -637,10 +559,10 @@ def ensure_gui_path() -> None:
 
 def ensure_cli_path() -> None:
     """把 ``cli/`` 放进 ``sys.path``，使 ``import agy`` / ``import jimeng_web`` /
-    ``import elevenlabs_http`` / ``import elevenlabs_web`` 可用。
+    ``import elevenlabs_http`` / ``import elevenlabs_web`` / ``import shared`` 可用。
 
     包在 ``cli/agy``、``cli/jimeng_web``、``cli/elevenlabs_http``、
-    ``cli/elevenlabs_web``（故意不用 ``elevenlabs`` 包名，避免盖掉
+    ``cli/elevenlabs_web``、``cli/shared``（故意不用 ``elevenlabs`` 包名，避免盖掉
     官方 SDK）。调用方在入口执行一次即可（GUI ``app.py`` 已调用）。脚本直跑::
 
         from scripts.config.paths import ensure_cli_path; ensure_cli_path()

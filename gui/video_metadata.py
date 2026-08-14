@@ -11,9 +11,14 @@ from pathlib import Path
 from typing import Any
 
 _VIDEO_EXTS = {".mp4", ".mov", ".mxf", ".mkv", ".avi", ".webm"}
-_IMAGE_EXTS = {".jpg", ".jpeg"}
+_IMAGE_EXTS = {".jpg", ".jpeg", ".png"}
 _MEDIA_EXTS = _VIDEO_EXTS | _IMAGE_EXTS
-_META_CACHE_VERSION = 4
+_IMAGE_FORMAT_LABELS = {
+    ".jpg": "JPG",
+    ".jpeg": "JPG",
+    ".png": "PNG",
+}
+_META_CACHE_VERSION = 5
 _mem_meta_cache: dict[str, tuple[tuple[int, int], dict[str, str]]] = {}
 # Sony rtmd WhiteBalance 枚举（exiftool -n 时为数字）
 _SONY_WHITE_BALANCE = {
@@ -37,7 +42,7 @@ def is_video_path(path: Path) -> bool:
 
 
 def list_dir_videos(directory: Path) -> list[Path]:
-    """Non-recursive list of video / JPG files in *directory*."""
+    """Non-recursive list of video / image (JPG/PNG) files in *directory*."""
     if not directory.is_dir():
         return []
     out: list[Path] = []
@@ -542,6 +547,10 @@ def _image_size_from_pil(path: Path) -> tuple[int, int]:
         return 0, 0
 
 
+def _image_format_label(path: Path) -> str:
+    return _IMAGE_FORMAT_LABELS.get(path.suffix.lower(), path.suffix.upper().lstrip(".") or "图片")
+
+
 def _probe_image_info(path: Path) -> dict[str, str]:
     tags = read_exif_tags(path)
     width, height = _image_size_from_tags(tags)
@@ -552,6 +561,7 @@ def _probe_image_info(path: Path) -> dict[str, str]:
     return {
         "title": path.stem,
         "kind": "image",
+        "format": _image_format_label(path),
         "resolution": resolution,
         "fps": "—",
         "bitrate": "—",
@@ -596,7 +606,7 @@ def read_raw_video_info(path: Path, *, use_cache: bool = True) -> dict[str, str]
 
 def format_raw_video_meta_lines(info: dict[str, str]) -> tuple[str, str, str]:
     if info.get("kind") == "image":
-        line1 = f"{info.get('resolution', '—')} · JPG"
+        line1 = f"{info.get('resolution', '—')} · {info.get('format', '图片')}"
     else:
         line1 = (
             f"{info.get('resolution', '—')} · {info.get('fps', '—')} · "
@@ -635,7 +645,7 @@ def format_raw_video_detail_text(info: dict[str, str]) -> str:
 
 
 def load_raw_media_thumb(path: Path, *, max_side: int = 320) -> "Image.Image | None":
-    """Load a thumbnail for video (first frame) or JPG (resized still)."""
+    """Load a thumbnail for video (first frame) or still image (JPG/PNG resized)."""
     from PIL import Image, ImageOps
 
     if is_image_path(path):

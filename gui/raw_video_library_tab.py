@@ -53,6 +53,7 @@ class RawVideoLibraryTab(ttk.Frame):
         self._current_dir: Path | None = None
         self._selected_key: str | None = None
         self._load_generation = 0
+        self._dewatermark_busy = False
         self._ui_theme: UiTheme = LIGHT
         self._grid_theme = grid_theme(LIGHT)
         self._section_labels: list[tk.Label] = []
@@ -64,11 +65,15 @@ class RawVideoLibraryTab(ttk.Frame):
         toolbar.pack(fill=tk.X, pady=(0, 8))
         ttk.Button(toolbar, text="选择目录", command=self._pick_directory).pack(side=tk.LEFT)
         ttk.Button(toolbar, text="刷新", command=lambda: self.refresh(force=True)).pack(side=tk.LEFT, padx=(6, 0))
+        self._btn_dewatermark = ttk.Button(
+            toolbar, text="图片去水印", command=self._on_dewatermark_clicked
+        )
+        self._btn_dewatermark.pack(side=tk.LEFT, padx=(6, 0))
         self.lbl_stats = ttk.Label(toolbar, text="")
         self.lbl_stats.pack(side=tk.LEFT, padx=(12, 0))
         ttk.Label(
             toolbar,
-            text="单击预览",
+            text="单击选中后可「图片去水印」· 默认去右上水印 / 有字幕才去底部字幕",
             foreground="gray",
         ).pack(side=tk.RIGHT)
 
@@ -155,17 +160,17 @@ class RawVideoLibraryTab(ttk.Frame):
     def _update_dir_label(self, directory: Path | None = None) -> None:
         if directory is not None:
             self.lbl_dir.configure(
-                text=f"目录：{directory}（仅根层视频/JPG，不含子目录）"
+                text=f"目录：{directory}（仅根层视频/图片，不含子目录）"
             )
             return
         raw = (self._get_directory() or "").strip()
         if not raw:
-            self.lbl_dir.configure(text="目录：未选择（仅展示选定目录根层视频/JPG，不含子目录）")
+            self.lbl_dir.configure(text="目录：未选择（仅展示选定目录根层视频/图片，不含子目录）")
             return
         path = Path(raw)
         if path.is_dir():
             self.lbl_dir.configure(
-                text=f"目录：{path}（仅根层视频/JPG，不含子目录）"
+                text=f"目录：{path}（仅根层视频/图片，不含子目录）"
             )
         else:
             self.lbl_dir.configure(text=f"目录：{raw}（路径无效或不可访问）")
@@ -224,7 +229,7 @@ class RawVideoLibraryTab(ttk.Frame):
         ).start()
 
     def _placeholder_info(self, video: Path) -> dict[str, str]:
-        return {
+        info = {
             "title": video.stem,
             "kind": "image" if is_image_path(video) else "video",
             "resolution": "…",
@@ -236,6 +241,9 @@ class RawVideoLibraryTab(ttk.Frame):
             "color_temp": "…",
             "focal_length": "…",
         }
+        if is_image_path(video):
+            info["format"] = "PNG" if video.suffix.lower() == ".png" else "JPG"
+        return info
 
     def _format_stats(self, paths: list[Path]) -> str:
         videos = sum(1 for p in paths if not is_image_path(p))
@@ -402,7 +410,7 @@ class RawVideoLibraryTab(ttk.Frame):
         self._canvas.configure(bg=self._ui_theme.canvas_bg)
 
         if not videos:
-            ttk.Label(self._grid_host, text="该目录下没有视频或 JPG 文件").grid(row=0, column=0, padx=8, pady=8)
+            ttk.Label(self._grid_host, text="该目录下没有视频或图片文件").grid(row=0, column=0, padx=8, pady=8)
             self.lbl_stats.configure(text="共 0 个")
             self._loading = False
             self.after_idle(self._sync_scroll_region)
@@ -518,6 +526,78 @@ class RawVideoLibraryTab(ttk.Frame):
             cell["img_lbl"].configure(image=photo, text="")
         elif cell.get("thumb_loaded"):
             cell["img_lbl"].configure(image="", text="无预览", fg="#999999")
+
+    def _on_dewatermark_clicked(self) -> None:
+        from tkinter import messagebox
+
+        if self._dewatermark_busy:
+            messagebox.showinfo("图片去水印", "正在处理中，请稍候…")
+            return
+        if not self._selected_key or self._selected_key not in self._cells:
+            messagebox.showwarning("图片去水印", "请先单击选中一张照片。")
+            return
+        cell = self._cells[self._selected_key]
+        path: Path = cell["video"]
+        if not is_image_path(path):
+            messagebox.showwarning("图片去水印", "当前选中的是视频，请选择照片。")
+            return
+        if not path.is_file():
+            messagebox.showerror("图片去水印", f"文件不存在：\n{path}")
+            return
+
+        self._dewatermark_busy = True
+        self._btn_dewatermark.configure(state=tk.DISABLED)
+        self._log(f"素材库 raw：去水印开始 → {path.name}")
+
+        def worker() -> None:
+            try:
+                from scripts.video_analysis.image_dewatermark import remove_image_watermarks
+
+                result = remove_image_watermarks(path, log_fn=self._log)
+                parts = []
+                if result.removed_top_right:
+                    parts.append("右上水印")
+                if result.removed_subtitle:
+                    parts.append("底部字幕")
+                summary = "、".join(parts) if parts else "未发现可去内容"
+                schedule_on_main(
+                    self,
+                    self._on_dewatermark_done,
+                    True,
+                    result.output_path,
+                    summary,
+                )
+            except Exception as exc:  # noqa: BLE001
+                schedule_on_main(self, self._on_dewatermark_done, False, path, str(exc))
+
+        threading.Thread(target=worker, daemon=True).start()
+
+    def _on_dewatermark_done(self, ok: bool, out_path: Path, detail: str) -> None:
+        from tkinter import messagebox
+
+        self._dewatermark_busy = False
+        try:
+            self._btn_dewatermark.configure(state=tk.NORMAL)
+        except tk.TclError:
+            pass
+        if not ok:
+            self._log(f"素材库 raw：去水印失败 — {detail}")
+            messagebox.showerror("图片去水印失败", detail)
+            return
+        self._log(f"素材库 raw：去水印完成（{detail}）→ {out_path.name}")
+        # 刷新目录，让 *_clean 出现在宫格；并尽量选中输出图
+        self.refresh(force=True, announce=False)
+        self.after(300, lambda p=out_path: self._select_output_if_present(p))
+        messagebox.showinfo("图片去水印", f"完成：{detail}\n已保存：{out_path.name}")
+
+    def _select_output_if_present(self, out_path: Path) -> None:
+        key = out_path.name
+        if key not in self._cells:
+            return
+        self._select_cell(key)
+        cell = self._cells[key]
+        if self._on_video_preview:
+            self._on_video_preview(cell["video"], cell["info"], cell.get("thumb"))
 
     def _bind_cell_events(self, cell: dict) -> None:
         def on_click(_e) -> None:

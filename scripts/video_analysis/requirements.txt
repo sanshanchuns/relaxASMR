@@ -23,3 +23,7 @@ numpy>=1.26,<2
 # VLM（Gemini 视觉 + 文案差异化）
 google-genai>=1.0
 # 环境变量 GEMINI_API_KEY（或 ~/.zshrc 中 export），见 vlm_engine.py
+
+# 素材库图片去水印（LaMa；缺省时回退 OpenCV inpaint）
+opencv-python>=4.8
+simple-lama-inpainting>=0.1

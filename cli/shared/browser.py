@@ -1,4 +1,4 @@
-"""Playwright helpers shared by jimeng_web / elevenlabs_web (economist xhs_client pattern)."""
+"""Playwright 基座：供 ``jimeng_web`` / ``elevenlabs_web`` 共用。"""
 
 from __future__ import annotations
 

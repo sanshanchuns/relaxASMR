@@ -20,12 +20,12 @@ local function main()
     "循环轨 · 0=选中轨",
     2,
     "轨道 track (0=选中),时长 minutes (0=工程长度)",
-    "0,100"
+    "0,90"
   )
   if not ret then return end
   local track_n, minutes_s = user:match("([^,]+),([^,]+)")
   track_n = parse_num(track_n, 0)
-  local minutes = parse_num(minutes_s, 100)
+  local minutes = parse_num(minutes_s, 90)
 
   local track
   if track_n > 0 then
@@ -41,7 +41,7 @@ local function main()
   local total_sec = minutes * 60
   if minutes <= 0 then
     total_sec = r.GetProjectLength(0)
-    if total_sec <= 0 then total_sec = 100 * 60 end
+    if total_sec <= 0 then total_sec = 90 * 60 end
   end
 
   r.GetSetProjectInfo(0, "PROJECT_LENGTH", total_sec, true)

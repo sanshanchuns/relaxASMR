@@ -1306,7 +1306,8 @@ def analyze_video(
         _notify(on_progress, f"首帧已存在，跳过: {raw_jpg.name}")
 
     if skip_clip:
-        _notify(on_progress, "CLIP 结果已存在，跳过分析")
+        # 入口可跳过 CLIP（代码仍保留在 clip_engine）；仅抽帧/封面
+        _notify(on_progress, "跳过 CLIP 分析")
         ai_results: dict = {}
     else:
         from scripts.video_analysis.clip_engine import analyze_and_map_with_clip

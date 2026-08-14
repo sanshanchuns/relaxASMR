@@ -481,8 +481,10 @@ def _launch_wav(wav_path: Path, *, loop: bool) -> subprocess.Popen | None:
     wav_path = Path(wav_path).resolve()
     from gui.reaper_launch import is_wsl
 
-    # 大体积 WAV 走 ffmpeg→ffplay 管道，避免 ffplay 直读 NAS 巨型文件约 1min 后卡顿
-    if _is_large_wav(wav_path):
+    # 大体积 WAV：原生 Linux 走 ffmpeg→ffplay 管道，避免直读 NAS 巨型混音卡顿。
+    # WSL 必须走 Windows SoundPlayer——ffplay/Pulse 出不了 Windows 扬声器，
+    # 且 /mnt/e 上 >33MB 的 boom（如 3min+ 24-bit）会被误判成「巨型混音」而没声。
+    if _is_large_wav(wav_path) and not is_wsl():
         proc = _start_large_wav(wav_path, loop=loop)
         if proc is not None:
             return proc
