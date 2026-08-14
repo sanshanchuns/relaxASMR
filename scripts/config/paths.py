@@ -250,7 +250,6 @@ def ensure_base_url_dirs() -> None:
     aigc_dir()
     for layer_id in AUDIO_LAYER_IDS:
         audio_layer_dir(layer_id).mkdir(parents=True, exist_ok=True)
-    for layer_id in ("1_rain", "3_random", "4_wildlife"):
         audio_booms_dir(layer_id).mkdir(parents=True, exist_ok=True)
 
 

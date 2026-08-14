@@ -64,27 +64,61 @@ def _unpin_all(*, stop_audio: bool = True) -> None:
     _clear_pin(stop_audio=stop_audio, log_cancel=False)
 
 
-def resolve_booms_dir(*, layer_id: str = "", booms_dir: Path | None = None) -> Path:
+def resolve_boom_dirs(*, layer_id: str = "", booms_dir: Path | None = None) -> list[Path]:
+    """声源目录列表。2_impact 为 sounds/ + booms/，其余层仅 booms/。"""
     if booms_dir is not None:
-        return booms_dir
+        return [booms_dir]
     if layer_id == "2_impact":
         from scripts.config.paths import audio_layer_dir
 
-        return audio_layer_dir("2_impact")
-    return audio_booms_dir(layer_id)
+        dirs: list[Path] = []
+        seen: set[Path] = set()
+        for root in (audio_layer_dir("2_impact"), audio_booms_dir("2_impact")):
+            try:
+                key = root.resolve()
+            except OSError:
+                key = root
+            if key in seen:
+                continue
+            seen.add(key)
+            dirs.append(root)
+        return dirs
+    return [audio_booms_dir(layer_id)]
+
+
+def resolve_booms_dir(*, layer_id: str = "", booms_dir: Path | None = None) -> Path:
+    return resolve_boom_dirs(layer_id=layer_id, booms_dir=booms_dir)[0]
+
+
+def _wav_sort_key(path: Path) -> tuple[int, str]:
+    parent = path.parent.name.lower()
+    rank = 0 if parent == "sounds" else 1 if parent == "booms" else 2
+    return (rank, path.name.lower())
 
 
 def list_boom_wavs(layer_id: str = "", *, booms_dir: Path | None = None) -> list[Path]:
-    root = resolve_booms_dir(layer_id=layer_id, booms_dir=booms_dir)
-    if not root.is_dir():
-        return []
-    return sorted(
-        (p for p in root.glob("*.wav") if p.is_file()),
-        key=lambda p: p.name.lower(),
-    )
+    wavs: list[Path] = []
+    seen: set[Path] = set()
+    for root in resolve_boom_dirs(layer_id=layer_id, booms_dir=booms_dir):
+        if not root.is_dir():
+            continue
+        for p in root.glob("*.wav"):
+            if not p.is_file():
+                continue
+            try:
+                key = p.resolve()
+            except OSError:
+                key = p
+            if key in seen:
+                continue
+            seen.add(key)
+            wavs.append(p)
+    return sorted(wavs, key=_wav_sort_key)
 
 
-def wav_display_title(path: Path) -> str:
+def wav_display_title(path: Path, *, multi_dir: bool = False) -> str:
+    if multi_dir:
+        return f"{path.parent.name}/{path.stem}"
     return path.stem
 
 
@@ -132,7 +166,7 @@ class AudioLibraryTab(ttk.Frame):
             foreground="gray",
         ).pack(side=tk.RIGHT)
 
-        self.lbl_base = ttk.Label(self, text="", wraplength=520, foreground="gray")
+        self.lbl_base = ttk.Label(self, text="", wraplength=900, foreground="gray")
         self.lbl_base.pack(anchor=tk.W, pady=(0, 6))
 
         container = ttk.Frame(self)
@@ -198,13 +232,14 @@ class AudioLibraryTab(ttk.Frame):
             self._apply_all_styles()
             return
         wavs = list_boom_wavs(self.layer_id, booms_dir=self._booms_dir)
-        sig = "|".join(f"{p.name}:{p.stat().st_mtime_ns}" for p in wavs)
+        sig = "|".join(f"{p}:{p.stat().st_mtime_ns}" for p in wavs)
         if not force and self._loaded_once and sig == self._list_signature:
             self._apply_all_styles()
             return
         self._list_signature = sig
         self._loading = True
-        items = [(w, wav_display_title(w)) for w in wavs]
+        multi = len(resolve_boom_dirs(layer_id=self.layer_id, booms_dir=self._booms_dir)) > 1
+        items = [(w, wav_display_title(w, multi_dir=multi)) for w in wavs]
         schedule_on_main(self, self._render_grid, items)
 
     def on_tab_selected(self) -> None:
@@ -234,8 +269,8 @@ class AudioLibraryTab(ttk.Frame):
         for child in self._grid_host.winfo_children():
             child.destroy()
 
-        booms = resolve_booms_dir(layer_id=self.layer_id, booms_dir=self._booms_dir)
-        self.lbl_base.configure(text=f"声源目录：{booms}")
+        roots = resolve_boom_dirs(layer_id=self.layer_id, booms_dir=self._booms_dir)
+        self.lbl_base.configure(text="声源目录：" + "  +  ".join(str(p) for p in roots))
 
         if not items:
             ttk.Label(self._grid_host, text="未找到 WAV 文件").grid(row=0, column=0, padx=8, pady=8)
