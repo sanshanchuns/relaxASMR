@@ -43,7 +43,7 @@ _ISO8601_DURATION = re.compile(
 
 
 def series_goal_for_rain_mode(rain_mode: str) -> str:
-    from scripts.aigc_lab.prompt_atoms import normalize_rain_mode
+    from scripts.aigc_lab.rain_modes import normalize_rain_mode
 
     return RAIN_MODE_TO_SERIES_GOAL.get(normalize_rain_mode(rain_mode), "steady_focus")
 

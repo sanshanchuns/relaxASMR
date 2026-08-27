@@ -9,7 +9,7 @@
 | 工作流 | 导入 → 音效 → Reaper → 导出 → 上传 |
 | 数据分析 | 子 Tab：我的数据 / 爆款分析 |
 | 素材库 | 视频 + 各音频库 |
-| AIGC | 子 Tab：图生视频 / 文生视频 / 旧（Jimeng Agent × Gemini + 原实验台） |
+| AIGC | 参考图/主体 → 三档提示词 → 抽卡 → 后验（无子 Tab） |
 
 入口：`python -m gui`。`cli/` 经 `ensure_cli_path()` 进 `sys.path`。
 
@@ -17,7 +17,7 @@
 
 ## Gemini 调用（硬规则）
 
-**凡是 Gemini，统一走 agy**（`cli/agy/`）。AIGC VLM（`scripts/aigc_lab/agent_loop.py`）遵守此条；勿用 `GEMINI_*` env key 直连。
+**凡是 Gemini，统一走 agy**（`cli/agy/`）。AIGC 提示词生成与后验 VLM（`prompt_gen.py` / `posterior.py`）遵守此条；勿用 `GEMINI_*` env key 直连。
 
 ---
 
@@ -28,7 +28,7 @@
 | 入口 | `home?type=video`（非旧 assets-canvas） |
 | 模型 | `Seedance 2.0 Fast VIP`（AIGC 默认；`JIMENG_VIDEO_MODEL` 可改） |
 | 参考 | 默认 **首尾帧**（同图×2）；`JIMENG_REF_MODE` 可改全能参考 |
-| 画幅/时长 | 16:9 720P · **5s**（时长面板数字框 + Enter） |
+| 画幅/时长 | 16:9 720P · **6s**（AIGC 顶栏可改） |
 | 登录判定 | 侧栏无「登录」；`status` 勿信正文模糊匹配 |
 | 进度 | 读结果卡「`N%造梦中`」→ AIGC：**生成按钮** `造梦进度：N%` |
 | 落盘 | `<video>` 直链 / **blob:** / 下载图标；校验 ffprobe 或体积极下限；**检测到新结果时日志打印全部 video 链接** |
@@ -46,7 +46,7 @@ PYTHONPATH=cli:. python -m jimeng_web generate \
 
 生成中勿点额度面板 Jimeng 刷新。失败截图：`cli/jimeng_web/debug/`。
 
-**文生（AIGC Tab）**：`generate_t2v(prompt, …)` · 默认 **5s**（顶栏 Spinbox 1–15 + **生成数量** 1–10，写 `params.json`）/ 16:9 / 720p / **Seedance 2.0 Fast VIP**（无参考图）。
+**文生（AIGC Tab）**：`generate_t2v(prompt, …)` · 默认 **6s**（顶栏 1–15 + 每档张数 1–10，写 `params.json`）/ 16:9 / 720p / **Seedance 2.0 Fast VIP**。参考图只当主体/材质锚点。
 
 ```bash
 PYTHONPATH=cli:. python -m jimeng_web generate-t2v --prompt "…" --out …/runs/xxx/video.mp4
@@ -54,143 +54,34 @@ PYTHONPATH=cli:. python -m jimeng_web generate-t2v --prompt "…" --out …/runs
 
 ---
 
-## AIGC 文生视频实验台（2026-08-06 ~ 08-07）
+## AIGC 抽卡（2026-08-19）
 
-**产品**：油管纯自然雨 ASMR · 场景默认**原始热带雨林**（GUI 可扩展） · 雨势 **暴雨 > 大雨 > 小/中雨**。  
-**方法**：`aigc/plan.md` — 原子断言 → 测评 → 消融 → 固化。
+**产品**：雨 ASMR（含木屋/小船等人造物）。**无子 Tab、无六槽**。参考图只当题材/材质锚点，一律文生视频。
 
-### AIGC 三子 Tab（2026-08-07 ~ 08-08）
+**流程**：主体关键词或参考图 → Gemini 一次产出三档四段 prompt（画面 / 光影 / 动态 / 约束）→ 每档抽卡（Fast VIP · 16:9 · 720p · **6s**）→ 后验。
 
-左侧 Notebook 仅一个父 Tab **AIGC**；内部：图生 / 文生 / 旧。
-
-| 子 Tab | 说明 |
+| 雨档 id（沿用，勿改） | 显示 |
 |---|---|
-| **图生视频** | 参考图 → Jimeng 六槽 → Gemini VLM **只审 Jimeng**（≤3 轮修订）→ **仅 agreed 可生成** → 全能参考成片；油管黑马评分代码保留、默认关 |
-| **文生视频** | 场景+雨型 → Jimeng 草稿 × Gemini 审（≤3 轮） |
-| **旧** | `gui/aigc_tab.py` · `aigc/t2v_lab/` |
+| `light_mod` | 小雨 drizzle |
+| `heavy` | 中雨 moderate |
+| `storm` | 暴雨 downpour |
 
-**图生协议（现行）**：
-- 事实源：[`rain_asmr_agent_i2v.md`](instructions/rain_asmr_agent_i2v.md) 文末 `<!-- agent:rules -->` **压缩块**（~800 字）
-- **Jimeng**：技能「雨ASMR图生」（[`jimeng_skills/雨ASMR图生.md`](instructions/jimeng_skills/雨ASMR图生.md)）承载规则；自动化「使用技能→搜索/新建→**去使用**」；对话只发短指令（~180 字），禁止整段粘规则
-- **Gemini**：审核 system 注入同一压缩块；疑问可问 Jimeng 并写入 [`aigc/Seedance2.0手册.md`](aigc/Seedance2.0手册.md)
-- **会话**：`JimengAgentSession` 整段审核复用同一浏览器页（不每轮开关）；发送后确认清空+等新回复（baseline/心跳）
-- **雨档**：按图；无雨默认 `heavy`；GUI 不覆盖。映射 `storm→助眠` / `heavy→专注` / `light_mod→冥想`
-- **公式**：保留（图）+ 调整（字）；camera 正向构图；action 前景雨+周期往复；禁靠 constraints 写 loop
-- **顶栏**：模型 Fast VIP（默认）/ 2.0 VIP / 2.5 · 固定 16:9 · 720p/1080p（Fast 仅 720）· 5s · 生成数量 · 额度条 · 登录即梦；写 `agent_i2v_lab/params.json`
-- **GUI 会话**：`gui_session.json` 存最后编辑六槽/审核态；重启**不**自动选中实验记录（点列表才灌该 run 标签）；额度在顶栏
+后验三层（`posterior.py`）：运动量/闪烁/硬切闸门 → 断言 VLM 核对 → 人工采用/废弃。动态段可写绿植约 3 秒小幅平滑摆动、首尾帧吻合；禁止剧烈/舞蹈式晃动。循环成片仍可由外部 loop 工具再处理。Jimeng Agent 手册仅作参考，不自动问答。
 
 | 路径 | 说明 |
 |---|---|
-| `gui/aigc_shell.py` · `agent_lab_base.py` · `agent_*_tab.py` | 父壳 + 图/文生 UI |
-| `gui/agent_atoms_ui.py` | 六槽芯片（增删/标红） |
-| `cli/jimeng_web/agentic.py` | Agent 页 · Session · 技能挂载 · 短对话 |
-| `scripts/aigc_lab/agent_loop.py` | Jimeng→Gemini 审；共用 Session |
-| `scripts/aigc_lab/agent_i2v_rules.py` | 压缩规则 + 技能三字段 |
-| `scripts/aigc_lab/agent_store.py` | runs / `I2V_JIMENG_PARAMS` / 模型分辨率门控 |
-| `scripts/aigc_lab/youtube_*.py` | 爆款池·基准·黑马分（默认不自动跑） |
+| `gui/aigc_flow_tab.py` | 单页主流程 |
+| `gui/aigc_preview_panel.py` | 右侧预览（视频 + prompt；有参考图则左图右文） |
+| `scripts/aigc_lab/prompt_gen.py` | 三档 prompt + 断言 |
+| `scripts/aigc_lab/posterior.py` | 后验 |
+| `scripts/aigc_lab/rain_modes.py` · `subject_pool.py` | 雨档 / 常用主体 |
+| `scripts/aigc_lab/agent_store.py` | runs：`prompt.txt` · `meta.json` · `posterior.json` · `video.mp4` |
+| `cli/jimeng_web/agentic.py` | Agent 页（技能挂载仍可用） |
 
-落盘：`meta.json` · `prompt.txt` · `review.json` · `video.mp4`（可选 `viral_score.json`）。Agent 与造梦共 Jimeng profile 锁。
-
-| 路径 | 说明 |
-|---|---|
-| `scripts/aigc_lab/` | `prompt_atoms.py` · `store.py` · `score.py` · `tag_pools.py` · `session.py` |
-| `aigc/t2v_lab/` | `params.json` · `gui_session.json` · `learned_pools.json` · `scene_pool.json` · `runs/`（**仅「旧」子 Tab**） |
-| `gui/aigc_tab.py` | 「旧」：场景总约束 · 六槽原子表 · 实验记录 · VLM/LLM · 标签拖拽 |
-| `gui/aigc_preview_panel.py` | AIGC 专用右侧预览（与工作流封面/视频预览**完全隔离**） |
-| `gui/video_quota_panel.py` | `JimengQuotaPanel`（AIGC 实验台下即梦额度条） |
-| `gui/audio_playback.py` | `start_media_audio_loop`（OpenCV 无声 → ffplay 循环音频） |
-
-### 顶栏实验台
-
-- 模型 / 画幅 / 720p / 时长 **1–15s** / **生成数量 1–10**（原「重复 N 次」已移至此，写 `params.json` `generate_count`）
-- 默认模型 **Seedance 2.0 Fast VIP**
-- 实验台下 **即梦额度**（`dreamina user_credit` / 6160）；切到 AIGC Tab 时刷新；生成中勿抢 profile
-
-### 右侧预览（与工作流独立）
-
-- `gui/app.py`：`_right_panel_mode` 分 **default / aigc**；各自 sash 独立保存恢复
-- AIGC 用 `AigcPreviewPanel`（非工作流 cover + video 双栏）：**T2V** 上视频下 prompt 表；**I2V** 上视频、左图右槽 prompt（`kind=` 文生/图生子 Tab 已用）
-- 视频循环播放时同步 **ffplay** 音频 loop
-
-### 布局与按钮（「旧」子 Tab）
-
-- **场景**（表外 LabelFrame）：总约束，指导 LLM 基线/替换，**不进送模**；标签 + 池选/`+`；**拖动改序**；`scene_pool.json`
-- **Prompt 原子表**：六槽标签芯片（×删；**拖动改序**；槽位标签短按标可疑红框；行末池选/`+`）；送模=各槽逗号拼接
-- **LLM生成基线**：按场景+雨档调 agy 生成开放三槽；闭集槽固定（见下）
-- **LLM替换可疑标签**：只替换红框项；**保真压缩**（信息不丢的最短电报式，如「中景排列着五株…」→「中景五株交错野芭蕉树」）
-- **VLM标记可疑标签**：L1 **主体/环境** + L2 **动作**（`gemini-3.6-flash` via agy）；**镜头/风格/约束不参与 VLM**；只红框，不弹窗、不入池
-- **合格标签入池**：**唯一入池入口**（排除红框 → 人工确认）；`learned_pools.json`
-- **生成视频**：提交前 **LLM 预检**（见下）→ 落 `runs/<run_id>/` → 自动选中 → 自动 VLM 红框
-- 左侧 **Canvas 垂直滚动**（滚动条常显，防宽度抖动递归）
-
-### 生成前 LLM 预检（`check_tag_conflicts`）
-
-- 检查六槽：**互相矛盾**（标红）+ **重复描述**（只提示）
-- 弹窗：**继续造梦 / 返回修改**；继续用 `skip_preflight=True` + 预检快照提交
-- 冲突标签保留已有红框；重复不标红
-
-### 实验记录 vs session（已确认，勿改语义）
-
-| 来源 | 存什么 |
-|---|---|
-| **run**（实验记录） | 点「生成视频」瞬间的 `slots` + 之后 VLM 的 `scores`（红框依据） |
-| **session**（`gui_session.json`） | 当前界面人工编辑（标签/红框/雨档/选中 run）；**重启 GUI 恢复** |
-
-点**另一条**实验记录 → `_apply_run_slots` + `_apply_score_fails_from_run`，覆盖人工编辑。  
-**同一条**已选中再点 → early return（防闪烁）；要强制回到生成快照 → 切别的再切回。  
-启动 `load_session(..., load_slots=False)` 只恢复编辑态，不覆盖 run 快照逻辑。
-
-### 标签拖拽换序（`gui/aigc_tab.py`）
-
-- 场景 + 六槽均支持；阈值 **~6px** 区分短按（槽位标红）与拖动
-- 拖动中：**半透明幽灵**（蓝框 `#1976d2`）跟鼠标；原标签也蓝框
-- **松手才 `_reorder_tags` + reflow**（拖动中实时 reflow 会导致全表闪烁）
-- 幽灵存 **`self._tag_drag_ghost`**（勿绑在 `_tag_drag` dict 上，否则 `_end_tag_drag` 清 dict 后泄漏 → 蓝框停在外围）
-
-### 六槽规则
-
-| 槽 | 规则 |
-|---|---|
-| 场景 | GUI only，不进送模 |
-| 主体/动作/环境 | 开放；LLM 只写这三槽 |
-| 镜头/风格/约束 | 闭集；LLM 基线固定：`固定镜头+平视` · `documentary+moody+desaturated+overcast`+雨档 ASMR · 核心+常选约束 |
-
-**语义原子化**（LLM 基线/替换强制；`prompt_atoms._atomic_open_atoms` 兜底）：  
-- **subject**：一项=一个可见对象；禁「A与B/和/、」并列；禁「高大/巨大」等不可核验形容词  
-- **action/environment**：一项=一个语义断言；顿号/逗号可补同一结果/条件  
-- **保真压缩**：删「排列着/分布的/正在/画面中」等填充，不丢数量/空间关系/动作  
-- 默认 subject 示例：`香蕉树` `宽大蕉叶` `热带乔木` `浓密灌木` `粗壮树干` `湿润地面`
-
-闭集池见 `atom_pools.md`；预览/生成**不钳制**，以当前标签表为准。
-
-### 无限 loop 视频建议（产品 Q&A）
-
-- **动作槽**：叶片/灌木**小幅往复摆动**、雨水沿树干流淌、暴雨连续、地面积水溅起；**树干本身不摆**
-- **首尾帧**：T2V 无首尾帧；I2V 同图首尾易慢镜头；实用路径 = 5s 文生 + 后期 loop/交叉淡化
-- **时长**：优先 **5s**（4s 循环感强，8–10s 首尾难闭合）
-
-### 工作流
-
-1. 设场景 → **LLM生成基线**（或手调标签）→ 预览送模正文 → **生成视频**（预检可弹窗）
-2. 完成后自动：**选中最新实验记录** → 刷新预览/详情 → **自动 VLM 红框**
-3. 可疑 → **LLM替换可疑标签**；满意 → **合格标签入池**
-4. 雨档切换：只同步闭集槽（如 ASMR 音频句），开放三槽不动
-
-### GUI 踩坑
-
-| 项 | 要点 |
-|---|---|
-| 实验记录点击 | 须点中**行条目**才加载；空白/重复点同条不刷新 |
-| 红框恢复 | `_preload_fail_marks` **先于** `_write_slots`，否则重启全灰 |
-| 滚动 | 滚动条勿 `grid_remove`（会触 reflow→Configure 递归）；`_reflow_tags` 勿尾递归 |
-| 会话 | `gui_session.json`：场景 + 六槽 + fail_tags + selected_run_id；debounce 300ms |
-| 预览区耦合 | AIGC 勿复用工作流 cover/video pane；用 `AigcPreviewPanel` + 分 mode sash |
-| 标签拖动 | 拖动中勿 reflow；幽灵窗口独立字段，松手 destroy |
-| VLM 槽位 | `_L1_SLOTS=subject,environment` · `_L2_SLOTS=action`；`failed_tags_from_scores` 忽略 locked 槽 |
-
-生成/评分/即梦登录走 `_run_bg`；顶栏时长 + 生成数量写 `params.json`。
+落盘：`aigc/agent_t2v_lab/runs/`。会话：`flow_session.json`（主体/参考图/三档草稿）。
 
 ---
+
 
 ## 架构决策（累计）
 
@@ -200,19 +91,12 @@ PYTHONPATH=cli:. python -m jimeng_web generate-t2v --prompt "…" --out …/runs
 | GUI 重 I/O 放后台 | 启动卡死、步骤 4 ffprobe/NAS 阻塞主线程 |
 | `find_export_wav_for_scene` | legacy `_3h.wav` 与 `_180min.wav` 双格式 |
 | GUI 合成 `--no-video-fade-in` | 去掉成片视频片头 5s 淡入 |
-| AIGC 红框恢复顺序 | 先 fail_tags 内存再建 widget；`_sync_fail_borders` |
-| AIGC 滚动条显隐 | 勿 `grid_remove` 滚动条（宽度抖动→Configure 递归）；滚动条常显 |
-| AIGC `_reflow_tags` | 函数末尾勿误调自身（曾致 RecursionError） |
 | AIGC 预览隔离 | 独立 `AigcPreviewPanel` + 分 mode sash；勿与工作流 cover/video 共用 |
-| AIGC 标签拖动 | 拖动中勿 reflow（全表闪）；幽灵 `Toplevel` 用 `_tag_drag_ghost` 独立销毁 |
-| AIGC VLM 槽位 | 只验 subject/environment/action；camera/style/constraints 固定项不入 VLM |
-| AIGC 生成前预检 | `check_tag_conflicts`：矛盾标红 + 重复提示；用户可选继续造梦 |
 | AIGC 默认模型 | Fast VIP（`params.json` / `client.py` `DEFAULT_VIDEO_MODEL`） |
-| 图生 Agent 会话 | `JimengAgentSession` 复用同页；禁每轮开关浏览器 |
-| 图生规则投递 | Jimeng 用技能+短指令；Gemini 注入压缩块；禁整段粘规则 |
 | 图生技能启用 | 新建/选用后必须点「去使用」才挂到对话 |
-| 图生 GUI 恢复 | 恢复最后编辑六槽；勿自动选中 run 覆盖标签 |
-| 图生生成门控 | 仅 Gemini `agreed` 可点「生成视频」 |
+| 成片默认 90min | `DEFAULT_DURATION_MINUTES`（原 100）；GUI 无配置时兜底 90 |
+| WSL 大 WAV 试听 | 勿走 ffplay/Pulse；一律 Windows SoundPlayer + `booms_16bit` |
+| impact 宫格 | `sounds/` + `booms/`；boom 试听同 rain/random/wildlife |
 | `elevenlabs_web`→`elevenlabs_http`；新建 Playwright 双包 | HTTP 挂时 UI 兜底 |
 | `shared` 在 `cli/shared/` | 入口须 `ensure_cli_path()` 或 `PYTHONPATH=cli` |
 | jimeng 默认 VIP+首尾帧+5s | loop 硬约束 + 产品档位 |
@@ -272,7 +156,7 @@ PYTHONPATH=cli:. python -m elevenlabs_web login
 - `gui/youtube_material.py` 打分：保留 `_3h`，另认 stem 含 `min`
 - **合成视频片头 fade-in**：GUI 主流程已传 `--no-video-fade-in`（`export_mp4.sh` 默认仍 5s）；Reaper Group 音频 fade 不受影响
 
-**测试**：`scripts/tests/test_export_wav.py` · `test_tag_pools.py` · `test_rpp_render_range.py` · `test_build_scene_config_from_gui.py`
+**测试**：`scripts/tests/test_export_wav.py` · `test_rpp_render_range.py` · `test_build_scene_config_from_gui.py`
 
 ---
 
@@ -285,11 +169,11 @@ PYTHONPATH=cli:. python -m elevenlabs_web login
 | 建控件、改 Label/Button 状态、布局 sash | NAS/`ffprobe`、路径 `is_file` 批量探测 |
 | `_repaint_tag_borders` / 就地改边框色 | 工作流恢复、步骤 4 混音/成片存在性校验 |
 | 用户点击后的即时视觉反馈（无 I/O） | 音库选中恢复、`_finish_set_video_heavy` 分析缓存读取 |
-| | 即梦/EL 登录与生成、L1+L2 评分、export_mp4/render |
+| | 即梦/EL 登录与生成、后验 VLM、export_mp4/render |
 
 **启动（曾卡死 ~30s）**：窗口 `_reveal_when_layout_ready` **同步先显现**；`_restore_workflow_state` / `_restore_audio_library_selections` 改 `after(50)`；`_refresh_step4_outputs(..., background=True)` 与 `_apply_finish_set_video_heavy` 探测在子线程。
 
-**模块**：`gui/tk_thread.py`（`schedule_on_main` / `ensure_ui_pump`）· `gui/app.py` · `gui/aigc_tab.py`
+**模块**：`gui/tk_thread.py`（`schedule_on_main` / `ensure_ui_pump`）· `gui/app.py` · `gui/aigc_flow_tab.py`
 
 ---
 
@@ -313,7 +197,7 @@ PYTHONPATH=cli:. python -m elevenlabs_web login
 
 **已接入**
 - `gui/app.py`：启动时 `setup_global_clipboard_safety`；日志区 `setup_copyable_readonly_text`
-- `gui/aigc_tab.py`：详情区 `setup_copyable_readonly_text`（Prompt 为六槽标签芯片，非大 Text）
+- `gui/aigc_flow_tab.py`：详情区与三档 prompt `setup_copyable_readonly_text`
 - `gui/aigc_preview_panel.py`：预览区视频 + `gui/audio_playback.py` ffplay 循环音
 
 **新增 Text 控件时**：可编辑走 `setup_editable_text_copy`；只读走 `setup_copyable_readonly_text`，程序写内容直接 `delete`/`insert`，不要 toggling `DISABLED`。
@@ -334,16 +218,41 @@ PYTHONPATH=cli:. python -m elevenlabs_web login
 
 ---
 
-## 本次对话新增（raw 视频 Tab，GUI）
-- `raw 视频` 宫格新增字段：**码率**（ffprobe `format.bit_rate`）、**ISO 小数取整**（四舍五入成整数）。
-- 交互：目录选择后立即刷新路径与**`共 N 个`**；宫格**单击**做封面放大预览 + 右侧显示：标题、分辨率、帧率、码率、ISO、光圈、快门、色温、焦距；双击不再触发任何动作。
-- 性能：对 raw 元数据加**磁盘+内存缓存**（`material_dir/.raw_video_meta/*.json`），避免每次 ffprobe/exiftool 实时解析；首次会先渲染占位再逐步填充（封面后参数）。
-- Sony a7m4 坑点：XAVC 的拍摄参数在 `rtmd` 嵌入轨，需 `exiftool -ExtractEmbedded`；并通过 rtmd 额外扫描补齐（焦距/色温）等缺失项。
-- 扩展：宫格支持根层 **JPG/JPEG**，同样解析 EXIF 并展示 `ISO/光圈/快门/色温/焦距`，帧率/码率不显示。
-- UI 修复：raw 子 Tab
-  - 深色模式下滚动区/背景适配；
-  - 宫格按 **视频/照片 分组**显示；
-  - 滚动条仅在内容超出视口时出现（避免“复用 loop 视频”的假滚动/常显滚动条）。
+## 素材库 · raw 视频
+
+- 宫格字段：码率（ffprobe `format.bit_rate`）、ISO 四舍五入取整；单击封面放大 + 右侧参数；双击无动作。
+- 缓存：`material_dir/.raw_video_meta/*.json`（内存+磁盘）；首次占位再填。
+- Sony a7m4：XAVC 参数在 `rtmd`，需 `exiftool -ExtractEmbedded`。
+- 根层 JPG 同样展 ISO/光圈/快门/色温/焦距；帧率/码率不显示。
+- UI：深色滚动区；视频/照片分组；滚动条仅内容超出时出现。
+
+---
+
+## Canon R50 视频 ISO（2026-08-13）
+
+录像元数据两套数，**差正好 3 档（×8）**，全目录一致：REI/EXIF:ISO `100/200` ↔ BaseISO/Composite:ISO `800/1600`。
+
+| 用途 | 看哪个 |
+|---|---|
+| **视频颗粒 / 实际增益** | **`BaseISO` 或 `exiftool -ISO`（Composite）** |
+| 照片 | 各字段一致，随便看 |
+| `RecommendedExposureIndex` / `EXIF:ISO` | R50 **录像不可信**（系统性写低 3 档） |
+| `AutoISO` | 内部乘数，几乎总是 100；**不是**「是否自动 ISO」 |
+| P 档 + ISO Auto | **不写实际 ISO**（`CameraISO=Auto`、REI=0、无 BaseISO） |
+
+查询：`exiftool -BaseISO -ISO -CanonExposureMode -FNumber -ExposureTime 文件.MP4`
+
+公式（照片准）：`实际 ISO = BaseISO × AutoISO / 100`。R50 视频颗粒跟 BaseISO 走，跟 REI 不走。
+
+---
+
+## 素材库 · 音频试听 / impact（2026-08-14 ~ 08-15）
+
+**WSL 大 WAV 没声**：`_PREVIEW_CLIP_MIN_BYTES`≈33MB。超过则曾走 ffplay/Pulse → Windows 扬声器无声。例：`QP03 0300` 56MB/3:24 没声；旁边 17–20MB 走 SoundPlayer 有声。宫格**红框=双击常驻循环**，不是损坏。
+
+已修：`gui/audio_playback.py` `_launch_wav` — **WSL 一律 SoundPlayer**（24bit 先转 `booms_16bit`）。原生 Linux 大文件仍 ffmpeg→ffplay 管道。
+
+**impact 子 Tab**：声源 = `2_impact/sounds/`（8 条，已 16bit）**追加** `2_impact/booms/`（~125 条 24bit）。试听与 rain/random/wildlife 相同：`parent==booms` → `booms_16bit/`。宫格标题 `sounds/…` · `booms/…`。`resolve_boom_dirs` / `list_boom_wavs`（`gui/audio_library_tab.py`）。`ensure_base_url_dirs` 现为四层都建 `booms/`。
 
 ---
 
@@ -356,3 +265,4 @@ PYTHONPATH=cli:. python -m elevenlabs_web login
 6. AIGC 金标准 → 固化规范（`aigc/plan.md`）
 7. 新增 GUI 重操作时：**默认后台 + `schedule_on_main` 刷新 UI**，勿在主线程 ffprobe/NAS/子进程
 8. AIGC **I2V 预览**子模式接线（`AigcPreviewPanel.show_i2v` 已预留）
+9. impact `booms/` 可 `python3 -m scripts.audio.booms_16bit` 预热，避免首次悬停转码等待

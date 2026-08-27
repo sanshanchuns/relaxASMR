@@ -123,7 +123,13 @@ def styled_thumb(img: Image.Image, *, uploaded: bool) -> Image.Image:
 
 
 def file_list_signature(videos: list[Path]) -> str:
-    return "|".join(f"{p.name}:{p.stat().st_mtime_ns}" for p in videos)
+    parts: list[str] = []
+    for path in videos:
+        try:
+            parts.append(f"{path.name}:{path.stat().st_mtime_ns}")
+        except OSError:
+            parts.append(f"{path.name}:?")
+    return "|".join(parts)
 
 
 class VideoLibraryTab(ttk.Frame):
@@ -218,14 +224,10 @@ class VideoLibraryTab(ttk.Frame):
     def refresh(self, *, force: bool = False) -> None:
         if self._loading:
             return
-        videos = list_root_mp4s()
-        sig = file_list_signature(videos)
-        if not force and self._loaded_once and sig == self._list_signature:
-            self._sync_all_cell_styles()
-            return
-        self._list_signature = sig
         self._loading = True
-        threading.Thread(target=self._load_and_render, args=(videos,), daemon=True).start()
+        if not self._loaded_once:
+            self.lbl_stats.configure(text="加载中…")
+        threading.Thread(target=self._load_and_render, args=(force,), daemon=True).start()
 
     def on_tab_selected(self) -> None:
         """切到素材库 Tab 时调用：仅在首次或文件变化时重建宫格。"""
@@ -254,38 +256,62 @@ class VideoLibraryTab(ttk.Frame):
         self.refresh_cell(scene_num)
         self._update_stats()
 
-    def _load_and_render(self, videos: list[Path]) -> None:
-        items: list[tuple[Path, str, Image.Image | None, str]] = []
-        for video in videos:
-            num = scene_num_from_video(video)
-            cache_key = f"{video}:{video.stat().st_mtime_ns}"
-            thumb = self._thumb_cache.get(cache_key)
-            quality = ""
-            if thumb is None:
-                thumb, quality = load_thumb_image(video)
-                if thumb is not None:
-                    self._thumb_cache[cache_key] = thumb
-            else:
-                cache = _thumb_cache_dir() / f"{video.stem}_{int(video.stat().st_mtime)}.jpg"
-                qf = cache.with_suffix(".quality")
-                if qf.is_file():
-                    quality = qf.read_text(encoding="utf-8").strip()
-                elif cache.is_file():
-                    quality = read_video_quality(video)
-            items.append((video, num, thumb, quality))
-        schedule_on_main(self, self._render_grid, items)
+    def _on_scan_unchanged(self) -> None:
+        self._loading = False
+        self._sync_all_cell_styles()
 
-    def _render_grid(self, items: list[tuple[Path, str, Image.Image | None, str]]) -> None:
+    def _on_load_failed(self, detail: str) -> None:
+        self._loading = False
+        self._log(f"素材库：加载失败: {detail}")
+        if not self._loaded_once:
+            self.lbl_stats.configure(text="加载失败")
+
+    def _load_and_render(self, force: bool) -> None:
+        try:
+            videos = list_root_mp4s()
+            sig = file_list_signature(videos)
+            if not force and self._loaded_once and sig == self._list_signature:
+                schedule_on_main(self, self._on_scan_unchanged)
+                return
+            items: list[tuple[Path, str, Image.Image | None, str]] = []
+            for video in videos:
+                num = scene_num_from_video(video)
+                cache_key = f"{video}:{video.stat().st_mtime_ns}"
+                thumb = self._thumb_cache.get(cache_key)
+                quality = ""
+                if thumb is None:
+                    thumb, quality = load_thumb_image(video)
+                    if thumb is not None:
+                        self._thumb_cache[cache_key] = thumb
+                else:
+                    cache = _thumb_cache_dir() / f"{video.stem}_{int(video.stat().st_mtime)}.jpg"
+                    qf = cache.with_suffix(".quality")
+                    if qf.is_file():
+                        quality = qf.read_text(encoding="utf-8").strip()
+                    elif cache.is_file():
+                        quality = read_video_quality(video)
+                items.append((video, num, thumb, quality))
+            bu = str(base_url())
+            schedule_on_main(self, self._render_grid, items, sig, bu)
+        except Exception as exc:
+            schedule_on_main(self, self._on_load_failed, str(exc))
+
+    def _render_grid(
+        self,
+        items: list[tuple[Path, str, Image.Image | None, str]],
+        sig: str,
+        base_url_text: str,
+    ) -> None:
         self._loading = False
         self._loaded_once = True
+        self._list_signature = sig
         self._photo_refs.clear()
         self._cells.clear()
 
         for child in self._grid_host.winfo_children():
             child.destroy()
 
-        bu = base_url()
-        self.lbl_base.configure(text=f"baseURL：{bu}（仅根目录 *.mp4）")
+        self.lbl_base.configure(text=f"baseURL：{base_url_text}（仅根目录 *.mp4）")
 
         if not items:
             ttk.Label(self._grid_host, text="未找到 MP4 文件").grid(row=0, column=0, padx=8, pady=8)

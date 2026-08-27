@@ -620,13 +620,13 @@ class RelaxAsmrApp(tk.Tk):
             "aigc": None,
         }
         self._aigc_t2v_video_path: Path | None = None
-        self._aigc_t2v_slots: dict[str, list[str]] = {}
+        self._aigc_t2v_prompt: str = ""
         self._aigc_t2v_run_id: str = ""
         self._aigc_i2v_video_path: Path | None = None
         self._aigc_i2v_image_path: Path | None = None
-        self._aigc_i2v_slots: dict[str, list[str]] = {}
+        self._aigc_i2v_prompt: str = ""
         self._aigc_i2v_run_id: str = ""
-        self._aigc_preview_kind = "i2v"  # 默认首个子 Tab：图生视频
+        self._aigc_preview_kind = "t2v"
 
         # --- 数据分析（我的数据 + 爆款分析）---
         self.data_analysis_tab = ttk.Frame(self.left_notebook)
@@ -730,14 +730,13 @@ class RelaxAsmrApp(tk.Tk):
             "4_wildlife": self.wildlife_library_tab,
         }
 
-        # --- AIGC：旧 / 文生视频 / 图生视频 ---
-        from gui.aigc_shell import AigcShell
+        # --- AIGC：参考图/主体 → 三档提示词 → 抽卡 → 后验 ---
+        from gui.aigc_flow_tab import AigcFlowTab
 
-        self.aigc_tab = AigcShell(
+        self.aigc_tab = AigcFlowTab(
             self.left_notebook,
             log_fn=self._log,
             on_preview_run=self._aigc_preview_run,
-            on_subtab_changed=self._on_aigc_subtab_changed,
         )
         self.left_notebook.add(self.aigc_tab, text="AIGC")
 
@@ -3236,22 +3235,6 @@ class RelaxAsmrApp(tk.Tk):
             )
             self._i2v_img = None
 
-    def _on_aigc_subtab_changed(self, sub) -> None:
-        """AIGC 内子 Tab 切换：右侧预览模式与内容跟随（延迟，避免卡 UI）。"""
-        if getattr(self, "_right_panel_mode", "default") != "aigc":
-            return
-        from gui.aigc_shell import AigcShell
-
-        self._aigc_preview_kind = AigcShell.preview_kind_for(sub)
-
-        def _deferred() -> None:
-            if hasattr(sub, "sync_right_preview"):
-                sub.sync_right_preview()
-            else:
-                self._aigc_refresh_right_panels()
-
-        self.after_idle(_deferred)
-
     def _aigc_refresh_right_panels(self) -> None:
         if getattr(self, "_right_panel_mode", "default") != "aigc":
             return
@@ -3262,14 +3245,14 @@ class RelaxAsmrApp(tk.Tk):
             self._aigc_preview.show_i2v(
                 self._aigc_i2v_video_path,
                 run_id=self._aigc_i2v_run_id or "—",
-                slots=self._aigc_i2v_slots,
+                prompt=self._aigc_i2v_prompt,
                 image_path=self._aigc_i2v_image_path,
             )
         else:
             self._aigc_preview.show_t2v(
                 self._aigc_t2v_video_path,
                 run_id=self._aigc_t2v_run_id or "—",
-                slots=self._aigc_t2v_slots,
+                prompt=self._aigc_t2v_prompt,
             )
 
     def _preview_tmp_path(self, token: int) -> str:
@@ -3502,17 +3485,16 @@ class RelaxAsmrApp(tk.Tk):
         self,
         video_path: Path | None,
         run_id: str,
-        slots: dict | None = None,
+        prompt: str = "",
         *,
         kind: str = "t2v",
         image_path: Path | None = None,
+        slots: dict | None = None,
     ) -> None:
-        """刷新 AIGC 专用预览；默认文生，子 tab 分流后可传 kind=i2v。"""
+        """刷新 AIGC 专用预览。"""
+        del slots
         rid = str(run_id or "").strip()
-        slot_map = {
-            str(k): [str(x).strip() for x in (v or []) if str(x).strip()]
-            for k, v in (slots or {}).items()
-        }
+        text = str(prompt or "").strip()
         self._aigc_preview_kind = "i2v" if kind == "i2v" else "t2v"
         if self._aigc_preview_kind == "i2v":
             self._aigc_i2v_run_id = rid
@@ -3522,13 +3504,13 @@ class RelaxAsmrApp(tk.Tk):
             self._aigc_i2v_image_path = (
                 image_path.resolve() if image_path and image_path.is_file() else None
             )
-            self._aigc_i2v_slots = slot_map
+            self._aigc_i2v_prompt = text
         else:
             self._aigc_t2v_run_id = rid
             self._aigc_t2v_video_path = (
                 video_path.resolve() if video_path and video_path.is_file() else None
             )
-            self._aigc_t2v_slots = slot_map
+            self._aigc_t2v_prompt = text
         if getattr(self, "_right_panel_mode", "default") == "aigc":
             self.after_idle(self._aigc_refresh_right_panels)
 

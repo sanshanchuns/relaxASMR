@@ -144,7 +144,7 @@ def _run_analysis(
     try:
         text, _email = generate_text_via_agy_accounts(
             prompt,
-            model="gemini-3.6-flash",
+            model="gemini-3.7-flash",
             effort="medium",
             system=system,
             images=images or None,

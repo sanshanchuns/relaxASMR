@@ -100,8 +100,19 @@ def extract_review_frames(video: Path, out_dir: Path, *, count: int = _REVIEW_FR
     return frames
 
 
-def measure_motion(video: Path) -> float:
-    """取中段连续帧，算相邻帧平均绝对差，映射成 0–100 的运动量。"""
+@dataclass
+class Dynamics:
+    """一次抽帧同时得到的三个客观量。"""
+
+    motion_score: float
+    #: 相邻帧整体亮度均值的平均跳动（0–255 刻度）。稳定空镜应当接近 0。
+    flicker: float
+    #: 最大帧差 / 中位帧差。远大于 1 说明片中有硬切或跳帧。
+    cut_ratio: float
+
+
+def measure_dynamics(video: Path) -> Dynamics:
+    """取中段连续帧，一次算出运动量、亮度闪烁与跳变比。"""
     from PIL import Image, ImageChops, ImageStat
 
     duration = _ffprobe_duration(video) or 5.0
@@ -122,7 +133,22 @@ def measure_motion(video: Path) -> float:
             ImageStat.Stat(ImageChops.difference(a, b)).mean[0]
             for a, b in zip(grays, grays[1:])
         ]
-    return min(100.0, (sum(diffs) / len(diffs)) * _MOTION_SCALE)
+        means = [ImageStat.Stat(g).mean[0] for g in grays]
+
+    motion = min(100.0, (sum(diffs) / len(diffs)) * _MOTION_SCALE)
+    flicker = sum(abs(b - a) for a, b in zip(means, means[1:])) / max(1, len(means) - 1)
+    ordered = sorted(diffs)
+    median = ordered[len(ordered) // 2] or 1e-6
+    return Dynamics(
+        motion_score=motion,
+        flicker=flicker,
+        cut_ratio=max(diffs) / median,
+    )
+
+
+def measure_motion(video: Path) -> float:
+    """取中段连续帧，算相邻帧平均绝对差，映射成 0–100 的运动量。"""
+    return measure_dynamics(video).motion_score
 
 
 def probe_video(

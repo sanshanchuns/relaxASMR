@@ -110,6 +110,7 @@ class AgentRun:
     meta: dict = field(default_factory=dict)
     review: dict = field(default_factory=dict)
     viral_score: dict = field(default_factory=dict)
+    posterior: dict = field(default_factory=dict)
 
     @property
     def prompt_path(self) -> Path:
@@ -134,6 +135,10 @@ class AgentRun:
     @property
     def ref_image_path(self) -> Path:
         return self.dir / "ref_image.png"
+
+    @property
+    def posterior_path(self) -> Path:
+        return self.dir / "posterior.json"
 
     def save_prompt(self, text: str) -> None:
         self.dir.mkdir(parents=True, exist_ok=True)
@@ -202,14 +207,16 @@ def create_agent_run(
     *,
     prompt: str,
     rain_mode: str,
-    slots: dict[str, list[str]],
+    slots: dict[str, list[str]] | None = None,
+    assertions: list[str] | None = None,
+    subjects: list[str] | None = None,
     scene_keywords: str = "",
     duration_sec: int | None = None,
     ref_image: Path | None = None,
     review: dict | None = None,
     series_goal: str = "",
 ) -> AgentRun:
-    from scripts.aigc_lab.prompt_atoms import RAIN_MODE_LABELS, normalize_rain_mode
+    from scripts.aigc_lab.rain_modes import normalize_rain_mode, rain_label
     from scripts.aigc_lab.youtube_competitor_pool import series_goal_for_rain_mode
 
     mode = normalize_rain_mode(rain_mode)
@@ -224,7 +231,7 @@ def create_agent_run(
         dur = int(duration_sec if duration_sec is not None else gen["duration_sec"])
     else:
         gen = params
-        dur = int(duration_sec if duration_sec is not None else params.get("duration_sec", 5))
+        dur = int(duration_sec if duration_sec is not None else params.get("duration_sec", 6))
     run = AgentRun(kind=kind, run_id=run_id, dir=run_dir)
     run.save_prompt(prompt)
     if ref_image and Path(ref_image).is_file():
@@ -246,10 +253,14 @@ def create_agent_run(
             "duration_sec": dur,
             "ref_mode": gen.get("ref_mode", "") if kind == "i2v" else "",
             "rain_mode": mode,
-            "rain_label": RAIN_MODE_LABELS.get(mode, mode),
+            "rain_label": rain_label(mode),
             "series_goal": goal,
             "scene_keywords": scene_keywords,
-            "slots": slots,
+            "slots": slots or {},
+            "assertions": [
+                str(a).strip() for a in (assertions or []) if str(a).strip()
+            ],
+            "subjects": [str(s).strip() for s in (subjects or []) if str(s).strip()],
             "ref_image": ref_rel,
             "confirmed": True,
         }
@@ -272,6 +283,8 @@ def load_agent_run(kind: Kind, run_id: str) -> AgentRun:
         run.review = json.loads(run.review_path.read_text(encoding="utf-8"))
     if run.viral_path.is_file():
         run.viral_score = json.loads(run.viral_path.read_text(encoding="utf-8"))
+    if run.posterior_path.is_file():
+        run.posterior = json.loads(run.posterior_path.read_text(encoding="utf-8"))
     return run
 
 
@@ -296,18 +309,11 @@ def list_agent_runs_light(kind: Kind) -> list[AgentRun]:
                 run.viral_score = json.loads(run.viral_path.read_text(encoding="utf-8"))
             if run.review_path.is_file():
                 run.review = json.loads(run.review_path.read_text(encoding="utf-8"))
+            if run.posterior_path.is_file():
+                run.posterior = json.loads(
+                    run.posterior_path.read_text(encoding="utf-8")
+                )
         except (OSError, json.JSONDecodeError):
             continue
         runs.append(run)
     return runs
-
-
-def slots_from_agent_run(run: AgentRun) -> dict[str, list[str]]:
-    from scripts.aigc_lab.prompt_atoms import SLOT_ORDER
-
-    raw = (run.meta or {}).get("slots") or {}
-    out: dict[str, list[str]] = {k: [] for k in SLOT_ORDER}
-    for key in SLOT_ORDER:
-        vals = raw.get(key) or []
-        out[key] = [str(x).strip() for x in vals if str(x).strip()]
-    return out

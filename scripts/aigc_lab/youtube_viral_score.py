@@ -16,7 +16,7 @@ from scripts.aigc_lab.youtube_competitor_pool import (
 )
 
 LogFn = Callable[[str], None]
-_MODEL = "gemini-3.6-flash"
+_MODEL = "gemini-3.7-flash"
 _JSON_BLOCK = re.compile(r"\{.*\}", re.DOTALL)
 
 _SYSTEM = """你是 YouTube 下雨 ASMR 频道的内容评审。你会收到新成片抽帧，以及同系列真实爆款 Top5 的结构化基准。

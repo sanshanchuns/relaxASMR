@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import threading
 import tkinter as tk
 from collections.abc import Callable
 from pathlib import Path
@@ -122,6 +123,41 @@ def wav_display_title(path: Path, *, multi_dir: bool = False) -> str:
     return path.stem
 
 
+def _paths_signature(paths: list[Path]) -> str:
+    parts: list[str] = []
+    for path in paths:
+        try:
+            parts.append(f"{path}:{path.stat().st_mtime_ns}")
+        except OSError:
+            parts.append(f"{path}:?")
+    return "|".join(parts)
+
+
+def collect_boom_grid_data(
+    layer_id: str = "",
+    *,
+    booms_dir: Path | None = None,
+) -> tuple[list[tuple[Path, str, str]], str, list[Path]]:
+    """扫描声源目录（glob / stat / resolve），供后台线程调用。
+
+    Returns:
+        items: ``(path, title, resolved_key)``
+        signature: 文件列表指纹
+        roots: 声源目录
+    """
+    roots = resolve_boom_dirs(layer_id=layer_id, booms_dir=booms_dir)
+    wavs = list_boom_wavs(layer_id, booms_dir=booms_dir)
+    multi = len(roots) > 1
+    items: list[tuple[Path, str, str]] = []
+    for wav in wavs:
+        try:
+            key = str(wav.resolve())
+        except OSError:
+            key = str(wav)
+        items.append((wav, wav_display_title(wav, multi_dir=multi), key))
+    return items, _paths_signature(wavs), roots
+
+
 class AudioLibraryTab(ttk.Frame):
     """宫格展示 booms 声源：悬停叠加循环试听、双击全局互斥常驻循环、最多 9 项选中。"""
 
@@ -231,16 +267,32 @@ class AudioLibraryTab(ttk.Frame):
         if not force and self._loaded_once and self._cells:
             self._apply_all_styles()
             return
-        wavs = list_boom_wavs(self.layer_id, booms_dir=self._booms_dir)
-        sig = "|".join(f"{p}:{p.stat().st_mtime_ns}" for p in wavs)
-        if not force and self._loaded_once and sig == self._list_signature:
-            self._apply_all_styles()
-            return
-        self._list_signature = sig
         self._loading = True
-        multi = len(resolve_boom_dirs(layer_id=self.layer_id, booms_dir=self._booms_dir)) > 1
-        items = [(w, wav_display_title(w, multi_dir=multi)) for w in wavs]
-        schedule_on_main(self, self._render_grid, items)
+        if not self._loaded_once:
+            self.lbl_stats.configure(text="加载中…")
+        threading.Thread(target=self._load_items, args=(force,), daemon=True).start()
+
+    def _load_items(self, force: bool) -> None:
+        try:
+            items, sig, roots = collect_boom_grid_data(
+                self.layer_id, booms_dir=self._booms_dir
+            )
+            if not force and self._loaded_once and sig == self._list_signature:
+                schedule_on_main(self, self._on_scan_unchanged)
+                return
+            schedule_on_main(self, self._render_grid, items, sig, roots)
+        except Exception as exc:
+            schedule_on_main(self, self._on_load_failed, str(exc))
+
+    def _on_scan_unchanged(self) -> None:
+        self._loading = False
+        self._apply_all_styles()
+
+    def _on_load_failed(self, detail: str) -> None:
+        self._loading = False
+        self._log(f"{self.track_id}：加载失败: {detail}")
+        if not self._loaded_once:
+            self.lbl_stats.configure(text="加载失败")
 
     def on_tab_selected(self) -> None:
         if self._loaded_once and self._cells:
@@ -257,10 +309,16 @@ class AudioLibraryTab(ttk.Frame):
         self._stop_hover_audio()
         self._refresh_playback_styles()
 
-    def _render_grid(self, items: list[tuple[Path, str]]) -> None:
+    def _render_grid(
+        self,
+        items: list[tuple[Path, str, str]],
+        sig: str,
+        roots: list[Path],
+    ) -> None:
         self._loading = False
         self._loaded_once = True
-        new_keys = {str(w.resolve()) for w, _ in items}
+        self._list_signature = sig
+        new_keys = {key for _, _, key in items}
         if _PINNED_TAB is self and _PINNED_KEY and _PINNED_KEY not in new_keys:
             _clear_pin(log_cancel=False)
         self._cells.clear()
@@ -269,7 +327,6 @@ class AudioLibraryTab(ttk.Frame):
         for child in self._grid_host.winfo_children():
             child.destroy()
 
-        roots = resolve_boom_dirs(layer_id=self.layer_id, booms_dir=self._booms_dir)
         self.lbl_base.configure(text="声源目录：" + "  +  ".join(str(p) for p in roots))
 
         if not items:
@@ -279,11 +336,10 @@ class AudioLibraryTab(ttk.Frame):
             return
 
         cols = max(2, self._canvas.winfo_width() // (CELL_W + CELL_PAD * 2)) if self._canvas.winfo_width() > 1 else 3
-        selected_keys = {str(p.resolve()) for p in self._selected}
+        selected_keys = {str(p) for p in self._selected}
 
-        for idx, (wav, title) in enumerate(items):
+        for idx, (wav, title, key) in enumerate(items):
             row, col = divmod(idx, cols)
-            key = str(wav.resolve())
             is_selected = key in selected_keys
 
             outer = tk.Frame(
@@ -389,7 +445,7 @@ class AudioLibraryTab(ttk.Frame):
             self._on_selection_changed(self.track_id, list(self._selected))
 
     def _apply_all_styles(self) -> None:
-        selected_keys = {str(p.resolve()) for p in self._selected}
+        selected_keys = {str(p) for p in self._selected}
         for key, cell in self._cells.items():
             cell["selected"] = key in selected_keys
             self._apply_cell_style(cell)

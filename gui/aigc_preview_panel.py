@@ -6,7 +6,6 @@ import os
 import shutil
 import threading
 from pathlib import Path
-from typing import Sequence
 
 import tkinter as tk
 from tkinter import ttk
@@ -15,7 +14,6 @@ from PIL import Image, ImageTk
 
 from gui.clipboard import setup_copyable_readonly_text
 from gui.tk_thread import bind_ui_root
-from scripts.aigc_lab.prompt_atoms import SLOT_ORDER, format_table
 
 _TMP_PREFIX = "relaxasmr_aigc_preview_"
 _VIDEO_MIN_H = 160
@@ -30,7 +28,7 @@ class AigcPreviewPanel(ttk.Frame):
 
         self._mode = "t2v"  # t2v | i2v
         self._run_id = "—"
-        self._slots: dict[str, list[str]] = {k: [] for k in SLOT_ORDER}
+        self._prompt = ""
         self._video_path: Path | None = None
         self._image_path: Path | None = None
 
@@ -73,7 +71,7 @@ class AigcPreviewPanel(ttk.Frame):
         # 文生：整幅 prompt
         self._t2v_prompt_wrap, self._t2v_prompt = self._make_prompt_text(self._bottom)
 
-        # 图生：下半区左右分栏 — 左参考图 / 右六槽 prompt（默认 1:1）
+        # 有参考图时：下半区左右分栏 — 左参考图 / 右 prompt
         self._i2v_bottom = ttk.PanedWindow(self._bottom, orient=tk.HORIZONTAL)
         self._i2v_img_wrap = ttk.Frame(self._i2v_bottom)
         self._i2v_bottom.add(self._i2v_img_wrap, weight=1)
@@ -167,21 +165,19 @@ class AigcPreviewPanel(ttk.Frame):
         video_path: Path | None,
         *,
         run_id: str = "—",
-        slots: dict[str, Sequence[str]] | None = None,
+        prompt: str = "",
+        slots: dict | None = None,
     ) -> None:
+        del slots
         self._show_t2v_layout()
         rid = (run_id or "—").strip() or "—"
-        norm_slots = self._normalize_slots(slots)
+        text = str(prompt or "").strip()
         new_video = video_path.resolve() if video_path and video_path.is_file() else None
-        if (
-            rid == self._run_id
-            and norm_slots == self._slots
-            and new_video == self._video_path
-        ):
+        if rid == self._run_id and text == self._prompt and new_video == self._video_path:
             return
         self._run_id = rid
         self.lbl_run.configure(text=self._run_id)
-        self._slots = norm_slots
+        self._prompt = text
         self._render_prompt()
         if new_video != self._video_path:
             self._set_video(new_video)
@@ -191,24 +187,26 @@ class AigcPreviewPanel(ttk.Frame):
         video_path: Path | None,
         *,
         run_id: str = "—",
-        slots: dict[str, Sequence[str]] | None = None,
+        prompt: str = "",
+        slots: dict | None = None,
         image_path: Path | None = None,
     ) -> None:
+        del slots
         self._show_i2v_layout()
         rid = (run_id or "—").strip() or "—"
-        norm_slots = self._normalize_slots(slots)
+        text = str(prompt or "").strip()
         new_video = video_path.resolve() if video_path and video_path.is_file() else None
         new_image = image_path.resolve() if image_path and image_path.is_file() else None
         if (
             rid == self._run_id
-            and norm_slots == self._slots
+            and text == self._prompt
             and new_video == self._video_path
             and new_image == self._image_path
         ):
             return
         self._run_id = rid
         self.lbl_run.configure(text=self._run_id)
-        self._slots = norm_slots
+        self._prompt = text
         self._image_path = new_image
         self._render_prompt()
         if new_image != getattr(self, "_last_rendered_image", None):
@@ -221,7 +219,7 @@ class AigcPreviewPanel(ttk.Frame):
         self.stop_playback()
         self._video_path = None
         self._image_path = None
-        self._slots = {k: [] for k in SLOT_ORDER}
+        self._prompt = ""
         self._run_id = "—"
         self.lbl_run.configure(text="—")
         self._show_video_placeholder("无预览")
@@ -269,19 +267,8 @@ class AigcPreviewPanel(ttk.Frame):
             self._audio_proc = None
             self._audio_path = None
 
-    @staticmethod
-    def _normalize_slots(
-        slots: dict[str, Sequence[str]] | None,
-    ) -> dict[str, list[str]]:
-        out: dict[str, list[str]] = {}
-        src = slots or {}
-        for key in SLOT_ORDER:
-            vals = src.get(key) or []
-            out[key] = [str(x).strip() for x in vals if str(x).strip()]
-        return out
-
     def _render_prompt(self) -> None:
-        self._set_prompt_text(format_table(self._slots))
+        self._set_prompt_text(self._prompt)
 
     def _set_prompt_text(self, text: str) -> None:
         for widget in (self._t2v_prompt, self._i2v_prompt):

@@ -531,6 +531,9 @@ def audio_booms_16bit_dir(layer_id: str) -> Path:
 def _extra_bin_dirs() -> list[Path]:
     """GUI/.app 启动时常缺失的常用可执行文件目录。"""
     dirs: list[Path] = []
+    home_local = Path.home() / ".local" / "bin"
+    if home_local.is_dir():
+        dirs.append(home_local)
     if is_mac():
         dirs.extend([Path("/opt/homebrew/bin"), Path("/usr/local/bin")])
     extra = os.environ.get("RELAXASMR_BIN_PATH", "").strip()
@@ -557,16 +560,18 @@ def ensure_gui_path() -> None:
 
 
 def ensure_cli_path() -> None:
-    """把 ``cli/`` 放进 ``sys.path``，使 ``import agy`` / ``import jimeng_web`` /
-    ``import elevenlabs_http`` / ``import elevenlabs_web`` / ``import shared`` 可用。
+    """把 ``workspace/utils`` 与 ``cli/`` 放进 ``sys.path``。
 
-    包在 ``cli/agy``、``cli/jimeng_web``、``cli/elevenlabs_http``、
-    ``cli/elevenlabs_web``、``cli/shared``（故意不用 ``elevenlabs`` 包名，避免盖掉
-    官方 SDK）。调用方在入口执行一次即可（GUI ``app.py`` 已调用）。脚本直跑::
-
-        from scripts.config.paths import ensure_cli_path; ensure_cli_path()
+    共享工具（``agy`` / ``jimeng_web`` / ``shared``）来自 workspace/utils；
+    ``cli/`` 仅保留 elevenlabs 等本项目专属包。
     """
     import sys
+
+    utils_root = REPO_ROOT.parent / "utils"
+    if utils_root.is_dir():
+        text = str(utils_root)
+        if text not in sys.path:
+            sys.path.insert(0, text)
 
     cli_root = REPO_ROOT / "cli"
     text = str(cli_root)

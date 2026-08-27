@@ -183,45 +183,100 @@ class RawVideoLibraryTab(ttk.Frame):
             self._log("素材库 raw：已取消选择目录")
             return
         directory = Path(folder)
-        videos = list_dir_videos(directory) if directory.is_dir() else []
-        count = len(videos)
-        self.lbl_stats.configure(text=self._format_stats(videos) if videos else "共 0 个")
         self._update_dir_label(directory)
-        self._log(f"素材库 raw：已选择目录 {directory}，共 {count} 个文件")
+        self._log(f"素材库 raw：已选择目录 {directory}")
         self._set_directory(folder)
         self._selected_key = None
-        self.update_idletasks()
-        self.refresh(force=True, announce=False)
-
-    def _resolve_directory(self) -> Path | None:
-        raw = (self._get_directory() or "").strip()
-        if not raw:
-            return None
-        path = Path(raw)
-        return path if path.is_dir() else None
+        self.refresh(force=True, announce=True)
 
     def refresh(self, *, force: bool = False, announce: bool = True) -> None:
-        directory = self._resolve_directory()
-        self._current_dir = directory
-        if directory is None:
-            self._render_empty("尚未选择目录，请点击「选择目录」")
-            return
-        self._update_dir_label(directory)
-        videos = list_dir_videos(directory)
-        sig = f"{directory}:{file_list_signature(videos)}"
-        if not force and self._loaded_once and sig == self._list_signature:
-            return
-
-        self._list_signature = sig
         self._load_generation += 1
         generation = self._load_generation
         self._loading = True
-        self.lbl_stats.configure(text=self._format_stats(videos) if videos else "共 0 个")
+        if not self._loaded_once:
+            self.lbl_stats.configure(text="加载中…")
+        threading.Thread(
+            target=self._scan_and_load,
+            args=(force, announce, generation),
+            daemon=True,
+        ).start()
 
-        if announce:
+    def _scan_and_load(self, force: bool, announce: bool, generation: int) -> None:
+        try:
+            raw = (self._get_directory() or "").strip()
+            if generation != self._load_generation:
+                return
+            if not raw:
+                schedule_on_main(
+                    self,
+                    self._render_empty,
+                    "尚未选择目录，请点击「选择目录」",
+                    generation,
+                    dir_text="目录：未选择（仅展示选定目录根层视频/图片，不含子目录）",
+                )
+                return
+            directory = Path(raw)
+            if not directory.is_dir():
+                schedule_on_main(
+                    self,
+                    self._render_empty,
+                    "尚未选择目录，请点击「选择目录」",
+                    generation,
+                    dir_text=f"目录：{raw}（路径无效或不可访问）",
+                )
+                return
+            videos = list_dir_videos(directory)
+            sig = f"{directory}:{file_list_signature(videos)}"
+            if generation != self._load_generation:
+                return
+            if not force and self._loaded_once and sig == self._list_signature:
+                schedule_on_main(self, self._on_scan_unchanged, generation)
+                return
             action = "刷新" if force else "加载"
+            schedule_on_main(
+                self,
+                self._begin_load_after_scan,
+                directory,
+                videos,
+                sig,
+                generation,
+                announce,
+                action,
+            )
+        except Exception as exc:
+            schedule_on_main(self, self._on_load_failed, generation, str(exc))
+
+    def _on_scan_unchanged(self, generation: int) -> None:
+        if generation != self._load_generation:
+            return
+        self._loading = False
+
+    def _on_load_failed(self, generation: int, detail: str) -> None:
+        if generation != self._load_generation:
+            return
+        self._loading = False
+        self._log(f"素材库 raw：加载失败 — {detail}")
+        if not self._loaded_once:
+            self.lbl_stats.configure(text="加载失败")
+
+    def _begin_load_after_scan(
+        self,
+        directory: Path,
+        videos: list[Path],
+        sig: str,
+        generation: int,
+        announce: bool,
+        action: str,
+    ) -> None:
+        if generation != self._load_generation:
+            return
+        self._list_signature = sig
+        self._current_dir = directory
+        if announce:
             self._log(f"素材库 raw：{action}目录 {directory}，共 {len(videos)} 个文件")
         self._init_grid_shell(directory, videos)
+        if not videos:
+            return
         threading.Thread(
             target=self._load_items_progressive,
             args=(directory, videos, generation),
@@ -297,7 +352,15 @@ class RawVideoLibraryTab(ttk.Frame):
         schedule_on_main(self, self._finish_loading, directory, total, generation)
         self._log(f"素材库 raw：加载完成，共 {total} 个文件")
 
-    def _render_empty(self, message: str) -> None:
+    def _render_empty(
+        self,
+        message: str,
+        generation: int | None = None,
+        *,
+        dir_text: str | None = None,
+    ) -> None:
+        if generation is not None and generation != self._load_generation:
+            return
         self._loading = False
         self._loaded_once = True
         self._photo_refs.clear()
@@ -306,7 +369,8 @@ class RawVideoLibraryTab(ttk.Frame):
         self._selected_key = None
         for child in self._grid_host.winfo_children():
             child.destroy()
-        self._update_dir_label()
+        if dir_text is not None:
+            self.lbl_dir.configure(text=dir_text)
         ttk.Label(self._grid_host, text=message).grid(row=0, column=0, padx=8, pady=8)
         self.lbl_stats.configure(text="")
         self.after_idle(self._sync_scroll_region)
@@ -327,7 +391,7 @@ class RawVideoLibraryTab(ttk.Frame):
 
     def _create_cell(self, video: Path, row: int, col: int) -> None:
         key = video.name
-        info = peek_raw_video_info_cache(video) or self._placeholder_info(video)
+        info = self._placeholder_info(video)
         line1, line2, line3 = format_raw_video_meta_lines(info)
 
         outer = tk.Frame(

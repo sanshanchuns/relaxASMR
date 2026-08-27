@@ -26,7 +26,7 @@ _BENCHMARK_DIR = CACHE_ROOT / "benchmark"
 _DOWNLOAD_SECONDS = 300
 _FRAME_COUNT = 8
 _JSON_BLOCK = re.compile(r"\{.*\}", re.DOTALL)
-_MODEL = "gemini-3.6-flash"
+_MODEL = "gemini-3.7-flash"
 
 _BENCHMARK_SYSTEM = """你是 YouTube 下雨 ASMR 横屏长视频分析师。根据视频抽帧，输出结构化基准 JSON（不要 markdown 围栏）：
 {
