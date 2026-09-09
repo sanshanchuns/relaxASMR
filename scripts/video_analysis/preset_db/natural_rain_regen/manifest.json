@@ -2173,6 +2173,6 @@
   "jobs_dir": "/home/leo/workspace/relaxASMR/scripts/video_analysis/preset_db/natural_rain_rpps/render_jobs",
   "raw_dir": "/home/leo/workspace/relaxASMR/tmp/rain_regen/regen_raw",
   "trimmed_dir": "/home/leo/workspace/relaxASMR/tmp/rain_regen/regen_trimmed",
-  "sounds_dir": "/mnt/e/自然之声/to_youtube/audio/1_rain/sounds",
+  "sounds_dir": "E:/自然之声/to_youtube/audio/1_rain/sounds",
   "lua": "/home/leo/workspace/relaxASMR/scripts/video_analysis/preset_db/natural_rain_attachments/batch_render_regen.lua"
 }

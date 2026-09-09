@@ -25,7 +25,18 @@ _PROC_STDINS: dict[int, object] = {}
 _FFMPEG_HELPERS: dict[int, subprocess.Popen] = {}
 _S16_CACHE: dict[str, Path] = {}
 
-_POWERSHELL = "/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe"
+_POWERSHELL = next(
+    (
+        str(p)
+        for p in (
+            Path(which("powershell.exe") or ""),
+            Path(r"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe"),
+            Path("/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe"),
+        )
+        if p.is_file()
+    ),
+    r"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe",
+)
 _PROC_WAIT_S = 0.25
 _WSL_STOP_GAP_S = 0.02
 _FFPLAY_STOP_GAP_S = 0.06
@@ -483,7 +494,7 @@ def _launch_wav(wav_path: Path, *, loop: bool) -> subprocess.Popen | None:
 
     # 大体积 WAV：原生 Linux 走 ffmpeg→ffplay 管道，避免直读 NAS 巨型混音卡顿。
     # WSL 必须走 Windows SoundPlayer——ffplay/Pulse 出不了 Windows 扬声器，
-    # 且 /mnt/e 上 >33MB 的 boom（如 3min+ 24-bit）会被误判成「巨型混音」而没声。
+    # 且外盘上 >33MB 的 boom（如 3min+ 24-bit）会被误判成「巨型混音」而没声。
     if _is_large_wav(wav_path) and not is_wsl():
         proc = _start_large_wav(wav_path, loop=loop)
         if proc is not None:

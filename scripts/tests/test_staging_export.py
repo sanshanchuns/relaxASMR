@@ -14,7 +14,7 @@ def test_base_url_is_network_mount_by_ip() -> None:
 
 
 def test_base_url_is_network_mount_local_path() -> None:
-    with patch("scripts.config.staging_export.base_url", return_value=Path("/mnt/e/自然之声/to_youtube")):
+    with patch("scripts.config.staging_export.base_url", return_value=Path("E:/自然之声/to_youtube")):
         with patch("scripts.config.staging_export._filesystem_type", return_value="9p"):
             assert se.base_url_is_network_mount() is False
 
@@ -52,7 +52,7 @@ def test_finalize_export_move(tmp_path: Path) -> None:
 def test_patch_and_restore_rpp_render_file(tmp_path: Path) -> None:
     rpp = tmp_path / "test.rpp"
     rpp.write_text(
-        "  RENDER_FILE /mnt/e/自然之声/to_youtube/export\n  RENDER_PATTERN $project_3h\n",
+        "  RENDER_FILE E:/自然之声/to_youtube/export\n  RENDER_PATTERN $project_3h\n",
         encoding="utf-8",
     )
     original = se.patch_rpp_render_file(rpp, "\\\\wsl.localhost\\Ubuntu\\tmp\\export")
@@ -60,7 +60,7 @@ def test_patch_and_restore_rpp_render_file(tmp_path: Path) -> None:
     assert "\\\\wsl.localhost\\Ubuntu\\tmp\\export" in text
     se.restore_rpp_render_file(rpp, original)
     assert rpp.read_text(encoding="utf-8") == (
-        "  RENDER_FILE /mnt/e/自然之声/to_youtube/export\n  RENDER_PATTERN $project_3h\n"
+        "  RENDER_FILE E:/自然之声/to_youtube/export\n  RENDER_PATTERN $project_3h\n"
     )
 
 

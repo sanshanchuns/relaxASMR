@@ -13,7 +13,11 @@ from tkinter import ttk
 
 logger = logging.getLogger(__name__)
 
-_WIN_SYSTEM32 = Path("/mnt/c/Windows/System32")
+_WIN_SYSTEM32 = (
+    Path(r"C:\Windows\System32")
+    if Path(r"C:\Windows\System32").is_dir()
+    else Path("/mnt/c/Windows/System32")
+)
 _WIN_POWERSHELL = _WIN_SYSTEM32 / "WindowsPowerShell" / "v1.0" / "powershell.exe"
 _WIN_CLIP = _WIN_SYSTEM32 / "clip.exe"
 
@@ -33,9 +37,7 @@ def _resolve_cmd(*names: str, fallbacks: list[Path] | None = None) -> str | None
 
 
 def _is_wsl() -> bool:
-    if Path("/mnt/c/Windows").is_dir():
-        return True
-    if shutil.which("powershell.exe") or shutil.which("clip.exe"):
+    if os.environ.get("WSL_DISTRO_NAME"):
         return True
     try:
         return "microsoft" in Path("/proc/version").read_text(encoding="utf-8").lower()
@@ -74,14 +76,19 @@ def _windows_clipboard_write(content: str) -> bool:
             logger.debug("powershell clipboard write failed: %s", exc)
 
         try:
-            win_tmp_dir = Path("/mnt/c/Windows/Temp")
+            win_tmp_dir = Path(os.environ.get("TEMP") or os.environ.get("TMP") or r"C:\Windows\Temp")
+            if not win_tmp_dir.is_dir():
+                win_tmp_dir = Path("/mnt/c/Windows/Temp")
             if not win_tmp_dir.is_dir():
                 win_tmp_dir = Path("/mnt/c/Users/Public")
             if win_tmp_dir.is_dir():
                 tmp_path = win_tmp_dir / f"relax_clip_{os.getpid()}.txt"
                 tmp_path.write_text(content, encoding="utf-8-sig")
-                rel = tmp_path.as_posix().removeprefix("/mnt/c/")
-                win_path = "C:\\" + rel.replace("/", "\\")
+                posix = tmp_path.as_posix()
+                if posix.startswith("/mnt/c/"):
+                    win_path = "C:\\" + posix.removeprefix("/mnt/c/").replace("/", "\\")
+                else:
+                    win_path = str(tmp_path)
                 file_cmd = (
                     f"$t = Get-Content -LiteralPath '{win_path}' -Raw -Encoding UTF8; "
                     "Set-Clipboard -Value $t"
@@ -166,14 +173,19 @@ def _windows_clipboard_read() -> str:
     if not ps:
         return ""
     try:
-        win_tmp_dir = Path("/mnt/c/Windows/Temp")
+        win_tmp_dir = Path(os.environ.get("TEMP") or os.environ.get("TMP") or r"C:\Windows\Temp")
+        if not win_tmp_dir.is_dir():
+            win_tmp_dir = Path("/mnt/c/Windows/Temp")
         if not win_tmp_dir.is_dir():
             win_tmp_dir = Path("/mnt/c/Users/Public")
         if not win_tmp_dir.is_dir():
             return ""
         tmp_path = win_tmp_dir / f"relax_clip_read_{os.getpid()}.txt"
-        rel = tmp_path.as_posix().removeprefix("/mnt/c/")
-        win_path = "C:\\" + rel.replace("/", "\\")
+        posix = tmp_path.as_posix()
+        if posix.startswith("/mnt/c/"):
+            win_path = "C:\\" + posix.removeprefix("/mnt/c/").replace("/", "\\")
+        else:
+            win_path = str(tmp_path)
         cmd = f"Get-Clipboard | Set-Content -LiteralPath '{win_path}' -Encoding UTF8"
         try:
             proc = subprocess.run(

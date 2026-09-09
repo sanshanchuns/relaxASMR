@@ -14,7 +14,7 @@
 | **4** | 混音 + 合成 MP4 | Headless 渲染 WAV → FFmpeg 合成；默认片头 5 秒 fade-in |
 | **5** | 上传 YouTube | 读取物料 + 成片自动上传 |
 
-数据根目录（baseURL）默认：`/mnt/e/自然之声/to_youtube/`（见 `scripts/config/paths.py`）。
+数据根目录（baseURL）默认：`E:/自然之声/to_youtube/`（见 `scripts/config/paths.py`）。
 
 ---
 

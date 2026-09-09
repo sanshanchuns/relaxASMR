@@ -1,7 +1,7 @@
 """统一路径管理器（Path Manager）。
 
 代码仓库（REPO_ROOT）仅含脚本与 Reaper 工程模板；
-所有媒体素材位于 baseURL（同一 NAS 共享，WSL 默认 /mnt/e，亦兼容 /mnt/z，Mac 为 /Volumes/192.168.3.128/...）。
+所有媒体素材位于 baseURL（同一 NAS 共享，Windows 默认 E:\\自然之声\\to_youtube，亦兼容 /mnt/e、/mnt/z，Mac 为 /Volumes/192.168.3.128/...）。
 """
 
 from __future__ import annotations
@@ -19,14 +19,17 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 # 同一 NAS 共享目录在各平台的挂载路径（运行时选用第一个存在的）
 _BASE_SUFFIX = "/自然之声/to_youtube"
 BASE_URL_VARIANTS: tuple[str, ...] = (
+    f"E:{_BASE_SUFFIX}",
+    f"Z:{_BASE_SUFFIX}",
     f"/mnt/e{_BASE_SUFFIX}",
     f"/mnt/z{_BASE_SUFFIX}",
     f"/Volumes/192.168.3.128{_BASE_SUFFIX}",
 )
 
 # 各平台首选默认（无挂载命中时的回退值）
-DEFAULT_BASE_URL_WSL = Path(BASE_URL_VARIANTS[0])
-DEFAULT_BASE_URL_MAC = Path(BASE_URL_VARIANTS[2])
+DEFAULT_BASE_URL_WIN = Path(BASE_URL_VARIANTS[0])
+DEFAULT_BASE_URL_WSL = Path(f"/mnt/e{_BASE_SUFFIX}")
+DEFAULT_BASE_URL_MAC = Path(BASE_URL_VARIANTS[-1])
 
 RAIN_FX_FILENAME = "footagecrate-real-medium-rain-1.mp4"
 RAIN_FX_PNG = "rain_fx.png"
@@ -39,6 +42,8 @@ def is_mac() -> bool:
 def default_base_url_for_platform() -> Path:
     if is_mac():
         return DEFAULT_BASE_URL_MAC
+    if sys.platform == "win32":
+        return DEFAULT_BASE_URL_WIN
     return DEFAULT_BASE_URL_WSL
 
 
@@ -81,17 +86,26 @@ def remap_storage_path(path: Path | str) -> Path:
 
 
 def _posix_from_any_stored(raw: str) -> Path:
-    """user_config / RPP 中可能出现的 Windows、WSL UNC、posix 路径 → posix Path。"""
+    """user_config / RPP 中可能出现的 Windows、WSL UNC、posix 路径 → 本机 Path。"""
     text = raw.strip()
     if not text:
         return Path(text)
     normalized = text.replace("\\", "/")
     m = re.match(r"^([A-Za-z]):/(.*)$", normalized)
     if m:
+        if sys.platform == "win32":
+            return Path(f"{m.group(1).upper()}:/{m.group(2)}")
         return Path(f"/mnt/{m.group(1).lower()}/{m.group(2)}")
+    m = re.match(r"^/mnt/([A-Za-z])/(.*)$", normalized)
+    if m and sys.platform == "win32":
+        return Path(f"{m.group(1).upper()}:/{m.group(2)}")
     m = re.match(r"^//wsl\.localhost/[^/]+/(.+)$", normalized, re.I)
     if m:
-        return Path("/" + m.group(1))
+        rest = m.group(1)
+        m2 = re.match(r"^mnt/([A-Za-z])/(.*)$", rest)
+        if m2 and sys.platform == "win32":
+            return Path(f"{m2.group(1).upper()}:/{m2.group(2)}")
+        return Path("/" + rest)
     return Path(text)
 
 
@@ -572,6 +586,12 @@ def ensure_cli_path() -> None:
         text = str(utils_root)
         if text not in sys.path:
             sys.path.insert(0, text)
+        try:
+            import utf8_stdio
+
+            utf8_stdio.install()
+        except ImportError:
+            pass
 
     cli_root = REPO_ROOT / "cli"
     text = str(cli_root)

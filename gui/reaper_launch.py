@@ -98,6 +98,7 @@ def wsl_to_windows_path(linux_path: Path) -> str:
 
 def windows_cmd_exe() -> Path:
     for candidate in (
+        Path(r"C:\Windows\System32\cmd.exe"),
         Path("/mnt/c/Windows/System32/cmd.exe"),
         Path(shutil.which("cmd.exe") or ""),
     ):
@@ -108,6 +109,7 @@ def windows_cmd_exe() -> Path:
 
 def windows_explorer_exe() -> Path:
     for candidate in (
+        Path(r"C:\Windows\explorer.exe"),
         Path("/mnt/c/Windows/explorer.exe"),
         Path(shutil.which("explorer.exe") or ""),
     ):
@@ -116,8 +118,14 @@ def windows_explorer_exe() -> Path:
     raise FileNotFoundError("找不到 Windows explorer.exe")
 
 
-# WSL 下常见 Windows Reaper 安装位置（/mnt/<盘符>/...）
+# Windows / WSL 下常见 Reaper 安装位置
 WSL_REAPER_MOUNT_CANDIDATES = (
+    r"D:\Program Files\REAPER (x64)\reaper.exe",
+    r"D:\Program Files\REAPER\reaper.exe",
+    r"C:\Program Files\REAPER (x64)\reaper.exe",
+    r"C:\Program Files\REAPER\reaper.exe",
+    r"C:\Program Files\Steinberg\Reaper\reaper.exe",
+    r"C:\Program Files (x86)\REAPER\reaper.exe",
     "/mnt/d/Program Files/REAPER (x64)/reaper.exe",
     "/mnt/d/Program Files/REAPER/reaper.exe",
     "/mnt/c/Program Files/REAPER (x64)/reaper.exe",

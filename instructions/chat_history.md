@@ -5,7 +5,7 @@
 - **仓库**：`/home/leo/workspace/relaxASMR`
 - **GUI**：`python -m gui` → `gui/app.py`
 - **配置**：`gui/user_config.json`（含 `theme`、`export_outputs`、`duration_hours` 等）
-- **baseURL**：`scripts/config/paths.py` → `base_url()`，典型为 `/mnt/e/自然之声/to_youtube`
+- **baseURL**：`scripts/config/paths.py` → `base_url()`，典型为 `E:/自然之声/to_youtube`
 - **关键目录**：
   - 物料：`baseURL/material/`（`MVI_xxx_material.json|md`、`MVI_xxx_thumbnail.jpg`）
   - 成片：`baseURL/export/`（`MVI_xxx_3h_fhd.mp4` / `_4k.mp4`、混音 WAV）

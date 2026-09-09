@@ -26,7 +26,7 @@ SAMPLE_SCENE = {
     "misty": False,
 }
 
-SNAP_6989 = Path("/mnt/e/自然之声/to_youtube/material/MVI_6989_snapshot_raw.jpg")
+SNAP_6989 = Path("E:/自然之声/to_youtube/material/MVI_6989_snapshot_raw.jpg")
 
 
 class TestVisualScene(unittest.TestCase):
